@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/rs/cors"
+	"github.com/tidwall/gjson"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -164,12 +165,13 @@ func generateUID(db *loggedIn) uint64{
 
 func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 
-	fmt.Println("GOT: ", r.URL, r.Form)
+	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
+	fmt.Println("USER", r.FormValue("email"), r.FormValue("password"))
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
 	}
-	user, err:=db.users[r.FormValue("login")]
+	user, err:=db.users[r.FormValue("email")]
 	if !err{
 		w.Write(getErrorNoUserAns())
 		return
@@ -194,7 +196,7 @@ func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 
 
 func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
-	fmt.Println("GOT: ", r.URL, r.Body, r.Method)
+	fmt.Println("SIGNUP GOT: ", r.URL, r.Body, r.Method)
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
@@ -205,16 +207,17 @@ func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
+	body:=r.FormValue("body_form")
 	user:=User{
 		id: generateUID(db),
-		name: r.FormValue("name"),
-
-		surname: r.FormValue("surname"),
-		login: r.FormValue("email"),
-		password: r.FormValue("password"),
-		//birthday: r.FormValue("date"),
-		imgPath: r.FormValue("img"),
+		name: gjson.Get(body,"name").String(),
+		surname: gjson.Get(body,"surname").String(),
+		login: gjson.Get(body,"email").String(),
+		password: gjson.Get(body,"password").String(),
+		//birthday: gjson.Get(body,"date"),
+		imgPath: gjson.Get(body,"img").String(),
 	}
+	fmt.Println("USER", user.name, user.password)
 
 	sid:=string(generateSID(db))
 	db.sessions[sid]= user.id
@@ -250,7 +253,7 @@ func (db *loggedIn)updateProfile(changes *PostGetter, uid string) uint16 {
 }
 
 func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
-	fmt.Println("GOT: ", r.URL, r.Form)
+	fmt.Println("PROFILE GOT: ", r.URL, r.Form)
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
