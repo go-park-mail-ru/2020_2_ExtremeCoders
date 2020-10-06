@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/rs/cors"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -46,6 +47,15 @@ func getErrorBadJsonAns() []byte {
 	err := &Answer{
 		Code:        400,
 		Description: "Bad Json",
+	}
+	ans, _ := json.Marshal(err)
+	return ans
+}
+
+func getErrorUnexpectedAns() []byte {
+	err := &Answer{
+		Code:        500,
+		Description: "Unexpected error",
 	}
 	ans, _ := json.Marshal(err)
 	return ans
@@ -153,6 +163,8 @@ func generateUID(db *loggedIn) uint64{
 }
 
 func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
+
+	fmt.Println("GOT: ", r.URL, r.Form)
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
@@ -179,13 +191,16 @@ func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 	w.Write(getOkAns(sid))
 }
 
+
+
 func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
+	fmt.Println("GOT: ", r.URL, r.Body, r.Method)
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
 	}
-	_, err:=db.users[r.FormValue("login")]
-	if err{
+	_, err:=db.users[r.FormValue("email")]
+	if err {
 		w.Write(getErrorLoginExistAns())
 		return
 	}
@@ -193,11 +208,12 @@ func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
 	user:=User{
 		id: generateUID(db),
 		name: r.FormValue("name"),
+
 		surname: r.FormValue("surname"),
-		login: r.FormValue("login"),
+		login: r.FormValue("email"),
 		password: r.FormValue("password"),
-		//birthday: r.FormValue("birthday"),
-		//imgPath: r.FormValue("img"),
+		//birthday: r.FormValue("date"),
+		imgPath: r.FormValue("img"),
 	}
 
 	sid:=string(generateSID(db))
@@ -234,6 +250,7 @@ func (db *loggedIn)updateProfile(changes *PostGetter, uid string) uint16 {
 }
 
 func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
+	fmt.Println("GOT: ", r.URL, r.Form)
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
@@ -267,13 +284,19 @@ func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
 
 func main() {
 	var db=loggedIn{
-		sessions: make(map[string] uint),
-		users: make(map[string] *User),
+		sessions: make(map[string]uint64),
+		users: make(map[string]*User),
 	}
-	http.HandleFunc("/signup", db.signin)
-	http.HandleFunc("/signin", db.signup)
-	http.HandleFunc("/profile", db.profile)
-
+	mux := http.NewServeMux()
+	mux.HandleFunc("/signup", db.signup)
+	mux.HandleFunc("/signin", db.signin)
+	mux.HandleFunc("/profile", db.profile)
+	server := http.Server{
+		Addr:         ":8080",
+		Handler:      cors.AllowAll().Handler(mux),
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
 	fmt.Println("starting server at :8080")
-	http.ListenAndServe(":8080", nil)
+	server.ListenAndServe()
 }
