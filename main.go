@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tidwall/gjson"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -23,12 +22,12 @@ type Profile struct {
 
 type User struct {
 	id       uint64
-	name     string
-	surname  string
-	login    string
-	password string
-	birthday uint64
-	imgPath  string
+	Name     string
+	Surname  string
+	Email    string
+	Password string
+	//Date     uint64
+	Img      string
 }
 
 type Answer struct {
@@ -109,7 +108,7 @@ func getErrorNoUserAns() []byte{
 func getErrorLoginExistAns() [] byte{
 	err:= &Answer{
 		Code:401,
-		Description: "This login has already exists",
+		Description: "This Email has already exists",
 	}
 	ans, _:=json.Marshal(err)
 	return ans
@@ -118,7 +117,7 @@ func getErrorLoginExistAns() [] byte{
 func getErrorBadPasswordAns() []byte{
 	err:= &Answer{
 		Code:401,
-		Description: "Wrong password",
+		Description: "Wrong Password",
 	}
 	ans, _:=json.Marshal(err)
 	return ans
@@ -135,7 +134,7 @@ func getOkAns(cocky string) []byte{
 }
 
 func getOkAnsData(cocky string, data User) []byte{
-	fmt.Println("DATA::::::::::", data.login, data.name, data.password)
+	fmt.Println("DATA::::::::::", data.Email, data.Name, data.Password)
 	ok:= &Answer{
 		Code:200,
 		Description: "ok",
@@ -177,22 +176,37 @@ func generateUID(db *loggedIn) uint64{
 func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 	setHeader(w, r)
 	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
-	fmt.Println("USER", r.FormValue("email"), r.FormValue("password"))
+	fmt.Println("USER", r.FormValue("Email"), r.FormValue("Password"))
+	if r.Method == http.MethodOptions {
+		w.Write([]byte(""))
+		return
+	}
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
 	}
-	user, err:=db.users[r.FormValue("email")]
-	if !err{
+
+	type Uinfo struct { Email string;Password string}
+
+	dec:=json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+	var user Uinfo
+	err:=dec.Decode(&user)
+	if err!=nil {
+		w.Write(getErrorBadJsonAns())
+		return
+	}
+	userEx, erro:=db.users[user.Email]
+	if !erro{
 		w.Write(getErrorNoUserAns())
 		return
 	}
-	if user.password!=r.FormValue("password"){
+	if userEx.Password !=user.Password{
 		w.Write(getErrorBadPasswordAns())
 		return
 	}
 	sid:=string(generateSID(db))
-	db.sessions[sid]= user.id
+	db.sessions[sid]= userEx.id
 	cocky:=&http.Cookie{
 		Name: "session_id",
 		Value: sid,
@@ -206,7 +220,7 @@ func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 
 
 func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
-	body:=r.PostFormValue("body_form")
+
 	setHeader(w, r)
 	fmt.Println("SIGNUP GOT: ", r.URL, r.Body, r.Method)
 	if r.Method==http.MethodOptions{
@@ -218,26 +232,28 @@ func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	//body:=r.PostFormValue("body_form")
+	//body:=r.PostFormValue("body_form")
 	//body=r.Form.Get("body_form")
-	_, err:=db.users[gjson.Get(body,"email").String()]
-	if err {
+	dec:=json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+	var user User
+	err:=dec.Decode(&user)
+	if err!=nil {
+		w.Write(getErrorBadJsonAns())
+		return
+	}
+	_, erro:=db.users[user.Email]
+	if erro {
 		w.Write(getErrorLoginExistAns())
 		return
 	}
-	user:=User{
-		id: generateUID(db),
-		name: gjson.Get(body,"name").String(),
-		surname: gjson.Get(body,"surname").String(),
-		login: gjson.Get(body,"email").String(),
-		password: gjson.Get(body,"password").String(),
-		//birthday: gjson.Get(body,"date"),
-		imgPath: gjson.Get(body,"img").String(),
-	}
-	fmt.Println("USER", user.name, user.password)
+
+	user.id=generateUID(db)
+	fmt.Println("USER", user.Name, user.Password)
 
 	sid:=string(generateSID(db))
 	db.sessions[sid]= user.id
-	db.users[user.login]=&user
+	db.users[user.Email]=&user
 
 	cocky:=&http.Cookie{
 		Name: "session_id",
@@ -250,22 +266,22 @@ func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
 }
 
 func (db *loggedIn)updateProfile(changes *Profile, uid string) uint16 {
-	if changes.method=="change password" {
-		db.users[uid].password=changes.value
-	}else if changes.method=="change login"{
-		db.users[uid].login=changes.value
-	}else if changes.method=="change name"{
-		db.users[uid].name=changes.value
-	}else if changes.method=="change surname"{
-		db.users[uid].surname=changes.value
-	}else if changes.method=="change birthday"{
-		date, err := strconv.ParseUint(changes.value, 10, 64)
-		if err != nil{
-			return 400
-		}
-		db.users[uid].birthday=date
-	}else if changes.method=="change img"{
-		db.users[uid].imgPath = changes.value
+	if changes.method=="change Password" {
+		db.users[uid].Password =changes.value
+	}else if changes.method=="change Email"{
+		db.users[uid].Email =changes.value
+	}else if changes.method=="change Name"{
+		db.users[uid].Name =changes.value
+	}else if changes.method=="change Surname"{
+		db.users[uid].Surname =changes.value
+	}else if changes.method=="change Date"{
+		//date, err := strconv.ParseUint(changes.value, 10, 64)
+		//if err != nil{
+		//	return 400
+		//}
+		//db.users[uid].Date =date
+	}else if changes.method=="change Img"{
+		db.users[uid].Img = changes.value
 	}
 	return 200
 }
@@ -293,7 +309,7 @@ func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
 		}
 		for _, val:=range db.users{
 			if (*val).id==uid{
-				fmt.Println("If_DATA::::::", (*val).password, (*val).name)
+				fmt.Println("If_DATA::::::", (*val).Password, (*val).Name)
 				w.Write(getOkAnsData(session.Value, *val))
 				return
 			}
@@ -302,33 +318,39 @@ func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
 	}else if r.Method != http.MethodPost{
 		w.Write(getErrorNotPostAns())
 		return
-	}else{
-		jsonData:=r.Form
-		var change =&Profile{}
-
+	} else {
+		fmt.Println("HUUUUUUUUUUUUIIIIIIIIIIIII::::::::::::::::")
 		session, err := r.Cookie("session_id")
-
-		if err!=nil {
+		if err==http.ErrNoCookie {
+			fmt.Println("NO COOKIE")
 			w.Write(getErrorNoCockyAns())
 			return
 		}
-		if _, ok := db.sessions[session.Value]; !ok {
+		fmt.Println("COOKIE!!!!!!!!!!!!!!!!!!!")
+
+		uid, ok := db.sessions[session.Value]
+		if  !ok {
 			w.Write(getErrorWrongCookieAns())
 			return
 		}
-		err=json.Unmarshal([]byte(jsonData.Encode()), change)
-
-		if err!=nil{
-			w.Write(getErrorBadJsonAns())
-			return
+		for _, val:=range db.users{
+			if (*val).id==uid{
+				fmt.Println("If_DATA::::::", (*val).Password, (*val).Name)
+				dec:=json.NewDecoder(r.Body)
+				dec.DisallowUnknownFields()
+				type update struct{Name string; Surname string}
+				var up update
+				err:=dec.Decode(&up)
+				if err!=nil {
+					w.Write(getErrorBadJsonAns())
+					return
+				}
+				(*val).Name=up.Name
+				(*val).Surname=up.Surname
+				w.Write(getOkAns(session.Value))
+				return
+			}
 		}
-		ans:=db.updateProfile(change, session.Value)
-		if ans==400{
-			w.Write(getErrorNotNumberAns())
-			return
-		}
-		w.Write(getOkAns(session.Value))
-		return
 	}
 	w.Write(getErrorUnexpectedAns())
 }
