@@ -318,33 +318,39 @@ func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
 	}else if r.Method != http.MethodPost{
 		w.Write(getErrorNotPostAns())
 		return
-	}else{
-		jsonData:=r.Form
-		var change =&Profile{}
-
+	} else {
+		fmt.Println("HUUUUUUUUUUUUIIIIIIIIIIIII::::::::::::::::")
 		session, err := r.Cookie("session_id")
-
-		if err!=nil {
+		if err==http.ErrNoCookie {
+			fmt.Println("NO COOKIE")
 			w.Write(getErrorNoCockyAns())
 			return
 		}
-		if _, ok := db.sessions[session.Value]; !ok {
+		fmt.Println("COOKIE!!!!!!!!!!!!!!!!!!!")
+
+		uid, ok := db.sessions[session.Value]
+		if  !ok {
 			w.Write(getErrorWrongCookieAns())
 			return
 		}
-		err=json.Unmarshal([]byte(jsonData.Encode()), change)
-
-		if err!=nil{
-			w.Write(getErrorBadJsonAns())
-			return
+		for _, val:=range db.users{
+			if (*val).id==uid{
+				fmt.Println("If_DATA::::::", (*val).Password, (*val).Name)
+				dec:=json.NewDecoder(r.Body)
+				dec.DisallowUnknownFields()
+				type update struct{Name string; Surname string}
+				var up update
+				err:=dec.Decode(&up)
+				if err!=nil {
+					w.Write(getErrorBadJsonAns())
+					return
+				}
+				(*val).Name=up.Name
+				(*val).Surname=up.Surname
+				w.Write(getOkAns(session.Value))
+				return
+			}
 		}
-		ans:=db.updateProfile(change, session.Value)
-		if ans==400{
-			w.Write(getErrorNotNumberAns())
-			return
-		}
-		w.Write(getOkAns(session.Value))
-		return
 	}
 	w.Write(getErrorUnexpectedAns())
 }
