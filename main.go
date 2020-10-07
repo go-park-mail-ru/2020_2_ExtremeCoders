@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/rs/cors"
 	"github.com/tidwall/gjson"
 	"math/rand"
 	"net/http"
@@ -17,7 +16,7 @@ const (
 )
 var sidRunes=[]rune("1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
 
-type PostGetter struct {
+type Profile struct {
 	method string
 	value string
 }
@@ -83,7 +82,7 @@ func getErrorWrongCookieAns() []byte{
 func getErrorNotPostAns() []byte{
 	err:= &Answer{
 		Code:400,
-		Description: "Do not require requests expect of POST",
+		Description: "Do not require request's method, expected POST",
 	}
 	ans, _:=json.Marshal(err)
 	return ans
@@ -135,6 +134,18 @@ func getOkAns(cocky string) []byte{
 	return ans
 }
 
+func getOkAnsData(cocky string, data User) []byte{
+	fmt.Println("DATA::::::::::", data.login, data.name, data.password)
+	ok:= &Answer{
+		Code:200,
+		Description: "ok",
+		sid: cocky,
+		User: data,
+	}
+	ans, _:=json.Marshal(ok)
+	return ans
+}
+
 func generateSID(db *loggedIn) []rune {
 	var sid=make ([]rune, sizeSID)
 	for{
@@ -164,7 +175,7 @@ func generateUID(db *loggedIn) uint64{
 }
 
 func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
-
+	setHeader(w, r)
 	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
 	fmt.Println("USER", r.FormValue("email"), r.FormValue("password"))
 	if r.Method != http.MethodPost {
@@ -180,15 +191,14 @@ func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 		w.Write(getErrorBadPasswordAns())
 		return
 	}
-
 	sid:=string(generateSID(db))
 	db.sessions[sid]= user.id
-
 	cocky:=&http.Cookie{
 		Name: "session_id",
 		Value: sid,
 		Expires: time.Now().Add(24*7*4*time.Hour),
 	}
+	cocky.Path="/"
 	http.SetCookie(w, cocky)
 	w.Write(getOkAns(sid))
 }
@@ -196,18 +206,24 @@ func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 
 
 func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
+	body:=r.PostFormValue("body_form")
+	setHeader(w, r)
 	fmt.Println("SIGNUP GOT: ", r.URL, r.Body, r.Method)
+	if r.Method==http.MethodOptions{
+		w.Write([]byte(""))
+		return
+	}
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
 	}
-	_, err:=db.users[r.FormValue("email")]
+	//body:=r.PostFormValue("body_form")
+	//body=r.Form.Get("body_form")
+	_, err:=db.users[gjson.Get(body,"email").String()]
 	if err {
 		w.Write(getErrorLoginExistAns())
 		return
 	}
-
-	body:=r.FormValue("body_form")
 	user:=User{
 		id: generateUID(db),
 		name: gjson.Get(body,"name").String(),
@@ -221,17 +237,19 @@ func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
 
 	sid:=string(generateSID(db))
 	db.sessions[sid]= user.id
+	db.users[user.login]=&user
 
 	cocky:=&http.Cookie{
 		Name: "session_id",
 		Value: sid,
 		Expires: time.Now().Add(24*7*4*time.Hour),
 	}
+	cocky.Path="/"
 	http.SetCookie(w, cocky)
 	w.Write(getOkAns(sid))
 }
 
-func (db *loggedIn)updateProfile(changes *PostGetter, uid string) uint16 {
+func (db *loggedIn)updateProfile(changes *Profile, uid string) uint16 {
 	if changes.method=="change password" {
 		db.users[uid].password=changes.value
 	}else if changes.method=="change login"{
@@ -253,38 +271,76 @@ func (db *loggedIn)updateProfile(changes *PostGetter, uid string) uint16 {
 }
 
 func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
-	fmt.Println("PROFILE GOT: ", r.URL, r.Form)
-	if r.Method != http.MethodPost {
+	setHeader(w, r)
+	fmt.Println("PROFILE GOT: ", r.URL, r.Form, r.Method)
+	if r.Method==http.MethodOptions{
+		w.Write([]byte(""))
+		return
+	}
+	if r.Method == http.MethodGet {
+		session, err := r.Cookie("session_id")
+		if err==http.ErrNoCookie {
+			fmt.Println("NO COOKIE")
+			w.Write(getErrorNoCockyAns())
+			return
+		}
+		fmt.Println("COOKIE!!!!!!!!!!!!!!!!!!!")
+
+		uid, ok := db.sessions[session.Value]
+		if  !ok {
+			w.Write(getErrorWrongCookieAns())
+			return
+		}
+		for _, val:=range db.users{
+			if (*val).id==uid{
+				fmt.Println("If_DATA::::::", (*val).password, (*val).name)
+				w.Write(getOkAnsData(session.Value, *val))
+				return
+			}
+		}
+
+	}else if r.Method != http.MethodPost{
 		w.Write(getErrorNotPostAns())
 		return
-	}
-	jsonData:=r.Form
-	var change =&PostGetter{}
+	}else{
+		jsonData:=r.Form
+		var change =&Profile{}
 
-	session, err := r.Cookie("session_id")
+		session, err := r.Cookie("session_id")
 
-	if err!=nil {
-		w.Write(getErrorNoCockyAns())
-		return
-	}
-	if _, ok := db.sessions[session.Value]; !ok {
-		w.Write(getErrorWrongCookieAns())
-		return
-	}
-	err=json.Unmarshal([]byte(jsonData.Encode()), change)
+		if err!=nil {
+			w.Write(getErrorNoCockyAns())
+			return
+		}
+		if _, ok := db.sessions[session.Value]; !ok {
+			w.Write(getErrorWrongCookieAns())
+			return
+		}
+		err=json.Unmarshal([]byte(jsonData.Encode()), change)
 
-	if err!=nil{
-		w.Write(getErrorBadJsonAns())
+		if err!=nil{
+			w.Write(getErrorBadJsonAns())
+			return
+		}
+		ans:=db.updateProfile(change, session.Value)
+		if ans==400{
+			w.Write(getErrorNotNumberAns())
+			return
+		}
+		w.Write(getOkAns(session.Value))
 		return
 	}
-	ans:=db.updateProfile(change, session.Value)
-	if ans==400{
-		w.Write(getErrorNotNumberAns())
-		return
-	}
-	w.Write(getOkAns(session.Value))
+	w.Write(getErrorUnexpectedAns())
 }
 
+
+func setHeader(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Version, Authorization, Content-Type")
+	//w.Header().Set("Access-Control-Expose-Headers", "Content-Length, API-Key, Content-Disposition")
+}
 func main() {
 	var db=loggedIn{
 		sessions: make(map[string]uint64),
@@ -296,7 +352,7 @@ func main() {
 	mux.HandleFunc("/profile", db.profile)
 	server := http.Server{
 		Addr:         ":8080",
-		Handler:      cors.AllowAll().Handler(mux),
+		Handler:      mux,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
