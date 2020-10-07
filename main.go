@@ -3,8 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -265,6 +268,42 @@ func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
 	w.Write(getOkAns(sid))
 }
 
+func (db *loggedIn)sendImg(w http.ResponseWriter, r *http.Request){
+
+	setHeader(w, r)
+	fmt.Println("sendImg GOT: ", r.URL, r.Body, r.Method)
+	if r.Method==http.MethodOptions{
+		w.Write([]byte(""))
+		return
+	}
+	if r.Method != http.MethodPost {
+		w.Write(getErrorNotPostAns())
+		return
+	}
+
+
+	src, hdr, err := r.FormFile("avatar")
+	if err != nil {
+		fmt.Println("sendImg GOT ERROR1: ", err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	defer src.Close()
+
+	dst, err := os.Create(filepath.Join(os.TempDir(), hdr.Filename))
+	if err != nil {
+		fmt.Println("sendImg GOT ERROR2: ", err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	defer dst.Close()
+
+	io.Copy(dst, src)
+
+	w.Write(getOkAns(""))
+}
+
+
 func (db *loggedIn)updateProfile(changes *Profile, uid string) uint16 {
 	if changes.method=="change Password" {
 		db.users[uid].Password =changes.value
@@ -372,6 +411,8 @@ func main() {
 	mux.HandleFunc("/signup", db.signup)
 	mux.HandleFunc("/signin", db.signin)
 	mux.HandleFunc("/profile", db.profile)
+	mux.HandleFunc("/sendimg", db.sendImg)
+
 	server := http.Server{
 		Addr:         ":8080",
 		Handler:      mux,
