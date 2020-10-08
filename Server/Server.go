@@ -218,7 +218,6 @@ func (db *loggedIn) profile(w http.ResponseWriter, r *http.Request) {
 		w.Write(getErrorNotPostAns())
 		return
 	} else {
-		fmt.Println("HUUUUUUUUUUUUIIIIIIIIIIIII::::::::::::::::")
 		session, err := r.Cookie("session_id")
 		if err == http.ErrNoCookie {
 			fmt.Println("NO COOKIE")
