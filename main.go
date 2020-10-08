@@ -279,22 +279,18 @@ func (db *loggedIn)sendImg(w http.ResponseWriter, r *http.Request){
 		w.Write(getErrorNotPostAns())
 		return
 	}
-	//
-	f, err := os.Create("s1200.jpeg")
+	fmt.Println("NAME",  r.FormValue("profile_firstName"), "SURNAME", r.FormValue("profile_lastName"))
+
+	file, fileHeader, err := r.FormFile("avatar")
+	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, 	r.FormValue("Name"))
+	f, err := os.Create(fileHeader.Filename)
 	if err != nil {
 		fmt.Println("sendImg GOT ERROR1: ", err)
 		http.Error(w, err.Error(), 500)
 		return
-
 	}
 	defer f.Close()
-
-
-	file, fileHeader, err := r.FormFile("avatar")
-	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLER", file, fileHeader, err)
-
 	io.Copy(f, file)
-
 	w.Write(getOkAns(""))
 }
 
