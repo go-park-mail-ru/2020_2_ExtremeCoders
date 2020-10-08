@@ -77,10 +77,6 @@ func generateUID(db *loggedIn) uint64 {
 
 func (db *loggedIn) signin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
-	if r.Method == http.MethodOptions {
-		w.Write([]byte(""))
-		return
-	}
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
@@ -117,10 +113,6 @@ func (db *loggedIn) signin(w http.ResponseWriter, r *http.Request) {
 
 func (db *loggedIn) signup(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("SIGNUP GOT: ", r.URL, r.Body, r.Method)
-	if r.Method == http.MethodOptions {
-		w.Write([]byte(""))
-		return
-	}
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
@@ -174,10 +166,6 @@ func (db *loggedIn) updateProfile(changes *Profile, uid string) uint16 {
 
 func (db *loggedIn) profile(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("PROFILE GOT: ", r.URL, r.Form, r.Method)
-	if r.Method == http.MethodOptions {
-		w.Write([]byte(""))
-		return
-	}
 	if r.Method == http.MethodGet {
 		session, err := r.Cookie("session_id")
 		if err == http.ErrNoCookie {
