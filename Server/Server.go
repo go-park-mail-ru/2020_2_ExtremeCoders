@@ -3,6 +3,7 @@ package Server
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/rs/cors"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -31,7 +32,6 @@ type User struct {
 	Surname  string
 	Email    string
 	Password string
-	//Date     uint64
 	Img string
 }
 
@@ -76,7 +76,6 @@ func generateUID(db *loggedIn) uint64 {
 }
 
 func (db *loggedIn) signin(w http.ResponseWriter, r *http.Request) {
-	setHeader(w, r)
 	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
 	fmt.Println("USER", r.FormValue("Email"), r.FormValue("Password"))
 	if r.Method == http.MethodOptions {
@@ -118,8 +117,6 @@ func (db *loggedIn) signin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (db *loggedIn) signup(w http.ResponseWriter, r *http.Request) {
-
-	setHeader(w, r)
 	fmt.Println("SIGNUP GOT: ", r.URL, r.Body, r.Method)
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
@@ -129,9 +126,7 @@ func (db *loggedIn) signup(w http.ResponseWriter, r *http.Request) {
 		w.Write(getErrorNotPostAns())
 		return
 	}
-	//body:=r.PostFormValue("body_form")
-	//body:=r.PostFormValue("body_form")
-	//body=r.Form.Get("body_form")
+
 	dec := json.NewDecoder(r.Body)
 	dec.DisallowUnknownFields()
 	var user User
@@ -175,18 +170,10 @@ func (db *loggedIn) updateProfile(changes *Profile, uid string) uint16 {
 	} else if changes.method == "change Img" {
 		db.users[uid].Img = changes.value
 	}
-	//else if changes.method == "change Date" {
-	//	//date, err := strconv.ParseUint(changes.value, 10, 64)
-	//	//if err != nil{
-	//	//	return 400
-	//	//}
-	//	//db.users[uid].Date =date
-	//}
 	return 200
 }
 
 func (db *loggedIn) profile(w http.ResponseWriter, r *http.Request) {
-	setHeader(w, r)
 	fmt.Println("PROFILE GOT: ", r.URL, r.Form, r.Method)
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
@@ -256,14 +243,6 @@ func (db *loggedIn) profile(w http.ResponseWriter, r *http.Request) {
 	w.Write(getErrorUnexpectedAns())
 }
 
-func setHeader(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Version, Authorization, Content-Type")
-	//w.Header().Set("Access-Control-Expose-Headers", "Content-Length, API-Key, Content-Disposition")
-}
-
 func Start() {
 	var db = loggedIn{
 		sessions: make(map[string]uint64),
@@ -273,9 +252,15 @@ func Start() {
 	mux.HandleFunc("/signup", db.signup)
 	mux.HandleFunc("/signin", db.signin)
 	mux.HandleFunc("/profile", db.profile)
+	handler := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:3000", "http://95.163.209.195:3000"},
+		AllowedHeaders: []string{"Version", "Authorization", "Content-Type"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowCredentials: true,
+	}).Handler(mux)
 	server := http.Server{
 		Addr:         ":8080",
-		Handler:      mux,
+		Handler:      handler,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}

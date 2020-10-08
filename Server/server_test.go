@@ -19,8 +19,6 @@ func TestServer(t *testing.T) {
 		"Img":"",
 		"Password":"123",
 	}
-
-
 	bytesRepresentation, err := json.Marshal(message)
 	if err != nil {
 		log.Fatalln(err)
@@ -181,8 +179,6 @@ func TestServer3(t *testing.T) {
 		"Name": "name",
 		"Surname":  "surname",
 	}
-
-
 	bytesRepresentation, err = json.Marshal(message)
 	if err != nil {
 		log.Fatalln(err)
