@@ -77,7 +77,6 @@ func generateUID(db *loggedIn) uint64 {
 
 func (db *loggedIn) signin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
-	fmt.Println("USER", r.FormValue("Email"), r.FormValue("Password"))
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
 		return
