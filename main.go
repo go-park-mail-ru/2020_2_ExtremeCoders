@@ -7,7 +7,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -280,25 +279,21 @@ func (db *loggedIn)sendImg(w http.ResponseWriter, r *http.Request){
 		w.Write(getErrorNotPostAns())
 		return
 	}
-
-
-	src, hdr, err := r.FormFile("avatar")
+	//
+	f, err := os.Create("s1200.jpeg")
 	if err != nil {
 		fmt.Println("sendImg GOT ERROR1: ", err)
 		http.Error(w, err.Error(), 500)
 		return
-	}
-	defer src.Close()
 
-	dst, err := os.Create(filepath.Join(os.TempDir(), hdr.Filename))
-	if err != nil {
-		fmt.Println("sendImg GOT ERROR2: ", err)
-		http.Error(w, err.Error(), 500)
-		return
 	}
-	defer dst.Close()
+	defer f.Close()
 
-	io.Copy(dst, src)
+
+	file, fileHeader, err := r.FormFile("avatar")
+	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLER", file, fileHeader, err)
+
+	io.Copy(f, file)
 
 	w.Write(getOkAns(""))
 }
@@ -397,11 +392,13 @@ func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
 
 func setHeader(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+	fmt.Println("Origin:::::::::::::::::::::::::::::::::",r.Header.Get("Origin"))
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Version, Authorization, Content-Type")
 	//w.Header().Set("Access-Control-Expose-Headers", "Content-Length, API-Key, Content-Disposition")
 }
+
 func main() {
 	var db=loggedIn{
 		sessions: make(map[string]uint64),
@@ -412,6 +409,10 @@ func main() {
 	mux.HandleFunc("/signin", db.signin)
 	mux.HandleFunc("/profile", db.profile)
 	mux.HandleFunc("/sendimg", db.sendImg)
+
+	//handler := cors.New(cors.Options{
+	//	AllowedOrigins: []string{"*"},
+	//}).Handler(mux)
 
 	server := http.Server{
 		Addr:         ":8080",
