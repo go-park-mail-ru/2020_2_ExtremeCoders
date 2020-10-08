@@ -11,15 +11,15 @@ import (
 	"time"
 )
 
-
 const (
-	sizeSID=32
+	sizeSID = 32
 )
-var sidRunes=[]rune("1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
+
+var sidRunes = []rune("1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
 
 type Profile struct {
 	method string
-	value string
+	value  string
 }
 
 type User struct {
@@ -29,13 +29,13 @@ type User struct {
 	Email    string
 	Password string
 	//Date     uint64
-	Img      string
+	Img string
 }
 
 type Answer struct {
 	Code        uint16
 	Description string
-	sid string
+	sid         string
 	User        User
 }
 
@@ -71,111 +71,111 @@ func getErrorNoCockyAns() []byte {
 	return ans
 }
 
-func getErrorWrongCookieAns() []byte{
-	err:= &Answer{
-		Code:401,
+func getErrorWrongCookieAns() []byte {
+	err := &Answer{
+		Code:        401,
 		Description: "wrong session id",
 	}
-	ans, _:=json.Marshal(err)
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
-func getErrorNotPostAns() []byte{
-	err:= &Answer{
-		Code:400,
+func getErrorNotPostAns() []byte {
+	err := &Answer{
+		Code:        400,
 		Description: "Do not require request's method, expected POST",
 	}
-	ans, _:=json.Marshal(err)
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
-func getErrorNotNumberAns() []byte{
-	err:= &Answer{
-		Code:400,
+func getErrorNotNumberAns() []byte {
+	err := &Answer{
+		Code:        400,
 		Description: "Not number",
 	}
-	ans, _:=json.Marshal(err)
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
-func getErrorNoUserAns() []byte{
-	err:= &Answer{
-		Code:404,
+func getErrorNoUserAns() []byte {
+	err := &Answer{
+		Code:        404,
 		Description: "Do not find this user in db",
 	}
-	ans, _:=json.Marshal(err)
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
-func getErrorLoginExistAns() [] byte{
-	err:= &Answer{
-		Code:401,
+func getErrorLoginExistAns() []byte {
+	err := &Answer{
+		Code:        401,
 		Description: "This Email has already exists",
 	}
-	ans, _:=json.Marshal(err)
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
-func getErrorBadPasswordAns() []byte{
-	err:= &Answer{
-		Code:401,
+func getErrorBadPasswordAns() []byte {
+	err := &Answer{
+		Code:        401,
 		Description: "Wrong Password",
 	}
-	ans, _:=json.Marshal(err)
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
-func getOkAns(cocky string) []byte{
-	ok:= &Answer{
-		Code:200,
+func getOkAns(cocky string) []byte {
+	ok := &Answer{
+		Code:        200,
 		Description: "ok",
-		sid: cocky,
+		sid:         cocky,
 	}
-	ans, _:=json.Marshal(ok)
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
-func getOkAnsData(cocky string, data User) []byte{
+func getOkAnsData(cocky string, data User) []byte {
 	fmt.Println("DATA::::::::::", data.Email, data.Name, data.Password)
-	ok:= &Answer{
-		Code:200,
+	ok := &Answer{
+		Code:        200,
 		Description: "ok",
-		sid: cocky,
-		User: data,
+		sid:         cocky,
+		User:        data,
 	}
-	ans, _:=json.Marshal(ok)
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
 func generateSID(db *loggedIn) []rune {
-	var sid=make ([]rune, sizeSID)
-	for{
-		for i:=0;i<sizeSID;i++{
-			sid[i]=sidRunes[rand.Intn(len(sidRunes))]
+	var sid = make([]rune, sizeSID)
+	for {
+		for i := 0; i < sizeSID; i++ {
+			sid[i] = sidRunes[rand.Intn(len(sidRunes))]
 		}
-		_,exist:=db.sessions[string(sid)]
-		if !exist{
+		_, exist := db.sessions[string(sid)]
+		if !exist {
 			break
 		}
 	}
 	return sid
 }
 
-func generateUID(db *loggedIn) uint64{
+func generateUID(db *loggedIn) uint64 {
 	var uid uint64
-	for{
-		for i:=0;i<sizeSID;i++{
-			uid=rand.Uint64()
+	for {
+		for i := 0; i < sizeSID; i++ {
+			uid = rand.Uint64()
 		}
 		var _, exist = db.users[strconv.FormatUint(uid, 10)]
-		if !exist{
+		if !exist {
 			break
 		}
 	}
 	return uid
 }
 
-func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
+func (db *loggedIn) signin(w http.ResponseWriter, r *http.Request) {
 	setHeader(w, r)
 	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
 	fmt.Println("USER", r.FormValue("Email"), r.FormValue("Password"))
@@ -188,44 +188,45 @@ func (db *loggedIn)signin(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	type Uinfo struct { Email string;Password string}
+	type Uinfo struct {
+		Email    string
+		Password string
+	}
 
-	dec:=json.NewDecoder(r.Body)
+	dec := json.NewDecoder(r.Body)
 	dec.DisallowUnknownFields()
 	var user Uinfo
-	err:=dec.Decode(&user)
-	if err!=nil {
+	err := dec.Decode(&user)
+	if err != nil {
 		w.Write(getErrorBadJsonAns())
 		return
 	}
-	userEx, erro:=db.users[user.Email]
-	if !erro{
+	userEx, erro := db.users[user.Email]
+	if !erro {
 		w.Write(getErrorNoUserAns())
 		return
 	}
-	if userEx.Password !=user.Password{
+	if userEx.Password != user.Password {
 		w.Write(getErrorBadPasswordAns())
 		return
 	}
-	sid:=string(generateSID(db))
-	db.sessions[sid]= userEx.id
-	cocky:=&http.Cookie{
-		Name: "session_id",
-		Value: sid,
-		Expires: time.Now().Add(24*7*4*time.Hour),
+	sid := string(generateSID(db))
+	db.sessions[sid] = userEx.id
+	cocky := &http.Cookie{
+		Name:    "session_id",
+		Value:   sid,
+		Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
 	}
-	cocky.Path="/"
+	cocky.Path = "/"
 	http.SetCookie(w, cocky)
 	w.Write(getOkAns(sid))
 }
 
-
-
-func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
+func (db *loggedIn) signup(w http.ResponseWriter, r *http.Request) {
 
 	setHeader(w, r)
 	fmt.Println("SIGNUP GOT: ", r.URL, r.Body, r.Method)
-	if r.Method==http.MethodOptions{
+	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
 		return
 	}
@@ -236,96 +237,69 @@ func (db *loggedIn)signup(w http.ResponseWriter, r *http.Request){
 	//body:=r.PostFormValue("body_form")
 	//body:=r.PostFormValue("body_form")
 	//body=r.Form.Get("body_form")
-	dec:=json.NewDecoder(r.Body)
+	dec := json.NewDecoder(r.Body)
 	dec.DisallowUnknownFields()
 	var user User
-	err:=dec.Decode(&user)
-	if err!=nil {
+	err := dec.Decode(&user)
+	if err != nil {
 		w.Write(getErrorBadJsonAns())
 		return
 	}
-	_, erro:=db.users[user.Email]
+	_, erro := db.users[user.Email]
 	if erro {
 		w.Write(getErrorLoginExistAns())
 		return
 	}
 
-	user.id=generateUID(db)
+	user.id = generateUID(db)
 	fmt.Println("USER", user.Name, user.Password)
 
-	sid:=string(generateSID(db))
-	db.sessions[sid]= user.id
-	db.users[user.Email]=&user
+	sid := string(generateSID(db))
+	db.sessions[sid] = user.id
+	db.users[user.Email] = &user
 
-	cocky:=&http.Cookie{
-		Name: "session_id",
-		Value: sid,
-		Expires: time.Now().Add(24*7*4*time.Hour),
+	cocky := &http.Cookie{
+		Name:    "session_id",
+		Value:   sid,
+		Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
 	}
-	cocky.Path="/"
+	cocky.Path = "/"
 	http.SetCookie(w, cocky)
 	w.Write(getOkAns(sid))
 }
 
-func (db *loggedIn)sendImg(w http.ResponseWriter, r *http.Request){
 
-	setHeader(w, r)
-	fmt.Println("sendImg GOT: ", r.URL, r.Body, r.Method)
-	if r.Method==http.MethodOptions{
-		w.Write([]byte(""))
-		return
-	}
-	if r.Method != http.MethodPost {
-		w.Write(getErrorNotPostAns())
-		return
-	}
-	fmt.Println("NAME",  r.FormValue("profile_firstName"), "SURNAME", r.FormValue("profile_lastName"))
-
-	file, fileHeader, err := r.FormFile("avatar")
-	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, 	r.FormValue("Name"))
-	f, err := os.Create(fileHeader.Filename)
-	if err != nil {
-		fmt.Println("sendImg GOT ERROR1: ", err)
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	defer f.Close()
-	io.Copy(f, file)
-	w.Write(getOkAns(""))
-}
-
-
-func (db *loggedIn)updateProfile(changes *Profile, uid string) uint16 {
-	if changes.method=="change Password" {
-		db.users[uid].Password =changes.value
-	}else if changes.method=="change Email"{
-		db.users[uid].Email =changes.value
-	}else if changes.method=="change Name"{
-		db.users[uid].Name =changes.value
-	}else if changes.method=="change Surname"{
-		db.users[uid].Surname =changes.value
-	}else if changes.method=="change Date"{
+func (db *loggedIn) updateProfile(changes *Profile, uid string) uint16 {
+	if changes.method == "change Password" {
+		db.users[uid].Password = changes.value
+	} else if changes.method == "change Email" {
+		db.users[uid].Email = changes.value
+	} else if changes.method == "change Name" {
+		db.users[uid].Name = changes.value
+	} else if changes.method == "change Surname" {
+		db.users[uid].Surname = changes.value
+	} else if changes.method == "change Date" {
 		//date, err := strconv.ParseUint(changes.value, 10, 64)
 		//if err != nil{
 		//	return 400
 		//}
 		//db.users[uid].Date =date
-	}else if changes.method=="change Img"{
+	} else if changes.method == "change Img" {
 		db.users[uid].Img = changes.value
 	}
 	return 200
 }
 
-func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
+func (db *loggedIn) profile(w http.ResponseWriter, r *http.Request) {
 	setHeader(w, r)
 	fmt.Println("PROFILE GOT: ", r.URL, r.Form, r.Method)
-	if r.Method==http.MethodOptions{
+	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
 		return
 	}
 	if r.Method == http.MethodGet {
 		session, err := r.Cookie("session_id")
-		if err==http.ErrNoCookie {
+		if err == http.ErrNoCookie {
 			fmt.Println("NO COOKIE")
 			w.Write(getErrorNoCockyAns())
 			return
@@ -333,62 +307,77 @@ func (db *loggedIn)profile(w http.ResponseWriter, r *http.Request){
 		fmt.Println("COOKIE!!!!!!!!!!!!!!!!!!!")
 
 		uid, ok := db.sessions[session.Value]
-		if  !ok {
+		if !ok {
 			w.Write(getErrorWrongCookieAns())
 			return
 		}
-		for _, val:=range db.users{
-			if (*val).id==uid{
+		for _, val := range db.users {
+			if (*val).id == uid {
 				fmt.Println("If_DATA::::::", (*val).Password, (*val).Name)
 				w.Write(getOkAnsData(session.Value, *val))
 				return
 			}
 		}
 
-	}else if r.Method != http.MethodPost{
+	} else if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
 	} else {
-		fmt.Println("HUUUUUUUUUUUUIIIIIIIIIIIII::::::::::::::::")
 		session, err := r.Cookie("session_id")
-		if err==http.ErrNoCookie {
+		if err == http.ErrNoCookie {
 			fmt.Println("NO COOKIE")
 			w.Write(getErrorNoCockyAns())
 			return
 		}
 		fmt.Println("COOKIE!!!!!!!!!!!!!!!!!!!")
-
+		fmt.Println("NAME", r.FormValue("profile_firstName"), "SURNAME", r.FormValue("profile_lastName"))
+		newName := r.FormValue("profile_firstName")
+		newSurname := r.FormValue("profile_lastName")
 		uid, ok := db.sessions[session.Value]
-		if  !ok {
+		if !ok {
 			w.Write(getErrorWrongCookieAns())
 			return
 		}
-		for _, val:=range db.users{
-			if (*val).id==uid{
-				fmt.Println("If_DATA::::::", (*val).Password, (*val).Name)
-				dec:=json.NewDecoder(r.Body)
-				dec.DisallowUnknownFields()
-				type update struct{Name string; Surname string}
-				var up update
-				err:=dec.Decode(&up)
-				if err!=nil {
-					w.Write(getErrorBadJsonAns())
-					return
-				}
-				(*val).Name=up.Name
-				(*val).Surname=up.Surname
-				w.Write(getOkAns(session.Value))
-				return
+		var currentUser *User
+		for _, val := range db.users {
+			if (*val).id == uid {
+				currentUser = val
+				break
 			}
 		}
+		if currentUser==nil{
+			w.Write(getErrorUnexpectedAns())
+			return
+		}
+		fmt.Println("If_DATA::::::", (*currentUser).Password, (*currentUser).Name)
+		(*currentUser).Name = newName
+		(*currentUser).Surname = newSurname
+
+		file, fileHeader, err := r.FormFile("avatar")
+		if file==nil{
+			fmt.Println("FILE IS EMPTY")
+			w.Write(getOkAns(session.Value))
+			return
+		}
+		fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, r.FormValue("Name"))
+		f, err := os.Create(fileHeader.Filename)
+		if err != nil {
+			fmt.Println("sendImg GOT ERROR1: ", err)
+			http.Error(w, err.Error(), 500)
+			return
+		}
+		defer f.Close()
+		io.Copy(f, file)
+
+		w.Write(getOkAns(session.Value))
+		return
 	}
 	w.Write(getErrorUnexpectedAns())
 }
 
-
-func setHeader(w http.ResponseWriter, r *http.Request){
+func setHeader(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
-	fmt.Println("Origin:::::::::::::::::::::::::::::::::",r.Header.Get("Origin"))
+	fmt.Println("Origin:::::::::::::::::::::::::::::::::", r.Header.Get("Origin"))
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Version, Authorization, Content-Type")
@@ -396,19 +385,14 @@ func setHeader(w http.ResponseWriter, r *http.Request){
 }
 
 func main() {
-	var db=loggedIn{
+	var db = loggedIn{
 		sessions: make(map[string]uint64),
-		users: make(map[string]*User),
+		users:    make(map[string]*User),
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("/signup", db.signup)
 	mux.HandleFunc("/signin", db.signin)
 	mux.HandleFunc("/profile", db.profile)
-	mux.HandleFunc("/sendimg", db.sendImg)
-
-	//handler := cors.New(cors.Options{
-	//	AllowedOrigins: []string{"*"},
-	//}).Handler(mux)
 
 	server := http.Server{
 		Addr:         ":8080",
