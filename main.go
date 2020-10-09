@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/jpeg"
 	"io"
 	"math/rand"
 	"net/http"
@@ -234,17 +237,14 @@ func (db *loggedIn) signup(w http.ResponseWriter, r *http.Request) {
 		w.Write(getErrorNotPostAns())
 		return
 	}
-	//body:=r.PostFormValue("body_form")
-	//body:=r.PostFormValue("body_form")
-	//body=r.Form.Get("body_form")
-	dec := json.NewDecoder(r.Body)
-	dec.DisallowUnknownFields()
+
+
 	var user User
-	err := dec.Decode(&user)
-	if err != nil {
-		w.Write(getErrorBadJsonAns())
-		return
-	}
+	user.Name = r.FormValue("name")
+	user.Surname = r.FormValue("surname")
+	user.Email = r.FormValue("email")
+	user.Password = r.FormValue("password1")
+
 	_, erro := db.users[user.Email]
 	if erro {
 		w.Write(getErrorLoginExistAns())
@@ -252,11 +252,44 @@ func (db *loggedIn) signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.id = generateUID(db)
-	fmt.Println("USER", user.Name, user.Password)
-
 	sid := string(generateSID(db))
 	db.sessions[sid] = user.id
 	db.users[user.Email] = &user
+
+	fmt.Println("USER", user.Name, user.Password)
+
+	file, fileHeader, err := r.FormFile("avatar")
+	if file==nil{
+		fmt.Println("FILE IS EMPTY")
+		cocky := &http.Cookie{
+			Name:    "session_id",
+			Value:   sid,
+			Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+		}
+		cocky.Path = "/"
+		http.SetCookie(w, cocky)
+		w.Write(getOkAns(sid))
+		return
+	}
+	user.Img = fileHeader.Filename
+	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, r.FormValue("Name"))
+	f, err := os.Create(fileHeader.Filename)
+	if err != nil {
+		fmt.Println("sendImg GOT ERROR1: ", err)
+		cocky := &http.Cookie{
+			Name:    "session_id",
+			Value:   sid,
+			Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+		}
+		cocky.Path = "/"
+		http.SetCookie(w, cocky)
+		w.Write(getOkAns(sid))
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	defer f.Close()
+	io.Copy(f, file)
+
 
 	cocky := &http.Cookie{
 		Name:    "session_id",
@@ -267,7 +300,6 @@ func (db *loggedIn) signup(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, cocky)
 	w.Write(getOkAns(sid))
 }
-
 
 func (db *loggedIn) updateProfile(changes *Profile, uid string) uint16 {
 	if changes.method == "change Password" {
@@ -359,6 +391,7 @@ func (db *loggedIn) profile(w http.ResponseWriter, r *http.Request) {
 			w.Write(getOkAns(session.Value))
 			return
 		}
+		(*currentUser).Img = fileHeader.Filename
 		fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, r.FormValue("Name"))
 		f, err := os.Create(fileHeader.Filename)
 		if err != nil {
@@ -373,6 +406,70 @@ func (db *loggedIn) profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(getErrorUnexpectedAns())
+}
+
+func (db *loggedIn) getAvatar(w http.ResponseWriter, r *http.Request){
+	setHeader(w, r)
+	fmt.Println("getAvatar GOT: ", r.URL, r.Form, r.Method)
+	if r.Method == http.MethodOptions {
+		w.Write([]byte(""))
+		return
+	}
+	if r.Method == http.MethodGet {
+		session, err := r.Cookie("session_id")
+		if err == http.ErrNoCookie {
+			fmt.Println("NO COOKIE")
+			w.Write(getErrorNoCockyAns())
+			return
+		}
+		fmt.Println("COOKIE!!!!!!!!!!!!!!!!!!!")
+
+		uid, ok := db.sessions[session.Value]
+		if !ok {
+			w.Write(getErrorWrongCookieAns())
+			return
+		}
+		var currentUser *User
+		for _, val := range db.users {
+			if (*val).id == uid {
+				currentUser = val
+
+			}
+		}
+		fmt.Println("USER::::::", (*currentUser).Password, (*currentUser).Name)
+		if (*currentUser).Img == ""{
+			fmt.Println("USER HAVE NOT AVATAR")
+			w.Write([]byte("USER HAVE NOT AVATAR"))
+			return
+		}
+
+		file, err := os.Open((*currentUser).Img) // path to image file
+		if err != nil {
+			fmt.Println("ERROR", err)
+			return
+		}
+
+		img, fmtName, err := image.Decode(file)
+		fmt.Println("FMT NAME", fmtName)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(getErrorUnexpectedAns())
+		}
+
+		buffer := new(bytes.Buffer)
+		if err := jpeg.Encode(buffer, img, nil); err != nil {
+			fmt.Println("unable to encode image.")
+		}
+
+		w.Header().Set("Content-Type", "image/jpeg")
+		w.Header().Set("Content-Length", strconv.Itoa(len(buffer.Bytes())))
+		if _, err := w.Write(buffer.Bytes()); err != nil {
+			w.Write(getErrorUnexpectedAns())
+			fmt.Println("unable to write image.")
+			return
+		}
+		return
+	}
 }
 
 func setHeader(w http.ResponseWriter, r *http.Request) {
@@ -393,6 +490,8 @@ func main() {
 	mux.HandleFunc("/signup", db.signup)
 	mux.HandleFunc("/signin", db.signin)
 	mux.HandleFunc("/profile", db.profile)
+	mux.HandleFunc("/getAvatar", db.getAvatar)
+
 
 	server := http.Server{
 		Addr:         ":8080",
