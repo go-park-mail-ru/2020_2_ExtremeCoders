@@ -53,7 +53,3 @@ func (uc *UseCase)SignIn(user Models.User) (uint16, *http.Cookie) {
 	cookie.Path = "/"
 	return 200, cookie
 }
-
-func UpdateProfile(newUser Models.User, email string){
-
-}

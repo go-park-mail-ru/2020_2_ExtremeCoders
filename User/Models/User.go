@@ -8,3 +8,8 @@ type User struct {
 	Password string
 	Img      string
 }
+
+type Session struct {
+	Sid string
+	User   *User `pg:"rel:has-one"`
+}
