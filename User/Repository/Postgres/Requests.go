@@ -23,8 +23,17 @@ func (dbInfo DataBase)IsEmailExists(email string) bool{
 func (dbInfo DataBase)AddUser(user Models.User){
 	_, err := dbInfo.db.Model(user).Insert()
 	if err != nil {
-		panic(err)
+
 	}
+}
+
+func (dbInfo DataBase)AddSession(sid string, uid uint64) error {
+	session:=&Models.Session{Sid: sid,UserId: int64(uid), User: &Models.User{Id: uid}}
+	_, err:=dbInfo.db.Model(session).Insert()
+	if err!=nil{
+		return err
+	}
+	return  nil
 }
 
 func (dbInfo DataBase)GenerateSID() []rune{

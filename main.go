@@ -2,8 +2,7 @@ package main
 
 import (
 	"CleanArch/User/Delivery"
-	"CleanArch/User/Models"
-	"CleanArch/User/Repository/tmpDB"
+	"CleanArch/User/Repository/Postgres"
 	"CleanArch/User/UseCase"
 	"fmt"
 	"github.com/rs/cors"
@@ -14,10 +13,8 @@ import (
 
 
 func main() {
-	var db=tmpDB.LoggedIn{
-		Sessions: make(map[string]uint64),
-		Users:    make(map[string] *Models.User),
-	}
+	var db=Postgres.DataBase{ User: "postgres", Password: "1538"}
+	db.Init()
 	var uc=UseCase.UseCase{Db: db}
 	var yaFood=Delivery.Delivery{Uc: uc}
 	mux := http.NewServeMux()

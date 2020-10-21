@@ -11,5 +11,6 @@ type User struct {
 
 type Session struct {
 	Sid string
+	UserId int64
 	User   *User `pg:"rel:has-one"`
 }
