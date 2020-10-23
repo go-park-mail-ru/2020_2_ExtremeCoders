@@ -10,20 +10,29 @@ type DataBase struct {
 	db *pg.DB
 	User string
 	Password string
+	DataBaseName string
 }
 
 func (dbInfo *DataBase)Init() {
 	if dbInfo ==nil{
 		dbInfo.User="postgres"
 		dbInfo.Password="1538"
+		dbInfo.DataBaseName="maila"
 	}
 	dbInfo.db = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
 		Password: dbInfo.Password,
+		Database: dbInfo.DataBaseName,
 	})
-	defer dbInfo.db.Close()
+
 
 	err := createSchema(dbInfo.db)
+	dbInfo.db.Close()
+	dbInfo.db = pg.Connect(&pg.Options{
+		User:     dbInfo.User,
+		Password: dbInfo.Password,
+		Database: dbInfo.DataBaseName,
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -39,7 +48,6 @@ func createSchema(db *pg.DB) error {
 
 	for _, model := range models {
 		err := db.Model(model).CreateTable(&orm.CreateTableOptions{
-			Temp: true,
 			IfNotExists: true,
 		})
 		if err != nil {

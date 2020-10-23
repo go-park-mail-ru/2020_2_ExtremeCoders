@@ -3,9 +3,14 @@ package Delivery
 import (
 	"CleanArch/User/Models"
 	"CleanArch/User/UseCase"
-	"encoding/json"
+	"bytes"
 	"fmt"
+	"image"
+	"image/jpeg"
+	"io"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -14,19 +19,20 @@ type Delivery struct{
 }
 
 func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("SIGNUP GOT: ", r.URL, r.Body, r.Method)
+	fmt.Print("SIGNUP: ")
+	fmt.Print("\n\n")
 	if r.Method != http.MethodPost {
 		return
 	}
-	dec := json.NewDecoder(r.Body)
-	dec.DisallowUnknownFields()
 	var user Models.User
-	err := dec.Decode(&user)
-	if err != nil {
-		w.Write(getErrorBadJsonAns())
-		return
-	}
+	user.Name = r.FormValue("name")
+	user.Surname = r.FormValue("surname")
+	user.Email = r.FormValue("email")
+	user.Password = r.FormValue("password1")
+
 	code, cookie:=yaFood.Uc.Signup(user)
+	yaFood.LoadFile(&user,r)
+	fmt.Print("\n\n")
 	if cookie!=nil{
 		http.SetCookie(w, cookie)
 	}
@@ -35,20 +41,17 @@ func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 }
 
 func (yaFood *Delivery)SignIn(w http.ResponseWriter, r *http.Request) {
+	fmt.Print("SIGNIN: ")
+	yaFood.Uc.Db.ShowAll()
+	fmt.Print("\n\n")
 	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
 	if r.Method != http.MethodPost {
 		w.Write(getErrorNotPostAns())
 		return
 	}
-
-	dec := json.NewDecoder(r.Body)
-	dec.DisallowUnknownFields()
 	var user Models.User
-	err := dec.Decode(&user)
-	if err != nil {
-		w.Write(getErrorBadJsonAns())
-		return
-	}
+	user.Email=r.FormValue("email")
+	user.Password=r.FormValue("password")
 	code, cookie:=yaFood.Uc.SignIn(user)
 	if cookie!=nil{http.SetCookie(w, cookie)}
 	response:=SignInError(code, cookie)
@@ -69,6 +72,9 @@ func (yaFood *Delivery)getUserByRequest(r *http.Request) (*Models.User, *http.Co
 }
 
 func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
+	fmt.Print("PROFILE: ")
+
+	fmt.Print("\n\n")
 	user, session, err:=yaFood.getUserByRequest(r)
 	if err!=200{
 		CookieError(err)
@@ -81,14 +87,9 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 		w.Write(getErrorNotPostAns())
 		return
 	} else {
-		dec := json.NewDecoder(r.Body)
-		dec.DisallowUnknownFields()
 		var up Models.User
-		err := dec.Decode(&up)
-		if err != nil {
-			w.Write(getErrorBadJsonAns())
-			return
-		}
+		up.Name=r.FormValue("profile_firstName")
+		up.Surname=r.FormValue("profile_lastName")
 		yaFood.Uc.Db.UpdateProfile(up, user.Email)
 		w.Write(getOkAns(session.Value))
 		return
@@ -118,4 +119,67 @@ func (yaFood *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(getErrorUnexpectedAns())
+}
+
+func (yaFood *Delivery)LoadFile(user *Models.User, r *http.Request){
+	file, fileHeader, err := r.FormFile("avatar")
+	if file == nil {
+		fmt.Println("FILE IS EMPTY")
+		return
+	}
+	(*user).Img = fileHeader.Filename
+	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, r.FormValue("Name"))
+	f, err := os.Create(fileHeader.Filename)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+	io.Copy(f, file)
+}
+
+func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
+	fmt.Println("getAvatar GOT: ", r.URL, r.Form, r.Method)
+	if r.Method == http.MethodOptions {
+		w.Write([]byte(""))
+		return
+	}
+	if r.Method == http.MethodGet {
+		user, _, Err:=yaFood.getUserByRequest(r)
+		if Err!=200{
+			CookieError(Err)
+			return
+		}
+		if (*user).Img == "" {
+			fmt.Println("USER HAVE NOT AVATAR")
+			w.Write([]byte("USER HAVE NOT AVATAR"))
+			return
+		}
+
+		file, err := os.Open((*user).Img) // path to image file
+		if err != nil {
+			fmt.Println("ERROR", err)
+			return
+		}
+
+		img, fmtName, err := image.Decode(file)
+		fmt.Println("FMT NAME", fmtName)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(getErrorUnexpectedAns())
+		}
+
+		buffer := new(bytes.Buffer)
+		if err := jpeg.Encode(buffer, img, nil); err != nil {
+			fmt.Println("unable to encode image.")
+		}
+
+		w.Header().Set("Content-Type", "image/jpeg")
+		w.Header().Set("Content-Length", strconv.Itoa(len(buffer.Bytes())))
+		if _, err := w.Write(buffer.Bytes()); err != nil {
+			w.Write(getErrorUnexpectedAns())
+			fmt.Println("unable to write image.")
+			return
+		}
+		return
+	}
 }

@@ -10,7 +10,7 @@ type User struct {
 }
 
 type Session struct {
-	Sid string
-	UserId int64
+	Id     string
+	UserId int64 `pg:"on_delete:RESTRICT,on_update: CASCADE"`
 	User   *User `pg:"rel:has-one"`
 }

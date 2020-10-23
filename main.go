@@ -13,7 +13,7 @@ import (
 
 
 func main() {
-	var db=Postgres.DataBase{ User: "postgres", Password: "1538"}
+	var db=Postgres.DataBase{ User: "postgres", Password: "1538", DataBaseName: "maila"}
 	db.Init()
 	var uc=UseCase.UseCase{Db: db}
 	var yaFood=Delivery.Delivery{Uc: uc}
@@ -22,6 +22,7 @@ func main() {
 	mux.HandleFunc("/signin", yaFood.SignIn)
 	mux.HandleFunc("/profile", yaFood.Profile)
 	mux.HandleFunc("/logout", yaFood.Logout)
+	mux.HandleFunc("/getAvatar", yaFood.GetAvatar)
 	handler := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:3000", "http://95.163.209.195:3000"},
 		AllowedHeaders: []string{"Version", "Authorization", "Content-Type"},
