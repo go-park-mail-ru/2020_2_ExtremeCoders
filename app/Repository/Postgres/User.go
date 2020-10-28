@@ -1,9 +1,10 @@
 package Postgres
 
 import (
-	"CleanArch/User/Models"
+	"CleanArch/app/Models"
+	crypto "crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 )
 
 const (
@@ -41,7 +42,8 @@ func (dbInfo DataBase) GenerateSID() []rune {
 	var sid string
 	for {
 		for i := 0; i < SizeSID; i++ {
-			sid+= string(SidRunes[rand.Intn(len(SidRunes))])
+			safeNum,_ :=crypto.Int(crypto.Reader, big.NewInt(int64(len(SidRunes))))
+			sid+= string(SidRunes[safeNum.Int64()])
 		}
 		fmt.Println(sid)
 		session := &Models.Session{Id: sid}
@@ -55,16 +57,14 @@ func (dbInfo DataBase) GenerateSID() []rune {
 }
 
 func (dbInfo DataBase) GenerateUID() uint64 {
-	var uid uint64
 	for {
-		uid = rand.Uint64()
-		user := Models.User{Id: uid}
-		exist := dbInfo.db.Model(user).Select()
+		uid,_ :=crypto.Int(crypto.Reader, big.NewInt(4294967295))
+		user := Models.User{Id: uid.Uint64()}
+		exist := dbInfo.db.Model(user).Where("id=?", uid.Int64()).Select()
 		if exist != nil {
-			break
+			return uid.Uint64()
 		}
 	}
-	return uid
 }
 
 func (dbInfo DataBase) GetUserByEmail(email string) (*Models.User, bool) {

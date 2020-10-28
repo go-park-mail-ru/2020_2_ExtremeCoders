@@ -1,7 +1,7 @@
 package Delivery
 
 import (
-	"CleanArch/User/Models"
+	"CleanArch/app/Models"
 	"encoding/json"
 	"fmt"
 )

@@ -1,7 +1,7 @@
 package tmpDB
 
 import (
-	"CleanArch/User/Models"
+	"CleanArch/app/Models"
 	"math/rand"
 	"strconv"
 )

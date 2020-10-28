@@ -1,10 +1,10 @@
 package Repository
 
 import (
-	"CleanArch/User/Models"
+	"CleanArch/app/Models"
 )
 
-type DB interface {
+type UserDB interface {
 	IsEmailExists(string) bool
 	AddSession(string, uint64, *Models.User) error
 	AddUser(*Models.User)

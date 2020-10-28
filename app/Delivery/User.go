@@ -1,8 +1,8 @@
 package Delivery
 
 import (
-	"CleanArch/User/Models"
-	"CleanArch/User/UseCase"
+	"CleanArch/app/Models"
+	"CleanArch/app/UseCase"
 	"bytes"
 	"fmt"
 	"image"
@@ -29,9 +29,9 @@ func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 	user.Surname = r.FormValue("surname")
 	user.Email = r.FormValue("email")
 	user.Password = r.FormValue("password1")
-
-	code, cookie:=yaFood.Uc.Signup(user)
 	yaFood.LoadFile(&user,r)
+	code, cookie:=yaFood.Uc.Signup(user)
+
 	fmt.Print("\n\n")
 	if cookie!=nil{
 		http.SetCookie(w, cookie)
@@ -135,6 +135,7 @@ func (yaFood *Delivery)LoadFile(user *Models.User, r *http.Request){
 	}
 	defer f.Close()
 	io.Copy(f, file)
+
 }
 
 func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"CleanArch/User/Delivery"
-	"CleanArch/User/Repository/Postgres"
-	"CleanArch/User/UseCase"
+	"CleanArch/app/Delivery"
+	"CleanArch/app/Repository/Postgres"
+	"CleanArch/app/UseCase"
 	"fmt"
 	"github.com/rs/cors"
 	"net/http"
@@ -23,8 +23,9 @@ func main() {
 	mux.HandleFunc("/profile", yaFood.Profile)
 	mux.HandleFunc("/logout", yaFood.Logout)
 	mux.HandleFunc("/getAvatar", yaFood.GetAvatar)
+	mux.HandleFunc("/sendMessage", yaFood.SendLetter)
 	handler := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:3000", "http://95.163.209.195:3000"},
+		AllowedOrigins: []string{"http://localhost:3000", "http://127.0.0.1:3000", "http://95.163.209.195:3000"},
 		AllowedHeaders: []string{"Version", "Authorization", "Content-Type"},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
 		AllowCredentials: true,

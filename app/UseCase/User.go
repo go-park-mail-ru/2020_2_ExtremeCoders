@@ -1,14 +1,14 @@
 package UseCase
 
 import (
-	"CleanArch/User/Models"
-	"CleanArch/User/Repository"
+	"CleanArch/app/Models"
+	"CleanArch/app/Repository"
 	"net/http"
 	"time"
 )
 
 type UseCase struct{
-	Db Repository.DB
+	Db Repository.UserDB
 }
 
 func (uc *UseCase)Signup(user Models.User) (uint16, *http.Cookie) {

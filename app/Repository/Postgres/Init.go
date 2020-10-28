@@ -1,7 +1,7 @@
 package Postgres
 
 import (
-	"CleanArch/User/Models"
+	"CleanArch/app/Models"
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 )
