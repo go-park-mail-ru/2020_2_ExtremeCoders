@@ -1,8 +1,10 @@
 package Models
 
 type Letter struct {
-	sender   User
-	receiver User
-	theme    string
-	text     string
+	Id       uint64
+	Sender   string
+	Receiver string
+	Theme    string
+	Text     string
+	DateTime int64
 }

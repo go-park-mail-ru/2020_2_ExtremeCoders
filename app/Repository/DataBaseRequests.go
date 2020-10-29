@@ -17,4 +17,8 @@ type UserDB interface {
 	RemoveSession(uint64, string)
 	RemoveSessionByUID(uint64)
 	ShowAll()
+
+	SaveMail(Models.Letter) int
+	GetLetters(string) (int, []Models.Letter)
+	GenerateLID() uint64
 }

@@ -44,6 +44,7 @@ func createSchema(db *pg.DB) error {
 	models := []interface{}{
 		(*Models.User)(nil),
 		(*Models.Session)(nil),
+		(*Models.Letter)(nil),
 	}
 
 	for _, model := range models {

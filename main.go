@@ -24,6 +24,7 @@ func main() {
 	mux.HandleFunc("/logout", yaFood.Logout)
 	mux.HandleFunc("/getAvatar", yaFood.GetAvatar)
 	mux.HandleFunc("/sendMessage", yaFood.SendLetter)
+	mux.HandleFunc("/getLetters", yaFood.GetLetters)
 	handler := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:3000", "http://127.0.0.1:3000", "http://95.163.209.195:3000"},
 		AllowedHeaders: []string{"Version", "Authorization", "Content-Type"},
