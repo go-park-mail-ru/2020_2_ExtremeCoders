@@ -2,15 +2,16 @@ package Delivery
 
 import (
 	"CleanArch/app/Models"
-	"fmt"
+	"github.com/golang/glog"
 	"net/http"
 	"time"
 )
 
 func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
-	fmt.Print("Send Letter: ")
-	fmt.Print("\n\n")
+	glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	if r.Method != http.MethodPost {
+		glog.Info("RESPONSE: ",getErrorNotPostAns())
+		w.Write(getErrorNotPostAns())
 		return
 	}
 	var letter Models.Letter
@@ -21,14 +22,18 @@ func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
 	letter.DateTime=time.Now().Unix()
 	err:=yaFood.Uc.SaveLetter(letter)
 	w.Write(SendLetterError(uint16(err)))
+	glog.Info("RESPONSE: ",SendLetterError(uint16(err)))
 }
 
 func (yaFood *Delivery)GetLetters(w http.ResponseWriter, r *http.Request){
+	glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	user, _, code:=yaFood.getUserByRequest(r)
 	if code != 200{
 		w.Write(getErrorNoCockyAns())
+		glog.Info("RESPONSE: ",getErrorNoCockyAns())
 		return
 	}
 	err, letters:=yaFood.Uc.GetLetters(user.Email)
 	w.Write(GetLettersError(uint16(err), letters))
+	glog.Info("RESPONSE: ",SendLetterError(uint16(err)))
 }
