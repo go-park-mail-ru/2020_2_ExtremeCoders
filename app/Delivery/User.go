@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/golang/glog"
+	"html/template"
 	"image"
 	"image/jpeg"
 	"io"
@@ -19,6 +20,10 @@ type Delivery struct{
 	Uc UseCase.UseCase
 }
 
+func getStrFormValueSafety(r *http.Request, field string) string{
+	return template.JSEscapeString(r.FormValue(field))
+}
+
 func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 	glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	fmt.Print("SIGNUP: ")
@@ -27,10 +32,10 @@ func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var user Models.User
-	user.Name = r.FormValue("name")
-	user.Surname = r.FormValue("surname")
-	user.Email = r.FormValue("email")
-	user.Password = r.FormValue("password1")
+	user.Name = getStrFormValueSafety(r,"name")
+	user.Surname = getStrFormValueSafety(r,"surname")
+	user.Email = getStrFormValueSafety(r,"email")
+	user.Password = getStrFormValueSafety(r,"password1")
 	yaFood.LoadFile(&user,r)
 	code, cookie:=yaFood.Uc.Signup(user)
 
@@ -55,8 +60,8 @@ func (yaFood *Delivery)SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var user Models.User
-	user.Email=r.FormValue("email")
-	user.Password=r.FormValue("password")
+	user.Email=getStrFormValueSafety(r,"email")
+	user.Password=getStrFormValueSafety(r,"password")
 	code, cookie:=yaFood.Uc.SignIn(user)
 	if cookie!=nil{http.SetCookie(w, cookie)}
 	response:=SignInError(code, cookie)
@@ -97,8 +102,8 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		var up Models.User
-		up.Name=r.FormValue("profile_firstName")
-		up.Surname=r.FormValue("profile_lastName")
+		up.Name=getStrFormValueSafety(r,"profile_firstName")
+		up.Surname=getStrFormValueSafety(r,"profile_lastName")
 		yaFood.Uc.Db.UpdateProfile(up, user.Email)
 		w.Write(getOkAns(session.Value))
 		glog.Info("RESPONSE: ",getOkAns(session.Value))
@@ -147,7 +152,7 @@ func (yaFood *Delivery)LoadFile(user *Models.User, r *http.Request){
 		return
 	}
 	(*user).Img = fileHeader.Filename
-	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, r.FormValue("Name"))
+	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, getStrFormValueSafety(r,"Name"))
 	f, err := os.Create(fileHeader.Filename)
 	if err != nil {
 		return

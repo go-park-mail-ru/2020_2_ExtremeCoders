@@ -15,10 +15,10 @@ func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	var letter Models.Letter
-	letter.Sender = r.FormValue("from")
-	letter.Receiver = r.FormValue("to")
-	letter.Theme = r.FormValue("title")
-	letter.Text = r.FormValue("text")
+	letter.Sender = getStrFormValueSafety(r,"from")
+	letter.Receiver = getStrFormValueSafety(r,"to")
+	letter.Theme = getStrFormValueSafety(r,"title")
+	letter.Text = getStrFormValueSafety(r,"text")
 	letter.DateTime=time.Now().Unix()
 	err:=yaFood.Uc.SaveLetter(letter)
 	w.Write(SendLetterError(uint16(err)))
