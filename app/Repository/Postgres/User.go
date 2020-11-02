@@ -78,7 +78,7 @@ func (dbInfo DataBase) GetUserByEmail(email string) (*Models.User, bool) {
 
 func (dbInfo DataBase) GetUserByUID(uid uint64) *Models.User {
 	user := &Models.User{Id: uid}
-	dbInfo.db.Model(user).Select()
+	dbInfo.db.Model(user).WherePK().Select()
 	return user
 }
 
