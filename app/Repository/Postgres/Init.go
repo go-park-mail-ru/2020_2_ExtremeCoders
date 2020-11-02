@@ -2,6 +2,7 @@ package Postgres
 
 import (
 	"CleanArch/app/Models"
+	"fmt"
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 )
@@ -16,7 +17,7 @@ type DataBase struct {
 func (dbInfo *DataBase)Init() {
 	if dbInfo ==nil{
 		dbInfo.User="postgres"
-		dbInfo.Password="1538"
+		dbInfo.Password="123456yhn"
 		dbInfo.DataBaseName="maila"
 	}
 	dbInfo.db = pg.Connect(&pg.Options{
@@ -24,7 +25,7 @@ func (dbInfo *DataBase)Init() {
 		Password: dbInfo.Password,
 		Database: dbInfo.DataBaseName,
 	})
-
+	fmt.Println(dbInfo.User, dbInfo.Password, dbInfo.DataBaseName)
 
 	err := createSchema(dbInfo.db)
 	dbInfo.db.Close()

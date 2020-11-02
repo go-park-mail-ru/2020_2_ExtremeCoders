@@ -13,7 +13,7 @@ import (
 
 
 func main() {
-	var db=Postgres.DataBase{ User: "postgres", Password: "1538", DataBaseName: "maila"}
+	var db=Postgres.DataBase{ User: "postgres", Password: "123456yhn", DataBaseName: "maila"}
 	db.Init()
 	var uc=UseCase.UseCase{Db: db}
 	var yaFood=Delivery.Delivery{Uc: uc}
