@@ -15,7 +15,13 @@ func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	var letter Models.Letter
-	letter.Sender = getStrFormValueSafety(r,"from")
+	user, _, code:=yaFood.getUserByRequest(r)
+	if code !=200{
+		w.Write(getErrorUnexpectedAns())
+		glog.Info("RESPONSE: ",getErrorUnexpectedAns())
+		return
+	}
+	letter.Sender = user.Email
 	letter.Receiver = getStrFormValueSafety(r,"to")
 	letter.Theme = getStrFormValueSafety(r,"title")
 	letter.Text = getStrFormValueSafety(r,"text")
