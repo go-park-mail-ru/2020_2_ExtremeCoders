@@ -27,9 +27,9 @@ func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
 	letter.Theme = getStrFormValueSafety(r,"theme")
 	letter.Text = getStrFormValueSafety(r,"text")
 	letter.DateTime=time.Now().Unix()
-	err:=yaFood.Uc.SaveLetter(letter)
-	w.Write(SendLetterError(uint16(err)))
-	glog.Info("RESPONSE: ",SendLetterError(uint16(err)))
+	err:=yaFood.Uc.SaveLetter(&letter)
+	w.Write(SendLetterError(uint16(err), letter))
+	glog.Info("RESPONSE: ",SendLetterError(uint16(err), letter))
 }
 
 func (yaFood *Delivery)GetLetters(w http.ResponseWriter, r *http.Request){
@@ -42,5 +42,5 @@ func (yaFood *Delivery)GetLetters(w http.ResponseWriter, r *http.Request){
 	}
 	err, letters:=yaFood.Uc.GetLetters(user.Email)
 	w.Write(GetLettersError(uint16(err), letters))
-	glog.Info("RESPONSE: ",SendLetterError(uint16(err)))
+	glog.Info("RESPONSE: ",GetLettersError(uint16(err), letters))
 }

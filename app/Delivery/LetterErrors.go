@@ -7,6 +7,7 @@ import (
 
 type LetterAns struct {
 	code int
+	lid uint64
 	letters []Models.Letter
 }
 
@@ -19,10 +20,20 @@ func getErrorSaveErrorAns() []byte {
 	return ans
 }
 
-func getSaveOkAns(letters []Models.Letter) []byte{
+func getGetLettersOkAns(letters []Models.Letter) []byte{
 	ok:=LetterAns{
 		code: 200,
 		letters: letters,
+	}
+	ans, _ := json.Marshal(ok)
+	return ans
+}
+
+
+func getSendOkAns(letters Models.Letter) []byte{
+	ok:=LetterAns{
+		code: 200,
+		lid: letters.Id,
 	}
 	ans, _ := json.Marshal(ok)
 	return ans

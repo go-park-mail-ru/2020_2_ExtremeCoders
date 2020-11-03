@@ -4,10 +4,10 @@ import (
 	"CleanArch/app/Models"
 )
 
-func SendLetterError(code uint16) []byte{
+func SendLetterError(code uint16, letter Models.Letter) []byte{
 	switch code {
 	case 200:
-		return getOkAns("")
+		return getSendOkAns(letter)
 	case 400:
 		return getErrorSaveErrorAns()
 	}
@@ -17,7 +17,7 @@ func SendLetterError(code uint16) []byte{
 func GetLettersError(code uint16, letters []Models.Letter) []byte{
 	switch code {
 	case 200:
-		return getSaveOkAns(letters)
+		return getGetLettersOkAns(letters)
 	case 400:
 		return getErrorSaveErrorAns()
 	}
