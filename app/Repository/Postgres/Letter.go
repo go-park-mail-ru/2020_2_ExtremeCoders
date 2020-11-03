@@ -7,7 +7,7 @@ import (
 )
 
 func (dbInfo DataBase)SaveMail(letter Models.Letter)int {
-	_, err:=dbInfo.db.Model(letter).Insert()
+	_, err:=dbInfo.db.Model(&letter).Insert()
 	if err!=nil{
 		return 409
 	}

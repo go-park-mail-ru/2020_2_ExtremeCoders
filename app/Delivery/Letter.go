@@ -24,7 +24,7 @@ func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
 	}
 	letter.Sender = user.Email
 	letter.Receiver = getStrFormValueSafety(r,"to")
-	letter.Theme = getStrFormValueSafety(r,"title")
+	letter.Theme = getStrFormValueSafety(r,"theme")
 	letter.Text = getStrFormValueSafety(r,"text")
 	letter.DateTime=time.Now().Unix()
 	err:=yaFood.Uc.SaveLetter(letter)
