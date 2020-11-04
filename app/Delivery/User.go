@@ -25,7 +25,7 @@ func getStrFormValueSafety(r *http.Request, field string) string{
 }
 
 func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
-	glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
+ 	glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	fmt.Print("SIGNUP: ")
 	fmt.Print("\n\n")
 	if r.Method != http.MethodPost {

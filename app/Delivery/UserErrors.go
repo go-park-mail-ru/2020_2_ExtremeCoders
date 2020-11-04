@@ -16,7 +16,7 @@ type AnswerGet struct {
 
 
 func getErrorBadJsonAns() []byte {
-	err := AnswerGet{
+	err := &AnswerGet{
 		Code:        400,
 		Description: "Bad Json",
 	}

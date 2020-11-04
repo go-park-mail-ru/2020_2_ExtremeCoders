@@ -6,13 +6,13 @@ import (
 )
 
 type LetterAns struct {
-	code int
-	lid uint64
-	letters []Models.Letter
+	Code    int
+	Lid     uint64
+	Letters []Models.Letter
 }
 
 func getErrorSaveErrorAns() []byte {
-	err := AnswerGet{
+	err := &AnswerGet{
 		Code:        400,
 		Description: "Could not save letter",
 	}
@@ -20,20 +20,19 @@ func getErrorSaveErrorAns() []byte {
 	return ans
 }
 
-func getGetLettersOkAns(letters []Models.Letter) []byte{
-	ok:=LetterAns{
-		code: 200,
-		letters: letters,
+func getGetLettersOkAns(letters []Models.Letter) []byte {
+	ok := &LetterAns{
+		Code:    200,
+		Letters: letters,
 	}
 	ans, _ := json.Marshal(ok)
 	return ans
 }
 
-
-func getSendOkAns(letters Models.Letter) []byte{
-	ok:=LetterAns{
-		code: 200,
-		lid: letters.Id,
+func getSendOkAns(letters Models.Letter) []byte {
+	ok := &LetterAns{
+		Code: 200,
+		Lid:  letters.Id,
 	}
 	ans, _ := json.Marshal(ok)
 	return ans
