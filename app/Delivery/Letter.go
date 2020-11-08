@@ -32,7 +32,7 @@ func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
 	glog.Info("RESPONSE: ",SendLetterError(uint16(err), letter))
 }
 
-func (yaFood *Delivery)GetLetters(w http.ResponseWriter, r *http.Request){
+func (yaFood *Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request){
 	glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	user, _, code:=yaFood.getUserByRequest(r)
 	if code != 200{
@@ -41,6 +41,19 @@ func (yaFood *Delivery)GetLetters(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	err, letters:=yaFood.Uc.GetLetters(user.Email)
+	w.Write(GetLettersError(uint16(err), letters))
+	glog.Info("RESPONSE: ",GetLettersError(uint16(err), letters))
+}
+
+func (yaFood *Delivery) GetSendLetters(w http.ResponseWriter, r *http.Request){
+	glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
+	user, _, code:=yaFood.getUserByRequest(r)
+	if code != 200{
+		w.Write(getErrorNoCockyAns())
+		glog.Info("RESPONSE: ",getErrorNoCockyAns())
+		return
+	}
+	err, letters:=yaFood.Uc.GetSendedLetters(user.Email)
 	w.Write(GetLettersError(uint16(err), letters))
 	glog.Info("RESPONSE: ",GetLettersError(uint16(err), letters))
 }

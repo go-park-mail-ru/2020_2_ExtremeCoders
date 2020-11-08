@@ -36,3 +36,13 @@ func (dbInfo DataBase) GenerateLID() uint64 {
 		}
 	}
 }
+
+
+func (dbInfo DataBase) GetSendedLetters(email string) (int, []Models.Letter) {
+	var letters []Models.Letter
+	exist := dbInfo.db.Model(&letters).Where("receiver=?", &email).Select()
+	if exist!=nil{
+		return 409, nil
+	}
+	return 200, letters
+}

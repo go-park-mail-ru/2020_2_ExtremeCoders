@@ -20,5 +20,6 @@ type UserDB interface {
 
 	SaveMail(Models.Letter) int
 	GetLetters(string) (int, []Models.Letter)
+	GetSendedLetters(string) (int, []Models.Letter)
 	GenerateLID() uint64
 }

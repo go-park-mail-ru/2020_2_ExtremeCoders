@@ -10,3 +10,7 @@ func (uc *UseCase)SaveLetter(letter *Models.Letter) int {
 func (uc *UseCase)GetLetters(email string)(int, []Models.Letter) {
 	return uc.Db.GetLetters(email)
 }
+
+func (uc *UseCase)GetSendedLetters(email string)(int, []Models.Letter) {
+	return uc.Db.GetLetters(email)
+}
