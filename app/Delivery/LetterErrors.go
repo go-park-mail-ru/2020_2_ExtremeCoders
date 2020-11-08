@@ -20,6 +20,15 @@ func getErrorSaveErrorAns() []byte {
 	return ans
 }
 
+func getErrorNoRecieverAns() []byte {
+	err := &AnswerGet{
+		Code:        408,
+		Description: "No such user in DB",
+	}
+	ans, _ := json.Marshal(err)
+	return ans
+}
+
 func getGetLettersOkAns(letters []Models.Letter) []byte {
 	ok := &LetterAns{
 		Code:    200,

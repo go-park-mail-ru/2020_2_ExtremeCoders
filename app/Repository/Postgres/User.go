@@ -98,7 +98,8 @@ func (dbInfo DataBase) UpdateProfile(newUser Models.User, email string) {
 	User := oldUser
 	User.Name = newUser.Name
 	User.Surname = newUser.Surname
-	_, err := dbInfo.db.Model(User).Column("name", "surname").Where("email=?", email).Update()
+	User.Img=newUser.Img
+	_, err := dbInfo.db.Model(User).Column("name", "surname", "img").Where("email=?", email).Update()
 	fmt.Println(err)
 }
 

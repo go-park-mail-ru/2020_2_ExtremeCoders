@@ -104,6 +104,7 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 		var up Models.User
 		up.Name=getStrFormValueSafety(r,"profile_firstName")
 		up.Surname=getStrFormValueSafety(r,"profile_lastName")
+		yaFood.LoadFile(&up,r)
 		yaFood.Uc.Db.UpdateProfile(up, user.Email)
 		w.Write(getOkAns(session.Value))
 		glog.Info("RESPONSE: ",getOkAns(session.Value))
@@ -153,7 +154,8 @@ func (yaFood *Delivery)LoadFile(user *Models.User, r *http.Request){
 	}
 	(*user).Img = fileHeader.Filename
 	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, getStrFormValueSafety(r,"Name"))
-	f, err := os.Create(fileHeader.Filename)
+	path:="./"+(*user).Email+"/"+fileHeader.Filename
+	f, err := os.Create(path)
 	if err != nil {
 		return
 	}

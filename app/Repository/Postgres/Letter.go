@@ -7,6 +7,9 @@ import (
 )
 
 func (dbInfo DataBase)SaveMail(letter Models.Letter)int {
+	reciever:=&Models.User{Email: letter.Receiver}
+	erro:=dbInfo.db.Model(reciever).Where("email=?", letter.Receiver).Select()
+	if erro!=nil{return 408}
 	_, err:=dbInfo.db.Model(&letter).Insert()
 	if err!=nil{
 		return 409
