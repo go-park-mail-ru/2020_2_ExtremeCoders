@@ -92,14 +92,14 @@ func (dbInfo DataBase) IsOkSession(sid string) (uint64, bool) {
 }
 
 func (dbInfo DataBase) UpdateProfile(newUser Models.User, email string) {
-	oldUser := Models.User{Email: email}
-	dbInfo.db.Model(oldUser).Select()
+	oldUser := &Models.User{Email: email}
+	dbInfo.db.Model(oldUser).Where("email=?", email).Select()
 
 	User := oldUser
 	User.Name = newUser.Name
 	User.Surname = newUser.Surname
-	_, _ = dbInfo.db.Model(User).Column("Name", "Surname").Update()
-
+	_, err := dbInfo.db.Model(User).Column("name", "surname").Where("email=?", email).Update()
+	fmt.Println(err)
 }
 
 func (dbInfo DataBase) RemoveSession(uid uint64, sid string) {
