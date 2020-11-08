@@ -19,7 +19,7 @@ type UserDB interface {
 	ShowAll()
 
 	SaveMail(Models.Letter) int
-	GetLetters(string) (int, []Models.Letter)
+	GetRecievedLetters(string) (int, []Models.Letter)
 	GetSendedLetters(string) (int, []Models.Letter)
 	GenerateLID() uint64
 }

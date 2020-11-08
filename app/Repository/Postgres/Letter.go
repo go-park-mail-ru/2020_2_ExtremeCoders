@@ -17,7 +17,7 @@ func (dbInfo DataBase)SaveMail(letter Models.Letter)int {
 	return 200
 }
 
-func (dbInfo DataBase)GetLetters(email string) (int, []Models.Letter){
+func (dbInfo DataBase) GetRecievedLetters(email string) (int, []Models.Letter){
 	var letters []Models.Letter
 	exist := dbInfo.db.Model(&letters).Where("sender=?", &email).Select()
 	if exist!=nil{

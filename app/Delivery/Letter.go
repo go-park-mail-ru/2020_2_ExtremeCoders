@@ -40,7 +40,7 @@ func (yaFood *Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request){
 		glog.Info("RESPONSE: ",getErrorNoCockyAns())
 		return
 	}
-	err, letters:=yaFood.Uc.GetLetters(user.Email)
+	err, letters:=yaFood.Uc.GetRecievedLetters(user.Email)
 	w.Write(GetLettersError(uint16(err), letters))
 	glog.Info("RESPONSE: ",GetLettersError(uint16(err), letters))
 }
