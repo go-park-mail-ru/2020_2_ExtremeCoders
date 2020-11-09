@@ -179,10 +179,7 @@ func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
 			return
 		}
 		if (*user).Img == "" {
-			fmt.Println("USER HAVE NOT AVATAR")
-			w.Write([]byte("USER HAVE NOT AVATAR"))
-			glog.Info("USER HAVE NOT AVATAR")
-			return
+			(*user).Img="/Users/dellvin/Desktop/Технопарк/Разработка GoLang/2020_2_ExtremeCoders/default.jpeg"
 		}
 
 		file, err := os.Open((*user).Img) // path to image file
