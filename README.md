@@ -5,7 +5,6 @@
 
 ## Состав
 
-- [Николай Умрихин](https://github.com/lowsukuku)
 - [Даниил Чёрный](https://github.com/Dellvin)
 - [Сергий Чепурной](https://github.com/sergii1)
 
