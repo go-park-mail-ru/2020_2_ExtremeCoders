@@ -8,17 +8,17 @@ import (
 )
 
 type DataBase struct {
-	db *pg.DB
-	User string
-	Password string
+	db           *pg.DB
+	User         string
+	Password     string
 	DataBaseName string
 }
 
-func (dbInfo *DataBase)Init() {
-	if dbInfo ==nil{
-		dbInfo.User="postgres"
-		dbInfo.Password="123456yhn"
-		dbInfo.DataBaseName="maila"
+func (dbInfo *DataBase) Init() {
+	if dbInfo == nil {
+		dbInfo.User = "postgres"
+		dbInfo.Password = "123456yhn"
+		dbInfo.DataBaseName = "maila"
 	}
 	dbInfo.db = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
@@ -38,7 +38,6 @@ func (dbInfo *DataBase)Init() {
 		panic(err)
 	}
 }
-
 
 // createSchema creates database schemas.
 func createSchema(db *pg.DB) error {

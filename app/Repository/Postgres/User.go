@@ -11,12 +11,12 @@ const (
 	SizeSID = 32
 )
 
-var SidRunes ="1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 
 func (dbInfo DataBase) IsEmailExists(email string) bool {
 	user := &Models.User{Email: email}
 	err := dbInfo.db.Model(user).Where("email=?", email).Select()
-	if err !=nil {
+	if err != nil {
 		return false
 	}
 	return true
@@ -42,8 +42,8 @@ func (dbInfo DataBase) GenerateSID() []rune {
 	var sid string
 	for {
 		for i := 0; i < SizeSID; i++ {
-			safeNum,_ :=crypto.Int(crypto.Reader, big.NewInt(int64(len(SidRunes))))
-			sid+= string(SidRunes[safeNum.Int64()])
+			safeNum, _ := crypto.Int(crypto.Reader, big.NewInt(int64(len(SidRunes))))
+			sid += string(SidRunes[safeNum.Int64()])
 		}
 		fmt.Println(sid)
 		session := &Models.Session{Id: sid}
@@ -51,14 +51,14 @@ func (dbInfo DataBase) GenerateSID() []rune {
 		if exist != nil {
 			break
 		}
-		sid=""
+		sid = ""
 	}
 	return []rune(sid)
 }
 
 func (dbInfo DataBase) GenerateUID() uint64 {
 	for {
-		uid,_ :=crypto.Int(crypto.Reader, big.NewInt(4294967295))
+		uid, _ := crypto.Int(crypto.Reader, big.NewInt(4294967295))
 		user := Models.User{Id: uid.Uint64()}
 		exist := dbInfo.db.Model(user).Where("id=?", uid.Int64()).Select()
 		if exist != nil {
@@ -85,7 +85,7 @@ func (dbInfo DataBase) GetUserByUID(uid uint64) *Models.User {
 func (dbInfo DataBase) IsOkSession(sid string) (uint64, bool) {
 	session := &Models.Session{Id: sid}
 	err := dbInfo.db.Model(session).WherePK().Select()
-	if err != nil  {
+	if err != nil {
 		return 0, false
 	}
 	return uint64(session.UserId), true
@@ -98,7 +98,7 @@ func (dbInfo DataBase) UpdateProfile(newUser Models.User, email string) {
 	User := oldUser
 	User.Name = newUser.Name
 	User.Surname = newUser.Surname
-	User.Img=newUser.Img
+	User.Img = newUser.Img
 	_, err := dbInfo.db.Model(User).Column("name", "surname", "img").Where("email=?", email).Update()
 	fmt.Println(err)
 }
@@ -108,16 +108,16 @@ func (dbInfo DataBase) RemoveSession(uid uint64, sid string) {
 	dbInfo.db.Model(session).WherePK().Delete()
 }
 
-func (dbInfo DataBase) RemoveSessionByUID(uid uint64){
-	session:=&Models.Session{UserId: int64(uid)}
-	err:=dbInfo.db.Model(session).Where("user_id=?", uid).Select()
-	if err!=nil{
+func (dbInfo DataBase) RemoveSessionByUID(uid uint64) {
+	session := &Models.Session{UserId: int64(uid)}
+	err := dbInfo.db.Model(session).Where("user_id=?", uid).Select()
+	if err != nil {
 		return
 	}
 	dbInfo.db.Model(session).WherePK().Delete()
 }
 
-func (dbInfo DataBase) ShowAll(){
+func (dbInfo DataBase) ShowAll() {
 	var users []Models.User
 	var sessions []Models.Session
 	fmt.Println(dbInfo.db.Model(users).Select())

@@ -7,21 +7,21 @@ import (
 	"time"
 )
 
-type UseCase struct{
+type UseCase struct {
 	Db Repository.UserDB
 }
 
-func (uc *UseCase)Signup(user Models.User) (uint16, *http.Cookie) {
+func (uc *UseCase) Signup(user Models.User) (uint16, *http.Cookie) {
 
-	if uc.Db.IsEmailExists(user.Email){
+	if uc.Db.IsEmailExists(user.Email) {
 		return 401, nil
 	}
 
 	user.Id = uc.Db.GenerateUID()
 	sid := string(uc.Db.GenerateSID())
 	uc.Db.AddUser(&user)
-	if uc.Db.AddSession(sid, user.Id, &user)!=nil{
-		return 401,nil
+	if uc.Db.AddSession(sid, user.Id, &user) != nil {
+		return 401, nil
 	}
 	cookie := &http.Cookie{
 		Name:    "session_id",
@@ -33,7 +33,7 @@ func (uc *UseCase)Signup(user Models.User) (uint16, *http.Cookie) {
 	return 200, cookie
 }
 
-func (uc *UseCase)SignIn(user Models.User) (uint16, *http.Cookie) {
+func (uc *UseCase) SignIn(user Models.User) (uint16, *http.Cookie) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
 	if !erro {
 		return 404, nil
@@ -43,8 +43,8 @@ func (uc *UseCase)SignIn(user Models.User) (uint16, *http.Cookie) {
 	}
 	sid := string(uc.Db.GenerateSID())
 	uc.Db.RemoveSessionByUID(userEx.Id)
-	if uc.Db.AddSession(sid, userEx.Id, &user)!=nil{
-		return 401,nil
+	if uc.Db.AddSession(sid, userEx.Id, &user) != nil {
+		return 401, nil
 	}
 
 	cookie := &http.Cookie{
