@@ -19,6 +19,9 @@ var SaveLetterError=errors.New("Save letter error!")
 
 var GetUserError=errors.New("Could not get user!")
 var RemoveSessionError =errors.New("Could not remove session!")
+
+
+var GetSessionError=errors.New("Could not get session!")
 type UserDB interface {
 	IsEmailExists(string) error
 	AddSession(string, uint64, *UserModel.User) error
@@ -30,4 +33,5 @@ type UserDB interface {
 	IsOkSession(string) (uint64,error)
 	UpdateProfile(UserModel.User, string) error
 	RemoveSession(uint64, string) error
+	GetSessionByUID(uint64) (string,error)
 }

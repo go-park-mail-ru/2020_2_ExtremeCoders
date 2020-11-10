@@ -4,6 +4,7 @@ import (
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserRepository"
 	"CleanArch/internal/errors"
+	err "errors"
 	"net/http"
 	"time"
 )
@@ -11,6 +12,8 @@ import (
 type UseCase struct{
 	Db UserRepository.UserDB
 }
+
+var WrongPasswordError = err.New("Wrong password!")
 
 func (uc *UseCase)Signup(user UserModel.User) (error, *http.Cookie) {
 	if uc.Db.IsEmailExists(user.Email){
@@ -36,16 +39,20 @@ func (uc *UseCase)Signup(user UserModel.User) (error, *http.Cookie) {
 	return nil, cookie
 }
 
-func (uc *UseCase)SignIn(user UserModel.User) (error, *http.Cookie) {
+func (uc *UseCase)SignIn(user UserModel.User) error {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
-	if !erro {
-		//return 404, nil
+	if erro!=nil {
+		return erro
 	}
 	if userEx.Password != user.Password {
-		//return 401, nil
+		return WrongPasswordError
 	}
 	sid := string(uc.Db.GenerateSID())
-	uc.Db.RemoveSessionByUID(userEx.Id)
+	userToRm, err:=uc.Db.GetUserByUID(userEx.Id)
+	if err!=nil{
+		return err
+	}
+	uc.Db.RemoveSession(userEx.Id, )
 	if uc.Db.AddSession(sid, userEx.Id, &user) != nil {
 		//return 401, nil
 	}
