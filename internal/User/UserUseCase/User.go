@@ -4,26 +4,34 @@ import (
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserRepository"
 	"CleanArch/internal/errors"
+	err "errors"
 	"net/http"
 	"time"
 )
 
-type UseCase struct{
+type UseCase struct {
 	Db UserRepository.UserDB
 }
 
-func (uc *UseCase)Signup(user UserModel.User) (error, string) {
+var WrongPasswordError = err.New("Wrong password!")
+
+func (uc *UseCase) Signup(user UserModel.User) (error, string) {
+
 	err := uc.Db.IsEmailExists(user.Email)
-	if err!=nil{
+	if err != nil {
 		return err, ""
 	}
 	user.Id, err = uc.Db.GenerateUID()
-	if err!=nil{
+	if err != nil {
 		return err, ""
 	}
-	sid := string(uc.Db.GenerateSID())
+	str, err := uc.Db.GenerateSID()
+	if err != nil {
+		return err, ""
+	}
+	sid := string(str)
 	err = uc.Db.AddUser(&user)
-	if err!=nil{
+	if err != nil {
 		return err, ""
 	}
 	err = uc.Db.AddSession(sid, user.Id, &user)
@@ -34,16 +42,20 @@ func (uc *UseCase)Signup(user UserModel.User) (error, string) {
 	return nil, sid
 }
 
-func (uc *UseCase)SignIn(user UserModel.User) (error, *http.Cookie) {
+func (uc *UseCase) SignIn(user UserModel.User) error {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
-	if !erro {
-		//return 404, nil
+	if erro != nil {
+		return erro
 	}
 	if userEx.Password != user.Password {
-		//return 401, nil
+		return WrongPasswordError
 	}
 	sid := string(uc.Db.GenerateSID())
-	uc.Db.RemoveSessionByUID(userEx.Id)
+	userToRm, err := uc.Db.GetUserByUID(userEx.Id)
+	if err != nil {
+		return err
+	}
+	uc.Db.RemoveSession(userEx.Id)
 	if uc.Db.AddSession(sid, userEx.Id, &user) != nil {
 		//return 401, nil
 	}
@@ -59,12 +71,12 @@ func (uc *UseCase)SignIn(user UserModel.User) (error, *http.Cookie) {
 
 }
 
-func (uc *UseCase)Logout(user UserModel.User) (error, *http.Cookie) {
+func (uc *UseCase) Logout(user UserModel.User) (error, *http.Cookie) {
 	uid, ok := uc.Db.IsOkSession(session.Value)
 	if !ok {
 		w.Write(errors.GetErrorWrongCookieAns())
 		//glog.Info("RESPONSE: ",getErrorWrongCookieAns())
 		return
 	}
-	e:=uc.Db.RemoveSession(uid, session.Value)
+	e := uc.Db.RemoveSession(uid, session.Value)
 }

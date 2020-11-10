@@ -126,3 +126,14 @@ func (dbInfo DataBase) RemoveSession(uid uint64, sid string) error {
 	}
 	return nil
 }
+
+
+func (dbInfo DataBase) GetSessionByUID(uid uint64) (string,error){
+	session:=&UserModel.Session{UserId: int64(uid)}
+	err:=dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
+	if err!=nil{
+		return "",UserRepository.GetSessionError
+	}
+	return session.Id,nil
+}
+
