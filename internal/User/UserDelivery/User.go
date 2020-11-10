@@ -70,7 +70,7 @@ func (de *Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var user UserModel.User
-<<<<<<< HEAD
+
 	user.Email= GetStrFormValueSafety(r,"email")
 	user.Password= GetStrFormValueSafety(r,"password")
 	err, sid:=de.Uc.SignIn(user)
