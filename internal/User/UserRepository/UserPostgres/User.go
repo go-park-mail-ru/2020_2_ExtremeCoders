@@ -19,11 +19,10 @@ const (
 
 var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 
-
 func (dbInfo DataBase) IsEmailExists(email string) error {
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
-	if err !=nil {
+	if err != nil {
 		return UserRepository.EmailAlreadyExists
 	}
 	return nil
@@ -61,12 +60,12 @@ func (dbInfo DataBase) GenerateSID() ([]rune, error) {
 		}
 		sid = ""
 	}
-	return []rune(sid),nil
+	return []rune(sid), nil
 }
 
 func (dbInfo DataBase) GenerateUID() (uint64, error) {
 	for {
-		uid,_ :=crypto.Int(crypto.Reader, big.NewInt(4294967295))
+		uid, _ := crypto.Int(crypto.Reader, big.NewInt(4294967295))
 		user := UserModel.User{Id: uid.Uint64()}
 		exist := dbInfo.DB.Model(user).Where("id=?", uid.Int64()).Select()
 		if exist != nil {
@@ -84,39 +83,46 @@ func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, error) {
 	return user, nil
 }
 
-func (dbInfo DataBase) GetUserByUID(uid uint64) *UserModel.User {
+func (dbInfo DataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
 	user := &UserModel.User{Id: uid}
-	dbInfo.DB.Model(user).WherePK().Select()
-	return user
+	err := dbInfo.DB.Model(user).WherePK().Select()
+	if err == nil {
+		return user, UserRepository.CantGetUserByUid
+	}
+	return user, nil
 }
 
-func (dbInfo DataBase) IsOkSession(sid string) (uint64, bool) {
+func (dbInfo DataBase) IsOkSession(sid string) (uint64, error) {
 	session := &UserModel.Session{Id: sid}
 	err := dbInfo.DB.Model(session).WherePK().Select()
 	if err != nil {
-		return 0, false
+		return 0, UserRepository.InvalidSession
 	}
-	return uint64(session.UserId), true
+	return uint64(session.UserId), nil
 }
 
-func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) {
+func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) error {
 	oldUser := &UserModel.User{Email: email}
-	dbInfo.DB.Model(oldUser).Where("email=?", email).Select()
-
+	err := dbInfo.DB.Model(oldUser).Where("email=?", email).Select()
+	if err != nil{
+		return UserRepository.CantGetUserOnUpdate
+	}
 	User := oldUser
 	User.Name = newUser.Name
 	User.Surname = newUser.Surname
 	User.Img = newUser.Img
-	_, err := dbInfo.DB.Model(User).Column("name", "surname", "img").Where("email=?", email).Update()
-	fmt.Println(err)
-}
-
-func (dbInfo DataBase) RemoveSession(uid uint64, sid string) error{
-	session := &UserModel.Session{Id: sid}
-	_, err:=dbInfo.DB.Model(session).WherePK().Delete()
-	if err!=nil{
-		return UserRepository.RemoveSessionError
+	_, err = dbInfo.DB.Model(User).Column("name", "surname", "img").Where("email=?", email).Update()
+	if err != nil{
+		return UserRepository.CantUpdateUser
 	}
 	return nil
 }
 
+func (dbInfo DataBase) RemoveSession(uid uint64, sid string) error {
+	session := &UserModel.Session{Id: sid}
+	_, err := dbInfo.DB.Model(session).WherePK().Delete()
+	if err != nil {
+		return UserRepository.RemoveSessionError
+	}
+	return nil
+}

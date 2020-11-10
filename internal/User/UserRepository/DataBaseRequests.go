@@ -10,8 +10,10 @@ var DbError=errors.New("Data Base error!")
 var CantAddSession = errors.New("Add session error!")
 var CantAddUser = errors.New("Add user error!")
 var CantGetUserByEmail = errors.New("Get user by email error!")
-var CantGetUserBy = errors.New("Get user by email error!")
-
+var CantGetUserByUid = errors.New("Get user by uid error!")
+var InvalidSession = errors.New("Invalid session!")
+var CantGetUserOnUpdate = errors.New("Get user on update error!")
+var CantUpdateUser = errors.New("User update error!")
 
 var ReceiverNotFound=errors.New("Receiver not found!")
 var SaveLetterError=errors.New("Save letter error!")
