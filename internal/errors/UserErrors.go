@@ -135,3 +135,30 @@ func RemoveSessionError()[]byte{
 	ans, _ := json.Marshal(ok)
 	return ans
 }
+
+func AddUserError()[]byte{
+	ok := &AnswerGet{
+		Code:        407,
+		Description: "Could not add user",
+	}
+	ans, _ := json.Marshal(ok)
+	return ans
+}
+
+func UpdateProfileError()[]byte{
+	ok := &AnswerGet{
+		Code:        407,
+		Description: "Could not update profile",
+	}
+	ans, _ := json.Marshal(ok)
+	return ans
+}
+
+func GetUserOnUpdateError()[]byte{
+	ok := &AnswerGet{
+		Code:        407,
+		Description: "Could not get user on update",
+	}
+	ans, _ := json.Marshal(ok)
+	return ans
+}

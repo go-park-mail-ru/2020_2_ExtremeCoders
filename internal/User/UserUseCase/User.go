@@ -65,13 +65,21 @@ func (uc *UseCase)SignIn(user UserModel.User) (error, string) {
 
 }
 
-func (uc *UseCase)Logout(user UserModel.User, sid string) error {
+func (uc *UseCase)Logout(sid string) error {
 	uid, ok := uc.Db.IsOkSession(sid)
 	if ok!=nil {
 		return ok
 	}
 	e:=uc.Db.RemoveSession(uid, sid)
 	if e!=nil{
+		return e
+	}
+	return nil
+}
+
+func (uc *UseCase)Profile(user UserModel.User) error{
+	e :=uc.Db.UpdateProfile(user, user.Email)
+	if e !=nil{
 		return e
 	}
 	return nil

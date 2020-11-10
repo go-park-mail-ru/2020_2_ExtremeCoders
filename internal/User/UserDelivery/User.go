@@ -6,7 +6,6 @@ import (
 	"CleanArch/internal/errors"
 	"bytes"
 	"fmt"
-	//"github.com/golang/glog"
 	"image"
 	"image/jpeg"
 	"io"
@@ -34,9 +33,6 @@ func (de *Delivery) Session(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de *Delivery) Signup(w http.ResponseWriter, r *http.Request) {
-	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
-	fmt.Print("SIGNUP: ")
-	fmt.Print("\n\n")
 	if r.Method != http.MethodPost {
 		return
 	}
@@ -47,19 +43,21 @@ func (de *Delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	user.Password = GetStrFormValueSafety(r, "password1")
 	de.LoadFile(&user, r)
 	err, sid := de.Uc.Signup(user)
-	if err != nil {
-		// АХТУНГ
+	var response []byte
+	if err == nil {
+		cookie := &http.Cookie{
+			Name:    "session_id",
+			Value:   sid,
+			Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+		}
+		cookie.Path = "/"
+		http.SetCookie(w, cookie)
+		response = SignUpError(err, cookie)
+	}else{
+		response=SignUpError(err, nil)
 	}
-	cookie := &http.Cookie{
-		Name:    "session_id",
-		Value:   sid,
-		Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
-	}
-	cookie.Path = "/"
-	fmt.Print("\n\n")
-	http.SetCookie(w, cookie)
 
-	response := SignUpError(code, cookie)
+
 	w.Write(response)
 	//glog.Info("RESPONSE: ",response)
 }
@@ -107,14 +105,9 @@ func (de *Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Co
 }
 
 func (de *Delivery) Profile(w http.ResponseWriter, r *http.Request) {
-	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
-	fmt.Print("PROFILE: ")
-	fmt.Print("\n\n")
 	user, session, err := de.GetUserByRequest(r)
 	if err != 200 {
-		CookieError(err)
-
-		//glog.Info("RESPONSE: ",CookieError(err))
+		w.Write(CookieError(err))
 		return
 	}
 	if r.Method == http.MethodGet {
@@ -130,8 +123,8 @@ func (de *Delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		up.Name = GetStrFormValueSafety(r, "profile_firstName")
 		up.Surname = GetStrFormValueSafety(r, "profile_lastName")
 		de.LoadFile(&up, r)
-		de.Uc.Db.UpdateProfile(up, user.Email)
-		w.Write(errors.GetOkAns(session.Value))
+		err:=de.Uc.Profile(up)
+		w.Write(ProfileError(err, session))
 		//glog.Info("RESPONSE: ",getOkAns(session.Value))
 		return
 	}
@@ -146,13 +139,13 @@ func (de *Delivery) Logout(w http.ResponseWriter, r *http.Request) {
 		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return
 	} else {
-		user, session, err := de.GetUserByRequest(r)
+		_, session, err := de.GetUserByRequest(r)
 		if err != 200 {
 			w.Write(CookieError(err))
 			return
 		}
 
-		e:=de.Uc.Logout(*user, session.Value)
+		e:=de.Uc.Logout(session.Value)
 		if e==nil{
 			session.Expires = time.Now().AddDate(0, 0, -1)
 			http.SetCookie(w, session)
@@ -169,13 +162,9 @@ func (de *Delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method)
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
-		fmt.Println("FILE IS EMPTY")
-		//glog.Info("RESPONSE: ","FILE IS EMPTY")
-
 		return
 	}
 	(*user).Img = fileHeader.Filename
-	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, GetStrFormValueSafety(r, "Name"))
 	path := "./" + (*user).Email + "/" + fileHeader.Filename
 	f, err := os.Create(path)
 	if err != nil {
@@ -183,7 +172,6 @@ func (de *Delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	}
 	defer f.Close()
 	io.Copy(f, file)
-	//glog.Info("FILE HAS BEEN SUCCESSFULLY DOWNLOADED")
 }
 
 func (de *Delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {

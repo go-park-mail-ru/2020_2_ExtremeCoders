@@ -7,12 +7,16 @@ import (
 	"net/http"
 )
 
-func SignUpError(code uint16, cookie *http.Cookie) []byte{
-	switch code {
-	case 200:
+func SignUpError(err error, cookie *http.Cookie) []byte{
+	switch err {
+	case nil:
 		return errors.GetOkAns(cookie.Value)
-	case 401:
+	case UserRepository.EmailAlreadyExists:
 		return errors.GetErrorLoginExistAns()
+	case UserRepository.CantAddSession:
+		return errors.GetAddSessionError()
+	case UserRepository.CantAddUser:
+		return errors.AddUserError()
 	}
 	return nil
 }
@@ -51,6 +55,18 @@ func LogoutError(err error)[]byte{
 		return errors.GetErrorNoCockyAns()
 	case UserRepository.RemoveSessionError:
 		return errors.RemoveSessionError()
+	}
+	return nil
+}
+
+func ProfileError(err error, cookie *http.Cookie) []byte{
+	switch err {
+	case nil:
+		return errors.GetOkAns(cookie.Value)
+	case UserRepository.CantUpdateUser:
+		return errors.UpdateProfileError()
+	case UserRepository.CantGetUserOnUpdate:
+		return errors.GetUserOnUpdateError()
 	}
 	return nil
 }
