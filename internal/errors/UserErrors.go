@@ -126,3 +126,5 @@ func GetAddSessionError() []byte {
 	ans, _ := json.Marshal(ok)
 	return ans
 }
+
+func Remove

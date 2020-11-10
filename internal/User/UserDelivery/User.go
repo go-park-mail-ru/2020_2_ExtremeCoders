@@ -6,8 +6,6 @@ import (
 	"CleanArch/internal/errors"
 	"bytes"
 	"fmt"
-	"github.com/golang/glog"
-
 	//"github.com/golang/glog"
 	"image"
 	"image/jpeg"
@@ -18,11 +16,11 @@ import (
 	"time"
 )
 
-type Delivery struct{
+type Delivery struct {
 	Uc UserUseCase.UseCase
 }
 
-func GetStrFormValueSafety(r *http.Request, field string) string{
+func GetStrFormValueSafety(r *http.Request, field string) string {
 	return r.FormValue(field)
 }
 
@@ -30,42 +28,49 @@ func (de *Delivery) Session(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		de.SignIn(w, r)
 	}
-	if r.Method == http.MethodDelete{
-		de.Logout(w,r)
+	if r.Method == http.MethodDelete {
+		de.Logout(w, r)
 	}
 }
 
-func (de *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
- 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
+func (de *Delivery) Signup(w http.ResponseWriter, r *http.Request) {
+	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	fmt.Print("SIGNUP: ")
 	fmt.Print("\n\n")
 	if r.Method != http.MethodPost {
 		return
 	}
 	var user UserModel.User
-	user.Name = GetStrFormValueSafety(r,"name")
-	user.Surname = GetStrFormValueSafety(r,"surname")
-	user.Email = GetStrFormValueSafety(r,"email")
-	user.Password = GetStrFormValueSafety(r,"password1")
-	de.LoadFile(&user,r)
-	code, cookie:=de.Uc.Signup(user)
-
-	fmt.Print("\n\n")
-	if cookie != nil {
-		http.SetCookie(w, cookie)
+	user.Name = GetStrFormValueSafety(r, "name")
+	user.Surname = GetStrFormValueSafety(r, "surname")
+	user.Email = GetStrFormValueSafety(r, "email")
+	user.Password = GetStrFormValueSafety(r, "password1")
+	de.LoadFile(&user, r)
+	err, sid := de.Uc.Signup(user)
+	if err != nil {
+		// АХТУНГ
 	}
+	cookie := &http.Cookie{
+		Name:    "session_id",
+		Value:   sid,
+		Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+	}
+	cookie.Path = "/"
+	fmt.Print("\n\n")
+	http.SetCookie(w, cookie)
 
-	response:= SignUpError(code, cookie)
+	response := SignUpError(code, cookie)
 	w.Write(response)
 	//glog.Info("RESPONSE: ",response)
 }
 
-func (de *Delivery)SignIn(w http.ResponseWriter, r *http.Request) {
+func (de *Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return
 	}
 	var user UserModel.User
+<<<<<<< HEAD
 	user.Email= GetStrFormValueSafety(r,"email")
 	user.Password= GetStrFormValueSafety(r,"password")
 	err, sid:=de.Uc.SignIn(user)
@@ -98,7 +103,7 @@ func (de *Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Co
 	return user, session, 200
 }
 
-func (de *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
+func (de *Delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	fmt.Print("PROFILE: ")
 	fmt.Print("\n\n")
@@ -119,9 +124,9 @@ func (de *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		var up UserModel.User
-		up.Name= GetStrFormValueSafety(r,"profile_firstName")
-		up.Surname= GetStrFormValueSafety(r,"profile_lastName")
-		de.LoadFile(&up,r)
+		up.Name = GetStrFormValueSafety(r, "profile_firstName")
+		up.Surname = GetStrFormValueSafety(r, "profile_lastName")
+		de.LoadFile(&up, r)
 		de.Uc.Db.UpdateProfile(up, user.Email)
 		w.Write(errors.GetOkAns(session.Value))
 		//glog.Info("RESPONSE: ",getOkAns(session.Value))
@@ -131,7 +136,7 @@ func (de *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("RESPONSE: ",getErrorUnexpectedAns())
 }
 
-func (de *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
+func (de *Delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
@@ -155,7 +160,7 @@ func (de *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("RESPONSE: ",getErrorUnexpectedAns())
 }
 
-func (de *Delivery)LoadFile(user *UserModel.User, r *http.Request){
+func (de *Delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method)
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
@@ -176,7 +181,7 @@ func (de *Delivery)LoadFile(user *UserModel.User, r *http.Request){
 	//glog.Info("FILE HAS BEEN SUCCESSFULLY DOWNLOADED")
 }
 
-func (de *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
+func (de *Delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))

@@ -44,5 +44,14 @@ func CookieError(code uint16) []byte{
 }
 
 func LogoutError(err error)[]byte{
+	switch err {
+	case nil:
+		return errors.GetOkAns("")
+	case UserRepository.InvalidSession:
+		return errors.GetErrorNoCockyAns()
+	case UserRepository.RemoveSessionError:
+		return
+
+	}
 	return nil
 }
