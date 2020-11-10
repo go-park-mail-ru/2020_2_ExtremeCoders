@@ -1,6 +1,15 @@
 package UserRepository
 
-import "CleanArch/internal/User/UserModel"
+import (
+	"CleanArch/internal/User/UserModel"
+	"errors"
+)
+
+var EmailAlreadyExists=errors.New("Email already exist!")
+var DbError=errors.New("Data Base error!")
+
+var ReceiverNotFound=errors.New("Receiver not found!")
+var SaveLetterError=errors.New("Save letter error!")
 
 type UserDB interface {
 	IsEmailExists(string) bool
