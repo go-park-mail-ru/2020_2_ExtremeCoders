@@ -1,6 +1,7 @@
 package main
 
 import (
+	"CleanArch/app/Postgres"
 	"CleanArch/app/User/UserDelivery"
 	"CleanArch/app/User/UserRepository/UserPostgres"
 	"CleanArch/app/User/UserUseCase"
@@ -9,8 +10,6 @@ import (
 	"net/http"
 	"time"
 )
-
-<<<<<<< HEAD
 
 func accessLogMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -37,11 +36,12 @@ func panicMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
-	var db= UserPostgres.DataBase{ User: "postgres", Password: "1538", DataBaseName: "maila"}
+	var db= Postgres.DataBase{ User: "postgres", Password: "1538", DataBaseName: "maila"}
 	db.Init()
-	var uc= UserUseCase.UseCase{Db: db}
+	var uc= UserUseCase.UseCase{DB: db}
 	var yaFood= UserDelivery.Delivery{Uc: uc}
 	mux := http.NewServeMux()
+
 	mux.HandleFunc("/signup", yaFood.Signup)
 	mux.HandleFunc("/signin", yaFood.SignIn)
 	mux.HandleFunc("/profile", yaFood.Profile)
@@ -50,23 +50,6 @@ func main() {
 	mux.HandleFunc("/sendMessage", yaFood.SendLetter)
 	mux.HandleFunc("/getSendLetters", yaFood.GetSendLetters)
 	mux.HandleFunc("/getRecvLetters", yaFood.GetRecvLetters)
-
-
-
-=======
-func main() {
-	var db = Postgres.DataBase{User: "postgres", Password: "123456yhn", DataBaseName: "maila"}
-	db.Init()
-	var uc = UseCase.UseCase{Db: db}
-	var yaFood = Delivery.Delivery{Uc: uc}
-	mux := http.NewServeMux()
-	mux.HandleFunc("/session", yaFood.Session)
-	mux.HandleFunc("/user", yaFood.Profile)
-	mux.HandleFunc("/user/avatar", yaFood.GetAvatar)
-	mux.HandleFunc("/letter", yaFood.SendLetter)
-	mux.HandleFunc("/sendedLetters", yaFood.GetSendLetters)
-	mux.HandleFunc("/receivedLetters", yaFood.GetRecvLetters)
->>>>>>> c1cbf8cca7d27251d3fad78a6f084256c6df9444
 	handler := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000", "http://127.0.0.1:3000", "http://95.163.209.195:3000"},
 		AllowedHeaders:   []string{"Version", "Authorization", "Content-Type"},

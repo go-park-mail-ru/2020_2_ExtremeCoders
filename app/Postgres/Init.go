@@ -9,11 +9,7 @@ import (
 )
 
 type DataBase struct {
-<<<<<<< HEAD:app/Postgres/Init.go
 	DB           *pg.DB
-=======
-	db           *pg.DB
->>>>>>> c1cbf8cca7d27251d3fad78a6f084256c6df9444:app/Repository/Postgres/Init.go
 	User         string
 	Password     string
 	DataBaseName string
