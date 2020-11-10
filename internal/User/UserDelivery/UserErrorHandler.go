@@ -50,8 +50,7 @@ func LogoutError(err error)[]byte{
 	case UserRepository.InvalidSession:
 		return errors.GetErrorNoCockyAns()
 	case UserRepository.RemoveSessionError:
-		return
-
+		return errors.RemoveSessionError()
 	}
 	return nil
 }

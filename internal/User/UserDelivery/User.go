@@ -149,10 +149,12 @@ func (de *Delivery) Logout(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err:=de.Uc.Logout(*user, session.Value)
-
-		session.Expires = time.Now().AddDate(0, 0, -1)
-		http.SetCookie(w, session)
+		e:=de.Uc.Logout(*user, session.Value)
+		if e==nil{
+			session.Expires = time.Now().AddDate(0, 0, -1)
+			http.SetCookie(w, session)
+		}
+		w.Write(LogoutError(e))
 		return
 	}
 

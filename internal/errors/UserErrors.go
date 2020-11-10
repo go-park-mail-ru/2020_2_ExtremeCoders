@@ -127,4 +127,11 @@ func GetAddSessionError() []byte {
 	return ans
 }
 
-func Remove
+func RemoveSessionError()[]byte{
+	ok := &AnswerGet{
+		Code:        408,
+		Description: "Could not remove session",
+	}
+	ans, _ := json.Marshal(ok)
+	return ans
+}
