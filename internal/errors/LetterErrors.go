@@ -1,8 +1,9 @@
 package errors
 
 import (
-	"CleanArch/cmd/Letter/LetterModel"
+	"CleanArch/internal/Letter/LetterModel"
 	"encoding/json"
+	"errors"
 )
 
 type LetterAns struct {
@@ -44,5 +45,14 @@ func GetSendOkAns(letters LetterModel.Letter) []byte {
 		Lid:  letters.Id,
 	}
 	ans, _ := json.Marshal(ok)
+	return ans
+}
+
+func SaveLetterError(err error)[]byte{
+	erro := &AnswerGet{
+		Code:        408,
+		Description: errors.Unwrap(err).Error(),
+	}
+	ans, _ := json.Marshal(erro)
 	return ans
 }

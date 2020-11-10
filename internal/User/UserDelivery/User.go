@@ -1,9 +1,9 @@
 package UserDelivery
 
 import (
-	"CleanArch/cmd/User/UserModel"
-	"CleanArch/cmd/User/UserUseCase"
-	"CleanArch/cmd/errors"
+	"CleanArch/internal/User/UserModel"
+	"CleanArch/internal/User/UserUseCase"
+	"CleanArch/internal/errors"
 	"bytes"
 	"fmt"
 	 //"github.com/golang/glog"
@@ -20,20 +20,20 @@ type Delivery struct{
 	Uc UserUseCase.UseCase
 }
 
-func getStrFormValueSafety(r *http.Request, field string) string{
+func GetStrFormValueSafety(r *http.Request, field string) string{
 	return r.FormValue(field)
 }
 
-func (yaFood *Delivery) Session(w http.ResponseWriter, r *http.Request) {
+func (de *Delivery) Session(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		yaFood.SignIn(w, r)
+		de.SignIn(w, r)
 	}
 	if r.Method == http.MethodDelete{
-		yaFood.Logout(w,r)
+		de.Logout(w,r)
 	}
 }
 
-func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
+func (de *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
  	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	fmt.Print("SIGNUP: ")
 	fmt.Print("\n\n")
@@ -41,12 +41,12 @@ func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var user UserModel.User
-	user.Name = getStrFormValueSafety(r,"name")
-	user.Surname = getStrFormValueSafety(r,"surname")
-	user.Email = getStrFormValueSafety(r,"email")
-	user.Password = getStrFormValueSafety(r,"password1")
-	yaFood.LoadFile(&user,r)
-	code, cookie:=yaFood.Uc.Signup(user)
+	user.Name = GetStrFormValueSafety(r,"name")
+	user.Surname = GetStrFormValueSafety(r,"surname")
+	user.Email = GetStrFormValueSafety(r,"email")
+	user.Password = GetStrFormValueSafety(r,"password1")
+	de.LoadFile(&user,r)
+	code, cookie:=de.Uc.Signup(user)
 
 	fmt.Print("\n\n")
 	if cookie != nil {
@@ -58,45 +58,40 @@ func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("RESPONSE: ",response)
 }
 
-func (yaFood *Delivery)SignIn(w http.ResponseWriter, r *http.Request) {
-	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
-	fmt.Print("SIGNIN: ")
-	yaFood.Uc.Db.ShowAll()
-	fmt.Print("\n\n")
-	fmt.Println("SIGNIN GOT: ", r.URL, r.Body)
+func (de *Delivery)SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return
 	}
 	var user UserModel.User
-	user.Email= getStrFormValueSafety(r,"email")
-	user.Password= getStrFormValueSafety(r,"password")
-	code, cookie:=yaFood.Uc.SignIn(user)
+	user.Email= GetStrFormValueSafety(r,"email")
+	user.Password= GetStrFormValueSafety(r,"password")
+	code, cookie:=de.Uc.SignIn(user)
 	if cookie!=nil{http.SetCookie(w, cookie)}
 	response:= SignInError(code, cookie)
 	w.Write(response)
 	//glog.Info("RESPONSE: ",response)
 }
 
-func (yaFood *Delivery)getUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
+func (de *Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
 	session, err := r.Cookie("session_id")
 	if err == http.ErrNoCookie {
 		return nil, nil, 401
 	}
-	uid, ok := yaFood.Uc.Db.IsOkSession(session.Value)
+	uid, ok := de.Uc.Db.IsOkSession(session.Value)
 	if !ok {
 		return nil, nil, 402
 	}
-	user := yaFood.Uc.Db.GetUserByUID(uid)
+	user := de.Uc.Db.GetUserByUID(uid)
 	return user, session, 200
 }
 
-func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
+func (de *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	fmt.Print("PROFILE: ")
 	fmt.Print("\n\n")
-	user, session, err := yaFood.getUserByRequest(r)
+	user, session, err := de.GetUserByRequest(r)
 	if err != 200 {
 		CookieError(err)
 
@@ -113,10 +108,10 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		var up UserModel.User
-		up.Name= getStrFormValueSafety(r,"profile_firstName")
-		up.Surname= getStrFormValueSafety(r,"profile_lastName")
-		yaFood.LoadFile(&up,r)
-		yaFood.Uc.Db.UpdateProfile(up, user.Email)
+		up.Name= GetStrFormValueSafety(r,"profile_firstName")
+		up.Surname= GetStrFormValueSafety(r,"profile_lastName")
+		de.LoadFile(&up,r)
+		de.Uc.Db.UpdateProfile(up, user.Email)
 		w.Write(errors.GetOkAns(session.Value))
 		//glog.Info("RESPONSE: ",getOkAns(session.Value))
 		return
@@ -125,26 +120,26 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("RESPONSE: ",getErrorUnexpectedAns())
 }
 
-func (yaFood *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
+func (de *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
 		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return
 	} else {
-		_, session, err := yaFood.getUserByRequest(r)
+		_, session, err := de.GetUserByRequest(r)
 		if err != 200 {
 			CookieError(err)
 			return
 		}
-		uid, ok := yaFood.Uc.Db.IsOkSession(session.Value)
+		uid, ok := de.Uc.Db.IsOkSession(session.Value)
 		if !ok {
 
 			w.Write(errors.GetErrorWrongCookieAns())
 			//glog.Info("RESPONSE: ",getErrorWrongCookieAns())
 			return
 		}
-		yaFood.Uc.Db.RemoveSession(uid, session.Value)
+		de.Uc.Db.RemoveSession(uid, session.Value)
 		w.Write(errors.GetOkAns(session.Value))
 		//glog.Info("RESPONSE: ",getOkAns(session.Value))
 
@@ -157,7 +152,7 @@ func (yaFood *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("RESPONSE: ",getErrorUnexpectedAns())
 }
 
-func (yaFood *Delivery)LoadFile(user *UserModel.User, r *http.Request){
+func (de *Delivery)LoadFile(user *UserModel.User, r *http.Request){
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method)
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
@@ -167,7 +162,7 @@ func (yaFood *Delivery)LoadFile(user *UserModel.User, r *http.Request){
 		return
 	}
 	(*user).Img = fileHeader.Filename
-	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, getStrFormValueSafety(r, "Name"))
+	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, GetStrFormValueSafety(r, "Name"))
 	path := "./" + (*user).Email + "/" + fileHeader.Filename
 	f, err := os.Create(path)
 	if err != nil {
@@ -178,7 +173,7 @@ func (yaFood *Delivery)LoadFile(user *UserModel.User, r *http.Request){
 	//glog.Info("FILE HAS BEEN SUCCESSFULLY DOWNLOADED")
 }
 
-func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
+func (de *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
@@ -186,7 +181,7 @@ func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	if r.Method == http.MethodGet {
-		user, _, Err := yaFood.getUserByRequest(r)
+		user, _, Err := de.GetUserByRequest(r)
 		if Err != 200 {
 			CookieError(Err)
 			//glog.Info("RESPONSE: ",CookieError(Err))
@@ -200,6 +195,7 @@ func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
 		if err != nil {
 			fmt.Println("ERROR", err)
 			//glog.Info("RESPONSE: ",CookieError(Err))
+			w.Write(errors.GetErrorUnexpectedAns())
 			return
 		}
 
@@ -207,8 +203,8 @@ func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
 		fmt.Println("FMT NAME", fmtName)
 		if err != nil {
 			fmt.Println(err)
-			w.Write(errors.GetErrorUnexpectedAns())
 			//glog.Info("RESPONSE: ",getErrorUnexpectedAns())
+			w.Write(errors.GetErrorUnexpectedAns())
 			return
 		}
 
@@ -216,6 +212,7 @@ func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
 		if err := jpeg.Encode(buffer, img, nil); err != nil {
 			fmt.Println("unable to encode image.")
 			//glog.Info("RESPONSE: unable to encode image.")
+			w.Write(errors.GetErrorUnexpectedAns())
 		}
 
 		w.Header().Set("Content-Type", "image/jpeg")

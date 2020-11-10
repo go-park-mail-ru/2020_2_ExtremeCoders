@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"CleanArch/cmd/User/UserModel"
+	"CleanArch/internal/User/UserModel"
 	"encoding/json"
 	"fmt"
 )

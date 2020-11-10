@@ -1,8 +1,8 @@
 package Postgres
 
 import (
-	"CleanArch/cmd/Letter/LetterModel"
-	"CleanArch/cmd/User/UserModel"
+	"CleanArch/internal/Letter/LetterModel"
+	"CleanArch/internal/User/UserModel"
 	"fmt"
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
@@ -15,29 +15,24 @@ type DataBase struct {
 	DataBaseName string
 }
 
-func (dbInfo *DataBase) Init() {
-	if dbInfo == nil {
-		dbInfo.User = "postgres"
-		dbInfo.Password = "123456yhn"
-		dbInfo.DataBaseName = "maila"
-	}
+func (dbInfo *DataBase) Init(user string, password string, name string) (*pg.DB, error) {
+	dbInfo.User = user
+	dbInfo.Password = password
+	dbInfo.DataBaseName = name
+
 	dbInfo.DB = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
 		Password: dbInfo.Password,
 		Database: dbInfo.DataBaseName,
 	})
 	fmt.Println(dbInfo.User, dbInfo.Password, dbInfo.DataBaseName)
-
-	err := createSchema(dbInfo.DB)
-	dbInfo.DB.Close()
+	err:=createSchema(dbInfo.DB)
 	dbInfo.DB = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
 		Password: dbInfo.Password,
 		Database: dbInfo.DataBaseName,
 	})
-	if err != nil {
-		panic(err)
-	}
+	return dbInfo.DB, err
 }
 
 func createSchema(db *pg.DB) error {
@@ -57,4 +52,3 @@ func createSchema(db *pg.DB) error {
 	}
 	return nil
 }
-

@@ -1,17 +1,27 @@
 package LetterUseCase
 
 import (
-	"CleanArch/cmd/Letter/LetterModel"
-	"CleanArch/cmd/Letter/LetterRepository"
+	"CleanArch/internal/Letter/LetterModel"
+	"CleanArch/internal/Letter/LetterRepository"
+	"errors"
+	"fmt"
 )
 
 type UseCase struct{
 	Db LetterRepository.LetterDB
 }
 
-func (uc *UseCase) SaveLetter(letter *LetterModel.Letter) int {
+func (uc *UseCase) SaveLetter(letter *LetterModel.Letter) error {
 	letter.Id = uc.Db.GenerateLID()
-	return uc.Db.SaveMail(*letter)
+	err:=uc.Db.IsUserExist(letter.Receiver)
+	if err!=nil{
+		return err
+	}
+	err=uc.Db.SaveMail(*letter)
+	if err!=nil{
+		return err
+	}
+	return nil
 }
 
 func (uc *UseCase) GetRecievedLetters(email string) (int, []LetterModel.Letter) {
