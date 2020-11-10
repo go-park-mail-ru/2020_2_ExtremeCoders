@@ -16,17 +16,17 @@ import (
 )
 
 func main() {
-	var db= Postgres.DataBase{}
-	DataBase, err:=db.Init("postgres", "1538", "maila")
-	if err!=nil{
+	var db = Postgres.DataBase{}
+	DataBase, err := db.Init("postgres", "1538", "maila")
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	var uDB= UserPostgres.DataBase{DB: DataBase}
+	var uDB = UserPostgres.DataBase{DB: DataBase}
 	var uUC = UserUseCase.UseCase{Db: uDB}
 	var uDE = UserDelivery.Delivery{Uc: uUC}
 
-	var lDB= LetterPostgres.DataBase{DB: DataBase}
+	var lDB = LetterPostgres.DataBase{DB: DataBase}
 	var lUC = LetterUseCase.UseCase{Db: lDB}
 	var lDE = LetterDelivery.Delivery{Uc: lUC}
 	mux := http.NewServeMux()

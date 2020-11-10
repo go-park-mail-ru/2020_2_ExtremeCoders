@@ -6,7 +6,7 @@ import (
 	"CleanArch/internal/errors"
 )
 
-func SendLetterError(err error, letter LetterModel.Letter) []byte{
+func SendLetterError(err error, letter LetterModel.Letter) []byte {
 	switch err {
 	case nil:
 		return errors.GetSendOkAns(letter)
@@ -20,7 +20,7 @@ func SendLetterError(err error, letter LetterModel.Letter) []byte{
 	return nil
 }
 
-func GetLettersError(err error, letters []LetterModel.Letter) []byte{
+func GetLettersError(err error, letters []LetterModel.Letter) []byte {
 	switch err {
 	case nil:
 		return errors.GetGetLettersOkAns(letters)

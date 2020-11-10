@@ -5,13 +5,12 @@ import (
 	"context"
 )
 
-type userKey struct {}
+type userKey struct{}
 
 func GetUserFromCtx(ctx context.Context) UserModel.User {
 	ctxUser := ctx.Value(userKey{})
 	user, ok := ctxUser.(UserModel.User)
 	if !ok {
-		//херово
 	}
 	return user
 }

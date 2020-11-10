@@ -3,7 +3,6 @@ package Postgres
 import (
 	"CleanArch/internal/Letter/LetterModel"
 	"CleanArch/internal/User/UserModel"
-	"fmt"
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 )
@@ -25,7 +24,6 @@ func (dbInfo *DataBase) Init(user string, password string, name string) (*pg.DB,
 		Password: dbInfo.Password,
 		Database: dbInfo.DataBaseName,
 	})
-	fmt.Println(dbInfo.User, dbInfo.Password, dbInfo.DataBaseName)
 	err:=createSchema(dbInfo.DB)
 	dbInfo.DB = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
