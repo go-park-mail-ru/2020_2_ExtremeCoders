@@ -96,10 +96,13 @@ func (de *Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Co
 		return nil, nil, 401
 	}
 	uid, ok := de.Uc.Db.IsOkSession(session.Value)
-	if !ok {
+	if ok!=nil {
 		return nil, nil, 402
 	}
-	user := de.Uc.Db.GetUserByUID(uid)
+	user, err := de.Uc.Db.GetUserByUID(uid)
+	if err!=nil {
+		return nil, nil, 402
+	}
 	return user, session, 200
 }
 
