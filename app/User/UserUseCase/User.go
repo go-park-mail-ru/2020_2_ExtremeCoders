@@ -1,18 +1,17 @@
-package UseCase
+package UserUseCase
 
 import (
-	"CleanArch/app/Models"
-	"CleanArch/app/Repository"
+	"CleanArch/app/User/UserModel"
+	"CleanArch/app/User/UserRepository"
 	"net/http"
 	"time"
 )
 
 type UseCase struct{
-	Db Repository.UserDB
+	Db UserRepository.UserDB
 }
 
-func (uc *UseCase)Signup(user Models.User) (uint16, *http.Cookie) {
-
+func (uc *UseCase)Signup(user UserModel.User) (uint16, *http.Cookie) {
 	if uc.Db.IsEmailExists(user.Email){
 		return 401, nil
 	}
@@ -33,7 +32,7 @@ func (uc *UseCase)Signup(user Models.User) (uint16, *http.Cookie) {
 	return 200, cookie
 }
 
-func (uc *UseCase)SignIn(user Models.User) (uint16, *http.Cookie) {
+func (uc *UseCase)SignIn(user UserModel.User) (uint16, *http.Cookie) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
 	if !erro {
 		return 404, nil

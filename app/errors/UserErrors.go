@@ -1,21 +1,21 @@
-package Delivery
+package errors
 
 import (
-	"CleanArch/app/Models"
+	"CleanArch/app/User/UserModel"
 	"encoding/json"
 	"fmt"
 )
 
 type AnswerGet struct {
-	Code uint16
+	Code        uint16
 	Description string
 	sid         string
-	User        Models.User
+	User        UserModel.User
 }
 
 
 
-func getErrorBadJsonAns() []byte {
+func GetErrorBadJsonAns() []byte {
 	err := &AnswerGet{
 		Code:        400,
 		Description: "Bad Json",
@@ -24,7 +24,7 @@ func getErrorBadJsonAns() []byte {
 	return ans
 }
 
-func getErrorLoginExistAns() []byte {
+func GetErrorLoginExistAns() []byte {
 	err := &AnswerGet{
 		Code:        401,
 		Description: "This Email has already exists",
@@ -33,7 +33,7 @@ func getErrorLoginExistAns() []byte {
 	return ans
 }
 
-func getErrorUnexpectedAns() []byte {
+func GetErrorUnexpectedAns() []byte {
 	err := &AnswerGet{
 		Code:        500,
 		Description: "Unexpected error",
@@ -42,7 +42,7 @@ func getErrorUnexpectedAns() []byte {
 	return ans
 }
 
-func getErrorNoCockyAns() []byte {
+func GetErrorNoCockyAns() []byte {
 	err := &AnswerGet{
 		Code:        401,
 		Description: "not authorized user",
@@ -51,7 +51,7 @@ func getErrorNoCockyAns() []byte {
 	return ans
 }
 
-func getErrorWrongCookieAns() []byte {
+func GetErrorWrongCookieAns() []byte {
 	err := &AnswerGet{
 		Code:        402,
 		Description: "wrong session id",
@@ -60,7 +60,7 @@ func getErrorWrongCookieAns() []byte {
 	return ans
 }
 
-func getErrorNotPostAns() []byte {
+func GetErrorNotPostAns() []byte {
 	err := &AnswerGet{
 		Code:        400,
 		Description: "Do not require request's method, expected POST",
@@ -69,7 +69,7 @@ func getErrorNotPostAns() []byte {
 	return ans
 }
 
-func getErrorNotNumberAns() []byte {
+func GetErrorNotNumberAns() []byte {
 	err := &AnswerGet{
 		Code:        400,
 		Description: "Not number",
@@ -78,7 +78,7 @@ func getErrorNotNumberAns() []byte {
 	return ans
 }
 
-func getErrorNoUserAns() []byte {
+func GetErrorNoUserAns() []byte {
 	err := &AnswerGet{
 		Code:        404,
 		Description: "Do not find this user in db",
@@ -87,7 +87,7 @@ func getErrorNoUserAns() []byte {
 	return ans
 }
 
-func getErrorBadPasswordAns() []byte {
+func GetErrorBadPasswordAns() []byte {
 	err := &AnswerGet{
 		Code:        401,
 		Description: "Wrong Password",
@@ -96,7 +96,7 @@ func getErrorBadPasswordAns() []byte {
 	return ans
 }
 
-func getOkAns(cocky string) []byte {
+func GetOkAns(cocky string) []byte {
 	ok := &AnswerGet{
 		Code:        200,
 		Description: "ok",
@@ -106,7 +106,7 @@ func getOkAns(cocky string) []byte {
 	return ans
 }
 
-func getOkAnsData(cocky string, data Models.User) []byte {
+func GetOkAnsData(cocky string, data UserModel.User) []byte {
 	fmt.Println("DATA::::::::::", data.Email, data.Name, data.Password)
 	ok := &AnswerGet{
 		Code:        200,

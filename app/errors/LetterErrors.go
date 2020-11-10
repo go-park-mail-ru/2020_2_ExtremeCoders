@@ -1,17 +1,17 @@
-package Delivery
+package errors
 
 import (
-	"CleanArch/app/Models"
+	"CleanArch/app/Letter/LetterModel"
 	"encoding/json"
 )
 
 type LetterAns struct {
 	Code    int
 	Lid     uint64
-	Letters []Models.Letter
+	Letters []LetterModel.Letter
 }
 
-func getErrorSaveErrorAns() []byte {
+func GetErrorSaveErrorAns() []byte {
 	err := &AnswerGet{
 		Code:        400,
 		Description: "Could not save letter",
@@ -20,7 +20,7 @@ func getErrorSaveErrorAns() []byte {
 	return ans
 }
 
-func getErrorNoRecieverAns() []byte {
+func GetErrorNoRecieverAns() []byte {
 	err := &AnswerGet{
 		Code:        408,
 		Description: "No such user in DB",
@@ -29,7 +29,7 @@ func getErrorNoRecieverAns() []byte {
 	return ans
 }
 
-func getGetLettersOkAns(letters []Models.Letter) []byte {
+func GetGetLettersOkAns(letters []LetterModel.Letter) []byte {
 	ok := &LetterAns{
 		Code:    200,
 		Letters: letters,
@@ -38,7 +38,7 @@ func getGetLettersOkAns(letters []Models.Letter) []byte {
 	return ans
 }
 
-func getSendOkAns(letters Models.Letter) []byte {
+func GetSendOkAns(letters LetterModel.Letter) []byte {
 	ok := &LetterAns{
 		Code: 200,
 		Lid:  letters.Id,

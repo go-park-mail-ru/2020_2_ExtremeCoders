@@ -1,16 +1,17 @@
 package Postgres
 
 import (
-	"CleanArch/app/Models"
+	"CleanArch/app/Letter/LetterModel"
+	"CleanArch/app/User/UserModel"
 	"fmt"
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 )
 
 type DataBase struct {
-	db *pg.DB
-	User string
-	Password string
+	DB           *pg.DB
+	User         string
+	Password     string
 	DataBaseName string
 }
 
@@ -20,16 +21,16 @@ func (dbInfo *DataBase)Init() {
 		dbInfo.Password="123456yhn"
 		dbInfo.DataBaseName="maila"
 	}
-	dbInfo.db = pg.Connect(&pg.Options{
+	dbInfo.DB = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
 		Password: dbInfo.Password,
 		Database: dbInfo.DataBaseName,
 	})
 	fmt.Println(dbInfo.User, dbInfo.Password, dbInfo.DataBaseName)
 
-	err := createSchema(dbInfo.db)
-	dbInfo.db.Close()
-	dbInfo.db = pg.Connect(&pg.Options{
+	err := createSchema(dbInfo.DB)
+	dbInfo.DB.Close()
+	dbInfo.DB = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
 		Password: dbInfo.Password,
 		Database: dbInfo.DataBaseName,
@@ -43,9 +44,9 @@ func (dbInfo *DataBase)Init() {
 // createSchema creates database schemas.
 func createSchema(db *pg.DB) error {
 	models := []interface{}{
-		(*Models.User)(nil),
-		(*Models.Session)(nil),
-		(*Models.Letter)(nil),
+		(*UserModel.User)(nil),
+		(*UserModel.Session)(nil),
+		(*LetterModel.Letter)(nil),
 	}
 
 	for _, model := range models {

@@ -1,7 +1,9 @@
-package Postgres
+package UserPostgres
 
 import (
-	"CleanArch/app/Models"
+	"CleanArch/app/Postgres"
+	"CleanArch/app/User/UserModel"
+	_ "CleanArch/app/User/UserRepository"
 	crypto "crypto/rand"
 	"fmt"
 	"math/big"
@@ -13,24 +15,24 @@ const (
 
 var SidRunes ="1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 
-func (dbInfo DataBase) IsEmailExists(email string) bool {
-	user := &Models.User{Email: email}
-	err := dbInfo.db.Model(user).Where("email=?", email).Select()
+func (dbInfo Postgres.DataBase) IsEmailExists(email string) bool {
+	user := &UserModel.User{Email: email}
+	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err !=nil {
 		return false
 	}
 	return true
 }
 
-func (dbInfo DataBase) AddUser(user *Models.User) {
+func (dbInfo DataBase) AddUser(user *UserModel.User) {
 	_, err := dbInfo.db.Model(user).Insert()
 	if err != nil {
 
 	}
 }
 
-func (dbInfo DataBase) AddSession(sid string, uid uint64, user *Models.User) error {
-	session := &Models.Session{Id: sid, UserId: int64(uid), User: user}
+func (dbInfo DataBase) AddSession(sid string, uid uint64, user *UserModel.User) error {
+	session := &UserModel.Session{Id: sid, UserId: int64(uid), User: user}
 	_, err := dbInfo.db.Model(session).Insert()
 	if err != nil {
 		return err
@@ -46,7 +48,7 @@ func (dbInfo DataBase) GenerateSID() []rune {
 			sid+= string(SidRunes[safeNum.Int64()])
 		}
 		fmt.Println(sid)
-		session := &Models.Session{Id: sid}
+		session := &UserModel.Session{Id: sid}
 		exist := dbInfo.db.Model(session).WherePK().Select()
 		if exist != nil {
 			break
@@ -59,7 +61,7 @@ func (dbInfo DataBase) GenerateSID() []rune {
 func (dbInfo DataBase) GenerateUID() uint64 {
 	for {
 		uid,_ :=crypto.Int(crypto.Reader, big.NewInt(4294967295))
-		user := Models.User{Id: uid.Uint64()}
+		user := UserModel.User{Id: uid.Uint64()}
 		exist := dbInfo.db.Model(user).Where("id=?", uid.Int64()).Select()
 		if exist != nil {
 			return uid.Uint64()
@@ -67,8 +69,8 @@ func (dbInfo DataBase) GenerateUID() uint64 {
 	}
 }
 
-func (dbInfo DataBase) GetUserByEmail(email string) (*Models.User, bool) {
-	user := &Models.User{Email: email}
+func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, bool) {
+	user := &UserModel.User{Email: email}
 	err := dbInfo.db.Model(user).Where("email=?", email).Select()
 	if err == nil {
 		return user, true
@@ -76,14 +78,14 @@ func (dbInfo DataBase) GetUserByEmail(email string) (*Models.User, bool) {
 	return user, false
 }
 
-func (dbInfo DataBase) GetUserByUID(uid uint64) *Models.User {
-	user := &Models.User{Id: uid}
+func (dbInfo DataBase) GetUserByUID(uid uint64) *UserModel.User {
+	user := &UserModel.User{Id: uid}
 	dbInfo.db.Model(user).WherePK().Select()
 	return user
 }
 
 func (dbInfo DataBase) IsOkSession(sid string) (uint64, bool) {
-	session := &Models.Session{Id: sid}
+	session := &UserModel.Session{Id: sid}
 	err := dbInfo.db.Model(session).WherePK().Select()
 	if err != nil  {
 		return 0, false
@@ -91,8 +93,8 @@ func (dbInfo DataBase) IsOkSession(sid string) (uint64, bool) {
 	return uint64(session.UserId), true
 }
 
-func (dbInfo DataBase) UpdateProfile(newUser Models.User, email string) {
-	oldUser := &Models.User{Email: email}
+func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) {
+	oldUser := &UserModel.User{Email: email}
 	dbInfo.db.Model(oldUser).Where("email=?", email).Select()
 
 	User := oldUser
@@ -104,12 +106,12 @@ func (dbInfo DataBase) UpdateProfile(newUser Models.User, email string) {
 }
 
 func (dbInfo DataBase) RemoveSession(uid uint64, sid string) {
-	session := &Models.Session{Id: sid}
+	session := &UserModel.Session{Id: sid}
 	dbInfo.db.Model(session).WherePK().Delete()
 }
 
 func (dbInfo DataBase) RemoveSessionByUID(uid uint64){
-	session:=&Models.Session{UserId: int64(uid)}
+	session:=&UserModel.Session{UserId: int64(uid)}
 	err:=dbInfo.db.Model(session).Where("user_id=?", uid).Select()
 	if err!=nil{
 		return
@@ -118,8 +120,8 @@ func (dbInfo DataBase) RemoveSessionByUID(uid uint64){
 }
 
 func (dbInfo DataBase) ShowAll(){
-	var users []Models.User
-	var sessions []Models.Session
+	var users []UserModel.User
+	var sessions []UserModel.Session
 	fmt.Println(dbInfo.db.Model(users).Select())
 	fmt.Println(dbInfo.db.Model(sessions).Select())
 }

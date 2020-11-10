@@ -1,4 +1,4 @@
-package Models
+package LetterModel
 
 type Letter struct {
 	Id       uint64
