@@ -1,6 +1,8 @@
 package UserDelivery
 
 import (
+	"CleanArch/internal/User/UserRepository"
+	"CleanArch/internal/User/UserUseCase"
 	"CleanArch/internal/errors"
 	"net/http"
 )
@@ -15,14 +17,18 @@ func SignUpError(code uint16, cookie *http.Cookie) []byte{
 	return nil
 }
 
-func SignInError(code uint16, cookie *http.Cookie) []byte{
-	switch code {
-	case 200:
+func SignInError(err error, cookie *http.Cookie) []byte{
+	switch err {
+	case nil:
 		return errors.GetOkAns(cookie.Value)
-	case 401:
-		return errors.GetErrorBadPasswordAns()
-	case 404:
+	case UserRepository.CantAddSession:
+		return errors.GetAddSessionError()
+	case UserRepository.CantGetUserByEmail:
 		return errors.GetErrorNoUserAns()
+	case UserRepository.GetSessionError:
+		errors.GetErrorNoCockyAns()
+	case UserUseCase.WrongPasswordError:
+		errors.GetErrorBadPasswordAns()
 	}
 	return nil
 }
@@ -34,5 +40,9 @@ func CookieError(code uint16) []byte{
 	case 402:
 		return errors.GetErrorWrongCookieAns()
 	}
+	return nil
+}
+
+func LogoutError(err error)[]byte{
 	return nil
 }

@@ -39,41 +39,39 @@ func (uc *UseCase)Signup(user UserModel.User) (error, *http.Cookie) {
 	return nil, cookie
 }
 
-func (uc *UseCase)SignIn(user UserModel.User) error {
+func (uc *UseCase)SignIn(user UserModel.User) (error, string) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
 	if erro!=nil {
-		return erro
+		return erro,""
 	}
 	if userEx.Password != user.Password {
-		return WrongPasswordError
+		return WrongPasswordError, ""
 	}
-	sid := string(uc.Db.GenerateSID())
-	userToRm, err:=uc.Db.GetUserByUID(userEx.Id)
-	if err!=nil{
-		return err
+	sid,e := uc.Db.GenerateSID()
+	if e!=nil{
+		return e, ""
 	}
-	uc.Db.RemoveSession(userEx.Id, )
-	if uc.Db.AddSession(sid, userEx.Id, &user) != nil {
-		//return 401, nil
+	oldSid, er:=uc.Db.GetSessionByUID(userEx.Id)
+	if er!=nil{
+		return er, ""
 	}
-
-	cookie := &http.Cookie{
-		Name:    "session_id",
-		Value:   sid,
-		Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+	uc.Db.RemoveSession(userEx.Id, oldSid)
+	er=uc.Db.AddSession(string(sid), userEx.Id, &user)
+	if er != nil {
+		return er, ""
 	}
-	cookie.Path = "/"
-	//return 200, cookie
-	return nil, cookie
+	return nil, string(sid)
 
 }
 
-func (uc *UseCase)Logout(user UserModel.User) (error, *http.Cookie) {
-	uid, ok := uc.Db.IsOkSession(session.Value)
-	if !ok {
-		w.Write(errors.GetErrorWrongCookieAns())
-		//glog.Info("RESPONSE: ",getErrorWrongCookieAns())
-		return
+func (uc *UseCase)Logout(user UserModel.User, sid string) error {
+	uid, ok := uc.Db.IsOkSession(sid)
+	if ok!=nil {
+		return ok
 	}
-	e:=uc.Db.RemoveSession(uid, session.Value)
+	e:=uc.Db.RemoveSession(uid, sid)
+	if e!=nil{
+		return e
+	}
+	return nil
 }

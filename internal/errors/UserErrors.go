@@ -117,3 +117,12 @@ func GetOkAnsData(cocky string, data UserModel.User) []byte {
 	ans, _ := json.Marshal(ok)
 	return ans
 }
+
+func GetAddSessionError() []byte {
+	ok := &AnswerGet{
+		Code:        401,
+		Description: "Could not add session",
+	}
+	ans, _ := json.Marshal(ok)
+	return ans
+}

@@ -6,7 +6,9 @@ import (
 	"CleanArch/internal/errors"
 	"bytes"
 	"fmt"
-	 //"github.com/golang/glog"
+	"github.com/golang/glog"
+
+	//"github.com/golang/glog"
 	"image"
 	"image/jpeg"
 	"io"
@@ -61,17 +63,26 @@ func (de *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 func (de *Delivery)SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
-		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return
 	}
 	var user UserModel.User
 	user.Email= GetStrFormValueSafety(r,"email")
 	user.Password= GetStrFormValueSafety(r,"password")
-	code, cookie:=de.Uc.SignIn(user)
-	if cookie!=nil{http.SetCookie(w, cookie)}
-	response:= SignInError(code, cookie)
+	err, sid:=de.Uc.SignIn(user)
+	var response []byte
+	if err==nil{
+		cookie := &http.Cookie{
+			Name:    "session_id",
+			Value:   sid,
+			Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+		}
+		cookie.Path = "/"
+		http.SetCookie(w, cookie)
+		response= SignInError(err, cookie)
+	} else{
+		response= SignInError(err, nil)
+	}
 	w.Write(response)
-	//glog.Info("RESPONSE: ",response)
 }
 
 func (de *Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
@@ -127,14 +138,14 @@ func (de *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return
 	} else {
-		_, session, err := de.GetUserByRequest(r)
+		user, session, err := de.GetUserByRequest(r)
 		if err != 200 {
 			w.Write(CookieError(err))
 			return
 		}
 
-		w.Write(errors.GetOkAns(session.Value))
-		//glog.Info("RESPONSE: ",getOkAns(session.Value))
+		err:=de.Uc.Logout(*user, session.Value)
+
 		session.Expires = time.Now().AddDate(0, 0, -1)
 		http.SetCookie(w, session)
 		return
