@@ -13,7 +13,8 @@ const (
 	SizeSID = 32
 )
 
-var SidRunes ="1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+
 
 func (dbInfo Postgres.DataBase) IsEmailExists(email string) bool {
 	user := &UserModel.User{Email: email}
@@ -44,8 +45,8 @@ func (dbInfo DataBase) GenerateSID() []rune {
 	var sid string
 	for {
 		for i := 0; i < SizeSID; i++ {
-			safeNum,_ :=crypto.Int(crypto.Reader, big.NewInt(int64(len(SidRunes))))
-			sid+= string(SidRunes[safeNum.Int64()])
+			safeNum, _ := crypto.Int(crypto.Reader, big.NewInt(int64(len(SidRunes))))
+			sid += string(SidRunes[safeNum.Int64()])
 		}
 		fmt.Println(sid)
 		session := &UserModel.Session{Id: sid}
@@ -53,7 +54,7 @@ func (dbInfo DataBase) GenerateSID() []rune {
 		if exist != nil {
 			break
 		}
-		sid=""
+		sid = ""
 	}
 	return []rune(sid)
 }
@@ -87,7 +88,7 @@ func (dbInfo DataBase) GetUserByUID(uid uint64) *UserModel.User {
 func (dbInfo DataBase) IsOkSession(sid string) (uint64, bool) {
 	session := &UserModel.Session{Id: sid}
 	err := dbInfo.db.Model(session).WherePK().Select()
-	if err != nil  {
+	if err != nil {
 		return 0, false
 	}
 	return uint64(session.UserId), true
@@ -100,7 +101,7 @@ func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) {
 	User := oldUser
 	User.Name = newUser.Name
 	User.Surname = newUser.Surname
-	User.Img=newUser.Img
+	User.Img = newUser.Img
 	_, err := dbInfo.db.Model(User).Column("name", "surname", "img").Where("email=?", email).Update()
 	fmt.Println(err)
 }

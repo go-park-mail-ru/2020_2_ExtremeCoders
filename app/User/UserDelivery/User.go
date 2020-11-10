@@ -40,9 +40,10 @@ func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
 	code, cookie:=yaFood.Uc.Signup(user)
 
 	fmt.Print("\n\n")
-	if cookie!=nil{
+	if cookie != nil {
 		http.SetCookie(w, cookie)
 	}
+
 	response:= SignUpError(code, cookie)
 	w.Write(response)
 	//glog.Info("RESPONSE: ",response)
@@ -72,13 +73,13 @@ func (yaFood *Delivery)SignIn(w http.ResponseWriter, r *http.Request) {
 func (yaFood *Delivery)getUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
 	session, err := r.Cookie("session_id")
 	if err == http.ErrNoCookie {
-		return nil,nil, 401
+		return nil, nil, 401
 	}
 	uid, ok := yaFood.Uc.Db.IsOkSession(session.Value)
-	if !ok{
+	if !ok {
 		return nil, nil, 402
 	}
-	user:=yaFood.Uc.Db.GetUserByUID(uid)
+	user := yaFood.Uc.Db.GetUserByUID(uid)
 	return user, session, 200
 }
 
@@ -86,9 +87,10 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
 	fmt.Print("PROFILE: ")
 	fmt.Print("\n\n")
-	user, session, err:=yaFood.getUserByRequest(r)
-	if err!=200{
+	user, session, err := yaFood.getUserByRequest(r)
+	if err != 200 {
 		CookieError(err)
+
 		//glog.Info("RESPONSE: ",CookieError(err))
 		return
 	}
@@ -121,14 +123,14 @@ func (yaFood *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return
 	} else {
-		_, session, err:=yaFood.getUserByRequest(r)
-		if err!=200{
+		_, session, err := yaFood.getUserByRequest(r)
+		if err != 200 {
 			CookieError(err)
-			//glog.Info("RESPONSE: ",CookieError(err))
 			return
 		}
-		uid, ok :=yaFood.Uc.Db.IsOkSession(session.Value)
+		uid, ok := yaFood.Uc.Db.IsOkSession(session.Value)
 		if !ok {
+
 			w.Write(errors.GetErrorWrongCookieAns())
 			//glog.Info("RESPONSE: ",getErrorWrongCookieAns())
 			return
@@ -136,10 +138,12 @@ func (yaFood *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 		yaFood.Uc.Db.RemoveSession(uid, session.Value)
 		w.Write(errors.GetOkAns(session.Value))
 		//glog.Info("RESPONSE: ",getOkAns(session.Value))
+
 		session.Expires = time.Now().AddDate(0, 0, -1)
 		http.SetCookie(w, session)
 		return
 	}
+
 	w.Write(errors.GetErrorUnexpectedAns())
 	//glog.Info("RESPONSE: ",getErrorUnexpectedAns())
 }
@@ -150,11 +154,12 @@ func (yaFood *Delivery)LoadFile(user *UserModel.User, r *http.Request){
 	if file == nil {
 		fmt.Println("FILE IS EMPTY")
 		//glog.Info("RESPONSE: ","FILE IS EMPTY")
+
 		return
 	}
 	(*user).Img = fileHeader.Filename
-	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, getStrFormValueSafety(r,"Name"))
-	path:="./"+(*user).Email+"/"+fileHeader.Filename
+	fmt.Println("FILLLLLLLLLLLLLLLLLLLLLLLE", fileHeader.Filename, err, getStrFormValueSafety(r, "Name"))
+	path := "./" + (*user).Email + "/" + fileHeader.Filename
 	f, err := os.Create(path)
 	if err != nil {
 		return
@@ -172,14 +177,14 @@ func (yaFood *Delivery)GetAvatar(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	if r.Method == http.MethodGet {
-		user, _, Err:=yaFood.getUserByRequest(r)
-		if Err!=200{
+		user, _, Err := yaFood.getUserByRequest(r)
+		if Err != 200 {
 			CookieError(Err)
 			//glog.Info("RESPONSE: ",CookieError(Err))
 			return
 		}
 		if (*user).Img == "" {
-			(*user).Img="./default.jpeg"
+			(*user).Img = "./default.jpeg"
 		}
 
 		file, err := os.Open((*user).Img) // path to image file

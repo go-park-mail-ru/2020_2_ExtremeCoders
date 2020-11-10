@@ -9,17 +9,21 @@ import (
 )
 
 type DataBase struct {
+<<<<<<< HEAD:app/Postgres/Init.go
 	DB           *pg.DB
+=======
+	db           *pg.DB
+>>>>>>> c1cbf8cca7d27251d3fad78a6f084256c6df9444:app/Repository/Postgres/Init.go
 	User         string
 	Password     string
 	DataBaseName string
 }
 
-func (dbInfo *DataBase)Init() {
-	if dbInfo ==nil{
-		dbInfo.User="postgres"
-		dbInfo.Password="123456yhn"
-		dbInfo.DataBaseName="maila"
+func (dbInfo *DataBase) Init() {
+	if dbInfo == nil {
+		dbInfo.User = "postgres"
+		dbInfo.Password = "123456yhn"
+		dbInfo.DataBaseName = "maila"
 	}
 	dbInfo.DB = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
@@ -39,7 +43,6 @@ func (dbInfo *DataBase)Init() {
 		panic(err)
 	}
 }
-
 
 // createSchema creates database schemas.
 func createSchema(db *pg.DB) error {

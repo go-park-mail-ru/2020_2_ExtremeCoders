@@ -19,8 +19,8 @@ func (uc *UseCase)Signup(user UserModel.User) (uint16, *http.Cookie) {
 	user.Id = uc.Db.GenerateUID()
 	sid := string(uc.Db.GenerateSID())
 	uc.Db.AddUser(&user)
-	if uc.Db.AddSession(sid, user.Id, &user)!=nil{
-		return 401,nil
+	if uc.Db.AddSession(sid, user.Id, &user) != nil {
+		return 401, nil
 	}
 	cookie := &http.Cookie{
 		Name:    "session_id",
@@ -42,8 +42,8 @@ func (uc *UseCase)SignIn(user UserModel.User) (uint16, *http.Cookie) {
 	}
 	sid := string(uc.Db.GenerateSID())
 	uc.Db.RemoveSessionByUID(userEx.Id)
-	if uc.Db.AddSession(sid, userEx.Id, &user)!=nil{
-		return 401,nil
+	if uc.Db.AddSession(sid, userEx.Id, &user) != nil {
+		return 401, nil
 	}
 
 	cookie := &http.Cookie{
