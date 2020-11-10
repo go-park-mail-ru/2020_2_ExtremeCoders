@@ -25,7 +25,7 @@ func (uc *UseCase) SaveLetter(letter *LetterModel.Letter) error {
 }
 
 func (uc *UseCase) GetRecievedLetters(email string) (int, []LetterModel.Letter) {
-	return uc.Db.GetRecievedLetters(email)
+	return uc.Db.GetReceivedLetters(email)
 }
 
 func (uc *UseCase) GetSendedLetters(email string) (int, []LetterModel.Letter) {

@@ -30,7 +30,7 @@ func (dbInfo DataBase)IsUserExist(email string) error{
 	return nil
 }
 
-func (dbInfo DataBase) GetRecievedLetters(email string) (error, []LetterModel.Letter){
+func (dbInfo DataBase) GetReceivedLetters(email string) (error, []LetterModel.Letter){
 	var letters []LetterModel.Letter
 	exist := dbInfo.DB.Model(&letters).Where("receiver=?", &email).Select()
 	if exist!=nil{
