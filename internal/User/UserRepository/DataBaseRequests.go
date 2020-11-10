@@ -12,16 +12,15 @@ var ReceiverNotFound=errors.New("Receiver not found!")
 var SaveLetterError=errors.New("Save letter error!")
 
 type UserDB interface {
-	IsEmailExists(string) bool
+	IsEmailExists(string) error
 	AddSession(string, uint64, *UserModel.User) error
-	AddUser(*UserModel.User)
-	GenerateSID() []rune
-	GenerateUID() uint64
-	GetUserByEmail(string) (*UserModel.User, bool)
-	GetUserByUID(uint64) *UserModel.User
-	IsOkSession(string) (uint64,bool)
-	UpdateProfile(UserModel.User, string)
-	RemoveSession(uint64, string)
-	RemoveSessionByUID(uint64)
-	ShowAll()
+	AddUser(*UserModel.User, error)
+	GenerateSID() ([]rune, error)
+	GenerateUID() (uint64, error)
+	GetUserByEmail(string) (*UserModel.User, error)
+	GetUserByUID(uint64) (*UserModel.User, error)
+	IsOkSession(string) (uint64,error)
+	UpdateProfile(UserModel.User, string) error
+	RemoveSession(uint64, string) error
+	RemoveSessionByUID(uint64) error
 }

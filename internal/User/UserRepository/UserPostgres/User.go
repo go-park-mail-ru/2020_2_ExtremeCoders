@@ -122,10 +122,3 @@ func (dbInfo DataBase) RemoveSessionByUID(uid uint64){
 	}
 	dbInfo.DB.Model(session).WherePK().Delete()
 }
-
-func (dbInfo DataBase) ShowAll(){
-	var users []UserModel.User
-	var sessions []UserModel.Session
-	fmt.Println(dbInfo.DB.Model(users).Select())
-	fmt.Println(dbInfo.DB.Model(sessions).Select())
-}
