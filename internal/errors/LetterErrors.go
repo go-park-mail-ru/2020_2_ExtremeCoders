@@ -3,7 +3,6 @@ package errors
 import (
 	"CleanArch/internal/Letter/LetterModel"
 	"encoding/json"
-	"errors"
 )
 
 type LetterAns struct {
@@ -30,6 +29,15 @@ func GetErrorNoRecieverAns() []byte {
 	return ans
 }
 
+func GetErrorReceivedLetterAns() []byte {
+	err := &AnswerGet{
+		Code:        408,
+		Description: "Could not get letters",
+	}
+	ans, _ := json.Marshal(err)
+	return ans
+}
+
 func GetGetLettersOkAns(letters []LetterModel.Letter) []byte {
 	ok := &LetterAns{
 		Code:    200,
@@ -45,14 +53,5 @@ func GetSendOkAns(letters LetterModel.Letter) []byte {
 		Lid:  letters.Id,
 	}
 	ans, _ := json.Marshal(ok)
-	return ans
-}
-
-func SaveLetterError(err error)[]byte{
-	erro := &AnswerGet{
-		Code:        408,
-		Description: errors.Unwrap(err).Error(),
-	}
-	ans, _ := json.Marshal(erro)
 	return ans
 }
