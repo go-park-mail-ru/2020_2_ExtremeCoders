@@ -11,6 +11,9 @@ var DbError=errors.New("Data Base error!")
 var ReceiverNotFound=errors.New("Receiver not found!")
 var SaveLetterError=errors.New("Save letter error!")
 
+
+var GetUserError=errors.New("Could not get user!")
+var RemoveSessionError =errors.New("Could not remove session!")
 type UserDB interface {
 	IsEmailExists(string) error
 	AddSession(string, uint64, *UserModel.User) error
@@ -22,5 +25,4 @@ type UserDB interface {
 	IsOkSession(string) (uint64,error)
 	UpdateProfile(UserModel.User, string) error
 	RemoveSession(uint64, string) error
-	RemoveSessionByUID(uint64) error
 }

@@ -2,6 +2,7 @@ package UserPostgres
 
 import (
 	"CleanArch/internal/User/UserModel"
+	"CleanArch/internal/User/UserRepository"
 	crypto "crypto/rand"
 	"fmt"
 	"github.com/go-pg/pg/v10"
@@ -109,16 +110,12 @@ func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) {
 	fmt.Println(err)
 }
 
-func (dbInfo DataBase) RemoveSession(uid uint64, sid string) {
+func (dbInfo DataBase) RemoveSession(uid uint64, sid string) error{
 	session := &UserModel.Session{Id: sid}
-	dbInfo.DB.Model(session).WherePK().Delete()
+	_, err:=dbInfo.DB.Model(session).WherePK().Delete()
+	if err!=nil{
+		return UserRepository.RemoveSessionError
+	}
+	return nil
 }
 
-func (dbInfo DataBase) RemoveSessionByUID(uid uint64){
-	session:=&UserModel.Session{UserId: int64(uid)}
-	err:=dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
-	if err!=nil{
-		return
-	}
-	dbInfo.DB.Model(session).WherePK().Delete()
-}

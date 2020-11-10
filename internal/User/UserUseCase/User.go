@@ -3,6 +3,7 @@ package UserUseCase
 import (
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserRepository"
+	"CleanArch/internal/errors"
 	"net/http"
 	"time"
 )
@@ -42,7 +43,6 @@ func (uc *UseCase)SignIn(user UserModel.User) (error, *http.Cookie) {
 	}
 	if userEx.Password != user.Password {
 		//return 401, nil
-
 	}
 	sid := string(uc.Db.GenerateSID())
 	uc.Db.RemoveSessionByUID(userEx.Id)
@@ -59,4 +59,14 @@ func (uc *UseCase)SignIn(user UserModel.User) (error, *http.Cookie) {
 	//return 200, cookie
 	return nil, cookie
 
+}
+
+func (uc *UseCase)Logout(user UserModel.User) (error, *http.Cookie) {
+	uid, ok := uc.Db.IsOkSession(session.Value)
+	if !ok {
+		w.Write(errors.GetErrorWrongCookieAns())
+		//glog.Info("RESPONSE: ",getErrorWrongCookieAns())
+		return
+	}
+	e:=uc.Db.RemoveSession(uid, session.Value)
 }

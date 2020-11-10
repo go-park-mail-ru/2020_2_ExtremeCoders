@@ -129,20 +129,12 @@ func (de *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 	} else {
 		_, session, err := de.GetUserByRequest(r)
 		if err != 200 {
-			CookieError(err)
+			w.Write(CookieError(err))
 			return
 		}
-		uid, ok := de.Uc.Db.IsOkSession(session.Value)
-		if !ok {
 
-			w.Write(errors.GetErrorWrongCookieAns())
-			//glog.Info("RESPONSE: ",getErrorWrongCookieAns())
-			return
-		}
-		de.Uc.Db.RemoveSession(uid, session.Value)
 		w.Write(errors.GetOkAns(session.Value))
 		//glog.Info("RESPONSE: ",getOkAns(session.Value))
-
 		session.Expires = time.Now().AddDate(0, 0, -1)
 		http.SetCookie(w, session)
 		return
