@@ -20,32 +20,33 @@ const (
 var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 
 
-func (dbInfo DataBase) IsEmailExists(email string) bool {
+func (dbInfo DataBase) IsEmailExists(email string) error {
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err !=nil {
-		return false
+		return UserRepository.EmailAlreadyExists
 	}
-	return true
+	return nil
 }
 
-func (dbInfo DataBase) AddUser(user *UserModel.User) {
+func (dbInfo DataBase) AddUser(user *UserModel.User) error {
 	_, err := dbInfo.DB.Model(user).Insert()
 	if err != nil {
-
+		return UserRepository.CantAddUser
 	}
+	return nil
 }
 
 func (dbInfo DataBase) AddSession(sid string, uid uint64, user *UserModel.User) error {
 	session := &UserModel.Session{Id: sid, UserId: int64(uid), User: user}
 	_, err := dbInfo.DB.Model(session).Insert()
 	if err != nil {
-		return err
+		return UserRepository.CantAddSession
 	}
 	return nil
 }
 
-func (dbInfo DataBase) GenerateSID() []rune {
+func (dbInfo DataBase) GenerateSID() ([]rune, error) {
 	var sid string
 	for {
 		for i := 0; i < SizeSID; i++ {
@@ -60,27 +61,27 @@ func (dbInfo DataBase) GenerateSID() []rune {
 		}
 		sid = ""
 	}
-	return []rune(sid)
+	return []rune(sid),nil
 }
 
-func (dbInfo DataBase) GenerateUID() uint64 {
+func (dbInfo DataBase) GenerateUID() (uint64, error) {
 	for {
 		uid,_ :=crypto.Int(crypto.Reader, big.NewInt(4294967295))
 		user := UserModel.User{Id: uid.Uint64()}
 		exist := dbInfo.DB.Model(user).Where("id=?", uid.Int64()).Select()
 		if exist != nil {
-			return uid.Uint64()
+			return uid.Uint64(), nil
 		}
 	}
 }
 
-func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, bool) {
+func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, error) {
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err == nil {
-		return user, true
+		return user, UserRepository.CantGetUserByEmail
 	}
-	return user, false
+	return user, nil
 }
 
 func (dbInfo DataBase) GetUserByUID(uid uint64) *UserModel.User {
