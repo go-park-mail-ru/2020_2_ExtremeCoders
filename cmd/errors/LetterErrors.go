@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"CleanArch/app/Letter/LetterModel"
+	"CleanArch/cmd/Letter/LetterModel"
 	"encoding/json"
 )
 

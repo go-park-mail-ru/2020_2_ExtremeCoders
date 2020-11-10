@@ -1,7 +1,7 @@
 package UserDelivery
 
 import (
-	"CleanArch/app/errors"
+	"CleanArch/cmd/errors"
 	"net/http"
 )
 

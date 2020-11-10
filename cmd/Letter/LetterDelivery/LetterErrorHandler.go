@@ -1,8 +1,8 @@
 package LetterDelivery
 
 import (
-	"CleanArch/app/Letter/LetterModel"
-	"CleanArch/app/errors"
+	"CleanArch/cmd/Letter/LetterModel"
+	"CleanArch/cmd/errors"
 )
 
 func SendLetterError(code uint16, letter LetterModel.Letter) []byte{

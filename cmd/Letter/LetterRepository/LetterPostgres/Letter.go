@@ -1,9 +1,9 @@
 package LetterPostgres
 
 import (
-	"CleanArch/app/Letter/LetterModel"
-	"CleanArch/app/Postgres"
-	"CleanArch/app/User/UserModel"
+	"CleanArch/cmd/Letter/LetterModel"
+	"CleanArch/cmd/Postgres"
+	"CleanArch/cmd/User/UserModel"
 	crypto "crypto/rand"
 	"math/big"
 )

@@ -1,9 +1,9 @@
 package UserDelivery
 
 import (
-	"CleanArch/app/User/UserModel"
-	"CleanArch/app/User/UserUseCase"
-	"CleanArch/app/errors"
+	"CleanArch/cmd/User/UserModel"
+	"CleanArch/cmd/User/UserUseCase"
+	"CleanArch/cmd/errors"
 	"bytes"
 	"fmt"
 	 //"github.com/golang/glog"
@@ -22,6 +22,15 @@ type Delivery struct{
 
 func getStrFormValueSafety(r *http.Request, field string) string{
 	return r.FormValue(field)
+}
+
+func (yaFood *Delivery) Session(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		yaFood.SignIn(w, r)
+	}
+	if r.Method == http.MethodDelete{
+		yaFood.Logout(w,r)
+	}
 }
 
 func (yaFood *Delivery)Signup(w http.ResponseWriter, r *http.Request) {
@@ -98,7 +107,7 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 		w.Write(errors.GetOkAnsData(session.Value, *user))
 		//glog.Info("RESPONSE: ",getOkAnsData(session.Value, *user))
 		return
-	} else if r.Method != http.MethodPost {
+	} else if r.Method != http.MethodPut {
 		w.Write(errors.GetErrorNotPostAns())
 		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return
@@ -118,7 +127,7 @@ func (yaFood *Delivery)Profile(w http.ResponseWriter, r *http.Request) {
 
 func (yaFood *Delivery)Logout(w http.ResponseWriter, r *http.Request) {
 	//glog.Info("REQUEST: ", r.URL.Path, r.Method, r.Form)
-	if r.Method != http.MethodPost {
+	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
 		//glog.Info("RESPONSE: ",getErrorNotPostAns())
 		return

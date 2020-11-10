@@ -1,8 +1,8 @@
 package Postgres
 
 import (
-	"CleanArch/app/Letter/LetterModel"
-	"CleanArch/app/User/UserModel"
+	"CleanArch/cmd/Letter/LetterModel"
+	"CleanArch/cmd/User/UserModel"
 	"fmt"
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
@@ -40,7 +40,6 @@ func (dbInfo *DataBase) Init() {
 	}
 }
 
-// createSchema creates database schemas.
 func createSchema(db *pg.DB) error {
 	models := []interface{}{
 		(*UserModel.User)(nil),
@@ -58,3 +57,4 @@ func createSchema(db *pg.DB) error {
 	}
 	return nil
 }
+

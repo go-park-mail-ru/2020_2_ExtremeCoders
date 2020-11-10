@@ -1,8 +1,8 @@
 package UserUseCase
 
 import (
-	"CleanArch/app/User/UserModel"
-	"CleanArch/app/User/UserRepository"
+	"CleanArch/cmd/User/UserModel"
+	"CleanArch/cmd/User/UserRepository"
 	"net/http"
 	"time"
 )

@@ -1,12 +1,13 @@
 package LetterDelivery
 
 import (
-	"CleanArch/app/Letter/LetterUseCase"
-	"CleanArch/app/User/UserModel"
+	"CleanArch/cmd/Letter/LetterModel"
+	"CleanArch/cmd/Letter/LetterUseCase"
+	"CleanArch/cmd/User/UserModel"
 	"github.com/golang/glog"
 	"net/http"
 	"time"
-	errors "CleanArch/app/errors"
+	errors "CleanArch/cmd/errors"
 )
 
 type Delivery struct{
@@ -20,7 +21,7 @@ func (yaFood *Delivery)SendLetter(w http.ResponseWriter, r *http.Request){
 		w.Write(errors.GetErrorNotPostAns())
 		return
 	}
-	var letter UserModel.Letter
+	var letter LetterModel.Letter
 	user, _, code:=yaFood.getUserByRequest(r)
 	if code !=200{
 		w.Write(errors.GetErrorUnexpectedAns())

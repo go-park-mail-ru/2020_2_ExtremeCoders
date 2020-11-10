@@ -1,7 +1,7 @@
 package LetterRepository
 
 import (
-	"CleanArch/app/Letter/LetterModel"
+	"CleanArch/cmd/Letter/LetterModel"
 )
 
 type LetterDB interface {

@@ -1,8 +1,8 @@
 package LetterUseCase
 
 import (
-	"CleanArch/app/Letter/LetterModel"
-	"CleanArch/app/Letter/LetterRepository"
+	"CleanArch/cmd/Letter/LetterModel"
+	"CleanArch/cmd/Letter/LetterRepository"
 )
 
 type UseCase struct{
