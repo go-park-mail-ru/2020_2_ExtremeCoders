@@ -5,13 +5,12 @@ import (
 	"errors"
 )
 
+var DbError = errors.New("Data Base error!")
+var ReceiverNotFound = errors.New("Receiver not found!")
+var SaveLetterError = errors.New("Save letter error!")
 
-var DbError=errors.New("Data Base error!")
-var ReceiverNotFound=errors.New("Receiver not found!")
-var SaveLetterError=errors.New("Save letter error!")
-
-var ReceivedLetterError=errors.New("Could not get received letters!")
-var SentLetterError=errors.New("Could not get sent letters!")
+var ReceivedLetterError = errors.New("Could not get received letters!")
+var SentLetterError = errors.New("Could not get sent letters!")
 
 type LetterDB interface {
 	IsUserExist(email string) error

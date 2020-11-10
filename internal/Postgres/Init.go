@@ -24,7 +24,7 @@ func (dbInfo *DataBase) Init(user string, password string, name string) (*pg.DB,
 		Password: dbInfo.Password,
 		Database: dbInfo.DataBaseName,
 	})
-	err:=createSchema(dbInfo.DB)
+	err := createSchema(dbInfo.DB)
 	dbInfo.DB = pg.Connect(&pg.Options{
 		User:     dbInfo.User,
 		Password: dbInfo.Password,

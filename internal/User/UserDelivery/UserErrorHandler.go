@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func SignUpError(err error, cookie *http.Cookie) []byte{
+func SignUpError(err error, cookie *http.Cookie) []byte {
 	switch err {
 	case nil:
 		return errors.GetOkAns(cookie.Value)
@@ -21,7 +21,7 @@ func SignUpError(err error, cookie *http.Cookie) []byte{
 	return nil
 }
 
-func SignInError(err error, cookie *http.Cookie) []byte{
+func SignInError(err error, cookie *http.Cookie) []byte {
 	switch err {
 	case nil:
 		return errors.GetOkAns(cookie.Value)
@@ -37,7 +37,7 @@ func SignInError(err error, cookie *http.Cookie) []byte{
 	return nil
 }
 
-func CookieError(code uint16) []byte{
+func CookieError(code uint16) []byte {
 	switch code {
 	case 401:
 		return errors.GetErrorNoCockyAns()
@@ -47,7 +47,7 @@ func CookieError(code uint16) []byte{
 	return nil
 }
 
-func LogoutError(err error)[]byte{
+func LogoutError(err error) []byte {
 	switch err {
 	case nil:
 		return errors.GetOkAns("")
@@ -59,7 +59,7 @@ func LogoutError(err error)[]byte{
 	return nil
 }
 
-func ProfileError(err error, cookie *http.Cookie) []byte{
+func ProfileError(err error, cookie *http.Cookie) []byte {
 	switch err {
 	case nil:
 		return errors.GetOkAns(cookie.Value)

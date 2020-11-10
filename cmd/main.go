@@ -1,6 +1,7 @@
 package main
 
 import (
+	"CleanArch/config"
 	"CleanArch/internal/Letter/LetterDelivery"
 	"CleanArch/internal/Letter/LetterRepository/LetterPostgres"
 	"CleanArch/internal/Letter/LetterUseCase"
@@ -12,12 +13,11 @@ import (
 	"fmt"
 	"github.com/rs/cors"
 	"net/http"
-	"time"
 )
 
 func main() {
 	var db = Postgres.DataBase{}
-	DataBase, err := db.Init("postgres", "1538", "maila")
+	DataBase, err := db.Init(config.DbUser, config.DbPassword, config.DbDB)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -39,18 +39,18 @@ func main() {
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
 
 	handler := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000", "http://127.0.0.1:3000", "http://95.163.209.195:3000"},
-		AllowedHeaders:   []string{"Version", "Authorization", "Content-Type"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedOrigins:   config.AllowedHeadersCORS,
+		AllowedHeaders:   config.AllowedHeadersCORS,
+		AllowedMethods:   config.AllowedMethodsCORS,
 		AllowCredentials: true,
 	}).Handler(mux)
 	siteHandler := middleware.AccessLogMiddleware(handler)
 	siteHandler = middleware.PanicMiddleware(siteHandler)
 	server := http.Server{
-		Addr:         ":8080",
+		Addr:         config.Port,
 		Handler:      siteHandler,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  config.ReadTimeout,
+		WriteTimeout: config.WriteTimeout,
 	}
 	fmt.Println("starting server at :8080")
 	server.ListenAndServe()

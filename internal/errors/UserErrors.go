@@ -13,8 +13,6 @@ type AnswerGet struct {
 	User        UserModel.User
 }
 
-
-
 func GetErrorBadJsonAns() []byte {
 	err := &AnswerGet{
 		Code:        400,
@@ -127,7 +125,7 @@ func GetAddSessionError() []byte {
 	return ans
 }
 
-func RemoveSessionError()[]byte{
+func RemoveSessionError() []byte {
 	ok := &AnswerGet{
 		Code:        408,
 		Description: "Could not remove session",
@@ -136,7 +134,7 @@ func RemoveSessionError()[]byte{
 	return ans
 }
 
-func AddUserError()[]byte{
+func AddUserError() []byte {
 	ok := &AnswerGet{
 		Code:        407,
 		Description: "Could not add user",
@@ -145,7 +143,7 @@ func AddUserError()[]byte{
 	return ans
 }
 
-func UpdateProfileError()[]byte{
+func UpdateProfileError() []byte {
 	ok := &AnswerGet{
 		Code:        407,
 		Description: "Could not update profile",
@@ -154,7 +152,7 @@ func UpdateProfileError()[]byte{
 	return ans
 }
 
-func GetUserOnUpdateError()[]byte{
+func GetUserOnUpdateError() []byte {
 	ok := &AnswerGet{
 		Code:        407,
 		Description: "Could not get user on update",

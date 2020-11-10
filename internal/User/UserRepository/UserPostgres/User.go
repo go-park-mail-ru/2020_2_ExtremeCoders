@@ -104,7 +104,7 @@ func (dbInfo DataBase) IsOkSession(sid string) (uint64, error) {
 func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) error {
 	oldUser := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(oldUser).Where("email=?", email).Select()
-	if err != nil{
+	if err != nil {
 		return UserRepository.CantGetUserOnUpdate
 	}
 	User := oldUser
@@ -112,7 +112,7 @@ func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) error
 	User.Surname = newUser.Surname
 	User.Img = newUser.Img
 	_, err = dbInfo.DB.Model(User).Column("name", "surname", "img").Where("email=?", email).Update()
-	if err != nil{
+	if err != nil {
 		return UserRepository.CantUpdateUser
 	}
 	return nil
@@ -127,13 +127,11 @@ func (dbInfo DataBase) RemoveSession(uid uint64, sid string) error {
 	return nil
 }
 
-
-func (dbInfo DataBase) GetSessionByUID(uid uint64) (string,error){
-	session:=&UserModel.Session{UserId: int64(uid)}
-	err:=dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
-	if err!=nil{
-		return "",UserRepository.GetSessionError
+func (dbInfo DataBase) GetSessionByUID(uid uint64) (string, error) {
+	session := &UserModel.Session{UserId: int64(uid)}
+	err := dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
+	if err != nil {
+		return "", UserRepository.GetSessionError
 	}
-	return session.Id,nil
+	return session.Id, nil
 }
-
