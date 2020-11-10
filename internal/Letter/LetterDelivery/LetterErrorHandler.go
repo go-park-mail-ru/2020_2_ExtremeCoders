@@ -13,19 +13,21 @@ func SendLetterError(err error, letter LetterModel.Letter) []byte{
 	case LetterRepository.ReceiverNotFound:
 		return errors.GetErrorNoRecieverAns()
 	case LetterRepository.DbError:
-		errors.GetErrorUnexpectedAns()
+		return errors.GetErrorUnexpectedAns()
 	case LetterRepository.SaveLetterError:
-		errors.GetErrorSaveErrorAns()
+		return errors.GetErrorSaveErrorAns()
 	}
 	return nil
 }
 
-func GetLettersError(code uint16, letters []LetterModel.Letter) []byte{
-	switch code {
-	case 200:
+func GetLettersError(err error, letters []LetterModel.Letter) []byte{
+	switch err {
+	case nil:
 		return errors.GetGetLettersOkAns(letters)
-	case 400:
-		return errors.GetErrorSaveErrorAns()
+	case LetterRepository.ReceivedLetterError:
+		return errors.GetErrorReceivedLetterAns()
+	case LetterRepository.DbError:
+		return errors.GetErrorUnexpectedAns()
 	}
 	return nil
 }

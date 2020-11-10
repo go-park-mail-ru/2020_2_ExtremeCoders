@@ -3,8 +3,6 @@ package LetterUseCase
 import (
 	"CleanArch/internal/Letter/LetterModel"
 	"CleanArch/internal/Letter/LetterRepository"
-	"errors"
-	"fmt"
 )
 
 type UseCase struct{
@@ -24,10 +22,18 @@ func (uc *UseCase) SaveLetter(letter *LetterModel.Letter) error {
 	return nil
 }
 
-func (uc *UseCase) GetRecievedLetters(email string) (int, []LetterModel.Letter) {
-	return uc.Db.GetReceivedLetters(email)
+func (uc *UseCase) GetReceivedLetters(email string) (error, []LetterModel.Letter) {
+	err, letters:= uc.Db.GetReceivedLetters(email)
+	if err!=nil{
+		return err, nil
+	}
+	return nil, letters
 }
 
-func (uc *UseCase) GetSendedLetters(email string) (int, []LetterModel.Letter) {
-	return uc.Db.GetSendedLetters(email)
+func (uc *UseCase) GetSendedLetters(email string) (error, []LetterModel.Letter) {
+	err, letters:=uc.Db.GetSendedLetters(email)
+	if err!=nil{
+		return err, nil
+	}
+	return nil, letters
 }
