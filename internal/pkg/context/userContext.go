@@ -7,6 +7,7 @@ import (
 	crypto "crypto/rand"
 	"errors"
 	"math/big"
+	"net/http"
 )
 
 var UserFromContextError = errors.New("Could not get user from context!")
@@ -34,4 +35,8 @@ func GenerateCSRF() string{
 		token+=string(config.SidRunes[pos.Int64()])
 	}
 	return token
+}
+
+func GetStrFormValueSafety(r *http.Request, field string) string {
+	return r.FormValue(field)
 }

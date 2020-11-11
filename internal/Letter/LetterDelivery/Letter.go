@@ -3,7 +3,6 @@ package LetterDelivery
 import (
 	"CleanArch/internal/Letter/LetterModel"
 	"CleanArch/internal/Letter/LetterUseCase"
-	"CleanArch/internal/User/UserDelivery"
 	"CleanArch/internal/errors"
 	"CleanArch/internal/pkg/context"
 	"github.com/golang/glog"
@@ -38,9 +37,9 @@ func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	letter.Sender = user.Email
-	letter.Receiver = UserDelivery.GetStrFormValueSafety(r, "to")
-	letter.Theme = UserDelivery.GetStrFormValueSafety(r, "theme")
-	letter.Text = UserDelivery.GetStrFormValueSafety(r, "text")
+	letter.Receiver = context.GetStrFormValueSafety(r, "to")
+	letter.Theme = context.GetStrFormValueSafety(r, "theme")
+	letter.Text = context.GetStrFormValueSafety(r, "text")
 	letter.DateTime = time.Now().Unix()
 	err := de.Uc.SaveLetter(&letter)
 	w.Write(SendLetterError(err, letter))
