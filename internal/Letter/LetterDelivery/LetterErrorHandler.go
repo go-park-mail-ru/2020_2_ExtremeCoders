@@ -4,6 +4,7 @@ import (
 	"CleanArch/internal/Letter/LetterModel"
 	"CleanArch/internal/Letter/LetterRepository"
 	"CleanArch/internal/errors"
+	"CleanArch/internal/pkg/context"
 )
 
 func SendLetterError(err error, letter LetterModel.Letter) []byte {
@@ -27,6 +28,8 @@ func GetLettersError(err error, letters []LetterModel.Letter) []byte {
 	case LetterRepository.ReceivedLetterError:
 		return errors.GetErrorReceivedLetterAns()
 	case LetterRepository.DbError:
+		return errors.GetErrorUnexpectedAns()
+	case context.UserFromContextError:
 		return errors.GetErrorUnexpectedAns()
 	}
 	return nil

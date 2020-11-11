@@ -11,18 +11,28 @@ import (
 	"time"
 )
 
-type Delivery struct {
-	Uc LetterUseCase.UseCase
+type Interface interface {
+	SendLetter(w http.ResponseWriter, r *http.Request)
+	GetRecvLetters(w http.ResponseWriter, r *http.Request)
+	GetSendLetters(w http.ResponseWriter, r *http.Request)
 }
 
-func (de *Delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
+type Delivery struct {
+	Uc LetterUseCase.LetterUseCase
+}
+
+func (de Delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 	glog.Info("hui")
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return
 	}
 	var letter LetterModel.Letter
-	user := context.GetUserFromCtx(r.Context())
+	er,user := context.GetUserFromCtx(r.Context())
+	if er!=nil{
+		w.Write(GetLettersError(er, nil))
+		return
+	}
 	letter.Sender = user.Email
 	letter.Receiver = UserDelivery.GetStrFormValueSafety(r, "to")
 	letter.Theme = UserDelivery.GetStrFormValueSafety(r, "theme")
@@ -32,14 +42,22 @@ func (de *Delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 	w.Write(SendLetterError(err, letter))
 }
 
-func (de *Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
-	user := context.GetUserFromCtx(r.Context())
+func (de Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
+	er,user := context.GetUserFromCtx(r.Context())
+	if er!=nil{
+		w.Write(GetLettersError(er, nil))
+		return
+	}
 	err, letters := de.Uc.GetReceivedLetters(user.Email)
 	w.Write(GetLettersError(err, letters))
 }
 
-func (de *Delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
-	user := context.GetUserFromCtx(r.Context())
+func (de Delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
+	er,user := context.GetUserFromCtx(r.Context())
+	if er!=nil{
+		w.Write(GetLettersError(er, nil))
+		return
+	}
 	err, letters := de.Uc.GetSendedLetters(user.Email)
 	w.Write(GetLettersError(err, letters))
 }

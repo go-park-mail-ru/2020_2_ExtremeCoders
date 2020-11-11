@@ -6,13 +6,21 @@ import (
 	err "errors"
 )
 
+type UserUseCase interface {
+	Signup(user UserModel.User) (error, string)
+	SignIn(user UserModel.User) (error, string)
+	Logout(sid string) error
+	Profile(user UserModel.User) error
+	GetDB() UserRepository.UserDB
+}
+
 type UseCase struct {
 	Db UserRepository.UserDB
 }
 
 var WrongPasswordError = err.New("Wrong password!")
 
-func (uc *UseCase) Signup(user UserModel.User) (error, string) {
+func (uc UseCase) Signup(user UserModel.User) (error, string) {
 
 	err := uc.Db.IsEmailExists(user.Email)
 	if err != nil {
@@ -39,7 +47,7 @@ func (uc *UseCase) Signup(user UserModel.User) (error, string) {
 	return nil, sid
 }
 
-func (uc *UseCase) SignIn(user UserModel.User) (error, string) {
+func (uc UseCase) SignIn(user UserModel.User) (error, string) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
 	if erro != nil {
 		return erro, ""
@@ -64,7 +72,7 @@ func (uc *UseCase) SignIn(user UserModel.User) (error, string) {
 
 }
 
-func (uc *UseCase) Logout(sid string) error {
+func (uc UseCase) Logout(sid string) error {
 	uid, ok := uc.Db.IsOkSession(sid)
 	if ok != nil {
 		return ok
@@ -76,10 +84,14 @@ func (uc *UseCase) Logout(sid string) error {
 	return nil
 }
 
-func (uc *UseCase) Profile(user UserModel.User) error {
+func (uc UseCase) Profile(user UserModel.User) error {
 	e := uc.Db.UpdateProfile(user, user.Email)
 	if e != nil {
 		return e
 	}
 	return nil
+}
+
+func (uc UseCase)GetDB() UserRepository.UserDB{
+	return uc.Db
 }

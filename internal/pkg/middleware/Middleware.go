@@ -23,31 +23,28 @@ func PanicMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-type authMiddleware struct {
-	sessions UserRepository.UserDB
+type AuthMiddleware struct {
+	Sessions UserRepository.UserDB
 }
-
-type userKey struct{}
 
 const (
 	cookieName = "session_id"
 )
 
-func (a authMiddleware) auth(next http.Handler) http.Handler {
+func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie(cookieName)
 		if err != http.ErrNoCookie {
 		}
-		uid, err := a.sessions.IsOkSession(cookie.Value)
+		uid, err := a.Sessions.IsOkSession(cookie.Value)
 		if err != nil {
 		}
-		user, err := a.sessions.GetUserByUID(uid)
-		if err != nil {
+		user, e := a.Sessions.GetUserByUID(uid)
+		if e != nil {
 		}
 		ctx := r.Context()
-		context.SaveUserToContext(ctx, *user)
+		ctx=context.SaveUserToContext(ctx, *user)
 		r.WithContext(ctx)
 		next.ServeHTTP(w, r)
-
 	})
 }

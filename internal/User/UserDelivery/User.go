@@ -14,15 +14,26 @@ import (
 	"time"
 )
 
+type Interface interface {
+	Session(w http.ResponseWriter, r *http.Request)
+	Signup(w http.ResponseWriter, r *http.Request)
+	SignIn(w http.ResponseWriter, r *http.Request)
+	GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16)
+	Profile(w http.ResponseWriter, r *http.Request)
+	Logout(w http.ResponseWriter, r *http.Request)
+	LoadFile(user *UserModel.User, r *http.Request)
+	GetAvatar(w http.ResponseWriter, r *http.Request)
+}
+
 type Delivery struct {
-	Uc UserUseCase.UseCase
+	Uc UserUseCase.UserUseCase
 }
 
 func GetStrFormValueSafety(r *http.Request, field string) string {
 	return r.FormValue(field)
 }
 
-func (de *Delivery) Session(w http.ResponseWriter, r *http.Request) {
+func (de Delivery) Session(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		de.SignIn(w, r)
 	}
@@ -31,7 +42,7 @@ func (de *Delivery) Session(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (de *Delivery) Signup(w http.ResponseWriter, r *http.Request) {
+func (de Delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		return
 	}
@@ -59,7 +70,7 @@ func (de *Delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
-func (de *Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
+func (de Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -85,23 +96,23 @@ func (de *Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
-func (de *Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
+func (de Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
 	session, err := r.Cookie("session_id")
 	if err == http.ErrNoCookie {
 		return nil, nil, 401
 	}
-	uid, ok := de.Uc.Db.IsOkSession(session.Value)
+	uid, ok := de.Uc.GetDB().IsOkSession(session.Value)
 	if ok != nil {
 		return nil, nil, 402
 	}
-	user, err := de.Uc.Db.GetUserByUID(uid)
+	user, err := de.Uc.GetDB().GetUserByUID(uid)
 	if err != nil {
 		return nil, nil, 402
 	}
 	return user, session, 200
 }
 
-func (de *Delivery) Profile(w http.ResponseWriter, r *http.Request) {
+func (de Delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	user, session, err := de.GetUserByRequest(r)
 	if err != 200 {
 		w.Write(CookieError(err))
@@ -125,7 +136,7 @@ func (de *Delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	w.Write(errors.GetErrorUnexpectedAns())
 }
 
-func (de *Delivery) Logout(w http.ResponseWriter, r *http.Request) {
+func (de Delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -148,7 +159,7 @@ func (de *Delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	w.Write(errors.GetErrorUnexpectedAns())
 }
 
-func (de *Delivery) LoadFile(user *UserModel.User, r *http.Request) {
+func (de Delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
 		return
@@ -163,7 +174,7 @@ func (de *Delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	io.Copy(f, file)
 }
 
-func (de *Delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
+func (de Delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
 		return

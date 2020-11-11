@@ -5,11 +5,17 @@ import (
 	"CleanArch/internal/Letter/LetterRepository"
 )
 
+type LetterUseCase interface {
+	SaveLetter(letter *LetterModel.Letter) error
+	GetReceivedLetters(email string) (error, []LetterModel.Letter)
+	GetSendedLetters(email string) (error, []LetterModel.Letter)
+}
+
 type UseCase struct {
 	Db LetterRepository.LetterDB
 }
 
-func (uc *UseCase) SaveLetter(letter *LetterModel.Letter) error {
+func (uc UseCase) SaveLetter(letter *LetterModel.Letter) error {
 	letter.Id = uc.Db.GenerateLID()
 	err := uc.Db.IsUserExist(letter.Receiver)
 	if err != nil {
@@ -22,7 +28,7 @@ func (uc *UseCase) SaveLetter(letter *LetterModel.Letter) error {
 	return nil
 }
 
-func (uc *UseCase) GetReceivedLetters(email string) (error, []LetterModel.Letter) {
+func (uc UseCase) GetReceivedLetters(email string) (error, []LetterModel.Letter) {
 	err, letters := uc.Db.GetReceivedLetters(email)
 	if err != nil {
 		return err, nil
@@ -30,7 +36,7 @@ func (uc *UseCase) GetReceivedLetters(email string) (error, []LetterModel.Letter
 	return nil, letters
 }
 
-func (uc *UseCase) GetSendedLetters(email string) (error, []LetterModel.Letter) {
+func (uc UseCase) GetSendedLetters(email string) (error, []LetterModel.Letter) {
 	err, letters := uc.Db.GetSendedLetters(email)
 	if err != nil {
 		return err, nil
