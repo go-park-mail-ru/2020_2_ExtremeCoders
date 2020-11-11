@@ -17,11 +17,15 @@ type Interface interface {
 	GetSendLetters(w http.ResponseWriter, r *http.Request)
 }
 
-type Delivery struct {
+type delivery struct {
 	Uc LetterUseCase.LetterUseCase
 }
 
-func (de Delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
+func New(usecase LetterUseCase.LetterUseCase) Interface {
+	return delivery{Uc: usecase}
+}
+
+func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 	glog.Info("hui")
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
@@ -42,7 +46,7 @@ func (de Delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 	w.Write(SendLetterError(err, letter))
 }
 
-func (de Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
+func (de delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		w.Write(GetLettersError(er, nil))
@@ -52,7 +56,7 @@ func (de Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 	w.Write(GetLettersError(err, letters))
 }
 
-func (de Delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
+func (de delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		w.Write(GetLettersError(er, nil))

@@ -25,15 +25,19 @@ type Interface interface {
 	GetAvatar(w http.ResponseWriter, r *http.Request)
 }
 
-type Delivery struct {
+type delivery struct {
 	Uc UserUseCase.UserUseCase
+}
+
+func New(usecase UserUseCase.UserUseCase) Interface {
+	return delivery{Uc: usecase}
 }
 
 func GetStrFormValueSafety(r *http.Request, field string) string {
 	return r.FormValue(field)
 }
 
-func (de Delivery) Session(w http.ResponseWriter, r *http.Request) {
+func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		de.SignIn(w, r)
 	}
@@ -42,7 +46,7 @@ func (de Delivery) Session(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (de Delivery) Signup(w http.ResponseWriter, r *http.Request) {
+func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		return
 	}
@@ -56,10 +60,10 @@ func (de Delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	var response []byte
 	if err == nil {
 		cookie := &http.Cookie{
-			Name:    "session_id",
-			Value:   sid,
+			Name:  "session_id",
+			Value: sid,
 			//Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
-			Expires: time.Now().Add(1* time.Second),
+			Expires: time.Now().Add(1 * time.Second),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -71,7 +75,7 @@ func (de Delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
-func (de Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
+func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -97,7 +101,7 @@ func (de Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
-func (de Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
+func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
 	session, err := r.Cookie("session_id")
 	if err == http.ErrNoCookie {
 		return nil, nil, 401
@@ -113,8 +117,8 @@ func (de Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Coo
 	return user, session, 200
 }
 
-func (de Delivery) Profile(w http.ResponseWriter, r *http.Request) {
-	if r.Method==http.MethodPost {
+func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
 		de.Signup(w, r)
 		return
 	}
@@ -138,7 +142,7 @@ func (de Delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	w.Write(errors.GetErrorUnexpectedAns())
 }
 
-func (de Delivery) Logout(w http.ResponseWriter, r *http.Request) {
+func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -161,7 +165,7 @@ func (de Delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	w.Write(errors.GetErrorUnexpectedAns())
 }
 
-func (de Delivery) LoadFile(user *UserModel.User, r *http.Request) {
+func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
 		return
@@ -176,7 +180,7 @@ func (de Delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	io.Copy(f, file)
 }
 
-func (de Delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
+func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
 		return

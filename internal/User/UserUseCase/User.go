@@ -15,13 +15,17 @@ type UserUseCase interface {
 	GetDB() UserRepository.UserDB
 }
 
-type UseCase struct {
+type useCase struct {
 	Db UserRepository.UserDB
+}
+
+func New(db UserRepository.UserDB) UserUseCase {
+	return useCase{Db: db}
 }
 
 var WrongPasswordError = err.New("Wrong password!")
 
-func (uc UseCase) Signup(user UserModel.User) (error, string) {
+func (uc useCase) Signup(user UserModel.User) (error, string) {
 
 	err := uc.Db.IsEmailExists(user.Email)
 	if err != nil {
@@ -48,12 +52,12 @@ func (uc UseCase) Signup(user UserModel.User) (error, string) {
 	return nil, sid
 }
 
-func (uc UseCase) SignIn(user UserModel.User) (error, string) {
+func (uc useCase) SignIn(user UserModel.User) (error, string) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
 	if erro != nil {
 		return erro, ""
 	}
-	if bcrypt.CompareHashAndPassword([]byte(userEx.Password), []byte(user.Password))!=nil {
+	if bcrypt.CompareHashAndPassword([]byte(userEx.Password), []byte(user.Password)) != nil {
 		return WrongPasswordError, ""
 	}
 	sid, e := uc.Db.GenerateSID()
@@ -64,9 +68,9 @@ func (uc UseCase) SignIn(user UserModel.User) (error, string) {
 	if er != nil {
 		return er, ""
 	}
-	er,_=uc.Db.RemoveSession(oldSid)
-	if er!=nil{
-		return er,""
+	er, _ = uc.Db.RemoveSession(oldSid)
+	if er != nil {
+		return er, ""
 	}
 	er = uc.Db.AddSession(string(sid), userEx.Id, &user)
 	if er != nil {
@@ -76,7 +80,7 @@ func (uc UseCase) SignIn(user UserModel.User) (error, string) {
 
 }
 
-func (uc UseCase) Logout(sid string) error {
+func (uc useCase) Logout(sid string) error {
 	_, ok := uc.Db.IsOkSession(sid)
 	if ok != nil {
 		return ok
@@ -88,7 +92,7 @@ func (uc UseCase) Logout(sid string) error {
 	return nil
 }
 
-func (uc UseCase) Profile(user UserModel.User) error {
+func (uc useCase) Profile(user UserModel.User) error {
 	e := uc.Db.UpdateProfile(user, user.Email)
 	if e != nil {
 		return e
@@ -96,6 +100,6 @@ func (uc UseCase) Profile(user UserModel.User) error {
 	return nil
 }
 
-func (uc UseCase) GetDB() UserRepository.UserDB {
+func (uc useCase) GetDB() UserRepository.UserDB {
 	return uc.Db
 }

@@ -10,8 +10,12 @@ import (
 	"math/big"
 )
 
-type DataBase struct {
+type dataBase struct {
 	DB *pg.DB
+}
+
+func New(db *pg.DB) UserRepository.UserDB {
+	return dataBase{DB: db}
 }
 
 const (
@@ -20,7 +24,7 @@ const (
 
 var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 
-func (dbInfo DataBase) IsEmailExists(email string) error {
+func (dbInfo dataBase) IsEmailExists(email string) error {
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err != pg.ErrNoRows {
@@ -29,8 +33,8 @@ func (dbInfo DataBase) IsEmailExists(email string) error {
 	return nil
 }
 
-func (dbInfo DataBase) AddUser(user *UserModel.User) error {
-	user.Password=string(PasswordBcrypt([]byte(user.Password)))
+func (dbInfo dataBase) AddUser(user *UserModel.User) error {
+	user.Password = string(PasswordBcrypt([]byte(user.Password)))
 	_, err := dbInfo.DB.Model(user).Insert()
 	if err != nil {
 		return UserRepository.CantAddUser
@@ -38,7 +42,7 @@ func (dbInfo DataBase) AddUser(user *UserModel.User) error {
 	return nil
 }
 
-func (dbInfo DataBase) AddSession(sid string, uid uint64, user *UserModel.User) error {
+func (dbInfo dataBase) AddSession(sid string, uid uint64, user *UserModel.User) error {
 	session := &UserModel.Session{Id: sid, UserId: int64(uid), User: user}
 	_, err := dbInfo.DB.Model(session).Insert()
 	if err != nil {
@@ -47,7 +51,7 @@ func (dbInfo DataBase) AddSession(sid string, uid uint64, user *UserModel.User) 
 	return nil
 }
 
-func (dbInfo DataBase) GenerateSID() ([]rune, error) {
+func (dbInfo dataBase) GenerateSID() ([]rune, error) {
 	var sid string
 	for {
 		for i := 0; i < SizeSID; i++ {
@@ -65,7 +69,7 @@ func (dbInfo DataBase) GenerateSID() ([]rune, error) {
 	return []rune(sid), nil
 }
 
-func (dbInfo DataBase) GenerateUID() (uint64, error) {
+func (dbInfo dataBase) GenerateUID() (uint64, error) {
 	for {
 		uid, _ := crypto.Int(crypto.Reader, big.NewInt(4294967295))
 		user := UserModel.User{Id: uid.Uint64()}
@@ -76,7 +80,7 @@ func (dbInfo DataBase) GenerateUID() (uint64, error) {
 	}
 }
 
-func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, error) {
+func (dbInfo dataBase) GetUserByEmail(email string) (*UserModel.User, error) {
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err != nil {
@@ -85,7 +89,7 @@ func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, error) {
 	return user, nil
 }
 
-func (dbInfo DataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
+func (dbInfo dataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
 	user := &UserModel.User{Id: uid}
 	err := dbInfo.DB.Model(user).WherePK().Select()
 	if err != nil {
@@ -94,7 +98,7 @@ func (dbInfo DataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
 	return user, nil
 }
 
-func (dbInfo DataBase) IsOkSession(sid string) (uint64, error) {
+func (dbInfo dataBase) IsOkSession(sid string) (uint64, error) {
 	session := &UserModel.Session{Id: sid}
 	err := dbInfo.DB.Model(session).WherePK().Select()
 	if err != nil {
@@ -103,7 +107,7 @@ func (dbInfo DataBase) IsOkSession(sid string) (uint64, error) {
 	return uint64(session.UserId), nil
 }
 
-func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) error {
+func (dbInfo dataBase) UpdateProfile(newUser UserModel.User, email string) error {
 	oldUser := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(oldUser).Where("email=?", email).Select()
 	if err != nil {
@@ -120,17 +124,17 @@ func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) error
 	return nil
 }
 
-func (dbInfo DataBase) RemoveSession(sid string) (error,uint64) {
+func (dbInfo dataBase) RemoveSession(sid string) (error, uint64) {
 	session := &UserModel.Session{Id: sid}
 	err := dbInfo.DB.Model(session).WherePK().Select()
 	_, err = dbInfo.DB.Model(session).WherePK().Delete()
 	if err != nil {
-		return UserRepository.RemoveSessionError,0
+		return UserRepository.RemoveSessionError, 0
 	}
 	return nil, uint64(session.UserId)
 }
 
-func (dbInfo DataBase) GetSessionByUID(uid uint64) (string, error) {
+func (dbInfo dataBase) GetSessionByUID(uid uint64) (string, error) {
 	session := &UserModel.Session{UserId: int64(uid)}
 	err := dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
 	if err != nil {

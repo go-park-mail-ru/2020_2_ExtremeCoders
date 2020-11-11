@@ -22,13 +22,13 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	var uDB = UserPostgres.DataBase{DB: DataBase}
-	var uUC = UserUseCase.UseCase{Db: uDB}
-	var uDE = UserDelivery.Delivery{Uc: uUC}
+	var uDB = UserPostgres.New(DataBase)
+	var uUC = UserUseCase.New(uDB)
+	var uDE = UserDelivery.New(uUC)
 
-	var lDB = LetterPostgres.DataBase{DB: DataBase}
-	var lUC = LetterUseCase.UseCase{Db: lDB}
-	var lDE = LetterDelivery.Delivery{Uc: lUC}
+	var lDB = LetterPostgres.New(DataBase)
+	var lUC = LetterUseCase.New(lDB)
+	var lDE = LetterDelivery.New(lUC)
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/session", uDE.Session)
@@ -37,7 +37,6 @@ func main() {
 	mux.HandleFunc("/letter", lDE.SendLetter)
 	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
-
 
 	siteHandler := middleware.AccessLogMiddleware(mux)
 	siteHandler = middleware.PanicMiddleware(siteHandler)
@@ -55,6 +54,7 @@ func main() {
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 	}
-	fmt.Println("starting server at ",config.Port)
-	server.ListenAndServe()
+	fmt.Println("starting server at ", config.Port)
+	err = server.ListenAndServe()
+	fmt.Println(err.Error())
 }

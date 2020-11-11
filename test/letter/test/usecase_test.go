@@ -12,12 +12,12 @@ func TestSaveLetter(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	Letter:=&LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
+	Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
 	mockLetter := mock.NewMockLetterDB(ctrl)
 	mockLetter.EXPECT().GenerateLID().Return(uint64(0))
 	mockLetter.EXPECT().IsUserExist((*Letter).Receiver).Return(nil)
 	mockLetter.EXPECT().SaveMail(*Letter).Return(nil)
-	uc:=LetterUseCase.UseCase{Db: mockLetter}
+	uc := LetterUseCase.New(mockLetter)
 
 	uc.SaveLetter(Letter)
 }
@@ -28,7 +28,7 @@ func TestGetReceivedLetters(t *testing.T) {
 	mockLetter := mock.NewMockLetterDB(ctrl)
 	mockLetter.EXPECT().GetReceivedLetters("dellvin.black@gmail.com").Return(nil, nil)
 
-	uc:=LetterUseCase.UseCase{Db: mockLetter}
+	uc := LetterUseCase.New(mockLetter)
 
 	uc.GetReceivedLetters("dellvin.black@gmail.com")
 }
@@ -38,6 +38,6 @@ func TestGetSendedLetters(t *testing.T) {
 	defer ctrl.Finish()
 	mockLetter := mock.NewMockLetterDB(ctrl)
 	mockLetter.EXPECT().GetSendedLetters("dellvin.black@gmail.com").Return(nil, nil)
-	uc:=LetterUseCase.UseCase{Db: mockLetter}
+	uc := LetterUseCase.New(mockLetter)
 	uc.GetSendedLetters("dellvin.black@gmail.com")
 }

@@ -33,33 +33,32 @@ type AuthMiddleware struct {
 }
 
 const (
-	cookieName = "session_id"
+	cookieName     = "session_id"
+	csrfCookieName = "token"
 )
 
 func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie(cookieName)
-		if err==http.ErrNoCookie{
-			var uid uint64
-			if cookie!=nil {
-				_, uid=a.Sessions.RemoveSession(cookie.Value)
-				sid, _:=a.Sessions.GenerateSID()
-				user, _:=a.Sessions.GetUserByUID(uid)
-				a.Sessions.AddSession(string(sid), uid, user)
-				cookie := &http.Cookie{
-					Name:    "session_id",
-					Value:   string(sid),
-					//Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
-					Expires: time.Now().Add(1* time.Second),
-				}
-				cookie.Path = "/"
-				http.SetCookie(w, cookie)
-			}
-		}
 		if err != nil {
 			next.ServeHTTP(w, r)
 			return
 		}
+		csrf, errC := r.Cookie(csrfCookieName)
+		if csrf.Value == r.Header.Get("csrf_token") {
+			cookie := &http.Cookie{
+				Name:    csrfCookieName,
+				Value:   "alskjd", //gen
+				Expires: time.Now().Add(15 * time.Minute),
+			}
+			cookie.Path = "/"
+			http.SetCookie(w, cookie)
+		}
+		if errC != nil {
+			//w.Write("uhodi")
+			return
+		}
+
 		uid, er := a.Sessions.IsOkSession(cookie.Value)
 		if er != nil {
 			next.ServeHTTP(w, r)

@@ -9,7 +9,7 @@ func TestSendLetter(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	httpmock.RegisterResponder("POST", "http://127.0.0.1/session",
+	httpmock.RegisterResponder("POST", "http://127.0.0.1/sesugfogsion",
 		httpmock.NewStringResponder(200, `[{"code": 1, "description": "ok"}]`))
 	httpmock.GetTotalCallCount()
 
