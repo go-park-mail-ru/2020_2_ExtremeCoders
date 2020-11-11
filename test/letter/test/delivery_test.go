@@ -1,25 +1,53 @@
 package test
 
 import (
-	"github.com/jarcoal/httpmock"
+	//"CleanArch/internal/Letter/LetterDelivery"
+	//"CleanArch/internal/Letter/LetterModel"
+	//"github.com/golang/mock/gomock"
+	//"net/http"
+	//"strings"
+
+	"CleanArch/internal/Letter/LetterDelivery"
+	mock "CleanArch/test/letter/mock_LetterUseCase"
+	"fmt"
+	"github.com/golang/mock/gomock"
+	//"github.com/jarcoal/httpmock"
+	//"github.com/tv42/mockhttp"
+	"net/http"
 	"testing"
 )
 
+type MyWriter struct {
+	Str []byte
+}
+
+func (writer MyWriter) Header() http.Header {
+	fmt.Println("implement me")
+	return nil
+}
+
+func (writer *MyWriter) Write(bytes []byte) (int, error) {
+	writer.Str = append(writer.Str, bytes...)
+	return len(writer.Str), nil
+}
+
+func (writer MyWriter) WriteHeader(statusCode int) {
+	fmt.Println("implement me")
+}
+
+
+
 func TestSendLetter(t *testing.T) {
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	httpmock.RegisterResponder("POST", "http://127.0.0.1/sesugfogsion",
-		httpmock.NewStringResponder(200, `[{"code": 1, "description": "ok"}]`))
-	httpmock.GetTotalCallCount()
-
-	//ctrl := gomock.NewController(t)
-	//defer ctrl.Finish()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 	//Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
-	//mockLetter := mock.NewMockLetterUseCase(ctrl)
-	//mockLetter.EXPECT().SaveLetter(&Letter).Return(nil)
-	//uc := LetterDelivery.Delivery{Uc: mockLetter}
-	//w :=http.ResponseWriter
-	//r:= http.Request{}
-	//uc.SendLetter(w, &r)
+	mockUseCase := mock.NewMockLetterUseCase(ctrl)
+	//mockUseCase.EXPECT().SaveLetter(&Letter).Return(nil)
+	uc := LetterDelivery.New(mockUseCase)
+
+	writer := MyWriter{}
+	r:= http.Request{}
+	uc.SendLetter(&writer, &r)
+	fmt.Println(writer.Str)
+
 }
