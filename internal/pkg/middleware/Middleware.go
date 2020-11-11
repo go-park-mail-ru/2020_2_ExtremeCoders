@@ -3,10 +3,13 @@ package middleware
 import (
 	"CleanArch/internal/User/UserRepository"
 	"CleanArch/internal/pkg/context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
 )
+
+var csrfError=errors.New("Sorry but your csrf token is over and someone can still your account. Please restart the page!")
 
 func AccessLogMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -48,14 +51,14 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		if csrf.Value == r.Header.Get("csrf_token") {
 			cookie := &http.Cookie{
 				Name:    csrfCookieName,
-				Value:   "alskjd", //gen
+				Value:   context.GenerateCSRF(),
 				Expires: time.Now().Add(15 * time.Minute),
 			}
 			cookie.Path = "/"
 			http.SetCookie(w, cookie)
 		}
 		if errC != nil {
-			//w.Write("uhodi")
+			w.Write(authError(csrfError))
 			return
 		}
 

@@ -1,6 +1,7 @@
 package UserPostgres
 
 import (
+	"CleanArch/config"
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserRepository"
 	crypto "crypto/rand"
@@ -17,12 +18,6 @@ type dataBase struct {
 func New(db *pg.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
 }
-
-const (
-	SizeSID = 32
-)
-
-var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 
 func (dbInfo dataBase) IsEmailExists(email string) error {
 	user := &UserModel.User{Email: email}
@@ -54,9 +49,9 @@ func (dbInfo dataBase) AddSession(sid string, uid uint64, user *UserModel.User) 
 func (dbInfo dataBase) GenerateSID() ([]rune, error) {
 	var sid string
 	for {
-		for i := 0; i < SizeSID; i++ {
-			safeNum, _ := crypto.Int(crypto.Reader, big.NewInt(int64(len(SidRunes))))
-			sid += string(SidRunes[safeNum.Int64()])
+		for i := 0; i < config.SizeSID; i++ {
+			safeNum, _ := crypto.Int(crypto.Reader, big.NewInt(int64(len(config.SidRunes))))
+			sid += string(config.SidRunes[safeNum.Int64()])
 		}
 		fmt.Println(sid)
 		session := &UserModel.Session{Id: sid}
