@@ -43,8 +43,8 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		if e != nil {
 		}
 		ctx := r.Context()
-		ctx=context.SaveUserToContext(ctx, *user)
-		r.WithContext(ctx)
+		ctx = context.SaveUserToContext(ctx, *user)
+		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 	})
 }

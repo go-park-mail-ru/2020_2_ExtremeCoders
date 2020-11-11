@@ -46,9 +46,8 @@ func main() {
 	}).Handler(mux)
 	siteHandler := middleware.AccessLogMiddleware(handler)
 	siteHandler = middleware.PanicMiddleware(siteHandler)
-	a:=middleware.AuthMiddleware{Sessions: uDB}
+	a := middleware.AuthMiddleware{Sessions: uDB}
 	siteHandler = a.Auth(siteHandler)
-
 
 	server := http.Server{
 		Addr:         config.Port,

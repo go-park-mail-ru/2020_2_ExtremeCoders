@@ -6,12 +6,12 @@ import (
 	"errors"
 )
 
-var UserFromContextError=errors.New("Could not get user from context!")
+var UserFromContextError = errors.New("Could not get user from context!")
 
-type userKey struct{
+type userKey struct {
 }
 
-func GetUserFromCtx(ctx context.Context) (error,UserModel.User) {
+func GetUserFromCtx(ctx context.Context) (error, UserModel.User) {
 	ctxUser := ctx.Value(userKey{})
 	user, ok := ctxUser.(UserModel.User)
 	if !ok {
@@ -20,6 +20,6 @@ func GetUserFromCtx(ctx context.Context) (error,UserModel.User) {
 	return nil, user
 }
 
-func SaveUserToContext(ctx context.Context, user UserModel.User) context.Context{
+func SaveUserToContext(ctx context.Context, user UserModel.User) context.Context {
 	return context.WithValue(ctx, userKey{}, user)
 }

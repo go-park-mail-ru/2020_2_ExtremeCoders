@@ -28,8 +28,8 @@ func (de Delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var letter LetterModel.Letter
-	er,user := context.GetUserFromCtx(r.Context())
-	if er!=nil{
+	er, user := context.GetUserFromCtx(r.Context())
+	if er != nil {
 		w.Write(GetLettersError(er, nil))
 		return
 	}
@@ -43,8 +43,8 @@ func (de Delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
-	er,user := context.GetUserFromCtx(r.Context())
-	if er!=nil{
+	er, user := context.GetUserFromCtx(r.Context())
+	if er != nil {
 		w.Write(GetLettersError(er, nil))
 		return
 	}
@@ -53,8 +53,8 @@ func (de Delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de Delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
-	er,user := context.GetUserFromCtx(r.Context())
-	if er!=nil{
+	er, user := context.GetUserFromCtx(r.Context())
+	if er != nil {
 		w.Write(GetLettersError(er, nil))
 		return
 	}

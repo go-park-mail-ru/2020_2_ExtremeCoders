@@ -92,6 +92,6 @@ func (uc UseCase) Profile(user UserModel.User) error {
 	return nil
 }
 
-func (uc UseCase)GetDB() UserRepository.UserDB{
+func (uc UseCase) GetDB() UserRepository.UserDB {
 	return uc.Db
 }
