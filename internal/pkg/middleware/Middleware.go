@@ -41,7 +41,6 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		cookie, err := r.Cookie(cookieName)
 		if err==http.ErrNoCookie{
 			var uid uint64
-			cookie.
 			if cookie!=nil {
 				_, uid=a.Sessions.RemoveSession(cookie.Value)
 				sid, _:=a.Sessions.GenerateSID()

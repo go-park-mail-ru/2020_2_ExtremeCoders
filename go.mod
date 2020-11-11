@@ -11,6 +11,7 @@ require (
 	github.com/golang/mock v1.4.4
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/rs/cors v1.7.0
+	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
 	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/tools v0.0.0-20201111133315-69daaf961d65 // indirect
