@@ -77,7 +77,7 @@ func (dbInfo DataBase) GenerateUID() (uint64, error) {
 func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, error) {
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
-	if err == nil {
+	if err != nil {
 		return user, UserRepository.CantGetUserByEmail
 	}
 	return user, nil
@@ -86,7 +86,7 @@ func (dbInfo DataBase) GetUserByEmail(email string) (*UserModel.User, error) {
 func (dbInfo DataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
 	user := &UserModel.User{Id: uid}
 	err := dbInfo.DB.Model(user).WherePK().Select()
-	if err == nil {
+	if err != nil {
 		return user, UserRepository.CantGetUserByUid
 	}
 	return user, nil

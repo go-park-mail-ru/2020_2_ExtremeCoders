@@ -39,7 +39,7 @@ func main() {
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
 
 	handler := cors.New(cors.Options{
-		AllowedOrigins:   config.AllowedHeadersCORS,
+		AllowedOrigins:   config.AllowedOriginsCORS,
 		AllowedHeaders:   config.AllowedHeadersCORS,
 		AllowedMethods:   config.AllowedMethodsCORS,
 		AllowCredentials: true,
