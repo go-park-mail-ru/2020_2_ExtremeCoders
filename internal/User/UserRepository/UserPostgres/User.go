@@ -6,6 +6,7 @@ import (
 	crypto "crypto/rand"
 	"fmt"
 	"github.com/go-pg/pg/v10"
+	"golang.org/x/crypto/bcrypt"
 	"math/big"
 )
 
@@ -22,13 +23,14 @@ var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 func (dbInfo DataBase) IsEmailExists(email string) error {
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
-	if err != nil {
+	if err != pg.ErrNoRows {
 		return UserRepository.EmailAlreadyExists
 	}
 	return nil
 }
 
 func (dbInfo DataBase) AddUser(user *UserModel.User) error {
+	user.Password=string(PasswordBcrypt([]byte(user.Password)))
 	_, err := dbInfo.DB.Model(user).Insert()
 	if err != nil {
 		return UserRepository.CantAddUser
@@ -118,13 +120,14 @@ func (dbInfo DataBase) UpdateProfile(newUser UserModel.User, email string) error
 	return nil
 }
 
-func (dbInfo DataBase) RemoveSession(uid uint64, sid string) error {
+func (dbInfo DataBase) RemoveSession(sid string) (error,uint64) {
 	session := &UserModel.Session{Id: sid}
-	_, err := dbInfo.DB.Model(session).WherePK().Delete()
+	err := dbInfo.DB.Model(session).WherePK().Select()
+	_, err = dbInfo.DB.Model(session).WherePK().Delete()
 	if err != nil {
-		return UserRepository.RemoveSessionError
+		return UserRepository.RemoveSessionError,0
 	}
-	return nil
+	return nil, uint64(session.UserId)
 }
 
 func (dbInfo DataBase) GetSessionByUID(uid uint64) (string, error) {
@@ -134,4 +137,9 @@ func (dbInfo DataBase) GetSessionByUID(uid uint64) (string, error) {
 		return "", UserRepository.GetSessionError
 	}
 	return session.Id, nil
+}
+
+func PasswordBcrypt(plainPassword []byte) []byte {
+	passBcrypt, _ := bcrypt.GenerateFromPassword(plainPassword, 14)
+	return passBcrypt
 }

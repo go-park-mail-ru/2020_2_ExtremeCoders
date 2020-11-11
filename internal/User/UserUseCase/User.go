@@ -4,6 +4,7 @@ import (
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserRepository"
 	err "errors"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserUseCase interface {
@@ -52,7 +53,7 @@ func (uc UseCase) SignIn(user UserModel.User) (error, string) {
 	if erro != nil {
 		return erro, ""
 	}
-	if userEx.Password != user.Password {
+	if bcrypt.CompareHashAndPassword([]byte(userEx.Password), []byte(user.Password))!=nil {
 		return WrongPasswordError, ""
 	}
 	sid, e := uc.Db.GenerateSID()
@@ -63,7 +64,10 @@ func (uc UseCase) SignIn(user UserModel.User) (error, string) {
 	if er != nil {
 		return er, ""
 	}
-	uc.Db.RemoveSession(userEx.Id, oldSid)
+	er,_=uc.Db.RemoveSession(oldSid)
+	if er!=nil{
+		return er,""
+	}
 	er = uc.Db.AddSession(string(sid), userEx.Id, &user)
 	if er != nil {
 		return er, ""
@@ -73,11 +77,11 @@ func (uc UseCase) SignIn(user UserModel.User) (error, string) {
 }
 
 func (uc UseCase) Logout(sid string) error {
-	uid, ok := uc.Db.IsOkSession(sid)
+	_, ok := uc.Db.IsOkSession(sid)
 	if ok != nil {
 		return ok
 	}
-	e := uc.Db.RemoveSession(uid, sid)
+	e, _ := uc.Db.RemoveSession(sid)
 	if e != nil {
 		return e
 	}

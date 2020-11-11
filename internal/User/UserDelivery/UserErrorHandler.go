@@ -33,6 +33,8 @@ func SignInError(err error, cookie *http.Cookie) []byte {
 		errors.GetErrorNoCockyAns()
 	case UserUseCase.WrongPasswordError:
 		errors.GetErrorBadPasswordAns()
+	case UserRepository.RemoveSessionError:
+		errors.RemoveSessionError()
 	}
 	return nil
 }

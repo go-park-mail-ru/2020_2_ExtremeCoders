@@ -58,7 +58,8 @@ func (de Delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:    "session_id",
 			Value:   sid,
-			Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+			//Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+			Expires: time.Now().Add(1* time.Second),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -85,7 +86,7 @@ func (de Delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:    "session_id",
 			Value:   sid,
-			Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
+			Expires: time.Now().Add(1 * time.Second),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -113,6 +114,10 @@ func (de Delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Coo
 }
 
 func (de Delivery) Profile(w http.ResponseWriter, r *http.Request) {
+	if r.Method==http.MethodPost {
+		de.Signup(w, r)
+		return
+	}
 	user, session, err := de.GetUserByRequest(r)
 	if err != 200 {
 		w.Write(CookieError(err))
@@ -121,10 +126,7 @@ func (de Delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		w.Write(errors.GetOkAnsData(session.Value, *user))
 		return
-	} else if r.Method != http.MethodPut {
-		w.Write(errors.GetErrorNotPostAns())
-		return
-	} else {
+	} else if r.Method == http.MethodPut {
 		var up UserModel.User
 		up.Name = GetStrFormValueSafety(r, "profile_firstName")
 		up.Surname = GetStrFormValueSafety(r, "profile_lastName")

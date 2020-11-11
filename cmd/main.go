@@ -38,23 +38,23 @@ func main() {
 	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
 
+
+	siteHandler := middleware.AccessLogMiddleware(mux)
+	siteHandler = middleware.PanicMiddleware(siteHandler)
+	a := middleware.AuthMiddleware{Sessions: uDB}
+	siteHandler = a.Auth(siteHandler)
 	handler := cors.New(cors.Options{
 		AllowedOrigins:   config.AllowedOriginsCORS,
 		AllowedHeaders:   config.AllowedHeadersCORS,
 		AllowedMethods:   config.AllowedMethodsCORS,
 		AllowCredentials: true,
-	}).Handler(mux)
-	siteHandler := middleware.AccessLogMiddleware(handler)
-	siteHandler = middleware.PanicMiddleware(siteHandler)
-	a := middleware.AuthMiddleware{Sessions: uDB}
-	siteHandler = a.Auth(siteHandler)
-
+	}).Handler(siteHandler)
 	server := http.Server{
 		Addr:         config.Port,
-		Handler:      siteHandler,
+		Handler:      handler,
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 	}
-	fmt.Println("starting server at :8080")
+	fmt.Println("starting server at ",config.Port)
 	server.ListenAndServe()
 }

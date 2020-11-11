@@ -28,6 +28,6 @@ type UserDB interface {
 	GetUserByUID(uint64) (*UserModel.User, error)
 	IsOkSession(string) (uint64, error)
 	UpdateProfile(UserModel.User, string) error
-	RemoveSession(uint64, string) error
+	RemoveSession(string) (error, uint64)
 	GetSessionByUID(uint64) (string, error)
 }
