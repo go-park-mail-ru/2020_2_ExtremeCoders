@@ -9,6 +9,7 @@ require (
 	github.com/go-pg/pg/v10 v10.4.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/mock v1.4.4
+	github.com/jarcoal/httpmock v1.0.6
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/rs/cors v1.7.0
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
