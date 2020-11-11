@@ -4,6 +4,7 @@ import (
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserUseCase"
 	"CleanArch/internal/errors"
+	"CleanArch/internal/pkg/context"
 	"bytes"
 	"image"
 	"image/jpeg"
@@ -33,10 +34,6 @@ func New(usecase UserUseCase.UserUseCase) Interface {
 	return delivery{Uc: usecase}
 }
 
-func GetStrFormValueSafety(r *http.Request, field string) string {
-	return r.FormValue(field)
-}
-
 func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		de.SignIn(w, r)
@@ -51,10 +48,10 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var user UserModel.User
-	user.Name = GetStrFormValueSafety(r, "name")
-	user.Surname = GetStrFormValueSafety(r, "surname")
-	user.Email = GetStrFormValueSafety(r, "email")
-	user.Password = GetStrFormValueSafety(r, "password1")
+	user.Name = context.GetStrFormValueSafety(r, "name")
+	user.Surname = context.GetStrFormValueSafety(r, "surname")
+	user.Email = context.GetStrFormValueSafety(r, "email")
+	user.Password = context.GetStrFormValueSafety(r, "password1")
 	de.LoadFile(&user, r)
 	err, sid := de.Uc.Signup(user)
 	var response []byte
@@ -82,8 +79,8 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	}
 	var user UserModel.User
 
-	user.Email = GetStrFormValueSafety(r, "email")
-	user.Password = GetStrFormValueSafety(r, "password")
+	user.Email = context.GetStrFormValueSafety(r, "email")
+	user.Password = context.GetStrFormValueSafety(r, "password")
 	err, sid := de.Uc.SignIn(user)
 	var response []byte
 	if err == nil {
@@ -132,8 +129,8 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if r.Method == http.MethodPut {
 		var up UserModel.User
-		up.Name = GetStrFormValueSafety(r, "profile_firstName")
-		up.Surname = GetStrFormValueSafety(r, "profile_lastName")
+		up.Name = context.GetStrFormValueSafety(r, "profile_firstName")
+		up.Surname = context.GetStrFormValueSafety(r, "profile_lastName")
 		de.LoadFile(&up, r)
 		err := de.Uc.Profile(up)
 		w.Write(ProfileError(err, session))
