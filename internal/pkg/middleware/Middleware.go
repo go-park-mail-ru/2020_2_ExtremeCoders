@@ -4,19 +4,30 @@ import (
 	"CleanArch/internal/User/UserRepository"
 	"CleanArch/internal/pkg/context"
 	"errors"
-	"fmt"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
+
+type RequestLog struct {
+	addr string
+	method string
+	url string
+}
 
 var csrfError=errors.New("Sorry but your csrf token is over and someone can still your account. Please restart the page!")
 
 func AccessLogMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
 		next.ServeHTTP(w, r)
-		fmt.Printf("REQUEST: [%s] %s, %s %s\n",
-			r.Method, r.RemoteAddr, r.URL.Path, time.Since(start))
+		log.WithFields(log.Fields{
+			"REQUEST": RequestLog{
+				addr: r.RemoteAddr,
+				method: r.Method,
+				url: r.URL.Path,
+			},
+		}).Info("got")
+
 	})
 }
 
@@ -24,6 +35,9 @@ func PanicMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
+				log.WithFields(log.Fields{
+					"RECOVERED": err,
+				}).Error("got")
 				http.Error(w, "Internal server error", 500)
 			}
 		}()
@@ -59,6 +73,9 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		}
 		if errC != nil {
 			w.Write(authError(csrfError))
+			log.WithFields(log.Fields{
+				"RECOVERED": csrfError,
+			}).Error("got")
 			return
 		}
 

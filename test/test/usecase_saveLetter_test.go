@@ -4,7 +4,7 @@ import (
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserRepository"
 	"CleanArch/internal/User/UserUseCase"
-	mock "CleanArch/test/user/mock_UserRepository"
+	mock "CleanArch/test/mock_UserRepository"
 	"github.com/golang/mock/gomock"
 	"testing"
 )

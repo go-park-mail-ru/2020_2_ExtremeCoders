@@ -2,16 +2,10 @@ package test
 
 import (
 	"CleanArch/internal/Letter/LetterDelivery"
-	//"CleanArch/internal/Letter/LetterDelivery"
-	//"CleanArch/internal/Letter/LetterModel"
-	//"net/http"
-	//"strings"
 	"CleanArch/internal/errors"
-	mock "CleanArch/test/letter/mock_LetterUseCase"
+	mock "CleanArch/test/mock_LetterUseCase"
 	"fmt"
 	"github.com/golang/mock/gomock"
-	//"github.com/jarcoal/httpmock"
-	//"github.com/tv42/mockhttp"
 	"net/http"
 	"testing"
 )
@@ -74,4 +68,13 @@ func TestSendLetter(t *testing.T) {
 	//fmt.Println(r.Context().Value(userKey{}))
 	////
 	//uc.SendLetter(&writer, r1)
+	//Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
+	////mockUseCase := mock.NewMockLetterUseCase(ctrl)
+	////mockUseCase.EXPECT().SaveLetter(&Letter).Return(nil)
+	//uc := LetterDelivery.New(mockUseCase)
+	//
+	//writer := MyWriter{}
+	//r:= http.Request{}
+	//uc.SendLetter(&writer, &r)
+	//fmt.Println(writer.Str)
 }

@@ -4,71 +4,102 @@ import (
 	"CleanArch/internal/User/UserRepository"
 	"CleanArch/internal/User/UserUseCase"
 	"CleanArch/internal/errors"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func SignUpError(err error, cookie *http.Cookie) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": returned,
+		}).Info("sent")
+	}()
 	switch err {
 	case nil:
-		return errors.GetOkAns(cookie.Value)
+		returned= errors.GetOkAns(cookie.Value)
 	case UserRepository.EmailAlreadyExists:
-		return errors.GetErrorLoginExistAns()
+		returned= errors.GetErrorLoginExistAns()
 	case UserRepository.CantAddSession:
-		return errors.GetAddSessionError()
+		returned= errors.GetAddSessionError()
 	case UserRepository.CantAddUser:
-		return errors.AddUserError()
+		returned= errors.AddUserError()
 	}
-	return nil
+	return returned
 }
 
 func SignInError(err error, cookie *http.Cookie) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": returned,
+		}).Info("sent")
+	}()
 	switch err {
 	case nil:
-		return errors.GetOkAns(cookie.Value)
+		returned= errors.GetOkAns(cookie.Value)
 	case UserRepository.CantAddSession:
-		return errors.GetAddSessionError()
+		returned= errors.GetAddSessionError()
 	case UserRepository.CantGetUserByEmail:
-		return errors.GetErrorNoUserAns()
+		returned= errors.GetErrorNoUserAns()
 	case UserRepository.GetSessionError:
-		errors.GetErrorNoCockyAns()
+		returned=errors.GetErrorNoCockyAns()
 	case UserUseCase.WrongPasswordError:
-		errors.GetErrorBadPasswordAns()
+		returned=errors.GetErrorBadPasswordAns()
 	case UserRepository.RemoveSessionError:
-		errors.RemoveSessionError()
+		returned=errors.RemoveSessionError()
 	}
-	return nil
+	return returned
 }
 
 func CookieError(code uint16) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": returned,
+		}).Info("sent")
+	}()
 	switch code {
 	case 401:
-		return errors.GetErrorNoCockyAns()
+		returned= errors.GetErrorNoCockyAns()
 	case 402:
-		return errors.GetErrorWrongCookieAns()
+		returned= errors.GetErrorWrongCookieAns()
 	}
-	return nil
+	return returned
 }
 
 func LogoutError(err error) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": returned,
+		}).Info("sent")
+	}()
 	switch err {
 	case nil:
-		return errors.GetOkAns("")
+		returned= errors.GetOkAns("")
 	case UserRepository.InvalidSession:
-		return errors.GetErrorNoCockyAns()
+		returned= errors.GetErrorNoCockyAns()
 	case UserRepository.RemoveSessionError:
-		return errors.RemoveSessionError()
+		returned= errors.RemoveSessionError()
 	}
-	return nil
+	return returned
 }
 
 func ProfileError(err error, cookie *http.Cookie) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": returned,
+		}).Info("sent")
+	}()
 	switch err {
 	case nil:
-		return errors.GetOkAns(cookie.Value)
+		returned= errors.GetOkAns(cookie.Value)
 	case UserRepository.CantUpdateUser:
-		return errors.UpdateProfileError()
+		returned= errors.UpdateProfileError()
 	case UserRepository.CantGetUserOnUpdate:
-		return errors.GetUserOnUpdateError()
+		returned= errors.GetUserOnUpdateError()
 	}
-	return nil
+	return returned
 }
