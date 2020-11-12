@@ -59,8 +59,6 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:  "session_id",
 			Value: sid,
-			//Expires: time.Now().Add(24 * 7 * 4 * time.Hour),
-			Expires: time.Now().Add(1 * time.Second),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -87,7 +85,6 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:    "session_id",
 			Value:   sid,
-			Expires: time.Now().Add(1 * time.Second),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
