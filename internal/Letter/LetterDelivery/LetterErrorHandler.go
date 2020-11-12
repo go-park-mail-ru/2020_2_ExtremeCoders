@@ -12,7 +12,7 @@ func SendLetterError(err error, letter LetterModel.Letter) []byte {
 	var returned []byte
 	defer func() {
 		log.WithFields(log.Fields{
-			"RESPONSE": returned,
+			"RESPONSE": string(returned),
 		}).Info("sent")
 	}()
 	switch err {
@@ -32,7 +32,7 @@ func GetLettersError(err error, letters []LetterModel.Letter) []byte {
 	var returned []byte
 	defer func() {
 		log.WithFields(log.Fields{
-			"RESPONSE": returned,
+			"RESPONSE": string(returned),
 		}).Info("sent")
 	}()
 	switch err {

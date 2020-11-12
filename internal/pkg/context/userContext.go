@@ -8,6 +8,12 @@ import (
 	"errors"
 	"math/big"
 	"net/http"
+	"time"
+)
+
+const (
+	CookieName     = "session_id"
+	CsrfCookieName = "token"
 )
 
 var UserFromContextError = errors.New("Could not get user from context!")
@@ -39,4 +45,14 @@ func GenerateCSRF() string{
 
 func GetStrFormValueSafety(r *http.Request, field string) string {
 	return r.FormValue(field)
+}
+
+func CreateCsrfCookie() *http.Cookie{
+	cookie := &http.Cookie{
+		Name:    CsrfCookieName,
+		Value:   GenerateCSRF(),
+		Expires: time.Now().Add(15 * time.Minute),
+	}
+	cookie.Path = "/"
+	return cookie
 }

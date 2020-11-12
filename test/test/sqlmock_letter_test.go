@@ -16,19 +16,6 @@ import (
 	ormmocks "gitlab.com/slax0rr/go-pg-wrapper/mocks/orm"
 )
 
-type MockResult struct {
-}
-
-func (r MockResult) Model() model.Model {
-	panic("implement me!")
-}
-func (r MockResult) RowsAffected() int {
-	panic("implement me!")
-}
-func (r MockResult) RowsReturned() int {
-	panic("implement me!")
-}
-
 var let=LetterModel.Letter{
 	Id: 123,
 	Sender: "dellvin.black@gmail.com",
@@ -260,4 +247,16 @@ func TestGetSendedLettersRep(t *testing.T) {
 	err, letters := r.GetSendedLetters(usertest.Email)
 	assert.Nil(t, err)
 	assert.Equal(t, lets, letters)
+}
+type MockResult struct {
+}
+
+func (r MockResult) Model() model.Model {
+	panic("implement me!")
+}
+func (r MockResult) RowsAffected() int {
+	panic("implement me!")
+}
+func (r MockResult) RowsReturned() int {
+	panic("implement me!")
 }
