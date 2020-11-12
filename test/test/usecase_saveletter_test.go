@@ -2,6 +2,7 @@ package test
 
 import (
 	"CleanArch/internal/Letter/LetterModel"
+	"CleanArch/internal/Letter/LetterRepository"
 	"CleanArch/internal/Letter/LetterUseCase"
 	mock "CleanArch/test/mock_LetterRepository"
 	"github.com/golang/mock/gomock"
@@ -22,22 +23,30 @@ func TestSaveLetter(t *testing.T) {
 	uc.SaveLetter(Letter)
 }
 
-func TestGetReceivedLetters(t *testing.T) {
+func TestIsUserExist(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
+
+	Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetReceivedLetters("dellvin.black@gmail.com").Return(nil, nil)
+	mockLetter.EXPECT().GenerateLID().Return(uint64(0))
+	mockLetter.EXPECT().IsUserExist((*Letter).Receiver).Return(LetterRepository.ReceiverNotFound)
 
 	uc := LetterUseCase.New(mockLetter)
 
-	uc.GetReceivedLetters("dellvin.black@gmail.com")
+	uc.SaveLetter(Letter)
 }
 
-func TestGetSendedLetters(t *testing.T) {
+func TestSaveMail(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
+
+	Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetSendedLetters("dellvin.black@gmail.com").Return(nil, nil)
+	mockLetter.EXPECT().GenerateLID().Return(uint64(0))
+	mockLetter.EXPECT().IsUserExist((*Letter).Receiver).Return(nil)
+	mockLetter.EXPECT().SaveMail(*Letter).Return(LetterRepository.SaveLetterError)
 	uc := LetterUseCase.New(mockLetter)
-	uc.GetSendedLetters("dellvin.black@gmail.com")
+
+	uc.SaveLetter(Letter)
 }
