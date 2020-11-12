@@ -7,8 +7,6 @@ import (
 	//"net/http"
 	//"strings"
 
-	"CleanArch/internal/Letter/LetterDelivery"
-	mock "CleanArch/test/letter/mock_LetterUseCase"
 	"fmt"
 	"github.com/golang/mock/gomock"
 	//"github.com/jarcoal/httpmock"
@@ -41,13 +39,12 @@ func TestSendLetter(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	//Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
-	mockUseCase := mock.NewMockLetterUseCase(ctrl)
-	//mockUseCase.EXPECT().SaveLetter(&Letter).Return(nil)
-	uc := LetterDelivery.New(mockUseCase)
-
-	writer := MyWriter{}
-	r:= http.Request{}
-	uc.SendLetter(&writer, &r)
-	fmt.Println(writer.Str)
-
+	////mockUseCase := mock.NewMockLetterUseCase(ctrl)
+	////mockUseCase.EXPECT().SaveLetter(&Letter).Return(nil)
+	//uc := LetterDelivery.New(mockUseCase)
+	//
+	//writer := MyWriter{}
+	//r:= http.Request{}
+	//uc.SendLetter(&writer, &r)
+	//fmt.Println(writer.Str)
 }

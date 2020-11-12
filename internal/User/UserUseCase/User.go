@@ -4,6 +4,7 @@ import (
 	"CleanArch/internal/User/UserModel"
 	"CleanArch/internal/User/UserRepository"
 	err "errors"
+	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -29,20 +30,20 @@ func (uc useCase) Signup(user UserModel.User) (error, string) {
 
 	err := uc.Db.IsEmailExists(user.Email)
 	if err != nil {
-		return err, ""
+		return errors.Wrapf(err, "error happend on val %s", user.Email), ""
 	}
 	user.Id, err = uc.Db.GenerateUID()
 	if err != nil {
-		return err, ""
+		return errors.Wrapf(err, "error happend on val %s", user.Email), ""
 	}
 	str, err := uc.Db.GenerateSID()
 	if err != nil {
-		return err, ""
+		return errors.Wrapf(err, "error happend on val %s", user.Email), ""
 	}
 	sid := string(str)
 	err = uc.Db.AddUser(&user)
 	if err != nil {
-		return err, ""
+		return errors.Wrapf(err, "error happend on val %s", user.Email), ""
 	}
 	err = uc.Db.AddSession(sid, user.Id, &user)
 	if err != nil {
@@ -55,26 +56,26 @@ func (uc useCase) Signup(user UserModel.User) (error, string) {
 func (uc useCase) SignIn(user UserModel.User) (error, string) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
 	if erro != nil {
-		return erro, ""
+		return errors.Wrapf(erro, "error happend on val %s", user.Email), ""
 	}
 	if bcrypt.CompareHashAndPassword([]byte(userEx.Password), []byte(user.Password)) != nil {
 		return WrongPasswordError, ""
 	}
 	sid, e := uc.Db.GenerateSID()
 	if e != nil {
-		return e, ""
+		return errors.Wrapf(e, "error happend on val %s", user.Email), ""
 	}
 	oldSid, er := uc.Db.GetSessionByUID(userEx.Id)
 	if er != nil {
-		return er, ""
+		return errors.Wrapf(er, "error happend on val %s", user.Email), ""
 	}
 	er, _ = uc.Db.RemoveSession(oldSid)
 	if er != nil {
-		return er, ""
+		return errors.Wrapf(er, "error happend on val %s", user.Email), ""
 	}
 	er = uc.Db.AddSession(string(sid), userEx.Id, &user)
 	if er != nil {
-		return er, ""
+		return errors.Wrapf(er, "error happend on val %s", user.Email), ""
 	}
 	return nil, string(sid)
 
@@ -83,11 +84,11 @@ func (uc useCase) SignIn(user UserModel.User) (error, string) {
 func (uc useCase) Logout(sid string) error {
 	_, ok := uc.Db.IsOkSession(sid)
 	if ok != nil {
-		return ok
+		return errors.Wrapf(ok, "error happend on val %s", sid)
 	}
 	e, _ := uc.Db.RemoveSession(sid)
 	if e != nil {
-		return e
+		return errors.Wrapf(e, "error happend on val %s", sid)
 	}
 	return nil
 }
@@ -95,7 +96,7 @@ func (uc useCase) Logout(sid string) error {
 func (uc useCase) Profile(user UserModel.User) error {
 	e := uc.Db.UpdateProfile(user, user.Email)
 	if e != nil {
-		return e
+		return errors.Wrapf(e, "error happend on val %s", user.Email)
 	}
 	return nil
 }
