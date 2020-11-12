@@ -68,5 +68,4 @@ func TestSendLetter(t *testing.T) {
 	if string(writer.Str)!=string(errors.GetErrorUnexpectedAns()){
 		t.Errorf("Expected error is  " + string(errors.GetErrorUnexpectedAns()))
 	}
-
 }
