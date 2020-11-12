@@ -56,7 +56,7 @@ func (dbInfo dataBase) GenerateSID() ([]rune, error) {
 		}
 		fmt.Println(sid)
 		session := &UserModel.Session{Id: sid}
-		exist := dbInfo.DB.Model(session).WherePK().Select()
+		exist := dbInfo.DB.Model(session).Where("id=?", sid).Select()
 		if exist != nil {
 			break
 		}
@@ -96,7 +96,7 @@ func (dbInfo dataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
 
 func (dbInfo dataBase) IsOkSession(sid string) (uint64, error) {
 	session := &UserModel.Session{Id: sid}
-	err := dbInfo.DB.Model(session).WherePK().Select()
+	err := dbInfo.DB.Model(session).Where("id=?", sid).Select()
 	if err != nil {
 		return 0, UserRepository.InvalidSession
 	}
@@ -122,8 +122,8 @@ func (dbInfo dataBase) UpdateProfile(newUser UserModel.User, email string) error
 
 func (dbInfo dataBase) RemoveSession(sid string) (error, uint64) {
 	session := &UserModel.Session{Id: sid}
-	err := dbInfo.DB.Model(session).WherePK().Select()
-	_, err = dbInfo.DB.Model(session).WherePK().Delete()
+	err := dbInfo.DB.Model(session).Where("id=?",sid).Select()
+	_, err = dbInfo.DB.Model(session).Where("id=?",sid).Delete()
 	if err != nil {
 		return UserRepository.RemoveSessionError, 0
 	}
