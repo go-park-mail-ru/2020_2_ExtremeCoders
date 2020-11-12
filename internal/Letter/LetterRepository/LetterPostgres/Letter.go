@@ -5,15 +5,15 @@ import (
 	"CleanArch/internal/Letter/LetterRepository"
 	"CleanArch/internal/User/UserModel"
 	crypto "crypto/rand"
-	"github.com/go-pg/pg/v10"
+	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
 	"math/big"
 )
 
 type dataBase struct {
-	DB *pg.DB
+	DB pgwrapper.DB
 }
 
-func New(db *pg.DB) LetterRepository.LetterDB {
+func New(db pgwrapper.DB) LetterRepository.LetterDB {
 	return dataBase{DB: db}
 }
 

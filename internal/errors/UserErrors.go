@@ -51,7 +51,7 @@ func GetErrorNoCockyAns() []byte {
 
 func GetErrorWrongCookieAns() []byte {
 	err := &AnswerGet{
-		Code:        402,
+		Code:        403,
 		Description: "wrong session id",
 	}
 	ans, _ := json.Marshal(err)
