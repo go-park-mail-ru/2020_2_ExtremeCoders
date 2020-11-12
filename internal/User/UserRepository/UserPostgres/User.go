@@ -6,16 +6,17 @@ import (
 	"CleanArch/internal/User/UserRepository"
 	crypto "crypto/rand"
 	"fmt"
-	"github.com/go-pg/pg/v10"
+	"github.com/go-pg/pg/v9"
+	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
 	"golang.org/x/crypto/bcrypt"
 	"math/big"
 )
 
 type dataBase struct {
-	DB *pg.DB
+	DB pgwrapper.DB
 }
 
-func New(db *pg.DB) UserRepository.UserDB {
+func New(db pgwrapper.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
 }
 
@@ -85,8 +86,8 @@ func (dbInfo dataBase) GetUserByEmail(email string) (*UserModel.User, error) {
 }
 
 func (dbInfo dataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
-	user := &UserModel.User{Id: uid}
-	err := dbInfo.DB.Model(user).WherePK().Select()
+	user := &UserModel.User{}
+	err := dbInfo.DB.Model(user).Where("id=?", uid).Select()
 	if err != nil {
 		return user, UserRepository.CantGetUserByUid
 	}
