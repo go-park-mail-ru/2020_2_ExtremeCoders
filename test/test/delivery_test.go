@@ -56,25 +56,4 @@ func TestSendLetter(t *testing.T) {
 		fmt.Println("FAIL")
 		panic("Expected error is  " + string(errors.GetErrorUnexpectedAns()))
 	}
-
-	//writer.Str = []byte{}
-	//Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com", Sender: "dellvin.black@gmail.com", Theme: "dellvin.black@gmail.com",
-	//	Text: "dellvin.black@gmail.com", DateTime: int64(0)}
-	//user := UserModel.User{12323,"ds","d","ss","aa","d"}
-	//r1 := r.WithContext(context.WithValue(r.Context(),userKey{}, user))
-	////r.Context().( )
-	////r.Context.WithValue(ctx, userKey{}, user)
-	////r.Context().WithValue(ctx, userKey{}, user)
-	//fmt.Println(r.Context().Value(userKey{}))
-	////
-	//uc.SendLetter(&writer, r1)
-	//Letter := &LetterModel.Letter{Receiver: "dellvin.black@gmail.com"}
-	////mockUseCase := mock.NewMockLetterUseCase(ctrl)
-	////mockUseCase.EXPECT().SaveLetter(&Letter).Return(nil)
-	//uc := LetterDelivery.New(mockUseCase)
-	//
-	//writer := MyWriter{}
-	//r:= http.Request{}
-	//uc.SendLetter(&writer, &r)
-	//fmt.Println(writer.Str)
 }
