@@ -6,7 +6,6 @@ import (
 	"errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
-	"time"
 )
 
 type RequestLog struct {
@@ -49,33 +48,28 @@ type AuthMiddleware struct {
 	Sessions UserRepository.UserDB
 }
 
-const (
-	cookieName     = "session_id"
-	csrfCookieName = "token"
-)
+
 
 func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie(cookieName)
-		if err != nil  {
-			next.ServeHTTP(w, r)
-			return
-		}
-		csrf, errC := r.Cookie(csrfCookieName)
-		if csrf.Value == r.Header.Get("csrf_token") {
-			cookie := &http.Cookie{
-				Name:    csrfCookieName,
-				Value:   context.GenerateCSRF(),
-				Expires: time.Now().Add(15 * time.Minute),
+		if r.Method!=http.MethodGet{
+			csrf, errC := r.Cookie(context.CsrfCookieName)
+			if csrf!=nil && csrf.Value == r.Header.Get("csrf_token") {
+				http.SetCookie(w, context.CreateCsrfCookie())
 			}
-			cookie.Path = "/"
-			http.SetCookie(w, cookie)
+			if r.URL.Path=="/user" && r.Method==http.MethodPost{
+				http.SetCookie(w, context.CreateCsrfCookie())
+			}else if errC != nil {
+				w.Write(authError(csrfError))
+				log.WithFields(log.Fields{
+					"RECOVERED": csrfError,
+				}).Error("got")
+				return
+			}
 		}
-		if errC != nil {
-			w.Write(authError(csrfError))
-			log.WithFields(log.Fields{
-				"RECOVERED": csrfError,
-			}).Error("got")
+		cookie, err := r.Cookie(context.CookieName)
+		if err != nil {
+			next.ServeHTTP(w, r)
 			return
 		}
 

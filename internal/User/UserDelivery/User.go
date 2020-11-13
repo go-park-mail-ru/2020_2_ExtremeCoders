@@ -59,6 +59,7 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:  "session_id",
 			Value: sid,
+			Expires: time.Now().Add(15*10000 * time.Hour),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -85,6 +86,7 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:    "session_id",
 			Value:   sid,
+			Expires: time.Now().Add(15*10000 * time.Hour),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -126,6 +128,7 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if r.Method == http.MethodPut {
 		var up UserModel.User
+		up.Email=user.Email
 		up.Name = context.GetStrFormValueSafety(r, "profile_firstName")
 		up.Surname = context.GetStrFormValueSafety(r, "profile_lastName")
 		de.LoadFile(&up, r)

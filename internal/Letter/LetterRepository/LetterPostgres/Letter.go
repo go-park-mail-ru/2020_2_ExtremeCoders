@@ -36,7 +36,7 @@ func (dbInfo dataBase) IsUserExist(email string) error {
 
 func (dbInfo dataBase) GetReceivedLetters(email string) (error, []LetterModel.Letter) {
 	var letters []LetterModel.Letter
-	exist := dbInfo.DB.Model(&letters).Where("receiver=?", &email).Select()
+	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).Select()
 	if exist != nil {
 		return LetterRepository.ReceivedLetterError, nil
 	}
@@ -56,7 +56,7 @@ func (dbInfo dataBase) GenerateLID() uint64 {
 
 func (dbInfo dataBase) GetSendedLetters(email string) (error, []LetterModel.Letter) {
 	var letters []LetterModel.Letter
-	exist := dbInfo.DB.Model(&letters).Where("sender=?", &email).Select()
+	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).Select()
 	if exist != nil {
 		return LetterRepository.SentLetterError, nil
 	}

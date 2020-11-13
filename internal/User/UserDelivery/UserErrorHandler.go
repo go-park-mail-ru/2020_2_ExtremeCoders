@@ -12,7 +12,7 @@ func SignUpError(err error, cookie *http.Cookie) []byte {
 	var returned []byte
 	defer func() {
 		log.WithFields(log.Fields{
-			"RESPONSE": returned,
+			"RESPONSE": string(returned),
 		}).Info("sent")
 	}()
 	switch err {
@@ -32,7 +32,7 @@ func SignInError(err error, cookie *http.Cookie) []byte {
 	var returned []byte
 	defer func() {
 		log.WithFields(log.Fields{
-			"RESPONSE": returned,
+			"RESPONSE": string(returned),
 		}).Info("sent")
 	}()
 	switch err {
@@ -56,7 +56,7 @@ func CookieError(code uint16) []byte {
 	var returned []byte
 	defer func() {
 		log.WithFields(log.Fields{
-			"RESPONSE": returned,
+			"RESPONSE": string(returned),
 		}).Info("sent")
 	}()
 	switch code {
@@ -72,7 +72,7 @@ func LogoutError(err error) []byte {
 	var returned []byte
 	defer func() {
 		log.WithFields(log.Fields{
-			"RESPONSE": returned,
+			"RESPONSE": string(returned),
 		}).Info("sent")
 	}()
 	switch err {
@@ -90,7 +90,7 @@ func ProfileError(err error, cookie *http.Cookie) []byte {
 	var returned []byte
 	defer func() {
 		log.WithFields(log.Fields{
-			"RESPONSE": returned,
+			"RESPONSE": string(returned),
 		}).Info("sent")
 	}()
 	switch err {
