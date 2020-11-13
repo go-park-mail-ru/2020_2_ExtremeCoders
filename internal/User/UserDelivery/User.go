@@ -63,6 +63,8 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
+		http.SetCookie(w, context.CreateCsrfCookie())
+
 		response = SignUpError(err, cookie)
 	} else {
 		response = SignUpError(err, nil)
@@ -90,6 +92,7 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
+		http.SetCookie(w, context.CreateCsrfCookie())
 		response = SignInError(err, cookie)
 	} else {
 		response = SignInError(err, nil)

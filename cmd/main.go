@@ -40,10 +40,10 @@ func main() {
 	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
 
-	siteHandler := middleware.AccessLogMiddleware(mux)
-	siteHandler = middleware.PanicMiddleware(siteHandler)
+	//siteHandler := middleware.AccessLogMiddleware(mux)
+	//siteHandler = middleware.PanicMiddleware(siteHandler)
 	a := middleware.AuthMiddleware{Sessions: uDB}
-	siteHandler = a.Auth(siteHandler)
+	siteHandler := a.Auth(mux)
 	handler := cors.New(cors.Options{
 		AllowedOrigins:   config.AllowedOriginsCORS,
 		AllowedHeaders:   config.AllowedHeadersCORS,
