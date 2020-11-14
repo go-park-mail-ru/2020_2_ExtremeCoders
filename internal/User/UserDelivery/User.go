@@ -63,8 +63,6 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
-		http.SetCookie(w, context.CreateCsrfCookie())
-
 		response = SignUpError(err, cookie)
 	} else {
 		response = SignUpError(err, nil)
@@ -92,7 +90,6 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
-		http.SetCookie(w, context.CreateCsrfCookie())
 		response = SignInError(err, cookie)
 	} else {
 		response = SignInError(err, nil)
@@ -171,7 +168,7 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 		return
 	}
 	(*user).Img = fileHeader.Filename
-	path := "./" + (*user).Email + "/" + fileHeader.Filename
+	path := "../web/static/" + (*user).Email + "/" + fileHeader.Filename
 	f, err := os.Create(path)
 	if err != nil {
 		return
@@ -192,7 +189,7 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if (*user).Img == "" {
-			(*user).Img = "./default.jpeg"
+			(*user).Img = "../web/static/default.jpeg"
 		}
 
 		file, err := os.Open((*user).Img)

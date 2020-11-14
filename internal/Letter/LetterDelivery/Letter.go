@@ -5,7 +5,6 @@ import (
 	"CleanArch/internal/Letter/LetterUseCase"
 	"CleanArch/internal/errors"
 	"CleanArch/internal/pkg/context"
-	"github.com/golang/glog"
 	"net/http"
 	"time"
 )
@@ -25,7 +24,6 @@ func New(usecase LetterUseCase.LetterUseCase) Interface {
 }
 
 func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
-	glog.Info("hui")
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return

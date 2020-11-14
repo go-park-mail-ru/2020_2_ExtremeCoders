@@ -53,7 +53,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 
 		csrf, _ := r.Cookie(context.CsrfCookieName)
 		//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
-		if csrf != nil && csrf.Value == r.Header.Get("csrf_token") {
+		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method==http.MethodGet{
 			http.SetCookie(w, context.CreateCsrfCookie())
 			cookie, err := r.Cookie(context.CookieName)
 			if err != nil {
@@ -70,6 +70,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 				next.ServeHTTP(w, r)
 				return
 			}
+			http.SetCookie(w, context.CreateCsrfCookie())
 			ctx := r.Context()
 			ctx = context.SaveUserToContext(ctx, *user)
 			r = r.WithContext(ctx)
@@ -77,11 +78,8 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 			return
 		} else {
 			//если csrf не норм, то если это вход или регистрация, то надо отправить на них
-			if  r.URL.Path == "/user" && r.Method == http.MethodPost {
-				next.ServeHTTP(w, r)
-				return
-			}
-			if  r.URL.Path == "/session" && r.Method == http.MethodPost {
+			if  (r.URL.Path == "/session"||r.URL.Path == "/user") && r.Method == http.MethodPost {
+				http.SetCookie(w, context.CreateCsrfCookie())
 				next.ServeHTTP(w, r)
 				return
 			}
