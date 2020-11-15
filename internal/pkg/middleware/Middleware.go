@@ -54,7 +54,6 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		csrf, _ := r.Cookie(context.CsrfCookieName)
 		//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
 		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method==http.MethodGet{
-			http.SetCookie(w, context.CreateCsrfCookie())
 			cookie, err := r.Cookie(context.CookieName)
 			if err != nil {
 				next.ServeHTTP(w, r)
@@ -92,3 +91,4 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 
 	})
 }
+
