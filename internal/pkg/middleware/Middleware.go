@@ -4,6 +4,7 @@ import (
 	"CleanArch/internal/User/UserRepository"
 	"CleanArch/internal/pkg/context"
 	"errors"
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
@@ -52,8 +53,9 @@ type AuthMiddleware struct {
 func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		csrf, _ := r.Cookie(context.CsrfCookieName)
+		csrf, Error := r.Cookie(context.CsrfCookieName)
 		//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
+		fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
 		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method==http.MethodGet{
 			cookie, err := r.Cookie(context.CookieName)
 			if err != nil {
@@ -70,10 +72,9 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 				next.ServeHTTP(w, r)
 				return
 			}
-			cookie, error:=r.Cookie(context.CsrfCookieName)
-			if error==nil {
-				cookie.Expires = time.Now().AddDate(0, 0, -1)
-				http.SetCookie(w, cookie)
+			if Error==nil {
+				csrf.Expires = time.Now().AddDate(0, 0, -1)
+				http.SetCookie(w, csrf)
 			}
 			http.SetCookie(w, context.CreateCsrfCookie())
 			ctx := r.Context()
@@ -84,6 +85,10 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		} else {
 			//если csrf не норм, то если это вход или регистрация, то надо отправить на них
 			if  (r.URL.Path == "/session"||r.URL.Path == "/user") && r.Method == http.MethodPost {
+				if Error==nil {
+					csrf.Expires = time.Now().AddDate(0, 0, -1)
+					http.SetCookie(w, csrf)
+				}
 				http.SetCookie(w, context.CreateCsrfCookie())
 				next.ServeHTTP(w, r)
 				return
