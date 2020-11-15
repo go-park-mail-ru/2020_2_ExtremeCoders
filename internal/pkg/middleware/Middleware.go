@@ -6,6 +6,7 @@ import (
 	"errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"time"
 )
 
 type RequestLog struct {
@@ -68,6 +69,11 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 			if e != nil {
 				next.ServeHTTP(w, r)
 				return
+			}
+			cookie, error:=r.Cookie(context.CsrfCookieName)
+			if error==nil {
+				cookie.Expires = time.Now().AddDate(0, 0, -1)
+				http.SetCookie(w, cookie)
 			}
 			http.SetCookie(w, context.CreateCsrfCookie())
 			ctx := r.Context()
