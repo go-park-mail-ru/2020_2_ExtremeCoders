@@ -1,0 +1,139 @@
+package test
+
+import (
+	mock "2020_2_ExtremeCoders/MainApplication/test/mock_UserRepository"
+	"2020_2_ExtremeCoders/internal/User/UserModel"
+	"CleanArch/internal/User/UserRepository"
+	"CleanArch/internal/User/UserUseCase"
+	"github.com/golang/mock/gomock"
+	"testing"
+)
+
+func TestSignUp(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	user := UserModel.User{
+		Id: 123,
+		Name: "Dellvin",
+		Surname: "Black",
+		Email: "dellvin.black@gmail.com",
+		Password: "1538",
+	}
+	var sid []rune
+	sid=[]rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
+	mockLetter := mock.NewMockUserDB(ctrl)
+	mockLetter.EXPECT().IsEmailExists(user.Email).Return(nil)
+	mockLetter.EXPECT().GenerateUID().Return(user.Id,nil)
+	mockLetter.EXPECT().GenerateSID().Return(sid, nil)
+	mockLetter.EXPECT().AddUser(&user).Return(nil)
+	mockLetter.EXPECT().AddSession(string(sid), uint64(user.Id),&user).Return(nil)
+	uc := UserUseCase.New(mockLetter)
+
+	uc.Signup(user)
+}
+
+func TestSaveLetterExEmail(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	user := UserModel.User{
+		Id: 123,
+		Name: "Dellvin",
+		Surname: "Black",
+		Email: "dellvin.black@gmail.com",
+		Password: "1538",
+	}
+	mockLetter := mock.NewMockUserDB(ctrl)
+	mockLetter.EXPECT().IsEmailExists(user.Email).Return(UserRepository.EmailAlreadyExists)
+
+	uc := UserUseCase.New(mockLetter)
+
+	uc.Signup(user)
+}
+
+func TestSaveLetterGenUID(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	user := UserModel.User{
+		Id: 123,
+		Name: "Dellvin",
+		Surname: "Black",
+		Email: "dellvin.black@gmail.com",
+		Password: "1538",
+	}
+	mockLetter := mock.NewMockUserDB(ctrl)
+	mockLetter.EXPECT().IsEmailExists(user.Email).Return(nil)
+	mockLetter.EXPECT().GenerateUID().Return(user.Id,UserRepository.InvalidSession)
+	uc := UserUseCase.New(mockLetter)
+	uc.Signup(user)
+}
+
+func TestSaveLetterGenSID(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	user := UserModel.User{
+		Id: 123,
+		Name: "Dellvin",
+		Surname: "Black",
+		Email: "dellvin.black@gmail.com",
+		Password: "1538",
+	}
+	mockLetter := mock.NewMockUserDB(ctrl)
+	mockLetter.EXPECT().IsEmailExists(user.Email).Return(nil)
+	mockLetter.EXPECT().GenerateUID().Return(user.Id,nil)
+	mockLetter.EXPECT().GenerateSID().Return([]rune(""), UserRepository.InvalidSession)
+	uc := UserUseCase.New(mockLetter)
+	uc.Signup(user)
+}
+
+func TestSaveLetterAddUser(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	user := UserModel.User{
+		Id: 123,
+		Name: "Dellvin",
+		Surname: "Black",
+		Email: "dellvin.black@gmail.com",
+		Password: "1538",
+	}
+	var sid []rune
+	sid=[]rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
+	mockLetter := mock.NewMockUserDB(ctrl)
+	mockLetter.EXPECT().IsEmailExists(user.Email).Return(nil)
+	mockLetter.EXPECT().GenerateUID().Return(user.Id,nil)
+	mockLetter.EXPECT().GenerateSID().Return(sid, nil)
+	mockLetter.EXPECT().AddUser(&user).Return(UserRepository.CantAddUser)
+
+	uc := UserUseCase.New(mockLetter)
+
+	uc.Signup(user)
+}
+
+func TestSaveLetterAddSession(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	user := UserModel.User{
+		Id: 123,
+		Name: "Dellvin",
+		Surname: "Black",
+		Email: "dellvin.black@gmail.com",
+		Password: "1538",
+	}
+	var sid []rune
+	sid=[]rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
+	mockLetter := mock.NewMockUserDB(ctrl)
+	mockLetter.EXPECT().IsEmailExists(user.Email).Return(nil)
+	mockLetter.EXPECT().GenerateUID().Return(user.Id,nil)
+	mockLetter.EXPECT().GenerateSID().Return(sid, nil)
+	mockLetter.EXPECT().AddUser(&user).Return(nil)
+	mockLetter.EXPECT().AddSession(string(sid), uint64(user.Id),&user).Return(UserRepository.CantAddSession)
+	uc := UserUseCase.New(mockLetter)
+
+	uc.Signup(user)
+}
+

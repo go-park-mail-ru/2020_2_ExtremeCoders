@@ -1,3 +1,4 @@
-/.idea/
-go.sum
+.idea
+.idea/workspace.xml
+../go.sum
 /CleanArch
