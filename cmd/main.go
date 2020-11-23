@@ -33,12 +33,12 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/session", uDE.Session)
-	mux.HandleFunc("/user", uDE.Profile)
-	mux.HandleFunc("/user/avatar", uDE.GetAvatar)
-	mux.HandleFunc("/letter", lDE.SendLetter)
-	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
-	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
+	mux.HandleFunc("/api/session", uDE.Session)
+	mux.HandleFunc("/api/user", uDE.Profile)
+	mux.HandleFunc("/api/user/avatar", uDE.GetAvatar)
+	mux.HandleFunc("/api/letter", lDE.SendLetter)
+	mux.HandleFunc("/api/user/letter/sent", lDE.GetSendLetters)
+	mux.HandleFunc("/api/user/letter/received", lDE.GetRecvLetters)
 
 	//siteHandler := middleware.AccessLogMiddleware(mux)
 	//siteHandler = middleware.PanicMiddleware(siteHandler)
