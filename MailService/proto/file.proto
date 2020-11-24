@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+// protoc --go_out=plugins=grpc:. *.proto
+package letterService;
+
+message Lid{
+  uint64 lid=1;
+}
+
+message Letter{
+  uint64 lid=1;
+  string sender=2;
+  string receiver=3;
+  string theme=4;
+  string text=5;
+  uint64 dateTime=6;
+  bool isWatched=7;
+}
+
+message DirName{
+  string dirName=1;
+}
+
+message Response{
+  bool ok=1;
+  string description=2;
+}
+
+message LetterListResponse {
+  repeated Letter letter=1;
+  Response result=2;
+}
+
+message LetterResponse {
+  Letter letter=1;
+  Response result=2;
+}
+
+service LetterService{
+  rpc GetLettersByDir(DirName) returns (LetterListResponse);
+  rpc SaveLetter(Letter) returns (Response);
+  rpc WatchedLetter(Lid) returns (LetterResponse);
+}
+
