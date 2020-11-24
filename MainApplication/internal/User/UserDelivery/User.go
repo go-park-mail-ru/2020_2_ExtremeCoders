@@ -1,11 +1,13 @@
 package UserDelivery
 
 import (
+	fileProto "Mailer/FileService/proto"
 	"Mailer/MainApplication/internal/User/UserModel"
 	"Mailer/MainApplication/internal/User/UserUseCase"
 	"Mailer/MainApplication/internal/errors"
 	"Mailer/MainApplication/internal/pkg/context"
 	"bytes"
+	log "github.com/sirupsen/logrus"
 	"image"
 	"image/jpeg"
 	"io"
@@ -28,10 +30,11 @@ type Interface interface {
 
 type delivery struct {
 	Uc UserUseCase.UserUseCase
+	FileManager fileProto.FileServiceClient
 }
 
-func New(usecase UserUseCase.UserUseCase) Interface {
-	return delivery{Uc: usecase}
+func New(usecase UserUseCase.UserUseCase, fileManager fileProto.FileServiceClient) Interface {
+	return delivery{Uc: usecase, FileManager: fileManager}
 }
 
 func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
@@ -167,14 +170,20 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	if file == nil {
 		return
 	}
-	(*user).Img = fileHeader.Filename
-	path := "../web/static/" + (*user).Email + "/" + fileHeader.Filename
-	f, err := os.Create(path)
 	if err != nil {
 		return
 	}
-	defer f.Close()
-	io.Copy(f, file)
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, file); err != nil {
+		log.Println("EEERR", err)
+	}
+	log.Println("LOAD FILE", buf)
+	avatar := fileProto.Avatar{
+		Email:    (*user).Email,
+		FileName: fileHeader.Filename,
+		Content:  buf.Bytes(),
+	}
+	de.FileManager.SetAvatar(r.Context(),&avatar)
 }
 
 func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {

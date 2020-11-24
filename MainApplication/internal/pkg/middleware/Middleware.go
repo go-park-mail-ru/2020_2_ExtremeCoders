@@ -4,7 +4,6 @@ import (
 	"Mailer/MainApplication/internal/User/UserRepository"
 	"Mailer/MainApplication/internal/pkg/context"
 	"errors"
-	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
@@ -55,7 +54,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 
 		csrf, Error := r.Cookie(context.CsrfCookieName)
 		//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
-		fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
+		//fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
 		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method==http.MethodGet{
 			cookie, err := r.Cookie(context.CookieName)
 			if err != nil {

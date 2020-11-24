@@ -10,6 +10,9 @@ import (
 	"Mailer/MainApplication/internal/User/UserRepository/UserPostgres"
 	"Mailer/MainApplication/internal/User/UserUseCase"
 	"Mailer/MainApplication/internal/pkg/middleware"
+	fileProto "Mailer/FileService/proto"
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 	"fmt"
 	"github.com/rs/cors"
 	"net/http"
@@ -22,9 +25,21 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
+	grcpConn, err := grpc.Dial(
+		"127.0.0.1:8081",
+		grpc.WithInsecure(),
+	)
+	if err != nil {
+		log.Fatalf("cant connect to grpc")
+	}
+	defer grcpConn.Close()
+
+	fileManager := fileProto.NewFileServiceClient(grcpConn)
+
 	var uDB = UserPostgres.New(DataBase)
 	var uUC = UserUseCase.New(uDB)
-	var uDE = UserDelivery.New(uUC)
+	var uDE = UserDelivery.New(uUC, fileManager)
 
 	var lDB = LetterPostgres.New(DataBase)
 	var lUC = LetterUseCase.New(lDB)
