@@ -1,6 +1,7 @@
 package main
 
 import (
+	fileProto "Mailer/FileService/proto"
 	"Mailer/MainApplication/config"
 	"Mailer/MainApplication/internal/Letter/LetterDelivery"
 	"Mailer/MainApplication/internal/Letter/LetterRepository/LetterPostgres"
@@ -10,11 +11,10 @@ import (
 	"Mailer/MainApplication/internal/User/UserRepository/UserPostgres"
 	"Mailer/MainApplication/internal/User/UserUseCase"
 	"Mailer/MainApplication/internal/pkg/middleware"
-	fileProto "Mailer/FileService/proto"
-	log "github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
 	"fmt"
 	"github.com/rs/cors"
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 	"net/http"
 )
 
@@ -45,7 +45,6 @@ func main() {
 	var lUC = LetterUseCase.New(lDB)
 	var lDE = LetterDelivery.New(lUC)
 
-
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/session", uDE.Session)
@@ -71,7 +70,7 @@ func main() {
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 	}
-	fmt.Println("starting server at ", config.Port)
+	fmt.Println("starting File at ", config.Port)
 	err = server.ListenAndServe()
 	fmt.Println(err.Error())
 }

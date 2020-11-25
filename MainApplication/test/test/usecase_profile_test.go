@@ -14,10 +14,10 @@ func TestProfile(t *testing.T) {
 	defer ctrl.Finish()
 
 	user := UserModel.User{
-		Id: 123,
-		Name: "Dellvin",
-		Surname: "Black",
-		Email: "dellvin.black@gmail.com",
+		Id:       123,
+		Name:     "Dellvin",
+		Surname:  "Black",
+		Email:    "dellvin.black@gmail.com",
 		Password: "1538",
 	}
 	mockLetter := mock.NewMockUserDB(ctrl)
@@ -31,10 +31,10 @@ func TestProfileUpUser(t *testing.T) {
 	defer ctrl.Finish()
 
 	user := UserModel.User{
-		Id: 123,
-		Name: "Dellvin",
-		Surname: "Black",
-		Email: "dellvin.black@gmail.com",
+		Id:       123,
+		Name:     "Dellvin",
+		Surname:  "Black",
+		Email:    "dellvin.black@gmail.com",
 		Password: "1538",
 	}
 	mockLetter := mock.NewMockUserDB(ctrl)

@@ -57,7 +57,7 @@ func TestSendLetter(t *testing.T) {
 	mockUseCase.EXPECT().GetReceivedLetters(nil).MaxTimes(0)
 	r = http.Request{Method: "POST"}
 	uc.GetRecvLetters(&writer, &r)
-	if string(writer.Str)!=string(errors.GetErrorUnexpectedAns()){
+	if string(writer.Str) != string(errors.GetErrorUnexpectedAns()) {
 		t.Errorf("Expected error is  " + string(errors.GetErrorUnexpectedAns()))
 	}
 
@@ -65,7 +65,7 @@ func TestSendLetter(t *testing.T) {
 	mockUseCase.EXPECT().GetSendedLetters(nil).MaxTimes(0)
 	r = http.Request{Method: "POST"}
 	uc.GetSendLetters(&writer, &r)
-	if string(writer.Str)!=string(errors.GetErrorUnexpectedAns()){
+	if string(writer.Str) != string(errors.GetErrorUnexpectedAns()) {
 		t.Errorf("Expected error is  " + string(errors.GetErrorUnexpectedAns()))
 	}
 }

@@ -38,7 +38,7 @@ func PanicMiddleware(next http.Handler) http.Handler {
 				log.WithFields(log.Fields{
 					"RECOVERED": err,
 				}).Error("got")
-				http.Error(w, "Internal server error", 500)
+				http.Error(w, "Internal File error", 500)
 			}
 		}()
 		next.ServeHTTP(w, r)
@@ -55,7 +55,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		csrf, Error := r.Cookie(context.CsrfCookieName)
 		//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
 		//fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
-		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method==http.MethodGet{
+		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method == http.MethodGet {
 			cookie, err := r.Cookie(context.CookieName)
 			if err != nil {
 				next.ServeHTTP(w, r)
@@ -71,7 +71,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 				next.ServeHTTP(w, r)
 				return
 			}
-			if Error==nil {
+			if Error == nil {
 				csrf.Expires = time.Now().AddDate(0, 0, -1)
 				http.SetCookie(w, csrf)
 			}
@@ -83,8 +83,8 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 			return
 		} else {
 			//если csrf не норм, то если это вход или регистрация, то надо отправить на них
-			if  (r.URL.Path == "/session"||r.URL.Path == "/user") && r.Method == http.MethodPost {
-				if Error==nil {
+			if (r.URL.Path == "/session" || r.URL.Path == "/user") && r.Method == http.MethodPost {
+				if Error == nil {
 					csrf.Expires = time.Now().AddDate(0, 0, -1)
 					http.SetCookie(w, csrf)
 				}
@@ -101,4 +101,3 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 
 	})
 }
-

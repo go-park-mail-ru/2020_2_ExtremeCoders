@@ -38,14 +38,14 @@ func TestServer(t *testing.T) {
 	//	AllowedMethods:   config.AllowedMethodsCORS,
 	//	AllowCredentials: true,
 	//}).Handler(siteHandler)
-	//server := http.Server{
+	//File := http.Server{
 	//	Addr:         config.Port,
 	//	Handler:      handler,
 	//	ReadTimeout:  config.ReadTimeout,
 	//	WriteTimeout: config.WriteTimeout,
 	//}
-	//fmt.Println("starting server at ", config.Port)
-	//server.ListenAndServe()
+	//fmt.Println("starting File at ", config.Port)
+	//File.ListenAndServe()
 	//
 	//
 	//convey.Convey("Create should return ID of newly created user", func() {
@@ -57,7 +57,7 @@ func TestServer(t *testing.T) {
 	//	req, err := http.NewRequest("POST", "http://localhost/api/v1/users", buf)
 	//	convey.So(err, convey.ShouldBeNil)
 	//	w := httptest.NewRecorder()
-	//	server.
+	//	File.
 	//	r.ServeHTTP(w, req)
 	//
 	//	convey.So(w.Code, convey.ShouldAlmostEqual, http.StatusOK)

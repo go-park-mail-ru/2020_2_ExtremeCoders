@@ -8,7 +8,6 @@ message LetterId{
 }
 
 message File{
-  uint64 letterId = 1;
   string fileType = 2;
   bytes content = 3;
 }
@@ -27,9 +26,14 @@ message Nothing {
   bool dummy = 1;
 }
 
+message Files{
+  uint64 letterId = 1;
+  repeated File files = 2;
+}
+
 service FileService{
   rpc SetAvatar(Avatar) returns (Nothing);
   rpc GetAvatar(User) returns (Avatar);
-  rpc SaveFile(File) returns (Nothing);
-  rpc GetFile(LetterId) returns(File);
+  rpc SaveFiles(Files) returns (Nothing);
+  rpc GetFiles(LetterId) returns(Files);
 }

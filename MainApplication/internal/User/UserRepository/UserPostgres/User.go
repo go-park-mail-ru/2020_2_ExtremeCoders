@@ -122,8 +122,8 @@ func (dbInfo dataBase) UpdateProfile(newUser UserModel.User, email string) error
 
 func (dbInfo dataBase) RemoveSession(sid string) (error, uint64) {
 	session := &UserModel.Session{Id: sid}
-	err := dbInfo.DB.Model(session).Where("id=?",sid).Select()
-	_, err = dbInfo.DB.Model(session).Where("id=?",sid).Delete()
+	err := dbInfo.DB.Model(session).Where("id=?", sid).Select()
+	_, err = dbInfo.DB.Model(session).Where("id=?", sid).Delete()
 	if err != nil {
 		return UserRepository.RemoveSessionError, 0
 	}

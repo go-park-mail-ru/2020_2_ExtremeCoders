@@ -13,10 +13,10 @@ func TestLogout(t *testing.T) {
 	defer ctrl.Finish()
 
 	var sid []rune
-	sid=[]rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
+	sid = []rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
 	mockLetter := mock.NewMockUserDB(ctrl)
-	mockLetter.EXPECT().IsOkSession(string(sid)).Return(uint64(0),nil)
-	mockLetter.EXPECT().RemoveSession(string(sid)).Return(nil,uint64(0))
+	mockLetter.EXPECT().IsOkSession(string(sid)).Return(uint64(0), nil)
+	mockLetter.EXPECT().RemoveSession(string(sid)).Return(nil, uint64(0))
 	uc := UserUseCase.New(mockLetter)
 	uc.Logout(string(sid))
 }
@@ -26,7 +26,7 @@ func TestLogoutIsOkSess(t *testing.T) {
 	defer ctrl.Finish()
 
 	var sid []rune
-	sid=[]rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
+	sid = []rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
 	mockLetter := mock.NewMockUserDB(ctrl)
 	mockLetter.EXPECT().IsOkSession(string(sid)).Return(uint64(0), UserRepository.GetSessionError)
 	uc := UserUseCase.New(mockLetter)
@@ -38,10 +38,10 @@ func TestLogoutRemoveSession(t *testing.T) {
 	defer ctrl.Finish()
 
 	var sid []rune
-	sid=[]rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
+	sid = []rune("VLbutPK_aMA_zVi4QP_EL_7KLXl8Uxwg")
 	mockLetter := mock.NewMockUserDB(ctrl)
-	mockLetter.EXPECT().IsOkSession(string(sid)).Return(uint64(0),nil)
-	mockLetter.EXPECT().RemoveSession(string(sid)).Return(UserRepository.RemoveSessionError,uint64(0))
+	mockLetter.EXPECT().IsOkSession(string(sid)).Return(uint64(0), nil)
+	mockLetter.EXPECT().RemoveSession(string(sid)).Return(UserRepository.RemoveSessionError, uint64(0))
 	uc := UserUseCase.New(mockLetter)
 	uc.Logout(string(sid))
 }

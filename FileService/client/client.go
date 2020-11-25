@@ -27,7 +27,6 @@ func main() {
 
 	ctx := context.Background()
 
-
 	file, err := os.Open("default.jpeg")
 	if err != nil {
 		fmt.Printf("ERR1", err.Error())
@@ -45,7 +44,7 @@ func main() {
 	//var a []byte
 	//file.Read(a)
 	//avatar, _ := fileManager.GetAvatar(ctx, &fileProto.User{Email: "suko"})
-	_,err = fileManager.SetAvatar(ctx, &fileProto.Avatar{
+	_, err = fileManager.SetAvatar(ctx, &fileProto.Avatar{
 		Email:    "s@mail.ru",
 		FileName: "text.jpeg",
 		Content:  buffer.Bytes(),
