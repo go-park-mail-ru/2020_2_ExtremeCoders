@@ -17,10 +17,10 @@ var SetLetterWatchedError = errors.New("Could not set letter watched!")
 
 type LetterDB interface {
 	SaveMail(Model.Letter) error
-	GetLettersByFolder(string) (error, []Model.Letter)
 	GenerateLID() uint64
 	SetLetterWatched(uint64) (error, Model.Letter)
 	GetLetterByLid(uint64)(error, Model.Letter)
-	GetLetterByEmailAndDir(string, string)(error, []Model.Letter)
-	CreateDir(string, string) error
+
+	GetLettersRecv(uint64)  (error, []Model.Letter)
+	GetLettersSent(uint64)  (error, []Model.Letter)
 }

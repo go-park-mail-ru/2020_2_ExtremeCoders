@@ -15,8 +15,13 @@ type Interface interface {
 	WatchLetter(lid uint64) (error, Model.Letter)
 }
 
-func (uc UseCase)GetLettersByDir(dir string) (error, []Model.Letter){
-	err, letters:=uc.re.GetLettersByFolder(dir)
+func (uc UseCase)GetLettersRecv(dir uint64) (error, []Model.Letter){
+	err, letters:=uc.re.GetLettersRecv(dir)
+	return err, letters
+}
+
+func (uc UseCase)GetLettersSend(dir uint64) (error, []Model.Letter){
+	err, letters:=uc.re.GetLettersSent(dir)
 	return err, letters
 }
 
