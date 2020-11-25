@@ -6,7 +6,7 @@
 
 // protoc --go_out=plugins=grpc:. *.proto
 
-package fileService
+package FileServise
 
 import (
 	context "context"

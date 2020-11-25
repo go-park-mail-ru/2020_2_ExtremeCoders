@@ -1,7 +1,7 @@
 package main
 
 import (
-	fileProto "Mailer/FileService/proto"
+	fileProto "FileService/proto"
 	"bytes"
 	"context"
 	"fmt"

@@ -1,8 +1,8 @@
 package FileSystem
 
 import (
-	repo "Mailer/FileService/File/Repository"
-	fileProto "Mailer/FileService/proto"
+	repo "FileService/File/Repository"
+	fileProto "FileService/proto"
 	"bytes"
 	"fmt"
 	"image"

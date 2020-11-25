@@ -10,7 +10,7 @@ import (
 	"MainApplication/internal/User/UserRepository/UserPostgres"
 	"MainApplication/internal/User/UserUseCase"
 	"MainApplication/internal/pkg/middleware"
-	fileProto "MainApplication/proto"
+	"MainApplication/proto/FileServise"
 	"fmt"
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
@@ -35,7 +35,7 @@ func main() {
 	}
 	defer grcpConn.Close()
 
-	fileManager := fileProto.NewFileServiceClient(grcpConn)
+	fileManager := FileServise.NewFileServiceClient(grcpConn)
 
 	var uDB = UserPostgres.New(DataBase)
 	var uUC = UserUseCase.New(uDB)

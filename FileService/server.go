@@ -1,10 +1,10 @@
 package main
 
 import (
-	"Mailer/FileService/File/Delivery"
-	fsRepo "Mailer/FileService/File/Repository/FileSystem"
-	"Mailer/FileService/File/UseCase"
-	fileProto "Mailer/FileService/proto"
+	"FileService/File/Delivery"
+	fsRepo "FileService/File/Repository/FileSystem"
+	"FileService/File/UseCase"
+	fileProto "FileService/proto"
 	"fmt"
 	"google.golang.org/grpc"
 	"log"

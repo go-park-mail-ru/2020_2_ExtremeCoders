@@ -1,7 +1,7 @@
 package Repository
 
 import (
-	fileProto "Mailer/FileService/proto"
+	fileProto "FileService/proto"
 )
 
 type Interface interface {

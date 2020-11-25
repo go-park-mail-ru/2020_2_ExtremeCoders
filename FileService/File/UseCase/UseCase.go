@@ -1,7 +1,7 @@
 package UseCase
 
-import fileProto "Mailer/FileService/proto"
-import "Mailer/FileService/File/Repository"
+import fileProto "FileService/proto"
+import "FileService/File/Repository"
 
 type Interface interface {
 	SaveFiles(*fileProto.Files) error

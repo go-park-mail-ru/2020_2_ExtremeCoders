@@ -15,7 +15,6 @@ var InvalidSession = errors.New("Invalid session!")
 var CantGetUserOnUpdate = errors.New("Get user on update error!")
 var CantUpdateUser = errors.New("User update error!")
 var RemoveSessionError = errors.New("Could not remove session!")
-
 var GetSessionError = errors.New("Could not get session!")
 
 type UserDB interface {

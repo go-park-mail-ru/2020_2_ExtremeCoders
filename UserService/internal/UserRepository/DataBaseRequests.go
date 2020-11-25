@@ -1,7 +1,7 @@
 package UserRepository
 
 import (
-	"MainApplication/internal/User/UserModel"
+	"UserService/internal/UserModel"
 	"errors"
 )
 
@@ -15,19 +15,33 @@ var InvalidSession = errors.New("Invalid session!")
 var CantGetUserOnUpdate = errors.New("Get user on update error!")
 var CantUpdateUser = errors.New("User update error!")
 var RemoveSessionError = errors.New("Could not remove session!")
-
 var GetSessionError = errors.New("Could not get session!")
 
 type UserDB interface {
-	IsEmailExists(string) error
-	AddSession(string, uint64, *UserModel.User) error
-	AddUser(*UserModel.User) error
-	GenerateSID() ([]rune, error)
-	GenerateUID() (uint64, error)
-	GetUserByEmail(string) (*UserModel.User, error)
-	GetUserByUID(uint64) (*UserModel.User, error)
-	IsOkSession(string) (uint64, error)
-	UpdateProfile(UserModel.User, string) error
-	RemoveSession(string) (error, uint64)
-	GetSessionByUID(uint64) (string, error)
+	IsEmailExists(email string) error
+	AddSession(sid string, uid uint64, user *UserModel.User) error
+	AddUser(user *UserModel.User) error
+	GenerateSID() (sid []rune, err error)
+	GenerateUID() (uid uint64, err error)
+	GetUserByEmail(email string) (user *UserModel.User, err error)
+	GetUserByUID(uid uint64) (user *UserModel.User, err error)
+	IsOkSession(sid string) (uid uint64, err error)
+	UpdateProfile(newUser UserModel.User, email string) error
+	RemoveSession(sid string) (err error, uid uint64)
+	GetSessionByUID(uid uint64) (sid string, err error)
 }
+
+
+//type UserDB interface {
+//	IsEmailExists(*proto.Email) error
+//	AddSession(*proto.AddSessionMsg) error
+//	AddUser(*proto.User) (*proto.Nothing, error)
+//	GenerateSID(*proto.Nothing) (*proto.Sid, error)
+//	GenerateUID(*proto.Nothing) (*proto.Sid, error)
+//	GetUserByEmail(*proto.Email) (*proto.User, error)
+//	GetUserByUID(*proto.Uid) (*proto.User, error)
+//	IsOkSession(*proto.Sid) (*proto.Uid, error)
+//	UpdateProfile(*proto.UpdateProfileMsg) (*proto.Nothing, error)
+//	RemoveSession(*proto.Sid) (*proto.Uid, error)
+//	GetSessionByUID(*proto.Uid) (*proto.Sid, error)
+//}

@@ -1,9 +1,9 @@
 package UserPostgres
 
 import (
-	"MainApplication/config"
-	"MainApplication/internal/User/UserModel"
-	"MainApplication/internal/User/UserRepository"
+	"UserService/config"
+	"UserService/internal/UserModel"
+	"UserService/internal/UserRepository"
 	crypto "crypto/rand"
 	"fmt"
 	"github.com/go-pg/pg/v9"
@@ -47,7 +47,7 @@ func (dbInfo dataBase) AddSession(sid string, uid uint64, user *UserModel.User) 
 	return nil
 }
 
-func (dbInfo dataBase) GenerateSID() ([]rune, error) {
+func (dbInfo dataBase) GenerateSID() (sessionId []rune, err error) {
 	var sid string
 	for {
 		for i := 0; i < config.SizeSID; i++ {
@@ -65,7 +65,7 @@ func (dbInfo dataBase) GenerateSID() ([]rune, error) {
 	return []rune(sid), nil
 }
 
-func (dbInfo dataBase) GenerateUID() (uint64, error) {
+func (dbInfo dataBase) GenerateUID() (uid uint64, err error) {
 	for {
 		uid, _ := crypto.Int(crypto.Reader, big.NewInt(4294967295))
 		user := UserModel.User{Id: uid.Uint64()}
@@ -76,27 +76,27 @@ func (dbInfo dataBase) GenerateUID() (uint64, error) {
 	}
 }
 
-func (dbInfo dataBase) GetUserByEmail(email string) (*UserModel.User, error) {
-	user := &UserModel.User{Email: email}
-	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
+func (dbInfo dataBase) GetUserByEmail(email string) (user *UserModel.User, err error) {
+	user = &UserModel.User{Email: email}
+	err = dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err != nil {
 		return user, UserRepository.CantGetUserByEmail
 	}
 	return user, nil
 }
 
-func (dbInfo dataBase) GetUserByUID(uid uint64) (*UserModel.User, error) {
-	user := &UserModel.User{}
-	err := dbInfo.DB.Model(user).Where("id=?", uid).Select()
+func (dbInfo dataBase) GetUserByUID(uid uint64) (user *UserModel.User, err error) {
+	user = &UserModel.User{}
+	err = dbInfo.DB.Model(user).Where("id=?", uid).Select()
 	if err != nil {
 		return user, UserRepository.CantGetUserByUid
 	}
 	return user, nil
 }
 
-func (dbInfo dataBase) IsOkSession(sid string) (uint64, error) {
+func (dbInfo dataBase) IsOkSession(sid string) (uid uint64, err error) {
 	session := &UserModel.Session{Id: sid}
-	err := dbInfo.DB.Model(session).Where("id=?", sid).Select()
+	err = dbInfo.DB.Model(session).Where("id=?", sid).Select()
 	if err != nil {
 		return 0, UserRepository.InvalidSession
 	}
@@ -120,9 +120,9 @@ func (dbInfo dataBase) UpdateProfile(newUser UserModel.User, email string) error
 	return nil
 }
 
-func (dbInfo dataBase) RemoveSession(sid string) (error, uint64) {
+func (dbInfo dataBase) RemoveSession(sid string) (err error, uid uint64) {
 	session := &UserModel.Session{Id: sid}
-	err := dbInfo.DB.Model(session).Where("id=?", sid).Select()
+	err = dbInfo.DB.Model(session).Where("id=?", sid).Select()
 	_, err = dbInfo.DB.Model(session).Where("id=?", sid).Delete()
 	if err != nil {
 		return UserRepository.RemoveSessionError, 0
@@ -130,9 +130,9 @@ func (dbInfo dataBase) RemoveSession(sid string) (error, uint64) {
 	return nil, uint64(session.UserId)
 }
 
-func (dbInfo dataBase) GetSessionByUID(uid uint64) (string, error) {
+func (dbInfo dataBase) GetSessionByUID(uid uint64) (sid string, err error) {
 	session := &UserModel.Session{UserId: int64(uid)}
-	err := dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
+	err = dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
 	if err != nil {
 		return "", UserRepository.GetSessionError
 	}
