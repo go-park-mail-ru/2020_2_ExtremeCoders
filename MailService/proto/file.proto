@@ -18,7 +18,7 @@ message Letter{
 }
 
 message DirName{
-  string dirName=1;
+  uint64 dirName=1;
 }
 
 message Response{
@@ -37,7 +37,8 @@ message LetterResponse {
 }
 
 service LetterService{
-  rpc GetLettersByDir(DirName) returns (LetterListResponse);
+  rpc GetLettersByDirRecv(DirName) returns (LetterListResponse);
+  rpc GetLettersByDirSend(DirName) returns (LetterListResponse);
   rpc SaveLetter(Letter) returns (Response);
   rpc WatchedLetter(Lid) returns (LetterResponse);
 }
