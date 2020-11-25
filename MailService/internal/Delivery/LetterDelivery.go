@@ -7,7 +7,8 @@ import (
 )
 
 type Interface interface {
-	GetLettersByDir(dir *pb.DirName) *pb.LetterListResponse
+	GetLettersByDirRecv(dir *pb.DirName) pb.LetterListResponse
+	GetLettersByDirSend(dir *pb.DirName) pb.LetterListResponse
 	SaveLetter(letter *pb.Letter) *pb.Response
 	WatchedLetter(Lid *pb.Lid)  *pb.Response
 }
@@ -16,19 +17,26 @@ type Delivery struct{
 	uc UseCase.UseCase
 }
 
-func (ld Delivery)GetLettersByDir(dir *pb.DirName) *pb.LetterListResponse{
-	err, Letters:=ld.uc.GetLettersByDir(dir.DirName)
-	LetterResp:=pb.LetterListResponse{}
+func (ld Delivery)GetLettersByDirRecv(dir *pb.DirName) *pb.LetterListResponse{
+	err, letters:=ld.uc.GetLettersRecv(dir.DirName)
 	resp:=pb.Response{Ok: false, Description: err.Error()}
 	if err==nil{
 		resp.Ok=true
 	}
-	for _, letter:=range Letters{
-		pbLetter:=convert.ModelToProto(letter)
-		LetterResp.Letter=append(LetterResp.Letter, &pbLetter)
+	lettersListPb:=convert.ModelToProtoList(&letters)
+	letterPb:=pb.LetterListResponse{Result: &resp, Letter: lettersListPb}
+	return &letterPb
+}
+
+func (ld Delivery)GetLettersByDirSend(dir *pb.DirName) *pb.LetterListResponse{
+	err, letters:=ld.uc.GetLettersSend(dir.DirName)
+	resp:=pb.Response{Ok: false, Description: err.Error()}
+	if err==nil{
+		resp.Ok=true
 	}
-	LetterResp.Result=&resp
-	return &LetterResp
+	lettersListPb:=convert.ModelToProtoList(&letters)
+	letterPb:=pb.LetterListResponse{Result: &resp, Letter: lettersListPb}
+	return &letterPb
 }
 
 func (ld Delivery)SaveLetter(letter *pb.Letter) *pb.Response{
