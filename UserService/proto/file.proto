@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+// protoc --go_out=plugins=grpc:. *.proto
+package userService;
+
+message Session{
+  uint64 session = 1;
+}
+
+message User{
+  string email = 1;
+  string name = 2;
+  string surname = 3;
+  string password = 5;
+  uint64 uid = 6;
+}
+
+message Email{
+  string email = 1;
+}
+
+message Nothing {
+  bool dummy = 1;
+}
+
+message Sid{
+  string sid = 1;
+}
+
+message Uid{
+  uint64 uid = 1;
+}
+
+message AddSessionMsg{
+  string sid = 1;
+  User user = 2;
+}
+
+message UpdateProfileMsg{
+  User newUser = 1;
+  string email = 2;
+}
+
+service UserService{
+  rpc IsEmailExists(Email) returns(Nothing);
+  rpc AddSession(AddSessionMsg) returns(Nothing);
+  rpc AddUser(User) returns(Nothing);
+  rpc GenerateSID(Nothing) returns(Sid);
+  rpc GenerateUID(Nothing) returns(Sid);
+  rpc GetUserByEmail(Email) returns (User);
+  rpc GetUserByUID(Uid) returns (User);
+  rpc IsOkSession(Sid) returns (Uid);
+  rpc UpdateProfile(UpdateProfileMsg) returns(Nothing);
+  rpc RemoveSession(Sid) returns (Uid);
+  rpc GetSessionByUID(Uid) returns (Sid);
+}
+
+
+//    IsEmailExists(string) error
+//    AddSession(string, uint64, *UserModel.User) error
+//    AddUser(*UserModel.User) error
+//    GenerateSID() ([]rune, error)
+//    GenerateUID() (uint64, error)
+//    GetUserByEmail(string) (*UserModel.User, error)
+//    GetUserByUID(uint64) (*UserModel.User, error)
+//    IsOkSession(string) (uint64, error)
+//    UpdateProfile(UserModel.User, string) error
+//    RemoveSession(string) (error, uint64)
+//    GetSessionByUID(uint64) (string, error)
+
