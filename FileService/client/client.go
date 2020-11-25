@@ -40,10 +40,7 @@ func main() {
 	if err := jpeg.Encode(buffer, img, nil); err != nil {
 		fmt.Printf("err", err.Error())
 	}
-	//
-	//var a []byte
-	//file.Read(a)
-	//avatar, _ := fileManager.GetAvatar(ctx, &fileProto.User{Email: "suko"})
+
 	_, err = fileManager.SetAvatar(ctx, &fileProto.Avatar{
 		Email:    "s@mail.ru",
 		FileName: "text.jpeg",

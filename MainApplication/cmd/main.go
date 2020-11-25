@@ -7,10 +7,11 @@ import (
 	"MainApplication/internal/Letter/LetterUseCase"
 	"MainApplication/internal/Postgres"
 	"MainApplication/internal/User/UserDelivery"
-	"MainApplication/internal/User/UserRepository/UserPostgres"
+	"MainApplication/internal/User/UserRepository/UserMicroservice"
 	"MainApplication/internal/User/UserUseCase"
 	"MainApplication/internal/pkg/middleware"
-	"MainApplication/proto/FileServise"
+	protoFs "MainApplication/proto/FileServise"
+	protoUs "MainApplication/proto/UserServise"
 	"fmt"
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
@@ -26,18 +27,29 @@ func main() {
 		return
 	}
 
-	grcpConn, err := grpc.Dial(
+	grcpFileService, err := grpc.Dial(
 		"127.0.0.1:8081",
 		grpc.WithInsecure(),
 	)
 	if err != nil {
-		log.Fatalf("cant connect to grpc")
+		log.Fatalf("cant connect to grpc file service")
 	}
-	defer grcpConn.Close()
+	defer grcpFileService.Close()
+	fileManager := protoFs.NewFileServiceClient(grcpFileService)
 
-	fileManager := FileServise.NewFileServiceClient(grcpConn)
 
-	var uDB = UserPostgres.New(DataBase)
+	grcpUserService, err := grpc.Dial(
+		"127.0.0.1:8082",
+		grpc.WithInsecure(),
+	)
+	if err != nil {
+		log.Fatalf("cant connect to grpc file service")
+	}
+	defer grcpUserService.Close()
+	userManager := protoUs.NewUserServiceClient(grcpUserService)
+
+
+	var uDB = UserMicroservice.New(userManager)
 	var uUC = UserUseCase.New(uDB)
 	var uDE = UserDelivery.New(uUC, fileManager)
 

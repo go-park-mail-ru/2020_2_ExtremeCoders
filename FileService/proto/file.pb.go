@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.25.0
 // 	protoc        (unknown)
-// source: file.proto
+// source: user.proto
 
 // protoc --go_out=plugins=grpc:. *.proto
 
@@ -709,5 +709,5 @@ var _FileService_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "file.proto",
+	Metadata: "user.proto",
 }
