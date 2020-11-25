@@ -1,8 +1,9 @@
 package UserUseCase
 
 import (
-	"CleanArch/MainApplication/internal/User/UserModel"
-	"CleanArch/MainApplication/internal/User/UserRepository"
+	"MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserRepository"
+
 	err "errors"
 	"golang.org/x/crypto/bcrypt"
 )

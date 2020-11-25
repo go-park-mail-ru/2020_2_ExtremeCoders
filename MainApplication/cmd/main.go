@@ -1,17 +1,20 @@
 package main
 
 import (
-	"CleanArch/MainApplication/config"
-	"CleanArch/MainApplication/internal/Letter/LetterDelivery"
-	"CleanArch/MainApplication/internal/Letter/LetterRepository/LetterPostgres"
-	"CleanArch/MainApplication/internal/Letter/LetterUseCase"
-	"CleanArch/MainApplication/internal/Postgres"
-	"CleanArch/MainApplication/internal/User/UserDelivery"
-	"CleanArch/MainApplication/internal/User/UserRepository/UserPostgres"
-	"CleanArch/MainApplication/internal/User/UserUseCase"
-	"CleanArch/MainApplication/internal/pkg/middleware"
+	"MainApplication/config"
+	"MainApplication/internal/Letter/LetterDelivery"
+	"MainApplication/internal/Letter/LetterRepository/LetterPostgres"
+	"MainApplication/internal/Letter/LetterUseCase"
+	"MainApplication/internal/Postgres"
+	"MainApplication/internal/User/UserDelivery"
+	"MainApplication/internal/User/UserRepository/UserPostgres"
+	"MainApplication/internal/User/UserUseCase"
+	"MainApplication/internal/pkg/middleware"
+	fileProto "MainApplication/proto"
 	"fmt"
 	"github.com/rs/cors"
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 	"net/http"
 )
 
@@ -22,14 +25,25 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
+	grcpConn, err := grpc.Dial(
+		"127.0.0.1:8081",
+		grpc.WithInsecure(),
+	)
+	if err != nil {
+		log.Fatalf("cant connect to grpc")
+	}
+	defer grcpConn.Close()
+
+	fileManager := fileProto.NewFileServiceClient(grcpConn)
+
 	var uDB = UserPostgres.New(DataBase)
 	var uUC = UserUseCase.New(uDB)
-	var uDE = UserDelivery.New(uUC)
+	var uDE = UserDelivery.New(uUC, fileManager)
 
 	var lDB = LetterPostgres.New(DataBase)
 	var lUC = LetterUseCase.New(lDB)
 	var lDE = LetterDelivery.New(lUC)
-
 
 	mux := http.NewServeMux()
 
@@ -56,7 +70,7 @@ func main() {
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 	}
-	fmt.Println("starting server at ", config.Port)
+	fmt.Println("starting File at ", config.Port)
 	err = server.ListenAndServe()
 	fmt.Println(err.Error())
 }

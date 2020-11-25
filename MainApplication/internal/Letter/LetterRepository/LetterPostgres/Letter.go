@@ -1,9 +1,9 @@
 package LetterPostgres
 
 import (
-	"CleanArch/MainApplication/internal/Letter/LetterModel"
-	"CleanArch/MainApplication/internal/Letter/LetterRepository"
-	"CleanArch/MainApplication/internal/User/UserModel"
+	"MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterRepository"
+	"MainApplication/internal/User/UserModel"
 	crypto "crypto/rand"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
 	"math/big"

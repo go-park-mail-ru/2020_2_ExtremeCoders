@@ -1,13 +1,14 @@
 package test
 
 import (
-	"CleanArch/MainApplication/internal/Letter/LetterModel"
-	"CleanArch/MainApplication/internal/Letter/LetterRepository"
-	"CleanArch/MainApplication/internal/Letter/LetterRepository/LetterPostgres"
-	"CleanArch/MainApplication/internal/User/UserModel"
-	"CleanArch/MainApplication/internal/User/UserRepository"
-	"CleanArch/MainApplication/internal/User/UserRepository/UserPostgres"
-	"github.com/stretchr/testify/assert"
+
+	"MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterRepository"
+	"MainApplication/internal/Letter/LetterRepository/LetterPostgres"
+	"MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserRepository"
+	"MainApplication/internal/User/UserRepository/UserPostgres"
+"github.com/stretchr/testify/assert"
 	"gitlab.com/slax0rr/go-pg-wrapper/mocks"
 	"testing"
 
@@ -16,12 +17,13 @@ import (
 	ormmocks "gitlab.com/slax0rr/go-pg-wrapper/mocks/orm"
 )
 
+
 var let= LetterModel.Letter{
 	Id: 123,
 	Sender: "dellvin.black@gmail.com",
 	Receiver: "dellvin.black@gmail.com",
-	Theme: "Meeting",
-	Text: "Tomorrow at 6 am",
+	Theme:    "Meeting",
+	Text:     "Tomorrow at 6 am",
 	DateTime: 78654678,
 }
 
@@ -47,7 +49,7 @@ var usertest= UserModel.User{
 var session= UserModel.Session{
 	Id: "alsuiehfoqwuefhoq8723yroq7eroq73r",
 	UserId: 321,
-	User: nil,
+	User:   nil,
 }
 
 func mockLetterDB() (*mocks.DB, LetterRepository.LetterDB) {
@@ -62,7 +64,7 @@ func mockUserDB() (*mocks.DB, UserRepository.UserDB) {
 	return db, r
 }
 
-func mockLetter(db *mocks.DB) *ormmocks.Query  {
+func mockLetter(db *mocks.DB) *ormmocks.Query {
 	query := new(ormmocks.Query)
 	mockCall := db.On("Model", mock.AnythingOfType("*LetterModel.Letter")).Return(query)
 	mockCall.RunFn = func(args mock.Arguments) {
@@ -83,8 +85,7 @@ func mockLetters(db *mocks.DB) *ormmocks.Query  {
 	return query
 }
 
-
-func mockSession(db *mocks.DB) *ormmocks.Query  {
+func mockSession(db *mocks.DB) *ormmocks.Query {
 	query := new(ormmocks.Query)
 	mockCall := db.On("Model", mock.AnythingOfType("*UserModel.Session")).Return(query)
 	mockCall.RunFn = func(args mock.Arguments) {
@@ -94,7 +95,7 @@ func mockSession(db *mocks.DB) *ormmocks.Query  {
 	return query
 }
 
-func mockUser(db *mocks.DB) *ormmocks.Query  {
+func mockUser(db *mocks.DB) *ormmocks.Query {
 	query := new(ormmocks.Query)
 	mockCall := db.On("Model", mock.AnythingOfType("*UserModel.User")).Return(query)
 	mockCall.RunFn = func(args mock.Arguments) {
@@ -150,7 +151,7 @@ func TestIsEmailExists(t *testing.T) {
 func TestAddUser(t *testing.T) {
 	db, r := mockUserDB()
 	query := mockUser(db)
-	mockRes:= MockResult{}
+	mockRes := MockResult{}
 	query.On("Insert").Return(mockRes, nil)
 	err := r.AddUser(&usertest)
 	assert.Nil(t, err)
@@ -183,7 +184,7 @@ func TestUpdateProfile(t *testing.T) {
 	query.On("Where", "email=?", usertest.Email).Return(query)
 	query.On("Select").Return(nil)
 
-	query.On("Column","name", "surname", "img").Return(query)
+	query.On("Column", "name", "surname", "img").Return(query)
 	query.On("Where", "email=?", usertest.Email)
 	query.On("Update").Return(mockRes, nil)
 	err := r.UpdateProfile(usertest, usertest.Email)
@@ -198,7 +199,7 @@ func TestRemoveSession(t *testing.T) {
 	query.On("Select").Return(nil)
 	query.On("Where", "id=?", session.Id)
 	query.On("Delete").Return(mockRes, nil)
-	err,res := r.RemoveSession(session.Id)
+	err, res := r.RemoveSession(session.Id)
 	assert.Nil(t, err)
 	assert.Equal(t, session.UserId, int64(res))
 }
@@ -228,7 +229,6 @@ func TestIsUserExistRep(t *testing.T) {
 func TestGetReceivedLettersRep(t *testing.T) {
 	db, r := mockLetterDB()
 	query := mockLetters(db)
-
 	lets =append(lets, let)
 	query.On("Where", "receiver=?", usertest.Email).Return(query)
 	query.On("Select").Return(nil)
@@ -240,7 +240,6 @@ func TestGetReceivedLettersRep(t *testing.T) {
 func TestGetSendedLettersRep(t *testing.T) {
 	db, r := mockLetterDB()
 	query := mockLetters(db)
-
 	lets =append(lets, let)
 	query.On("Where", "sender=?", usertest.Email).Return(query)
 	query.On("Select").Return(nil)
@@ -248,6 +247,7 @@ func TestGetSendedLettersRep(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, lets, letters)
 }
+
 type MockResult struct {
 }
 

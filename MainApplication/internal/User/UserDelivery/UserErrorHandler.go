@@ -1,9 +1,9 @@
 package UserDelivery
 
 import (
-	"CleanArch/MainApplication/internal/User/UserRepository"
-	"CleanArch/MainApplication/internal/User/UserUseCase"
-	"CleanArch/MainApplication/internal/errors"
+	"MainApplication/internal/User/UserRepository"
+	"MainApplication/internal/User/UserUseCase"
+	"MainApplication/internal/errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -17,13 +17,13 @@ func SignUpError(err error, cookie *http.Cookie) []byte {
 	}()
 	switch err {
 	case nil:
-		returned= errors.GetOkAns(cookie.Value)
+		returned = errors.GetOkAns(cookie.Value)
 	case UserRepository.EmailAlreadyExists:
-		returned= errors.GetErrorLoginExistAns()
+		returned = errors.GetErrorLoginExistAns()
 	case UserRepository.CantAddSession:
-		returned= errors.GetAddSessionError()
+		returned = errors.GetAddSessionError()
 	case UserRepository.CantAddUser:
-		returned= errors.AddUserError()
+		returned = errors.AddUserError()
 	}
 	return returned
 }
@@ -37,17 +37,17 @@ func SignInError(err error, cookie *http.Cookie) []byte {
 	}()
 	switch err {
 	case nil:
-		returned= errors.GetOkAns(cookie.Value)
+		returned = errors.GetOkAns(cookie.Value)
 	case UserRepository.CantAddSession:
-		returned= errors.GetAddSessionError()
+		returned = errors.GetAddSessionError()
 	case UserRepository.CantGetUserByEmail:
-		returned= errors.GetErrorNoUserAns()
+		returned = errors.GetErrorNoUserAns()
 	case UserRepository.GetSessionError:
-		returned= errors.GetErrorNoCockyAns()
+		returned = errors.GetErrorNoCockyAns()
 	case UserUseCase.WrongPasswordError:
-		returned= errors.GetErrorBadPasswordAns()
+		returned = errors.GetErrorBadPasswordAns()
 	case UserRepository.RemoveSessionError:
-		returned= errors.RemoveSessionError()
+		returned = errors.RemoveSessionError()
 	}
 	return returned
 }
@@ -61,9 +61,9 @@ func CookieError(code uint16) []byte {
 	}()
 	switch code {
 	case 401:
-		returned= errors.GetErrorNoCockyAns()
+		returned = errors.GetErrorNoCockyAns()
 	case 402:
-		returned= errors.GetErrorWrongCookieAns()
+		returned = errors.GetErrorWrongCookieAns()
 	}
 	return returned
 }
@@ -77,11 +77,11 @@ func LogoutError(err error) []byte {
 	}()
 	switch err {
 	case nil:
-		returned= errors.GetOkAns("")
+		returned = errors.GetOkAns("")
 	case UserRepository.InvalidSession:
-		returned= errors.GetErrorNoCockyAns()
+		returned = errors.GetErrorNoCockyAns()
 	case UserRepository.RemoveSessionError:
-		returned= errors.RemoveSessionError()
+		returned = errors.RemoveSessionError()
 	}
 	return returned
 }
@@ -95,11 +95,11 @@ func ProfileError(err error, cookie *http.Cookie) []byte {
 	}()
 	switch err {
 	case nil:
-		returned= errors.GetOkAns(cookie.Value)
+		returned = errors.GetOkAns(cookie.Value)
 	case UserRepository.CantUpdateUser:
-		returned= errors.UpdateProfileError()
+		returned = errors.UpdateProfileError()
 	case UserRepository.CantGetUserOnUpdate:
-		returned= errors.GetUserOnUpdateError()
+		returned = errors.GetUserOnUpdateError()
 	}
 	return returned
 }

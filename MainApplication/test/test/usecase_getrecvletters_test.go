@@ -1,9 +1,9 @@
 package test
 
 import (
-	"CleanArch/MainApplication/internal/Letter/LetterRepository"
-	"CleanArch/MainApplication/internal/Letter/LetterUseCase"
-	mock "CleanArch/MainApplication/test/mock_LetterRepository"
+	"MainApplication/internal/Letter/LetterRepository"
+	"MainApplication/internal/Letter/LetterUseCase"
+	mock "MainApplication/test/mock_LetterRepository"
 	"github.com/golang/mock/gomock"
 	"testing"
 )

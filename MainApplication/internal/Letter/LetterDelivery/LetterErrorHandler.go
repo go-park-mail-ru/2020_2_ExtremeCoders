@@ -1,10 +1,10 @@
 package LetterDelivery
 
 import (
-	"CleanArch/MainApplication/internal/Letter/LetterModel"
-	"CleanArch/MainApplication/internal/Letter/LetterRepository"
-	"CleanArch/MainApplication/internal/errors"
-	"CleanArch/MainApplication/internal/pkg/context"
+	"MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterRepository"
+	"MainApplication/internal/errors"
+	"MainApplication/internal/pkg/context"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,13 +17,13 @@ func SendLetterError(err error, letter LetterModel.Letter) []byte {
 	}()
 	switch err {
 	case nil:
-		returned= errors.GetSendOkAns(letter)
+		returned = errors.GetSendOkAns(letter)
 	case LetterRepository.ReceiverNotFound:
-		returned= errors.GetErrorNoRecieverAns()
+		returned = errors.GetErrorNoRecieverAns()
 	case LetterRepository.DbError:
-		returned= errors.GetErrorUnexpectedAns()
+		returned = errors.GetErrorUnexpectedAns()
 	case LetterRepository.SaveLetterError:
-		returned= errors.GetErrorSaveErrorAns()
+		returned = errors.GetErrorSaveErrorAns()
 	}
 	return returned
 }
@@ -37,13 +37,13 @@ func GetLettersError(err error, letters []LetterModel.Letter) []byte {
 	}()
 	switch err {
 	case nil:
-		returned= errors.GetGetLettersOkAns(letters)
+		returned = errors.GetGetLettersOkAns(letters)
 	case LetterRepository.ReceivedLetterError:
-		returned= errors.GetErrorReceivedLetterAns()
+		returned = errors.GetErrorReceivedLetterAns()
 	case LetterRepository.DbError:
-		returned= errors.GetErrorUnexpectedAns()
+		returned = errors.GetErrorUnexpectedAns()
 	case context.UserFromContextError:
-		returned= errors.GetErrorUnexpectedAns()
+		returned = errors.GetErrorUnexpectedAns()
 	}
 	return returned
 }

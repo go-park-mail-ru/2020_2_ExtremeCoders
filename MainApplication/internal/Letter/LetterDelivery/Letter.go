@@ -1,10 +1,10 @@
 package LetterDelivery
 
 import (
-	"CleanArch/MainApplication/internal/Letter/LetterModel"
-	"CleanArch/MainApplication/internal/Letter/LetterUseCase"
-	"CleanArch/MainApplication/internal/errors"
-	"CleanArch/MainApplication/internal/pkg/context"
+	"MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterUseCase"
+	"MainApplication/internal/errors"
+	"MainApplication/internal/pkg/context"
 	"net/http"
 	"time"
 )

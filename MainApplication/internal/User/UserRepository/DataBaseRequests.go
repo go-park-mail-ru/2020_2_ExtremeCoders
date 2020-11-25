@@ -1,7 +1,7 @@
 package UserRepository
 
 import (
-	"CleanArch/MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserModel"
 	"errors"
 )
 

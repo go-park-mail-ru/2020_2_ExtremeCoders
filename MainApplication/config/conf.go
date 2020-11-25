@@ -3,9 +3,9 @@ package config
 import "time"
 
 const (
-	DbUser       = "postgres"
+	DbUser = "postgres"
 	//DbPassword   = "123456yhn"
-	DbPassword   = "1538"
+	DbPassword   = "123456yhn"
 	DbDB         = "maila"
 	Port         = ":8080"
 	ReadTimeout  = 10 * time.Second
@@ -17,10 +17,9 @@ var AllowedHeadersCORS = []string{"Version", "Authorization", "Content-Type", "c
 var AllowedMethodsCORS = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 
 const (
-	SizeSID = 32
+	SizeSID  = 32
 	CsrfSize = 32
 )
 
 var SidRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 var CsrfRunes = "1234567890_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
-

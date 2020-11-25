@@ -1,7 +1,7 @@
 package LetterRepository
 
 import (
-	"CleanArch/MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterModel"
 	"errors"
 )
 

@@ -1,8 +1,9 @@
 package context
 
 import (
-	"CleanArch/MainApplication/config"
-	"CleanArch/MainApplication/internal/User/UserModel"
+	"MainApplication/config"
+	"MainApplication/internal/User/UserModel"
+
 	"context"
 	crypto "crypto/rand"
 	"errors"
@@ -34,11 +35,11 @@ func SaveUserToContext(ctx context.Context, user UserModel.User) context.Context
 	return context.WithValue(ctx, userKey{}, user)
 }
 
-func GenerateCSRF() string{
+func GenerateCSRF() string {
 	var token string
 	for i:=0;i< config.CsrfSize;i++ {
 		pos, _ := crypto.Int(crypto.Reader, big.NewInt(int64(len(config.SidRunes))))
-		token+=string(config.SidRunes[pos.Int64()])
+		token += string(config.SidRunes[pos.Int64()])
 	}
 	return token
 }
@@ -47,7 +48,7 @@ func GetStrFormValueSafety(r *http.Request, field string) string {
 	return r.FormValue(field)
 }
 
-func CreateCsrfCookie() *http.Cookie{
+func CreateCsrfCookie() *http.Cookie {
 	cookie := &http.Cookie{
 		Name:    CsrfCookieName,
 		Value:   GenerateCSRF(),

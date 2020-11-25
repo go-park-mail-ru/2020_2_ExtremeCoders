@@ -1,22 +1,21 @@
 package test
 
 import (
-	"CleanArch/MainApplication/internal/Letter/LetterDelivery"
-	"CleanArch/MainApplication/internal/Letter/LetterModel"
-	"CleanArch/MainApplication/internal/Letter/LetterRepository"
-	"CleanArch/MainApplication/internal/User/UserDelivery"
-	"CleanArch/MainApplication/internal/User/UserModel"
-	"CleanArch/MainApplication/internal/User/UserRepository"
-	"CleanArch/MainApplication/internal/User/UserRepository/UserPostgres"
-	"CleanArch/MainApplication/internal/User/UserUseCase"
-	"CleanArch/MainApplication/internal/errors"
-	"CleanArch/MainApplication/internal/pkg/context"
-	"golang.org/x/crypto/bcrypt"
+	"MainApplication/internal/Letter/LetterDelivery"
+	"MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterRepository"
+	"MainApplication/internal/User/UserDelivery"
+	"MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserRepository"
+	"MainApplication/internal/User/UserRepository/UserPostgres"
+	"MainApplication/internal/User/UserUseCase"
+	"MainApplication/internal/errors"
+	"MainApplication/internal/pkg/context"
+"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"testing"
 )
-
 
 func TestPasswordBcrypt(t *testing.T) {
 	raw:="1538"

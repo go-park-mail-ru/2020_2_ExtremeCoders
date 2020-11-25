@@ -5,8 +5,8 @@
 package mock_UserUseCase
 
 import (
-	UserModel "CleanArch/MainApplication/internal/User/UserModel"
-	UserRepository "CleanArch/MainApplication/internal/User/UserRepository"
+	UserModel "MainApplication/internal/User/UserModel"
+	UserRepository "MainApplication/internal/User/UserRepository"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

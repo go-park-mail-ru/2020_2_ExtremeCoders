@@ -1,16 +1,17 @@
 package UserDelivery
 
 import (
-	"CleanArch/MainApplication/internal/User/UserModel"
-	"CleanArch/MainApplication/internal/User/UserUseCase"
-	"CleanArch/MainApplication/internal/errors"
-	"CleanArch/MainApplication/internal/pkg/context"
+	fileProto "MainApplication/proto"
+	"MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserUseCase"
+	"MainApplication/internal/errors"
+	"MainApplication/internal/pkg/context"
+
 	"bytes"
-	"image"
-	"image/jpeg"
+	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 )
@@ -27,11 +28,12 @@ type Interface interface {
 }
 
 type delivery struct {
-	Uc UserUseCase.UserUseCase
+	Uc          UserUseCase.UserUseCase
+	FileManager fileProto.FileServiceClient
 }
 
-func New(usecase UserUseCase.UserUseCase) Interface {
-	return delivery{Uc: usecase}
+func New(usecase UserUseCase.UserUseCase, fileManager fileProto.FileServiceClient) Interface {
+	return delivery{Uc: usecase, FileManager: fileManager}
 }
 
 func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
@@ -57,9 +59,9 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	var response []byte
 	if err == nil {
 		cookie := &http.Cookie{
-			Name:  "session_id",
-			Value: sid,
-			Expires: time.Now().Add(15*10000 * time.Hour),
+			Name:    "session_id",
+			Value:   sid,
+			Expires: time.Now().Add(15 * 10000 * time.Hour),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -86,7 +88,7 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 		cookie := &http.Cookie{
 			Name:    "session_id",
 			Value:   sid,
-			Expires: time.Now().Add(15*10000 * time.Hour),
+			Expires: time.Now().Add(15 * 10000 * time.Hour),
 		}
 		cookie.Path = "/"
 		http.SetCookie(w, cookie)
@@ -128,7 +130,7 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if r.Method == http.MethodPut {
 		var up UserModel.User
-		up.Email=user.Email
+		up.Email = user.Email
 		up.Name = context.GetStrFormValueSafety(r, "profile_firstName")
 		up.Surname = context.GetStrFormValueSafety(r, "profile_lastName")
 		de.LoadFile(&up, r)
@@ -167,14 +169,19 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	if file == nil {
 		return
 	}
-	(*user).Img = fileHeader.Filename
-	path := "../web/static/" + (*user).Email + "/" + fileHeader.Filename
-	f, err := os.Create(path)
 	if err != nil {
 		return
 	}
-	defer f.Close()
-	io.Copy(f, file)
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, file); err != nil {
+		log.Println("EEERR", err)
+	}
+	avatar := fileProto.Avatar{
+		Email:    (*user).Email,
+		FileName: fileHeader.Filename,
+		Content:  buf.Bytes(),
+	}
+	de.FileManager.SetAvatar(r.Context(), &avatar)
 }
 
 func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
@@ -188,29 +195,13 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 			CookieError(Err)
 			return
 		}
-		if (*user).Img == "" {
-			(*user).Img = "../web/static/default.jpeg"
-		}
-
-		file, err := os.Open((*user).Img)
+		avatar, err := de.FileManager.GetAvatar(r.Context(), &fileProto.User{Email: user.Email})
 		if err != nil {
-			w.Write(errors.GetErrorUnexpectedAns())
-			return
+			fmt.Println("GET AVATAR ERROR ", err)
 		}
-		img, _, err := image.Decode(file)
-		if err != nil {
-			w.Write(errors.GetErrorUnexpectedAns())
-			return
-		}
-
-		buffer := new(bytes.Buffer)
-		if err := jpeg.Encode(buffer, img, nil); err != nil {
-			w.Write(errors.GetErrorUnexpectedAns())
-		}
-
 		w.Header().Set("Content-Type", "image/jpeg")
-		w.Header().Set("Content-Length", strconv.Itoa(len(buffer.Bytes())))
-		if _, err := w.Write(buffer.Bytes()); err != nil {
+		w.Header().Set("Content-Length", strconv.Itoa(len(avatar.Content)))
+		if _, err := w.Write(avatar.Content); err != nil {
 			w.Write(errors.GetErrorUnexpectedAns())
 			return
 		}
