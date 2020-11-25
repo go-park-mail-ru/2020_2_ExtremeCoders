@@ -77,5 +77,5 @@ func (dbInfo dataBase)GetLetterByEmailAndDir(receiver string, dir string)(error,
 }
 
 func (dbInfo dataBase)CreateDir(string, string) error{
-
+	return nil
 }
