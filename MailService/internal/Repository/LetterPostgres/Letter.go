@@ -4,6 +4,7 @@ import (
 	"MailService/internal/Model"
 	"MailService/internal/Repository"
 	crypto "crypto/rand"
+	"github.com/go-pg/pg/v9"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
 	"math/big"
 )
@@ -64,4 +65,17 @@ func (dbInfo dataBase)GetLetterByLid(lid uint64)(error, Model.Letter){
 		return Repository.SentLetterError, letter
 	}
 	return nil, letter
+}
+
+func (dbInfo dataBase)GetLetterByEmailAndDir(receiver string, dir string)(error, []Model.Letter){
+	var letter []Model.Letter
+	err:=dbInfo.DB.Model(&letter).Where("receiver=? and directory=?", receiver, dir).Select()
+	if err!=pg.ErrNoRows{
+		return Repository.ReceiverNotFound, letter
+	}
+	return nil, letter
+}
+
+func (dbInfo dataBase)CreateDir(string, string) error{
+
 }

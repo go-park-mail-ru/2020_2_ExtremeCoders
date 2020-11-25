@@ -21,4 +21,6 @@ type LetterDB interface {
 	GenerateLID() uint64
 	SetLetterWatched(uint64) (error, Model.Letter)
 	GetLetterByLid(uint64)(error, Model.Letter)
+	GetLetterByEmailAndDir(string, string)(error, []Model.Letter)
+	CreateDir(string, string) error
 }
