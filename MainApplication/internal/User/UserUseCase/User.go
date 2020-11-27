@@ -3,6 +3,7 @@ package UserUseCase
 import (
 	"MainApplication/internal/User/UserModel"
 	"MainApplication/internal/User/UserRepository"
+	"fmt"
 
 	err "errors"
 	"golang.org/x/crypto/bcrypt"
@@ -55,6 +56,7 @@ func (uc useCase) Signup(user UserModel.User) (error, string) {
 
 func (uc useCase) SignIn(user UserModel.User) (error, string) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
+	fmt.Println("EX USER", userEx.Email, userEx.Id, "NEW USER", user.Id, user.Email)
 	if erro != nil {
 		return erro, ""
 	}
@@ -67,13 +69,15 @@ func (uc useCase) SignIn(user UserModel.User) (error, string) {
 	}
 	oldSid, er := uc.Db.GetSessionByUID(userEx.Id)
 	if er != nil {
-		return er, ""
+		fmt.Println("\n\n\n SIGN IN GET SESSION ERROR ", er, oldSid)
+		//return er, ""
 	}
 	er, _ = uc.Db.RemoveSession(oldSid)
 	if er != nil {
-		return er, ""
+		fmt.Println("\n\n\n SIGN IN REMOVE SESSION ERROR ", er, oldSid)
+		//return er, ""
 	}
-	er = uc.Db.AddSession(string(sid), userEx.Id, &user)
+	er = uc.Db.AddSession(string(sid), userEx.Id, userEx)
 	if er != nil {
 		return er, ""
 	}

@@ -1,6 +1,9 @@
 package UserDelivery
 
-import "context"
+import (
+	"context"
+	"fmt"
+)
 import proto "UserService/proto"
 import "UserService/internal/UserUseCase"
 
@@ -19,6 +22,7 @@ func (um UserManager) IsEmailExists(ctx context.Context, email *proto.Email) (*p
 }
 
 func (um UserManager) AddSession(ctx context.Context, msg *proto.AddSessionMsg) (*proto.Nothing, error) {
+	fmt.Println("ADD SESSION DELIVERY ", msg.Sid, msg.User.Uid, msg.User.Email)
 	return um.useCase.AddSession(msg)
 }
 

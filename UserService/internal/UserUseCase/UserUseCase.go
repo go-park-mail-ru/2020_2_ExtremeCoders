@@ -3,6 +3,7 @@ package UserUseCase
 import (
 	"UserService/internal/UserModel"
 	proto "UserService/proto"
+	"fmt"
 )
 import "UserService/internal/UserRepository"
 
@@ -34,6 +35,7 @@ func (u UseCase) IsEmailExists(email *proto.Email) (*proto.Nothing, error) {
 }
 
 func (u UseCase) AddSession(msg *proto.AddSessionMsg) (*proto.Nothing, error) {
+	fmt.Println("ADD SESSION UC", msg.Sid, msg.User.Uid, msg.User.Name)
 	userModel := UserModel.User{
 		Id:       msg.User.Uid,
 		Name:     msg.User.Name,

@@ -21,6 +21,7 @@ func New(db pgwrapper.DB) UserRepository.UserDB {
 }
 
 func (dbInfo dataBase) IsEmailExists(email string) error {
+	fmt.Println("CALL IS EMAIL EXIST")
 	user := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err != pg.ErrNoRows {
@@ -30,6 +31,8 @@ func (dbInfo dataBase) IsEmailExists(email string) error {
 }
 
 func (dbInfo dataBase) AddUser(user *UserModel.User) error {
+	fmt.Println("CALL AddUser")
+
 	user.Password = string(PasswordBcrypt([]byte(user.Password)))
 	_, err := dbInfo.DB.Model(user).Insert()
 	if err != nil {
@@ -39,6 +42,8 @@ func (dbInfo dataBase) AddUser(user *UserModel.User) error {
 }
 
 func (dbInfo dataBase) AddSession(sid string, uid uint64, user *UserModel.User) error {
+	fmt.Println("CALL AddSession ", "sid", sid , "uid", uid, "userUid", user.Id)
+
 	session := &UserModel.Session{Id: sid, UserId: int64(uid), User: user}
 	_, err := dbInfo.DB.Model(session).Insert()
 	if err != nil {
@@ -48,6 +53,7 @@ func (dbInfo dataBase) AddSession(sid string, uid uint64, user *UserModel.User) 
 }
 
 func (dbInfo dataBase) GenerateSID() (sessionId []rune, err error) {
+	fmt.Println("CALL GenerateSID")
 	var sid string
 	for {
 		for i := 0; i < config.SizeSID; i++ {
@@ -66,6 +72,7 @@ func (dbInfo dataBase) GenerateSID() (sessionId []rune, err error) {
 }
 
 func (dbInfo dataBase) GenerateUID() (uid uint64, err error) {
+	fmt.Println("CALL GenerateUID")
 	for {
 		uid, _ := crypto.Int(crypto.Reader, big.NewInt(4294967295))
 		user := UserModel.User{Id: uid.Uint64()}
@@ -77,6 +84,7 @@ func (dbInfo dataBase) GenerateUID() (uid uint64, err error) {
 }
 
 func (dbInfo dataBase) GetUserByEmail(email string) (user *UserModel.User, err error) {
+	fmt.Println("CALL GetUserByEmail")
 	user = &UserModel.User{Email: email}
 	err = dbInfo.DB.Model(user).Where("email=?", email).Select()
 	if err != nil {
@@ -86,6 +94,7 @@ func (dbInfo dataBase) GetUserByEmail(email string) (user *UserModel.User, err e
 }
 
 func (dbInfo dataBase) GetUserByUID(uid uint64) (user *UserModel.User, err error) {
+	fmt.Println("CALL GetUserByUID")
 	user = &UserModel.User{}
 	err = dbInfo.DB.Model(user).Where("id=?", uid).Select()
 	if err != nil {
@@ -95,6 +104,7 @@ func (dbInfo dataBase) GetUserByUID(uid uint64) (user *UserModel.User, err error
 }
 
 func (dbInfo dataBase) IsOkSession(sid string) (uid uint64, err error) {
+	fmt.Println("CALL IsOkSession")
 	session := &UserModel.Session{Id: sid}
 	err = dbInfo.DB.Model(session).Where("id=?", sid).Select()
 	if err != nil {
@@ -104,6 +114,7 @@ func (dbInfo dataBase) IsOkSession(sid string) (uid uint64, err error) {
 }
 
 func (dbInfo dataBase) UpdateProfile(newUser UserModel.User, email string) error {
+	fmt.Println("CALL UpdateProfile")
 	oldUser := &UserModel.User{Email: email}
 	err := dbInfo.DB.Model(oldUser).Where("email=?", email).Select()
 	if err != nil {
@@ -121,6 +132,7 @@ func (dbInfo dataBase) UpdateProfile(newUser UserModel.User, email string) error
 }
 
 func (dbInfo dataBase) RemoveSession(sid string) (err error, uid uint64) {
+	fmt.Println("CALL RemoveSession")
 	session := &UserModel.Session{Id: sid}
 	err = dbInfo.DB.Model(session).Where("id=?", sid).Select()
 	_, err = dbInfo.DB.Model(session).Where("id=?", sid).Delete()
@@ -131,6 +143,7 @@ func (dbInfo dataBase) RemoveSession(sid string) (err error, uid uint64) {
 }
 
 func (dbInfo dataBase) GetSessionByUID(uid uint64) (sid string, err error) {
+	fmt.Println("CALL GetSessionByUID")
 	session := &UserModel.Session{UserId: int64(uid)}
 	err = dbInfo.DB.Model(session).Where("user_id=?", uid).Select()
 	if err != nil {
@@ -140,6 +153,7 @@ func (dbInfo dataBase) GetSessionByUID(uid uint64) (sid string, err error) {
 }
 
 func PasswordBcrypt(plainPassword []byte) []byte {
+	fmt.Println("CALL PasswordBcrypt")
 	passBcrypt, _ := bcrypt.GenerateFromPassword(plainPassword, 14)
 	return passBcrypt
 }
