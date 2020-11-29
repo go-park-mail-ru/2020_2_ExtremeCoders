@@ -241,7 +241,7 @@ func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(r.URL.Path, "recived") {
 		kind = true
 	} else {
-		textKind := "sended"
+		textKind = "sended"
 		kind = false
 	}
 
