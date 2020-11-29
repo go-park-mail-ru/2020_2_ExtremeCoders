@@ -95,7 +95,7 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(len(letterList.Letter))
-	w.Write([]byte("HLLO"))
+	w.Write(ProtoLetterListAnswer(letterList))
 }
 
 //post /user/folders/{recived/sended}/folderName - добавить папку
@@ -168,7 +168,7 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(resp)
-	w.Write([]byte("HLLO"))
+	w.Write(ProtoResponseAnswer(resp))
 }
 
 
@@ -227,12 +227,13 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	d.lsClient.RemoveLetterFromDir(r.Context(), &mailProto.DirLid{
+	resp, err:=d.lsClient.RemoveLetterFromDir(r.Context(), &mailProto.DirLid{
 		Did:  folderId.Id,
 		Lid:  lid,
 		Type: kind,
 	})
-	w.Write([]byte("HLLO"))
+
+	w.Write(ProtoResponseAnswer(resp))
 }
 
 func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
@@ -259,9 +260,9 @@ func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	d.lsClient.RemoveDir(r.Context(), &mailProto.DirLid{
+	resp, _:=d.lsClient.RemoveDir(r.Context(), &mailProto.DirLid{
 		Did:  folderId.Id,
 		Type: kind,
 	})
-	w.Write([]byte("HLLO"))
+	w.Write(ProtoResponseAnswer(resp))
 }

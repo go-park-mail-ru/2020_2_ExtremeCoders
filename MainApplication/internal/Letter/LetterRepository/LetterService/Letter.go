@@ -25,9 +25,6 @@ func (lsManager LetterServiceManager) WatchLetter(lid uint64) (error, LetterMode
 	return err, convert.ProtoToModel(lr.Letter)
 }
 
-func (lsManager LetterServiceManager)IsUserExist(email string) error{
-	return nil
-}
 func (lsManager LetterServiceManager)SaveMail(letter LetterModel.Letter) error{
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.SaveLetter(ctx, convert.ModelToProto(letter))
