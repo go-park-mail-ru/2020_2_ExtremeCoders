@@ -2,6 +2,7 @@ package FolderDelivery
 
 import (
 	mailProto "MainApplication/proto/MailService"
+	userProto "MainApplication/proto/UserServise"
 	"encoding/json"
 )
 
@@ -15,6 +16,30 @@ type LetterList struct{
 	Code        int
 	Description string
 	letter []*mailProto.Letter
+}
+
+type FolderList struct{
+	Code int
+	folders []*userProto.FolderNameType
+}
+
+type SuccessAns struct {
+	Code int
+}
+
+func ProtoFolderListResponse(folders []*userProto.FolderNameType)[]byte  {
+	ans := FolderList{
+		Code:    200,
+		folders: folders,
+	}
+	res, _ := json.Marshal(ans)
+	return res
+}
+
+func SuccessRespAns() []byte {
+	ans := SuccessAns{Code: 200}
+	res,_ := json.Marshal(ans)
+	return res
 }
 
 func GetFoldersError(err error) []byte {

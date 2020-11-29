@@ -60,7 +60,7 @@ func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(len(folders.Res))
-	w.Write([]byte("HLLO"))
+	w.Write(ProtoFolderListResponse(folders.Res))
 }
 
 //get /user/foders/{recived/sended}/folderName - письма
@@ -119,7 +119,7 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println("hello")
-	w.Write([]byte("HLLO"))
+	w.Write(SuccessRespAns())
 }
 
 //put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
@@ -193,7 +193,7 @@ func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println("OK")
-	w.Write([]byte("HLLO"))
+	w.Write(SuccessRespAns())
 }
 
 //delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
