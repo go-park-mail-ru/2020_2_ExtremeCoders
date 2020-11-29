@@ -58,6 +58,8 @@ message RenameFolderMsg{
   string newName = 4;
 }
 
+
+
 service UserService{
   rpc IsEmailExists(Email) returns(Nothing);
   rpc AddSession(AddSessionMsg) returns(Nothing);
@@ -74,6 +76,7 @@ service UserService{
   rpc CreateFolder(Folder) returns(Nothing);
   rpc RenameFolder(RenameFolderMsg) returns(Nothing);
   rpc RemoveFolder(Folder) returns(FolderId);
+  rpc GetFoldersList(Uid) returns();
 }
 
 

@@ -3,6 +3,7 @@ package UserUseCase
 import (
 	"UserService/internal/UserModel"
 	proto "UserService/proto"
+	"errors"
 	"fmt"
 )
 import "UserService/internal/UserRepository"
@@ -21,19 +22,31 @@ type Interface interface {
 	GetSessionByUID(*proto.Uid) (*proto.Sid, error)
 	GetFolderId(*proto.Folder) (*proto.FolderId, error)
 	CreateFolder(*proto.Folder) (*proto.Nothing, error)
-	RenameFolder(msg *proto.RenameFolderMsg) (*proto.Nothing, error)
+	RenameFolder(*proto.RenameFolderMsg) (*proto.Nothing, error)
+	RemoveFolder(*proto.Folder) (*proto.FolderId, error)
 }
+
+var RemoveFolderErr = errors.New("REMOVE FOLDER ERROR")
 
 type UseCase struct {
 	db UserRepository.UserDB
 }
 
-
-
 func New(db UserRepository.UserDB) Interface {
 	return UseCase{db: db}
 }
 
+func (u UseCase) RemoveFolder(folder *proto.Folder) (*proto.FolderId, error) {
+	id, err := u.db.GetFolderId(folder.Uid, folder.Type, folder.Name)
+	if err!=nil{
+		return nil, RemoveFolderErr
+	}
+	err = u.db.RemoveFolder(id)
+	if err!=nil{
+		return nil, RemoveFolderErr
+	}
+	return &proto.FolderId{Id: id}, err
+}
 
 func (u UseCase) RenameFolder(msg *proto.RenameFolderMsg) (*proto.Nothing, error) {
 	err := u.db.RenameFolder(msg.Uid, msg.Type, msg.OldName, msg.NewName)
