@@ -8,7 +8,7 @@ import (
 import "UserService/internal/UserRepository"
 
 type Interface interface {
-	IsEmailExists(email *proto.Email) (*proto.Nothing, error)
+	IsEmailExists(*proto.Email) (*proto.Nothing, error)
 	AddSession(*proto.AddSessionMsg) (*proto.Nothing, error)
 	AddUser(*proto.User) (*proto.Nothing, error)
 	GenerateSID(*proto.Nothing) (*proto.Sid, error)
@@ -19,19 +19,43 @@ type Interface interface {
 	UpdateProfile(*proto.UpdateProfileMsg) (*proto.Nothing, error)
 	RemoveSession(*proto.Sid) (*proto.Uid, error)
 	GetSessionByUID(*proto.Uid) (*proto.Sid, error)
+	GetFolderId(*proto.Folder) (*proto.FolderId, error)
+	CreateFolder(*proto.Folder) (*proto.Nothing, error)
+	RenameFolder(msg *proto.RenameFolderMsg) (*proto.Nothing, error)
 }
 
 type UseCase struct {
 	db UserRepository.UserDB
 }
 
+
+
 func New(db UserRepository.UserDB) Interface {
 	return UseCase{db: db}
+}
+
+
+func (u UseCase) RenameFolder(msg *proto.RenameFolderMsg) (*proto.Nothing, error) {
+	err := u.db.RenameFolder(msg.Uid, msg.Type, msg.OldName, msg.NewName)
+	return &proto.Nothing{Dummy: true}, err
+}
+
+func (u UseCase) CreateFolder(folder *proto.Folder) (*proto.Nothing, error) {
+	err := u.db.CreateFolder(folder.Name, folder.Type, folder.Uid)
+	return &proto.Nothing{Dummy: true}, err
 }
 
 func (u UseCase) IsEmailExists(email *proto.Email) (*proto.Nothing, error) {
 	err := u.db.IsEmailExists(email.Email)
 	return &proto.Nothing{Dummy: true}, err
+}
+
+func (u UseCase) GetFolderId(msg *proto.Folder) (*proto.FolderId, error) {
+	folderId, err := u.db.GetFolderId(msg.Uid, msg.Type, msg.Name)
+	if err != nil {
+		return nil, err
+	}
+	return &proto.FolderId{Id: folderId}, nil
 }
 
 func (u UseCase) AddSession(msg *proto.AddSessionMsg) (*proto.Nothing, error) {
@@ -77,7 +101,7 @@ func (u UseCase) GenerateUID(nothing *proto.Nothing) (*proto.Uid, error) {
 
 func (u UseCase) GetUserByEmail(email *proto.Email) (*proto.User, error) {
 	user, err := u.db.GetUserByEmail(email.Email)
-	if err!=nil{
+	if err != nil {
 		return nil, err
 	}
 	res := proto.User{
@@ -92,7 +116,7 @@ func (u UseCase) GetUserByEmail(email *proto.Email) (*proto.User, error) {
 
 func (u UseCase) GetUserByUID(uid *proto.Uid) (*proto.User, error) {
 	user, err := u.db.GetUserByUID(uid.Uid)
-	if err!=nil{
+	if err != nil {
 		return nil, err
 	}
 	res := proto.User{

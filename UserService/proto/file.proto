@@ -41,6 +41,23 @@ message UpdateProfileMsg{
   string email = 2;
 }
 
+message Folder{
+  string name=1;
+  string Type=2;
+  uint64 uid=3;
+}
+
+message FolderId{
+  uint64 id=1;
+}
+
+message RenameFolderMsg{
+  uint64 uid = 1;
+  string Type=2;
+  string oldName = 3;
+  string newName = 4;
+}
+
 service UserService{
   rpc IsEmailExists(Email) returns(Nothing);
   rpc AddSession(AddSessionMsg) returns(Nothing);
@@ -53,6 +70,10 @@ service UserService{
   rpc UpdateProfile(UpdateProfileMsg) returns(Nothing);
   rpc RemoveSession(Sid) returns (Uid);
   rpc GetSessionByUID(Uid) returns (Sid);
+  rpc GetFolderId(Folder) returns(FolderId);
+  rpc CreateFolder(Folder) returns(Nothing);
+  rpc RenameFolder(RenameFolderMsg) returns(Nothing);
+  rpc RemoveFolder(Folder) returns(FolderId);
 }
 
 

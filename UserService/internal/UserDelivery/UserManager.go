@@ -12,8 +12,23 @@ type UserManager struct {
 	useCase UserUseCase.Interface
 }
 
+
 func New(uc UserUseCase.Interface) proto.UserServiceServer  {
 	return UserManager{useCase: uc}
+}
+
+
+func (um UserManager) RenameFolder(ctx context.Context, msg *proto.RenameFolderMsg) (*proto.Nothing, error) {
+	return um.useCase.RenameFolder(msg)
+}
+
+func (um UserManager) CreateFolder(ctx context.Context, folder *proto.Folder) (*proto.Nothing, error) {
+	return um.useCase.CreateFolder(folder)
+}
+
+
+func (um UserManager) GetFolderId(ctx context.Context, msg *proto.Folder) (*proto.FolderId, error) {
+	return um.useCase.GetFolderId(msg)
 }
 
 

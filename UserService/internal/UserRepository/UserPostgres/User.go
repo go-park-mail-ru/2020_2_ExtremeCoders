@@ -16,8 +16,56 @@ type dataBase struct {
 	DB pgwrapper.DB
 }
 
+
 func New(db pgwrapper.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
+}
+
+func (dbInfo dataBase) RenameFolder(uid uint64, kind string, oldName string, newName string) error {
+	fmt.Println("CALL RenameFolder")
+	oldFolder := &UserModel.Folder{Uid: uid, Name: oldName}
+	err := dbInfo.DB.Model(oldFolder).Where("uid=? and name=? and type=?", uid, oldName, kind).Select()
+	if err != nil {
+		return UserRepository.RenameFolderError
+	}
+	folder := oldFolder
+	folder.Name = newName
+	_, err = dbInfo.DB.Model(folder).Column("name").Where("id=?", oldFolder.Id).Update()
+	if err != nil {
+		return UserRepository.RenameFolderError
+	}
+	return nil
+}
+
+
+func (dbInfo dataBase) CreateFolder(name string, kind string, uid uint64) error {
+	fmt.Println("CALL GET FOLDER ID", uid, kind, name)
+	folder := &UserModel.Folder{
+		Uid:  uid,
+		Type: kind,
+		Name: name,
+	}
+	_, err := dbInfo.DB.Model(folder).Insert()
+	if err != nil {
+		fmt.Println("ERR", err)
+		return UserRepository.CreateFolderError
+	}
+	return nil
+}
+
+func (dbInfo dataBase) GetFolderId(uid uint64, kind string, name string) (fid uint64, err error) {
+	fmt.Println("CALL GET FOLDER ID", uid, kind, name)
+	folder := &UserModel.Folder{
+		Uid:  uid,
+		Type: kind,
+		Name: name,
+	}
+	err = dbInfo.DB.Model(folder).Where("type=? and uid=? and name=?", kind, uid, name).Select()
+	if err != nil {
+		fmt.Println("ERR", err)
+		return 0, UserRepository.GetFolderIdError
+	}
+	return folder.Id, nil
 }
 
 func (dbInfo dataBase) IsEmailExists(email string) error {

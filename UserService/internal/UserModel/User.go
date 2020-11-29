@@ -14,3 +14,10 @@ type Session struct {
 	UserId int64 `pg:"on_delete:RESTRICT,on_update: CASCADE"`
 	User   *User `pg:"rel:has-one"`
 }
+
+type Folder struct {
+	Id uint64
+	Uid uint64
+	Type string
+	Name string
+}

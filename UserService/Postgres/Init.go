@@ -2,6 +2,7 @@ package Postgres
 
 import (
 	"UserService/internal/UserModel"
+	"fmt"
 	"github.com/go-pg/pg/v9"
 	"github.com/go-pg/pg/v9/orm"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
@@ -37,6 +38,7 @@ func createSchema(db pgwrapper.DB) error {
 	models := []interface{}{
 		(*UserModel.User)(nil),
 		(*UserModel.Session)(nil),
+		(*UserModel.Folder)(nil),
 	}
 
 	for _, model := range models {
@@ -44,6 +46,7 @@ func createSchema(db pgwrapper.DB) error {
 			IfNotExists: true,
 		})
 		if err != nil {
+			fmt.Println("ERR", err)
 			return err
 		}
 	}

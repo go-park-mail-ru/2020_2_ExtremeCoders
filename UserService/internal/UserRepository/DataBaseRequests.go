@@ -16,6 +16,9 @@ var CantGetUserOnUpdate = errors.New("Get user on update error!")
 var CantUpdateUser = errors.New("User update error!")
 var RemoveSessionError = errors.New("Could not remove session!")
 var GetSessionError = errors.New("Could not get session!")
+var GetFolderIdError = errors.New("Could not get folder ID!")
+var CreateFolderError = errors.New("Could not get folder ID!")
+var RenameFolderError = errors.New("Could not rename folder!")
 
 type UserDB interface {
 	IsEmailExists(email string) error
@@ -29,8 +32,10 @@ type UserDB interface {
 	UpdateProfile(newUser UserModel.User, email string) error
 	RemoveSession(sid string) (err error, uid uint64)
 	GetSessionByUID(uid uint64) (sid string, err error)
+	GetFolderId(uid uint64, kind string, name string) (fid uint64, err error)
+	CreateFolder(name string, kind string, uid uint64) error
+	RenameFolder(uid uint64, kind string, oldName string, newName string) error
 }
-
 
 //type UserDB interface {
 //	IsEmailExists(*proto.Email) error
