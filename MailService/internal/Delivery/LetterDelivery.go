@@ -80,3 +80,7 @@ func (ld Delivery) GetLettersSend(ctx context.Context,email *pb.Email) (*pb.Lett
 	letterPb:=pb.LetterListResponse{Result: &resp, Letter: lettersListPb}
 	return &letterPb,  nil
 }
+
+func (ld Delivery)  AddLetterToDir(ctx context.Context,email *pb.DirLid) Response
+func (ld Delivery)  RemoveLetterFromDir(ctx context.Context,email *pb.DirLid) Response
+func (ld Delivery)  RemoveDir(ctx context.Context,email *pb.DirName) Response
