@@ -66,7 +66,7 @@ func (dbInfo dataBase)GetLetterByLid(lid uint64)(error, Model.Letter){
 	return nil, letter
 }
 
-func (dbInfo dataBase)GetLettersRecv(Did uint64)  (error, []Model.Letter){
+func (dbInfo dataBase) GetLettersRecvDir(Did uint64)  (error, []Model.Letter){
 	var letters []Model.Letter
 	exist := dbInfo.DB.Model(&letters).Where("directoryrecv=?", Did).Select()
 	if exist != nil {
@@ -75,9 +75,27 @@ func (dbInfo dataBase)GetLettersRecv(Did uint64)  (error, []Model.Letter){
 	return nil, letters
 }
 
-func (dbInfo dataBase)GetLettersSent(Did uint64)  (error, []Model.Letter){
+func (dbInfo dataBase) GetLettersSentDir(Did uint64)  (error, []Model.Letter){
 	var letters []Model.Letter
 	exist := dbInfo.DB.Model(&letters).Where("directorysend=?", Did).Select()
+	if exist != nil {
+		return Repository.SentLetterError, letters
+	}
+	return nil, letters
+}
+
+func (dbInfo dataBase)GetLettersRecv(email string)  (error, []Model.Letter){
+	var letters []Model.Letter
+	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).Select()
+	if exist != nil {
+		return Repository.SentLetterError, letters
+	}
+	return nil, letters
+}
+
+func (dbInfo dataBase)GetLettersSent(email string)  (error, []Model.Letter){
+	var letters []Model.Letter
+	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}

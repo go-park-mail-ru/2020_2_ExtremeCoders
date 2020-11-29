@@ -3,10 +3,7 @@ package LetterPostgres
 import (
 	"MainApplication/internal/Letter/LetterModel"
 	"MainApplication/internal/Letter/LetterRepository"
-	"MainApplication/internal/User/UserModel"
-	crypto "crypto/rand"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
-	"math/big"
 )
 
 type dataBase struct {
@@ -25,16 +22,7 @@ func (dbInfo dataBase) SaveMail(letter LetterModel.Letter) error {
 	return nil
 }
 
-func (dbInfo dataBase) IsUserExist(email string) error {
-	reciever := &UserModel.User{Email: email}
-	erro := dbInfo.DB.Model(reciever).Where("email=?", email).Select() //uc
-	if erro != nil {
-		return LetterRepository.ReceiverNotFound
-	}
-	return nil
-}
-
-func (dbInfo dataBase) GetReceivedLetters(email string) (error, []LetterModel.Letter) {
+func (dbInfo dataBase) GetReceivedLetters(email uint64) (error, []LetterModel.Letter) {
 	var letters []LetterModel.Letter
 	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).Select()
 	if exist != nil {
@@ -43,22 +31,15 @@ func (dbInfo dataBase) GetReceivedLetters(email string) (error, []LetterModel.Le
 	return nil, letters
 }
 
-func (dbInfo dataBase) GenerateLID() uint64 {
-	for {
-		lid, _ := crypto.Int(crypto.Reader, big.NewInt(4294967295))
-		user := LetterModel.Letter{Id: lid.Uint64()}
-		exist := dbInfo.DB.Model(user).Where("id=?", lid.Int64()).Select()
-		if exist != nil {
-			return lid.Uint64()
-		}
-	}
-}
-
-func (dbInfo dataBase) GetSendedLetters(email string) (error, []LetterModel.Letter) {
+func (dbInfo dataBase) GetSendedLetters(email uint64) (error, []LetterModel.Letter) {
 	var letters []LetterModel.Letter
 	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).Select()
 	if exist != nil {
 		return LetterRepository.SentLetterError, nil
 	}
 	return nil, letters
+}
+
+func (dbInfo dataBase) WatchLetter(uint64) (error, LetterModel.Letter){
+	return nil, LetterModel.Letter{}
 }

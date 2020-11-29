@@ -21,6 +21,8 @@ type LetterDB interface {
 	SetLetterWatched(uint64) (error, Model.Letter)
 	GetLetterByLid(uint64)(error, Model.Letter)
 
-	GetLettersRecv(uint64)  (error, []Model.Letter)
-	GetLettersSent(uint64)  (error, []Model.Letter)
+	GetLettersRecvDir(uint64)  (error, []Model.Letter)
+	GetLettersSentDir(uint64)  (error, []Model.Letter)
+	GetLettersRecv(string)  (error, []Model.Letter)
+	GetLettersSent(string)  (error, []Model.Letter)
 }

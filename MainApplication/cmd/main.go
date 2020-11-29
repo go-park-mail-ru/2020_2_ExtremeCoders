@@ -65,6 +65,7 @@ func main() {
 	mux.HandleFunc("/letter", lDE.SendLetter)
 	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
+	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
 
 	//siteHandler := middleware.AccessLogMiddleware(mux)
 	//siteHandler = middleware.PanicMiddleware(siteHandler)
@@ -82,7 +83,7 @@ func main() {
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 	}
-	fmt.Println("starting File at ", config.Port)
+	fmt.Println("starting Main at ", config.Port)
 	err = server.ListenAndServe()
 	fmt.Println(err.Error())
 }
