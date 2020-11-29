@@ -16,9 +16,14 @@ type dataBase struct {
 	DB pgwrapper.DB
 }
 
-
 func New(db pgwrapper.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
+}
+
+func (dbInfo dataBase) RemoveFolder(id uint64) error {
+	folder := &UserModel.Folder{Id: id}
+	_, err := dbInfo.DB.Model(folder).Where("id=?", id).Delete()
+	return err
 }
 
 func (dbInfo dataBase) RenameFolder(uid uint64, kind string, oldName string, newName string) error {
@@ -36,7 +41,6 @@ func (dbInfo dataBase) RenameFolder(uid uint64, kind string, oldName string, new
 	}
 	return nil
 }
-
 
 func (dbInfo dataBase) CreateFolder(name string, kind string, uid uint64) error {
 	fmt.Println("CALL GET FOLDER ID", uid, kind, name)
@@ -90,7 +94,7 @@ func (dbInfo dataBase) AddUser(user *UserModel.User) error {
 }
 
 func (dbInfo dataBase) AddSession(sid string, uid uint64, user *UserModel.User) error {
-	fmt.Println("CALL AddSession ", "sid", sid , "uid", uid, "userUid", user.Id)
+	fmt.Println("CALL AddSession ", "sid", sid, "uid", uid, "userUid", user.Id)
 
 	session := &UserModel.Session{Id: sid, UserId: int64(uid), User: user}
 	_, err := dbInfo.DB.Model(session).Insert()
