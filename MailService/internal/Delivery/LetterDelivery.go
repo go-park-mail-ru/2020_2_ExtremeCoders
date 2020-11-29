@@ -81,6 +81,14 @@ func (ld Delivery) GetLettersSend(ctx context.Context,email *pb.Email) (*pb.Lett
 	return &letterPb,  nil
 }
 
-func (ld Delivery)  AddLetterToDir(ctx context.Context,email *pb.DirLid) Response
-func (ld Delivery)  RemoveLetterFromDir(ctx context.Context,email *pb.DirLid) Response
-func (ld Delivery)  RemoveDir(ctx context.Context,email *pb.DirName) Response
+func (ld Delivery)  AddLetterToDir(ctx context.Context,email *pb.DirLid) (*pb.Response, error){
+
+}
+
+func (ld Delivery)  RemoveLetterFromDir(ctx context.Context,email *pb.DirLid) (*pb.Response, error){
+
+}
+
+func (ld Delivery)  RemoveDir(ctx context.Context,email *pb.DirName) (*pb.Response, error){
+
+}

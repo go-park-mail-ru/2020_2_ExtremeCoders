@@ -101,3 +101,31 @@ func (dbInfo dataBase)GetLettersSent(email string)  (error, []Model.Letter){
 	}
 	return nil, letters
 }
+
+func (dbInfo dataBase)AddLetterToDir(lid uint64, did uint64) error{
+	err, letter:=dbInfo.GetLetterByLid(lid)
+	if err!=nil{
+		return err
+	}
+	letter.DirectoryRecv=did
+	err, _=dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", lid).Update()
+	if err!=nil{
+		return err
+	}
+	return nil
+}
+func (dbInfo dataBase)RemoveLetterFromDir(lid uint64, did uint64) error{
+	err, letter:=dbInfo.GetLetterByLid(lid)
+	if err!=nil{
+		return err
+	}
+	letter.DirectoryRecv=0
+	err, _=dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", lid).Update()
+	if err!=nil{
+		return err
+	}
+	return nil
+}
+func (dbInfo dataBase)RemoveDir(did uint64) error{
+	dbInfo.GetLettersByFolder()
+}

@@ -26,5 +26,7 @@ type LetterDB interface {
 	GetLettersRecv(string)  (error, []Model.Letter)
 	GetLettersSent(string)  (error, []Model.Letter)
 
-
+	AddLetterToDir(uint64, uint64) error
+	RemoveLetterFromDir(uint64, uint64) error
+	RemoveDir(uint64) error
 }
