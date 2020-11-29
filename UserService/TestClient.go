@@ -1,11 +1,11 @@
 package main
 
 import (
+	proto "UserService/proto"
 	"context"
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
-	proto "UserService/proto"
 )
 
 func main() {
@@ -21,16 +21,24 @@ func main() {
 	fileManager := proto.NewUserServiceClient(grcpFileService)
 
 	ctx := context.Background()
-	fid, err := fileManager.RemoveFolder(ctx, &proto.Folder{
-		Name: "SUKO",
-		Type: "sanded",
-		Uid:  1,
-	})
+	//fid, err := fileManager.RemoveFolder(ctx, &proto.Folder{
+	//	Name: "SUKO",
+	//	Type: "sanded",
+	//	Uid:  1,
+	//})
+	//
+	//if err != nil {
+	//	fmt.Println("ERRRR", err)
+	//	return
+	//}
+	folders, err := fileManager.GetFoldersList(ctx, &proto.Uid{Uid: 1})
 	if err != nil {
 		fmt.Println("ERRRR", err)
 		return
 	}
-
+	for _,value:=range folders.Res{
+		fmt.Println(value)
+	}
 	//_, err = fileManager.RenameFolder(ctx, &proto.RenameFolderMsg{
 	//	OldName: "hui",
 	//	NewName: "SUKO",
@@ -39,5 +47,5 @@ func main() {
 	//})
 
 
-	fmt.Println("FID", fid)
+	//fmt.Println("FID", fid)
 }

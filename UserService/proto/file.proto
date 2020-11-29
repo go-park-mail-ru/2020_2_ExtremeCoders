@@ -58,7 +58,14 @@ message RenameFolderMsg{
   string newName = 4;
 }
 
+message FolderNameType{
+  string name = 1;
+  string type = 2;
+}
 
+message FolderList{
+  repeated FolderNameType res  = 1;
+}
 
 service UserService{
   rpc IsEmailExists(Email) returns(Nothing);
@@ -76,7 +83,7 @@ service UserService{
   rpc CreateFolder(Folder) returns(Nothing);
   rpc RenameFolder(RenameFolderMsg) returns(Nothing);
   rpc RemoveFolder(Folder) returns(FolderId);
-  rpc GetFoldersList(Uid) returns();
+  rpc GetFoldersList(Uid) returns(FolderList);
 }
 
 

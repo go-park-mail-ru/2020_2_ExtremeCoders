@@ -77,5 +77,4 @@ func (de delivery) WatchLetter(w http.ResponseWriter, r *http.Request) {
 	}
 	letter.Sender = user.Email
 	letter.Receiver = context.GetStrFormValueSafety(r, "id")
-
 }

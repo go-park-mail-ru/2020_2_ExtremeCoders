@@ -24,6 +24,7 @@ type Interface interface {
 	CreateFolder(*proto.Folder) (*proto.Nothing, error)
 	RenameFolder(*proto.RenameFolderMsg) (*proto.Nothing, error)
 	RemoveFolder(*proto.Folder) (*proto.FolderId, error)
+	GetFoldersList(*proto.Uid) (*proto.FolderList, error)
 }
 
 var RemoveFolderErr = errors.New("REMOVE FOLDER ERROR")
@@ -32,8 +33,24 @@ type UseCase struct {
 	db UserRepository.UserDB
 }
 
+
 func New(db UserRepository.UserDB) Interface {
 	return UseCase{db: db}
+}
+
+func (u UseCase) GetFoldersList(uid *proto.Uid) (*proto.FolderList, error) {
+	folders, err := u.db.GetFoldersList(uid.Uid)
+	if err != nil {
+		return nil, err
+	}
+	var tmp []*proto.FolderNameType
+	for _, value := range folders{
+		tmp = append(tmp, &proto.FolderNameType{
+			Name: value.Name,
+			Type: value.Type,
+		})
+	}
+	return &proto.FolderList{Res: tmp}, err
 }
 
 func (u UseCase) RemoveFolder(folder *proto.Folder) (*proto.FolderId, error) {

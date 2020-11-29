@@ -16,8 +16,19 @@ type dataBase struct {
 	DB pgwrapper.DB
 }
 
+
 func New(db pgwrapper.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
+}
+
+func (dbInfo dataBase) GetFoldersList(uid uint64) (folders []*UserModel.Folder, err error) {
+	var res []*UserModel.Folder
+	err = dbInfo.DB.Model(&res).Where("uid=?", uid).Select()
+	if err!=nil{
+		fmt.Println("GET FOLDERS ERROR", err)
+		return nil, err
+	}
+	return res, nil
 }
 
 func (dbInfo dataBase) RemoveFolder(id uint64) error {

@@ -67,6 +67,8 @@ func main() {
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
 	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
 
+	mux.Handler("")
+
 	//siteHandler := middleware.AccessLogMiddleware(mux)
 	//siteHandler = middleware.PanicMiddleware(siteHandler)
 	a := middleware.AuthMiddleware{Sessions: uDB}
