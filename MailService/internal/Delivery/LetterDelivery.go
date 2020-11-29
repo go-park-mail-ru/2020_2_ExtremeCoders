@@ -19,9 +19,9 @@ func New(usecase UseCase.Interface) pb.LetterServiceServer {
 func (ld Delivery) GetLettersByDirRecv(ctx context.Context, dir *pb.DirName) (*pb.LetterListResponse, error) {
 	fmt.Println("recv dir")
 	err, letters := ld.uc.GetLettersRecvDir(dir.DirName)
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true}
+	if err != nil || letters==nil {
+		return &pb.LetterListResponse{}, err
 	}
 	lettersListPb := convert.ModelToProtoList(&letters)
 	letterPb := pb.LetterListResponse{Result: &resp, Letter: lettersListPb}
@@ -30,9 +30,9 @@ func (ld Delivery) GetLettersByDirRecv(ctx context.Context, dir *pb.DirName) (*p
 
 func (ld Delivery) GetLettersByDirSend(ctx context.Context, dir *pb.DirName) (*pb.LetterListResponse, error) {
 	err, letters := ld.uc.GetLettersSendDir(dir.DirName)
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true}
+	if err != nil || letters==nil {
+		return &pb.LetterListResponse{}, err
 	}
 	lettersListPb := convert.ModelToProtoList(&letters)
 	letterPb := pb.LetterListResponse{Result: &resp, Letter: lettersListPb}
@@ -73,9 +73,9 @@ func (ld Delivery) GetLettersRecv(ctx context.Context, email *pb.Email) (*pb.Let
 
 func (ld Delivery) GetLettersSend(ctx context.Context, email *pb.Email) (*pb.LetterListResponse, error) {
 	err, letters := ld.uc.GetLettersSend(email.Email)
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true}
+	if err != nil || letters==nil {
+		return &pb.LetterListResponse{}, err
 	}
 	lettersListPb := convert.ModelToProtoList(&letters)
 	letterPb := pb.LetterListResponse{Result: &resp, Letter: lettersListPb}
