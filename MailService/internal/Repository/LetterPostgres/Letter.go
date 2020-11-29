@@ -35,9 +35,9 @@ func (dbInfo dataBase) GenerateLID() uint64 {
 	}
 }
 
-func (dbInfo dataBase) GetLettersByFolder(email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetLettersByFolder(did uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).Select()
+	exist := dbInfo.DB.Model(&letters).Where("directoryrecv=? or directorysend=?", did, did).Select()
 	if exist != nil {
 		return Repository.SentLetterError, nil
 	}
@@ -100,4 +100,64 @@ func (dbInfo dataBase)GetLettersSent(email string)  (error, []Model.Letter){
 		return Repository.SentLetterError, letters
 	}
 	return nil, letters
+}
+
+func (dbInfo dataBase)AddLetterToDir(lid uint64, did uint64, flag bool) error{
+	err, letter:=dbInfo.GetLetterByLid(lid)
+	if err!=nil{
+		return err
+	}
+	if flag{
+		letter.DirectoryRecv=did
+		_, err=dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", lid).Update()
+		if err!=nil{
+			return err
+		}
+	} else {
+		letter.DirectorySend=did
+		_, err=dbInfo.DB.Model(letter).Column("directorysend").Where("id=?", lid).Update()
+		if err!=nil{
+			return err
+		}
+	}
+
+	return nil
+}
+func (dbInfo dataBase)RemoveLetterFromDir(lid uint64, did uint64, flag bool) error{
+	err, letter:=dbInfo.GetLetterByLid(lid)
+	if err!=nil{
+		return err
+	}
+	if flag {
+		letter.DirectoryRecv=0
+		_, err=dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", lid).Update()
+		if err!=nil{
+			return err
+		}
+	} else {
+		letter.DirectorySend=0
+		_, err=dbInfo.DB.Model(letter).Column("directorysend").Where("id=?", lid).Update()
+		if err!=nil{
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (dbInfo dataBase)RemoveDir(did uint64, flag bool) error{
+	err, letters:=dbInfo.GetLettersByFolder(did)
+	if err!=nil{
+		return err
+	}
+	for _,  letter:= range letters{
+		if flag {
+			letter.DirectoryRecv=0
+			_, err=dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", letter.Id).Update()
+		} else {
+			letter.DirectorySend=0
+			_, err=dbInfo.DB.Model(letter).Column("directorysend").Where("id=?", letter.Id).Update()
+		}
+	}
+	return err
 }

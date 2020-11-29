@@ -43,6 +43,7 @@ message LetterResponse {
 message DirLid{
   uint64 did=1;
   uint64 lid=2;
+  bool type=3;// 0: send; 1: recv;
 }
 
 service LetterService{
@@ -55,6 +56,6 @@ service LetterService{
 
   rpc AddLetterToDir(DirLid) returns (Response);
   rpc RemoveLetterFromDir(DirLid) returns (Response);
-  rpc RemoveDir(DirName) returns (Response);
+  rpc RemoveDir(DirLid) returns (Response);
 }
 
