@@ -81,14 +81,31 @@ func (ld Delivery) GetLettersSend(ctx context.Context,email *pb.Email) (*pb.Lett
 	return &letterPb,  nil
 }
 
-func (ld Delivery)  AddLetterToDir(ctx context.Context,email *pb.DirLid) (*pb.Response, error){
+func (ld Delivery)  AddLetterToDir(ctx context.Context,dirlid *pb.DirLid) (*pb.Response, error){
+	err:=ld.uc.AddLetterToDir(dirlid.Lid, dirlid.Did, dirlid.Type)
 
+	resp:=pb.Response{Ok: false, Description: err.Error()}
+	if err==nil{
+		resp.Ok=true
+	}
+	return &resp, nil
 }
 
-func (ld Delivery)  RemoveLetterFromDir(ctx context.Context,email *pb.DirLid) (*pb.Response, error){
+func (ld Delivery)  RemoveLetterFromDir(ctx context.Context,dirlid *pb.DirLid) (*pb.Response, error){
+	err:=ld.uc.RemoveLetterFromDir(dirlid.Lid, dirlid.Did, dirlid.Type)
 
+	resp:=pb.Response{Ok: false, Description: err.Error()}
+	if err==nil{
+		resp.Ok=true
+	}
+	return &resp, nil
 }
 
-func (ld Delivery)  RemoveDir(ctx context.Context,email *pb.DirName) (*pb.Response, error){
-
+func (ld Delivery)  RemoveDir(ctx context.Context,dirlid *pb.DirLid) (*pb.Response, error){
+	err:=ld.uc.RemoveDir(dirlid.Did, dirlid.Type)
+	resp:=pb.Response{Ok: false, Description: err.Error()}
+	if err==nil{
+		resp.Ok=true
+	}
+	return &resp, nil
 }

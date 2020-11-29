@@ -16,6 +16,10 @@ type Interface interface {
 	GetLettersRecv(email string) (error, []Model.Letter)
 	SaveLetter(letter Model.Letter) error
 	WatchLetter(lid uint64) (error, Model.Letter)
+
+	AddLetterToDir(uint64, uint64, bool) error
+	RemoveLetterFromDir(uint64, uint64, bool) error
+	RemoveDir(uint64, bool) error
 }
 
 func New(repo Repository.LetterDB) Interface {
@@ -51,3 +55,12 @@ func (uc UseCase)GetLettersRecv(email string) (error, []Model.Letter){
 	return err, letters
 }
 
+func (uc UseCase)AddLetterToDir(lid uint64, did uint64, flag bool) error{
+	return uc.re.AddLetterToDir(lid, did, flag)
+}
+func (uc UseCase)RemoveLetterFromDir(lid uint64, did uint64, flag bool) error{
+	return uc.re.RemoveLetterFromDir(lid, did, flag)
+}
+func (uc UseCase)RemoveDir(did uint64, flag bool) error{
+	return uc.re.RemoveDir(did, flag)
+}

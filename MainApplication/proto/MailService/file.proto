@@ -56,6 +56,6 @@ service LetterService{
 
   rpc AddLetterToDir(DirLid) returns (Response);
   rpc RemoveLetterFromDir(DirLid) returns (Response);
-  rpc RemoveDir(DirName) returns (Response);
+  rpc RemoveDir(DirLid) returns (Response);
 }
 
