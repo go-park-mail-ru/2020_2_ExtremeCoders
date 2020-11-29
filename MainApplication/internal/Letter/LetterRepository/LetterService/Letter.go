@@ -38,8 +38,8 @@ func (lsManager LetterServiceManager)SaveMail(letter LetterModel.Letter) error{
 }
 func (lsManager LetterServiceManager)GetReceivedLetters(email string) (error, []LetterModel.Letter){
 	ctx := context.Background()
-	resp, _ := lsManager.lsClient.GetLettersRecv(ctx, &letterService.Email{Email: email})
-	if resp.Result.Ok==false{
+	resp, err := lsManager.lsClient.GetLettersRecv(ctx, &letterService.Email{Email: email})
+	if err!=nil{
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
