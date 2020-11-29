@@ -40,6 +40,11 @@ message LetterResponse {
   Response result=2;
 }
 
+message DirLid{
+  uint64 did=1;
+  uint64 lid=2;
+}
+
 service LetterService{
   rpc GetLettersByDirRecv(DirName) returns (LetterListResponse);
   rpc GetLettersByDirSend(DirName) returns (LetterListResponse);
@@ -47,5 +52,9 @@ service LetterService{
   rpc GetLettersSend(Email) returns (LetterListResponse);
   rpc SaveLetter(Letter) returns (Response);
   rpc WatchedLetter(Lid) returns (LetterResponse);
+
+  rpc AddLetterToDir(DirLid) returns (Response);
+  rpc RemoveLetterFromDir(DirLid) returns (Response);
+  rpc RemoveDir(DirName) returns (Response);
 }
 
