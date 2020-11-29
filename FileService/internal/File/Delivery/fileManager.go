@@ -1,8 +1,9 @@
 package Delivery
 
 import (
-	"FileService/File/UseCase"
+	"FileService/internal/File/UseCase"
 	fileProto "FileService/proto"
+	"fmt"
 	"golang.org/x/net/context"
 )
 
@@ -20,6 +21,7 @@ func (fm *FileManager) SetAvatar(ctx context.Context, avatar *fileProto.Avatar) 
 }
 
 func (fm *FileManager) GetAvatar(ctx context.Context, user *fileProto.User) (*fileProto.Avatar, error) {
+	fmt.Println("GET AVATAR")
 	avatar, err := fm.uc.GetAvatar(user)
 	return avatar, err
 }

@@ -7,4 +7,5 @@ type Letter struct {
 	Theme    string
 	Text     string
 	DateTime int64
+	IsWatched bool
 }

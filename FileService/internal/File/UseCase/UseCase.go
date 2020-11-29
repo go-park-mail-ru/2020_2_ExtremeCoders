@@ -1,7 +1,7 @@
 package UseCase
 
 import fileProto "FileService/proto"
-import "FileService/File/Repository"
+import "FileService/internal/File/Repository"
 
 type Interface interface {
 	SaveFiles(*fileProto.Files) error

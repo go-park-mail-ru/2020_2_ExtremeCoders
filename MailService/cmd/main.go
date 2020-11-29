@@ -1,19 +1,30 @@
 package main
 
 import (
-	//pb "MailService/proto"
-	//"fmt"
+	"MailService/Postgres"
+	"MailService/config"
+	"MailService/internal/Delivery"
+	"MailService/internal/Repository/LetterPostgres"
+	"MailService/internal/UseCase"
+	letterProto "MailService/proto"
+	"fmt"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/grpclog"
+	"log"
+	"net"
 )
 
 func main() {
-	opts := []grpc.DialOption{
-		grpc.WithInsecure(),
-	}
-	conn, err := grpc.Dial("127.0.0.1:5300", opts...)
+	lis, err := net.Listen("tcp", ":8083")
 	if err != nil {
-		grpclog.Fatalf("fail to dial: %v", err)
+		log.Fatalln("cant listen port", err)
 	}
-	defer conn.Close()
+
+	server := grpc.NewServer()
+	db:=Postgres.DataBase{}
+	db.Init(config.DbUser, config.DbPassword, config.DbDB)
+	repo := LetterPostgres.New(db.DB)
+	uc := UseCase.New(repo)
+	letterProto.RegisterLetterServiceServer(server, Delivery.New(uc))
+	fmt.Println("starting File at :8083")
+	server.Serve(lis)
 }

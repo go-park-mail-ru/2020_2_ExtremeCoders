@@ -1,9 +1,9 @@
 package main
 
 import (
-	"FileService/File/Delivery"
-	fsRepo "FileService/File/Repository/FileSystem"
-	"FileService/File/UseCase"
+	"FileService/internal/File/Delivery"
+	fsRepo "FileService/internal/File/Repository/FileSystem"
+	"FileService/internal/File/UseCase"
 	fileProto "FileService/proto"
 	"fmt"
 	"google.golang.org/grpc"
