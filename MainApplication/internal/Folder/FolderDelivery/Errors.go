@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 )
 
-getFolderListError = errors.New("getErrorListError")
-
+//var getFolderListError = errors.New("getErrorListError")
 type LetterErr struct {
-	Code    int
+	Code        int
 	Description string
 }
-
 
 func GetFoldersError(err error) []byte {
 	ans := &LetterErr{
@@ -20,4 +18,3 @@ func GetFoldersError(err error) []byte {
 	res, _ := json.Marshal(ans)
 	return res
 }
-

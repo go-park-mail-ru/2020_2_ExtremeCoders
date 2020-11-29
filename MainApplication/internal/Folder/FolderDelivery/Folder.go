@@ -206,9 +206,11 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"),lid)
 	kind := true
+	textKind := "recieved"
 	if strings.Contains(r.URL.Path, "recived") {
 		kind = true
 	} else {
+		textKind = "sended"
 		kind = false
 	}
 
@@ -218,7 +220,7 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: kind})
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))
