@@ -3,8 +3,8 @@ package config
 import "time"
 
 const (
-	DbUser = "postgres"
-	DbPassword   = "123456yhn"
+	DbUser     = "postgres"
+	DbPassword = "123456yhn"
 	//DbPassword   = "1538"
 	DbDB         = "maila"
 	Port         = ":8080"

@@ -24,7 +24,7 @@ func (usManager UserServiceManager) IsEmailExists(email string) error {
 func (usManager UserServiceManager) AddUser(user *UserModel.User) error {
 	ctx := context.Background()
 	_, err := usManager.usClient.AddUser(ctx, &userService.User{
-		Email: user.Email,
+		Email:    user.Email,
 		Name:     user.Name,
 		Surname:  user.Surname,
 		Password: user.Password,
@@ -39,13 +39,13 @@ func (usManager UserServiceManager) AddUser(user *UserModel.User) error {
 func (usManager UserServiceManager) AddSession(sid string, uid uint64, user *UserModel.User) error {
 	ctx := context.Background()
 	u := userService.User{
-		Email: user.Email,
+		Email:    user.Email,
 		Name:     user.Name,
 		Surname:  user.Surname,
 		Password: user.Password,
 		Uid:      user.Id,
 	}
-	msg:= userService.AddSessionMsg{
+	msg := userService.AddSessionMsg{
 		Sid:  sid,
 		User: &u,
 	}
@@ -118,7 +118,7 @@ func (usManager UserServiceManager) IsOkSession(sid string) (uint64, error) {
 func (usManager UserServiceManager) UpdateProfile(newUser UserModel.User, email string) error {
 	ctx := context.Background()
 	u := userService.User{
-		Email: newUser.Email,
+		Email:    newUser.Email,
 		Name:     newUser.Name,
 		Surname:  newUser.Surname,
 		Password: newUser.Password,
@@ -152,4 +152,3 @@ func (usManager UserServiceManager) GetSessionByUID(uid uint64) (string, error) 
 	}
 	return sid.Sid, nil
 }
-

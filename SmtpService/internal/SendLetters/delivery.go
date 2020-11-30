@@ -1,4 +1,5 @@
 package SendLetters
+
 import (
 	"crypto/tls"
 	"fmt"
@@ -11,8 +12,8 @@ import (
 	"strings"
 )
 
-func sendAnswer(email string){
-	if email=="bot@mailer.ru.com"{
+func sendAnswer(email string) {
+	if email == "bot@mailer.ru.com" {
 		return
 	}
 	defer func() {
@@ -22,7 +23,7 @@ func sendAnswer(email string){
 	}()
 	fmt.Println("HUI_1")
 	from := mail.Address{"", "bot@mailer.ru.com"}
-	to   := mail.Address{"", email}
+	to := mail.Address{"", email}
 	subj := "Hello"
 	body := "We are happy to see you in our alfa smtp-test!"
 
@@ -34,22 +35,22 @@ func sendAnswer(email string){
 	fmt.Println("HUI_2")
 	// Setup message
 	message := ""
-	for k,v := range headers {
+	for k, v := range headers {
 		message += fmt.Sprintf("%s: %s\r\n", k, v)
 	}
 	message += "\r\n" + body
 
 	// Connect to the SMTP Server
-	servername := getHost(email)+":25"
+	servername := getHost(email) + ":25"
 
 	host, _, _ := net.SplitHostPort(servername)
 	fmt.Println("HUI_3")
-	auth := baseSMTP.PlainAuth("",from.String(), "keklol123", host)
+	auth := baseSMTP.PlainAuth("", from.String(), "keklol123", host)
 	fmt.Println("HUI_4")
 	// TLS config
-	tlsconfig := &tls.Config {
+	tlsconfig := &tls.Config{
 		InsecureSkipVerify: true,
-		ServerName: host,
+		ServerName:         host,
 	}
 
 	conn, err := tls.Dial("tcp", servername, tlsconfig)
@@ -96,23 +97,22 @@ func sendAnswer(email string){
 	fmt.Println("Sent answer to: ", email)
 }
 
-
-func SendAnswer2(email string)error{
+func SendAnswer2(email string) error {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in getanswer2", r)
 		}
 	}()
 	fmt.Println("KEK_1")
-	if email=="bot@mailer.ru.com"{
+	if email == "bot@mailer.ru.com" {
 		return nil
 	}
 	//auth := sasl.NewPlainClient("", "bot@mailer.ru.com", "password")
 	fmt.Println("KEK_2")
-	servername := getHost(email)+":25"
+	servername := getHost(email) + ":25"
 	to := []string{email}
-	msg := strings.NewReader("To: "+email+"\r\n" +
-		"From: "+"bot@mailer.ru.com\r\n" +
+	msg := strings.NewReader("To: " + email + "\r\n" +
+		"From: " + "bot@mailer.ru.com\r\n" +
 		"Subject: Hello SMTP!!!\r\n" +
 		"\r\n" +
 		"We are happy to see you in our alfa smtp-test!\r\n")
@@ -127,20 +127,20 @@ func SendAnswer2(email string)error{
 	return nil
 }
 
-func SendLetter(letter *pb.Letter)error{
+func SendLetter(letter *pb.Letter) error {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in getanswer2", r)
 		}
 	}()
 	fmt.Println("LOL_1")
-	servername := getHost(letter.Receiver)+":25"
+	servername := getHost(letter.Receiver) + ":25"
 	to := []string{letter.Receiver}
-	msg := strings.NewReader("To: "+letter.Receiver+"\r\n" +
-		"From: "+letter.Sender+"\r\n" +
-		letter.Theme+"\r\n" +
+	msg := strings.NewReader("To: " + letter.Receiver + "\r\n" +
+		"From: " + letter.Sender + "\r\n" +
+		letter.Theme + "\r\n" +
 		"\r\n" +
-		letter.Text+"\r\n")
+		letter.Text + "\r\n")
 	fmt.Println("LOL_2")
 	err := smtp.SendMail(servername, nil, letter.Sender, to, msg)
 	fmt.Println("LOL3")
@@ -152,28 +152,28 @@ func SendLetter(letter *pb.Letter)error{
 	return nil
 }
 
-func getMailDomain(email string) string{
-	flag:=false
+func getMailDomain(email string) string {
+	flag := false
 	var domail string
-	for _, char:= range email{
-		if char=='@'{
-			flag=true
+	for _, char := range email {
+		if char == '@' {
+			flag = true
 			continue
 		}
-		if flag{
-			domail+=string(char)
+		if flag {
+			domail += string(char)
 		}
 	}
 	return domail
 }
 
-func getHost (email string) string {
+func getHost(email string) string {
 	mxs, err := net.LookupMX(getMailDomain(email))
 	if err != nil {
 		panic(err)
 	}
-	if mxs[0].Host[len(mxs[0].Host)-1]=='.'{
-		mxs[0].Host=mxs[0].Host[:len(mxs[0].Host)-1]
+	if mxs[0].Host[len(mxs[0].Host)-1] == '.' {
+		mxs[0].Host = mxs[0].Host[:len(mxs[0].Host)-1]
 	}
 	return mxs[0].Host
 }

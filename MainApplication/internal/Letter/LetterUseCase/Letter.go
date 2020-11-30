@@ -11,7 +11,7 @@ type LetterUseCase interface {
 	GetSendedLetters(email string) (error, []LetterModel.Letter)
 	GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter)
 	GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter)
-	WatchLetter(lid uint64)(error, LetterModel.Letter)
+	WatchLetter(lid uint64) (error, LetterModel.Letter)
 }
 
 type useCase struct {
@@ -46,7 +46,7 @@ func (uc useCase) GetSendedLetters(email string) (error, []LetterModel.Letter) {
 	return nil, letters
 }
 
-func (uc useCase)WatchLetter(lid uint64)(error, LetterModel.Letter){
+func (uc useCase) WatchLetter(lid uint64) (error, LetterModel.Letter) {
 	err, letters := uc.Db.WatchLetter(lid)
 	if err != nil {
 		return err, LetterModel.Letter{}
@@ -54,7 +54,7 @@ func (uc useCase)WatchLetter(lid uint64)(error, LetterModel.Letter){
 	return nil, letters
 }
 
-func (uc useCase)GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter){
+func (uc useCase) GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter) {
 	err, letters := uc.Db.GetReceivedLettersDir(dir)
 	if err != nil {
 		return err, nil
@@ -62,7 +62,7 @@ func (uc useCase)GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter)
 	return nil, letters
 }
 
-func (uc useCase)GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter){
+func (uc useCase) GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter) {
 	err, letters := uc.Db.GetSendedLettersDir(dir)
 	if err != nil {
 		return err, nil

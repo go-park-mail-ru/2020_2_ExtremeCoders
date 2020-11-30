@@ -7,19 +7,17 @@ import (
 import proto "UserService/proto"
 import "UserService/internal/UserUseCase"
 
-
 type UserManager struct {
 	useCase UserUseCase.Interface
 }
 
-func New(uc UserUseCase.Interface) proto.UserServiceServer  {
+func New(uc UserUseCase.Interface) proto.UserServiceServer {
 	return UserManager{useCase: uc}
 }
 
 func (um UserManager) GetFoldersList(ctx context.Context, uid *proto.Uid) (*proto.FolderList, error) {
 	return um.useCase.GetFoldersList(uid)
 }
-
 
 func (um UserManager) RemoveFolder(ctx context.Context, folder *proto.Folder) (*proto.FolderId, error) {
 	return um.useCase.RemoveFolder(folder)
@@ -33,11 +31,9 @@ func (um UserManager) CreateFolder(ctx context.Context, folder *proto.Folder) (*
 	return um.useCase.CreateFolder(folder)
 }
 
-
 func (um UserManager) GetFolderId(ctx context.Context, msg *proto.Folder) (*proto.FolderId, error) {
 	return um.useCase.GetFolderId(msg)
 }
-
 
 func (um UserManager) IsEmailExists(ctx context.Context, email *proto.Email) (*proto.Nothing, error) {
 	return um.useCase.IsEmailExists(email)
@@ -83,7 +79,3 @@ func (um UserManager) RemoveSession(ctx context.Context, sid *proto.Sid) (*proto
 func (um UserManager) GetSessionByUID(ctx context.Context, uid *proto.Uid) (*proto.Sid, error) {
 	return um.useCase.GetSessionByUID(uid)
 }
-
-
-
-

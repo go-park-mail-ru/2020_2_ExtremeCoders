@@ -37,7 +37,7 @@ func SaveUserToContext(ctx context.Context, user UserModel.User) context.Context
 
 func GenerateCSRF() string {
 	var token string
-	for i:=0;i< config.CsrfSize;i++ {
+	for i := 0; i < config.CsrfSize; i++ {
 		pos, _ := crypto.Int(crypto.Reader, big.NewInt(int64(len(config.SidRunes))))
 		token += string(config.SidRunes[pos.Int64()])
 	}

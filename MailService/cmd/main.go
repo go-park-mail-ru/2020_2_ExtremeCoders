@@ -20,7 +20,7 @@ func main() {
 	}
 
 	server := grpc.NewServer()
-	db:=Postgres.DataBase{}
+	db := Postgres.DataBase{}
 	db.Init(config.DbUser, config.DbPassword, config.DbDB)
 	repo := LetterPostgres.New(db.DB)
 	uc := UseCase.New(repo)

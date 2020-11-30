@@ -171,7 +171,6 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoResponseAnswer(resp))
 }
 
-
 //put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
 func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 	oldName := r.FormValue("oldName")
@@ -204,7 +203,7 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(err))
 		return
 	}
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"),lid)
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), lid)
 	kind := true
 	textKind := "recieved"
 	if strings.Contains(r.URL.Path, "recived") {
@@ -227,7 +226,7 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err:=d.lsClient.RemoveLetterFromDir(r.Context(), &mailProto.DirLid{
+	resp, err := d.lsClient.RemoveLetterFromDir(r.Context(), &mailProto.DirLid{
 		Did:  folderId.Id,
 		Lid:  lid,
 		Type: kind,
@@ -238,7 +237,7 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 
 func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 	folderName := r.FormValue("folderName")
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"),folderName)
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), folderName)
 	kind := true
 	textKind := "recieved"
 	if strings.Contains(r.URL.Path, "recived") {
@@ -260,7 +259,7 @@ func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	resp, _:=d.lsClient.RemoveDir(r.Context(), &mailProto.DirLid{
+	resp, _ := d.lsClient.RemoveDir(r.Context(), &mailProto.DirLid{
 		Did:  folderId.Id,
 		Type: kind,
 	})

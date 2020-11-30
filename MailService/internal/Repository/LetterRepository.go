@@ -14,19 +14,17 @@ var SentLetterError = errors.New("Could not get sent letters!")
 var GetByLidError = errors.New("Could not get letter by lid!")
 var SetLetterWatchedError = errors.New("Could not set letter watched!")
 
-
 type LetterDB interface {
 	SaveMail(Model.Letter) error
 	GenerateLID() uint64
 	SetLetterWatched(uint64) (error, Model.Letter)
-	GetLetterByLid(uint64)(error, Model.Letter)
+	GetLetterByLid(uint64) (error, Model.Letter)
 
-	GetLettersRecvDir(uint64)  (error, []Model.Letter)
-	GetLettersSentDir(uint64)  (error, []Model.Letter)
-	GetLettersRecv(string)  (error, []Model.Letter)
-	GetLettersSent(string)  (error, []Model.Letter)
+	GetLettersRecvDir(uint64) (error, []Model.Letter)
+	GetLettersSentDir(uint64) (error, []Model.Letter)
+	GetLettersRecv(string) (error, []Model.Letter)
+	GetLettersSent(string) (error, []Model.Letter)
 	GetLettersByFolder(uint64) (error, []Model.Letter)
-
 
 	AddLetterToDir(uint64, uint64, bool) error
 	RemoveLetterFromDir(uint64, uint64, bool) error

@@ -38,7 +38,6 @@ func main() {
 	defer grcpMailService.Close()
 	mailManager := protoMail.NewLetterServiceClient(grcpMailService)
 
-
 	grcpFileService, err := grpc.Dial(
 		"127.0.0.1:8081",
 		grpc.WithInsecure(),
@@ -49,7 +48,6 @@ func main() {
 	defer grcpFileService.Close()
 	fileManager := protoFs.NewFileServiceClient(grcpFileService)
 
-
 	grcpUserService, err := grpc.Dial(
 		"127.0.0.1:8082",
 		grpc.WithInsecure(),
@@ -59,7 +57,6 @@ func main() {
 	}
 	defer grcpUserService.Close()
 	userManager := protoUs.NewUserServiceClient(grcpUserService)
-
 
 	var uDB = UserMicroservice.New(userManager)
 	var uUC = UserUseCase.New(uDB)
@@ -86,17 +83,17 @@ func main() {
 	mux.HandleFunc("/user/foders/recived/folderName", fDe.GetLettersByFolder)
 	mux.HandleFunc("/user/foders/sended/folderName", fDe.GetLettersByFolder)
 	//post /user/folders/{recived/sended}/folderName - добавить папку
-	mux.HandleFunc("/user/folders/recived/folderName" , fDe.AddFolder)
-	mux.HandleFunc("/user/folders/sended/folderName" , fDe.AddFolder)
+	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)
+	mux.HandleFunc("/user/folders/sended/folderName", fDe.AddFolder)
 	//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
-	mux.HandleFunc("/user/folders/recived/folderName/letter" , fDe.RenameFolder)
-	mux.HandleFunc("/user/folders/sended/folderName/letter" , fDe.AddLetterInFolder)
+	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.RenameFolder)
+	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
-	mux.HandleFunc("/user/folders/recived/folderName " , fDe.AddLetterInFolder)
-	mux.HandleFunc("/user/folders/sended/folderName " , fDe.RenameFolder)
+	mux.HandleFunc("/user/folders/recived/folderName ", fDe.AddLetterInFolder)
+	mux.HandleFunc("/user/folders/sended/folderName ", fDe.RenameFolder)
 	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
-	mux.HandleFunc("/user/folders/recived/folderName/letter  " , fDe.RemoveLetterInFolder)
-	mux.HandleFunc("/user/folders/sended/folderName/letter  " , fDe.RemoveLetterInFolder)
+	mux.HandleFunc("/user/folders/recived/folderName/letter  ", fDe.RemoveLetterInFolder)
+	mux.HandleFunc("/user/folders/sended/folderName/letter  ", fDe.RemoveLetterInFolder)
 	//delete /user/folders/{recived/sended}/folderName  - удалить папку
 	//mux.HandleFunc("/user/folders/recived/folderName " , fDe.RemoveFolder)
 	//mux.HandleFunc("/user/folders/sended/folderName/letter" , fDe.RemoveFolder)
