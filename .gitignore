@@ -1,0 +1,7 @@
+/.idea/
+MainApplication/go.sum
+.idea
+.idea/workspace.xml
+../go.sum
+/CleanArch
+*.jpeg

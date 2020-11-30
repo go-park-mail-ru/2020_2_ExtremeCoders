@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+// protoc --go_out=plugins=grpc:. *.proto
+package letterService;
+
+message Letter{
+  uint64 lid=1;
+  string sender=2;
+  string receiver=3;
+  string theme=4;
+  string text=5;
+  uint64 dateTime=6;
+}
+
+message DirName{
+  string dirName=1;
+}
+
+message Response{
+  bool ok=1;
+  string description=2;
+}
+
+
+service LetterService{
+  rpc SendLetter(Letter) returns (Response);
+}
+
