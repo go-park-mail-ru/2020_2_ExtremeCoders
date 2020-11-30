@@ -86,7 +86,7 @@ func (dbInfo dataBase) GetLettersSentDir(Did uint64)  (error, []Model.Letter){
 
 func (dbInfo dataBase)GetLettersRecv(email string)  (error, []Model.Letter){
 	var letters []Model.Letter
-	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).Select()
+	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
