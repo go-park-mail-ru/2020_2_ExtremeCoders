@@ -6,6 +6,7 @@ const (
 	DbUser = "postgres"
 	//DbPassword   = "123456yhn"
 	DbPassword   = "1538"
+	//DbPassword   = "1538"
 	DbDB         = "maila"
 	Port         = ":8080"
 	ReadTimeout  = 10 * time.Second

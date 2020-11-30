@@ -16,7 +16,6 @@ type dataBase struct {
 	DB pgwrapper.DB
 }
 
-
 func New(db pgwrapper.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
 }
@@ -24,7 +23,7 @@ func New(db pgwrapper.DB) UserRepository.UserDB {
 func (dbInfo dataBase) GetFoldersList(uid uint64) (folders []*UserModel.Folder, err error) {
 	var res []*UserModel.Folder
 	err = dbInfo.DB.Model(&res).Where("uid=?", uid).Select()
-	if err!=nil{
+	if err != nil {
 		fmt.Println("GET FOLDERS ERROR", err)
 		return nil, err
 	}

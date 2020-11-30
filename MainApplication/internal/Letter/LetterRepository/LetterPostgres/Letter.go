@@ -40,6 +40,6 @@ func (dbInfo dataBase) GetSendedLetters(email uint64) (error, []LetterModel.Lett
 	return nil, letters
 }
 
-func (dbInfo dataBase) WatchLetter(uint64) (error, LetterModel.Letter){
+func (dbInfo dataBase) WatchLetter(uint64) (error, LetterModel.Letter) {
 	return nil, LetterModel.Letter{}
 }

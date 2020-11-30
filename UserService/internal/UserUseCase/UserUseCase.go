@@ -33,7 +33,6 @@ type UseCase struct {
 	db UserRepository.UserDB
 }
 
-
 func New(db UserRepository.UserDB) Interface {
 	return UseCase{db: db}
 }
@@ -44,7 +43,7 @@ func (u UseCase) GetFoldersList(uid *proto.Uid) (*proto.FolderList, error) {
 		return nil, err
 	}
 	var tmp []*proto.FolderNameType
-	for _, value := range folders{
+	for _, value := range folders {
 		tmp = append(tmp, &proto.FolderNameType{
 			Name: value.Name,
 			Type: value.Type,
@@ -55,11 +54,11 @@ func (u UseCase) GetFoldersList(uid *proto.Uid) (*proto.FolderList, error) {
 
 func (u UseCase) RemoveFolder(folder *proto.Folder) (*proto.FolderId, error) {
 	id, err := u.db.GetFolderId(folder.Uid, folder.Type, folder.Name)
-	if err!=nil{
+	if err != nil {
 		return nil, RemoveFolderErr
 	}
 	err = u.db.RemoveFolder(id)
-	if err!=nil{
+	if err != nil {
 		return nil, RemoveFolderErr
 	}
 	return &proto.FolderId{Id: id}, err
