@@ -58,6 +58,7 @@ func (lsManager LetterServiceManager)GetReceivedLettersDir(dir uint64) (error, [
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
 }
+
 func (lsManager LetterServiceManager)GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter){
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.GetLettersByDirSend(ctx, &letterService.DirName{DirName: dir})

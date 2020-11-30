@@ -42,19 +42,20 @@ func (ld Delivery) GetLettersByDirSend(ctx context.Context, dir *pb.DirName) (*p
 func (ld Delivery) SaveLetter(ctx context.Context, letter *pb.Letter) (*pb.Response, error) {
 	letter.IsWatched = false
 	err := ld.uc.SaveLetter(convert.ProtoToModel(letter))
-
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true, Description: ""}
+	if err != nil {
+		resp.Ok = false
+		resp.Description = err.Error()
 	}
 	return &resp, nil
 }
 
 func (ld Delivery) WatchedLetter(ctx context.Context, Lid *pb.Lid) (*pb.LetterResponse, error) {
 	err, letter := ld.uc.WatchLetter(Lid.Lid)
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true, Description: ""}
+	if err != nil {
+		resp.Ok = false
+		resp.Description = err.Error()
 	}
 	letterPB := convert.ModelToProto(letter)
 	return &pb.LetterResponse{Letter: &letterPB, Result: &resp}, nil
@@ -85,9 +86,10 @@ func (ld Delivery) GetLettersSend(ctx context.Context, email *pb.Email) (*pb.Let
 func (ld Delivery) AddLetterToDir(ctx context.Context, dirlid *pb.DirLid) (*pb.Response, error) {
 	err := ld.uc.AddLetterToDir(dirlid.Lid, dirlid.Did, dirlid.Type)
 
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true, Description: ""}
+	if err != nil {
+		resp.Ok = false
+		resp.Description = err.Error()
 	}
 	return &resp, nil
 }
@@ -95,18 +97,20 @@ func (ld Delivery) AddLetterToDir(ctx context.Context, dirlid *pb.DirLid) (*pb.R
 func (ld Delivery) RemoveLetterFromDir(ctx context.Context, dirlid *pb.DirLid) (*pb.Response, error) {
 	err := ld.uc.RemoveLetterFromDir(dirlid.Lid, dirlid.Did, dirlid.Type)
 
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true, Description: ""}
+	if err != nil {
+		resp.Ok = false
+		resp.Description = err.Error()
 	}
 	return &resp, nil
 }
 
 func (ld Delivery) RemoveDir(ctx context.Context, dirlid *pb.DirLid) (*pb.Response, error) {
 	err := ld.uc.RemoveDir(dirlid.Did, dirlid.Type)
-	resp := pb.Response{Ok: false, Description: err.Error()}
-	if err == nil {
-		resp.Ok = true
+	resp := pb.Response{Ok: true, Description: ""}
+	if err != nil {
+		resp.Ok = false
+		resp.Description = err.Error()
 	}
 	return &resp, nil
 }

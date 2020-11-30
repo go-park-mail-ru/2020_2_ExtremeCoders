@@ -56,10 +56,10 @@ func (uc useCase) Signup(user UserModel.User) (error, string) {
 
 func (uc useCase) SignIn(user UserModel.User) (error, string) {
 	userEx, erro := uc.Db.GetUserByEmail(user.Email)
-	fmt.Println("EX USER", userEx.Email, userEx.Id, "NEW USER", user.Id, user.Email)
 	if erro != nil {
 		return erro, ""
 	}
+	//fmt.Println("EX USER", userEx.Email, userEx.Id, "NEW USER", user.Id, user.Email)
 	if bcrypt.CompareHashAndPassword([]byte(userEx.Password), []byte(user.Password)) != nil {
 		return WrongPasswordError, ""
 	}
