@@ -8,6 +8,7 @@ require (
 	github.com/golang/mock v1.4.4
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.2 // indirect
+	github.com/mailru/easyjson v0.7.6
 	github.com/microcosm-cc/bluemonday v1.0.4
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/onsi/ginkgo v1.14.2 // indirect

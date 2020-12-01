@@ -7,10 +7,10 @@ import (
 	"context"
 	crypto "crypto/rand"
 	"errors"
+	"github.com/microcosm-cc/bluemonday"
 	"math/big"
 	"net/http"
 	"time"
-	"github.com/microcosm-cc/bluemonday"
 )
 
 const (
