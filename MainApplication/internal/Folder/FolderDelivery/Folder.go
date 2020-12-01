@@ -30,8 +30,8 @@ type Interface interface {
 	RemoveFolder(w http.ResponseWriter, r *http.Request)
 }
 
-func New() Interface {
-	return Delivery{}
+func New(usClient userService.UserServiceClient, lsClient letterService.LetterServiceClient) Interface {
+	return Delivery{usClient: usClient, lsClient: lsClient}
 }
 
 type Delivery struct {
@@ -113,7 +113,8 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	_, er = d.usClient.CreateFolder(r.Context(), &userProto.Folder{Uid: user.Id, Name: folderName})
+	userProtoStruct:=&userProto.Folder{Uid: user.Id, Name: folderName, Type: "received"}
+	_, er = d.usClient.CreateFolder(r.Context(), userProtoStruct)
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return

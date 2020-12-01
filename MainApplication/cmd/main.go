@@ -66,7 +66,8 @@ func main() {
 	var lUC = LetterUseCase.New(lDB)
 	var lDE = LetterDelivery.New(lUC)
 
-	var fDe = FolderDelivery.New()
+	var fDe = FolderDelivery.New(userManager, mailManager)
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/session", uDE.Session)
