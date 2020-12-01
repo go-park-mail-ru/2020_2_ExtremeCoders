@@ -10,6 +10,7 @@ import (
 	"math/big"
 	"net/http"
 	"time"
+	"github.com/microcosm-cc/bluemonday"
 )
 
 const (
@@ -45,7 +46,10 @@ func GenerateCSRF() string {
 }
 
 func GetStrFormValueSafety(r *http.Request, field string) string {
-	return r.FormValue(field)
+	xss:=r.FormValue(field)
+	p := bluemonday.UGCPolicy()
+	ok:=p.Sanitize(xss)
+	return ok
 }
 
 func CreateCsrfCookie() *http.Cookie {
