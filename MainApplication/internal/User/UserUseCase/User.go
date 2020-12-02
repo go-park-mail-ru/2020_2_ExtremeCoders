@@ -70,12 +70,12 @@ func (uc useCase) SignIn(user UserModel.User) (error, string) {
 	oldSid, er := uc.Db.GetSessionByUID(userEx.Id)
 	if er != nil {
 		fmt.Println("\n\n\n SIGN IN GET SESSION ERROR ", er, oldSid)
-		//return er, ""
+		return er, ""
 	}
 	er, _ = uc.Db.RemoveSession(oldSid)
 	if er != nil {
 		fmt.Println("\n\n\n SIGN IN REMOVE SESSION ERROR ", er, oldSid)
-		//return er, ""
+		return er, ""
 	}
 	er = uc.Db.AddSession(string(sid), userEx.Id, userEx)
 	if er != nil {
