@@ -55,7 +55,7 @@ func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	folders, er := d.usClient.GetFoldersList(r.Context(), &userProto.Uid{Uid: user.Id})
+	folders, er := d.usClient.GetFoldersList(r.Context(), &userProto.FolderUidType{Uid: user.Id, Type: kind})
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
