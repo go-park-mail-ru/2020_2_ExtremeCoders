@@ -18,6 +18,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net/http"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -68,7 +69,7 @@ func main() {
 
 	var fDe = FolderDelivery.New(userManager, mailManager)
 
-	mux := http.NewServeMux()
+	mux := mux.NewRouter()
 
 	mux.HandleFunc("/session", uDE.Session)
 	mux.HandleFunc("/user", uDE.Profile)
@@ -81,8 +82,8 @@ func main() {
 	mux.HandleFunc("/user/folders/recived", fDe.GetFolderList)
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
 	//get /user/foders/{recived/sended}/folderName - письма
-	mux.HandleFunc("/user/foders/recived/folderName", fDe.GetLettersByFolder)
-	mux.HandleFunc("/user/foders/sended/folderName", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/recived/{folderName:.*}", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/sended/{folderName:.*}", fDe.GetLettersByFolder)
 	//post /user/folders/{recived/sended}/folderName - добавить папку
 	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)
 	mux.HandleFunc("/user/folders/sended/folderName", fDe.AddFolder)
