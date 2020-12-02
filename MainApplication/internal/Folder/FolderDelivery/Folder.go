@@ -137,12 +137,14 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		kind = "recived"
 	}
 	fmt.Println("KIND", kind)
+	folderName:=context.GetStrFormValueSafety(r, "folderName")
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: kind})
+
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: kind, Name: folderName})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))

@@ -6,6 +6,7 @@ import (
 	"MainApplication/internal/errors"
 	"MainApplication/internal/pkg/context"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -69,12 +70,7 @@ func (de delivery) WatchLetter(w http.ResponseWriter, r *http.Request) {
 		w.Write(errors.GetErrorNotPostAns())
 		return
 	}
-	var letter LetterModel.Letter
-	er, user := context.GetUserFromCtx(r.Context())
-	if er != nil {
-		w.Write(GetLettersError(er, nil))
-		return
-	}
-	letter.Sender = user.Email
-	letter.Receiver = context.GetStrFormValueSafety(r, "id")
+	id := context.GetStrFormValueSafety(r, "id")
+	num, _:=strconv.Atoi(id)
+	de.Uc.WatchLetter(uint64(num))
 }

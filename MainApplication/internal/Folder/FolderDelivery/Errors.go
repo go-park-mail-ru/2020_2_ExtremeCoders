@@ -6,33 +6,15 @@ import (
 	"encoding/json"
 )
 
-//var getFolderListError = errors.New("getErrorListError")
-type LetterErr struct {
-	Code        int
-	Description string
-}
-
-type LetterList struct {
-	Code        int
-	Description string
-	letter      []*mailProto.Letter
-}
-
-type FolderList struct {
-	Code    int
-	folders []*userProto.FolderNameType
-}
-
-type SuccessAns struct {
-	Code int
-}
-
 func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
 	ans := FolderList{
 		Code:    200,
-		folders: folders,
+		Folders: ProtoToModelList(folders),
 	}
-	res, _ := json.Marshal(ans)
+	res, err := json.Marshal(ans)
+	if err!=nil{
+		return nil
+	}
 	return res
 }
 

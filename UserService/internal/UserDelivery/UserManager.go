@@ -16,7 +16,8 @@ func New(uc UserUseCase.Interface) proto.UserServiceServer {
 }
 
 func (um UserManager) GetFoldersList(ctx context.Context, uid *proto.Uid) (*proto.FolderList, error) {
-	return um.useCase.GetFoldersList(uid)
+	folder, err:=um.useCase.GetFoldersList(uid)
+	return folder, err
 }
 
 func (um UserManager) RemoveFolder(ctx context.Context, folder *proto.Folder) (*proto.FolderId, error) {
