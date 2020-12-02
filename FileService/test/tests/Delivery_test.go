@@ -52,3 +52,4 @@ func TestSetAvatarDelivery(t *testing.T) {
 	ctx:=context.Background()
 	de.SetAvatar(ctx, avatar)
 }
+
