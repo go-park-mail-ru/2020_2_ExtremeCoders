@@ -35,5 +35,5 @@ service FileService{
   rpc SetAvatar(Avatar) returns (Nothing);
   rpc GetAvatar(User) returns (Avatar);
   rpc SaveFiles(Files) returns (Nothing);
-  rpc GetFiles(LetterId) returns(Files);
+  rpc GetFiles(LetterId) returns(Files);folders
 }

@@ -13,7 +13,7 @@ var ReceivedLetterError = errors.New("Could not get received letters!")
 var SentLetterError = errors.New("Could not get sent letters!")
 var GetByLidError = errors.New("Could not get letter by lid!")
 var SetLetterWatchedError = errors.New("Could not set letter watched!")
-
+//go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
 type LetterDB interface {
 	SaveMail(Model.Letter) error
 	GenerateLID() uint64
