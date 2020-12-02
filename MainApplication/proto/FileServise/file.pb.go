@@ -19,6 +19,8 @@ import (
 	reflect "reflect"
 	sync "sync"
 )
+//go:generate mockgen -source=./file.pb.go -destination=./FileProtoMock.go
+
 
 const (
 	// Verify that this generated code is sufficiently up-to-date.

@@ -7,6 +7,7 @@
 // protoc --go_out=plugins=grpc:. *.proto
 
 package letterService
+//go:generate mockgen -source=./mail.pb.go -destination=./MailProtoMock.go
 
 import (
 	context "context"
