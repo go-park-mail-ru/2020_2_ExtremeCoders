@@ -14,10 +14,30 @@ import (
 	protoMail "MainApplication/proto/MailService"
 	protoUs "MainApplication/proto/UserServise"
 	"fmt"
+	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net/http"
+	"time"
+)
+
+func recordMetrics() {
+	go func() {
+		for {
+			opsProcessed.Inc()
+			time.Sleep(2 * time.Second)
+		}
+	}()
+}
+
+var (
+	opsProcessed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "myapp_processed_ops_total",
+		Help: "The total number of processed events",
+	})
 )
 
 func main() {
@@ -68,7 +88,7 @@ func main() {
 
 	var fDe = FolderDelivery.New(userManager, mailManager)
 
-	mux := http.NewServeMux()
+	mux := mux.NewRouter()
 
 	mux.HandleFunc("/session", uDE.Session)
 	mux.HandleFunc("/user", uDE.Profile)
@@ -81,20 +101,23 @@ func main() {
 	mux.HandleFunc("/user/folders/recived", fDe.GetFolderList)
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
 	//get /user/foders/{recived/sended}/folderName - письма
-	mux.HandleFunc("/user/foders/recived/folderName", fDe.GetLettersByFolder)
-	mux.HandleFunc("/user/foders/sended/folderName", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/recived/{folderName}", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/sended/{folderName}", fDe.GetLettersByFolder)
 	//post /user/folders/{recived/sended}/folderName - добавить папку
 	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)
 	mux.HandleFunc("/user/folders/sended/folderName", fDe.AddFolder)
 	//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
-	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.RenameFolder)
+	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
 	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
-	mux.HandleFunc("/user/folders/recived/folderName ", fDe.AddLetterInFolder)
+	mux.HandleFunc("/user/folders/recived/folderName ", fDe.RenameFolder)
 	mux.HandleFunc("/user/folders/sended/folderName ", fDe.RenameFolder)
 	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
 	mux.HandleFunc("/user/folders/recived/folderName/letter  ", fDe.RemoveLetterInFolder)
 	mux.HandleFunc("/user/folders/sended/folderName/letter  ", fDe.RemoveLetterInFolder)
+
+	//mux.Handle("/metrics", promhttp.Handler())
+
 	//delete /user/folders/{recived/sended}/folderName  - удалить папку
 	//mux.HandleFunc("/user/folders/recived/folderName " , fDe.RemoveFolder)
 	//mux.HandleFunc("/user/folders/sended/folderName/letter" , fDe.RemoveFolder)

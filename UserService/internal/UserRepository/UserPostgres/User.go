@@ -22,9 +22,9 @@ func New(db pgwrapper.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
 }
 
-func (dbInfo dataBase) GetFoldersList(uid uint64) (folders []*UserModel.Folder, err error) {
+func (dbInfo dataBase) GetFoldersList(uid uint64, kind string) (folders []*UserModel.Folder, err error) {
 	var res []*UserModel.Folder
-	err = dbInfo.DB.Model(&res).Where("uid=?", uid).Select()
+	err = dbInfo.DB.Model(&res).Where("uid=? and type=?", uid, kind).Select()
 	if err != nil {
 		fmt.Println("GET FOLDERS ERROR", err)
 		return nil, err
@@ -55,11 +55,16 @@ func (dbInfo dataBase) RenameFolder(uid uint64, kind string, oldName string, new
 }
 
 func (dbInfo dataBase) CreateFolder(name string, kind string, uid uint64) error {
+
 	fmt.Println("CALL GET FOLDER ID", uid, kind, name)
 	folder := &UserModel.Folder{
 		Uid:  uid,
 		Type: kind,
 		Name: name,
+	}
+	exist:=dbInfo.DB.Model(folder).Where("type=? and name=? and uid=?", folder.Type, folder.Name, folder.Uid).Select()
+	if exist==nil{
+		return UserRepository.CreateFolderError
 	}
 	_, err := dbInfo.DB.Model(folder).Insert()
 	if err != nil {

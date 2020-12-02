@@ -1,44 +1,26 @@
 package FolderDelivery
 
 import (
+	Model "MainApplication/internal/Letter/LetterModel"
 	mailProto "MainApplication/proto/MailService"
 	userProto "MainApplication/proto/UserServise"
-	"encoding/json"
 )
-
-//var getFolderListError = errors.New("getErrorListError")
-type LetterErr struct {
-	Code        int
-	Description string
-}
-
-type LetterList struct {
-	Code        int
-	Description string
-	letter      []*mailProto.Letter
-}
-
-type FolderList struct {
-	Code    int
-	folders []*userProto.FolderNameType
-}
-
-type SuccessAns struct {
-	Code int
-}
 
 func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
 	ans := FolderList{
 		Code:    200,
-		folders: folders,
+		Folders: ProtoToModelList(folders),
 	}
-	res, _ := json.Marshal(ans)
+	res, err := ans.MarshalJSON()
+	if err!=nil{
+		return nil
+	}
 	return res
 }
 
 func SuccessRespAns() []byte {
 	ans := SuccessAns{Code: 200}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
 }
 
@@ -47,7 +29,7 @@ func GetFoldersError(err error) []byte {
 		Code:        400,
 		Description: err.Error(),
 	}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
 }
 
@@ -60,7 +42,7 @@ func ProtoResponseAnswer(pbLetter *mailProto.Response) []byte {
 		Code:        code,
 		Description: pbLetter.Description,
 	}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
 }
 
@@ -72,8 +54,34 @@ func ProtoLetterListAnswer(pbLetter *mailProto.LetterListResponse) []byte {
 	ans := LetterList{
 		Code:        code,
 		Description: pbLetter.Result.Description,
-		letter:      pbLetter.Letter,
+		Letter:      ProtoToModelMail(pbLetter),
 	}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
+}
+
+func ProtoToModelList(pbLetter []*userProto.FolderNameType) []Folder{
+	var folders []Folder
+	for _, letter:=range pbLetter{
+		letterModel:=Folder{Name: letter.Name, Type: letter.Type}
+		folders=append(folders, letterModel)
+	}
+	return folders
+}
+
+func ProtoToModelMail(pbLetter *mailProto.LetterListResponse) []Model.Letter{
+	var letters []Model.Letter
+	for _, pb:=range pbLetter.Letter{
+		letter:=Model.Letter{
+			Sender: pb.Sender,
+			Receiver: pb.Receiver,
+			Text: pb.Text,
+			Theme: pb.Theme,
+			IsWatched: pb.IsWatched,
+			Id: pb.Lid,
+			DateTime: int64(pb.DateTime),
+		}
+		letters=append(letters, letter)
+	}
+	return letters
 }

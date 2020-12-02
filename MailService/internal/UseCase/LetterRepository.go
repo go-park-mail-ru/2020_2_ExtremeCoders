@@ -22,6 +22,8 @@ type Interface interface {
 	RemoveDir(uint64, bool) error
 }
 
+//go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
+
 func New(repo Repository.LetterDB) Interface {
 	return UseCase{re: repo}
 }

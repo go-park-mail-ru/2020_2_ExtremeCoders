@@ -36,7 +36,7 @@ type UserDB interface {
 	CreateFolder(name string, kind string, uid uint64) error
 	RenameFolder(uid uint64, kind string, oldName string, newName string) error
 	RemoveFolder(id uint64) error
-	GetFoldersList(uid uint64) (folders []*UserModel.Folder, err error)
+	GetFoldersList(uid uint64, kind string) (folders []*UserModel.Folder, err error)
 }
 
 //type UserDB interface {
