@@ -17,7 +17,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -116,7 +115,9 @@ func main() {
 	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
 	mux.HandleFunc("/user/folders/recived/folderName/letter  ", fDe.RemoveLetterInFolder)
 	mux.HandleFunc("/user/folders/sended/folderName/letter  ", fDe.RemoveLetterInFolder)
-	mux.Handle("/metrics", promhttp.Handler())
+
+	//mux.Handle("/metrics", promhttp.Handler())
+
 	//delete /user/folders/{recived/sended}/folderName  - удалить папку
 	//mux.HandleFunc("/user/folders/recived/folderName " , fDe.RemoveFolder)
 	//mux.HandleFunc("/user/folders/sended/folderName/letter" , fDe.RemoveFolder)
