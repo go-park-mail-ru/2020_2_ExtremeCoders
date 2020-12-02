@@ -159,13 +159,13 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		resp, er = d.lsClient.AddLetterToDir(r.Context(), &mailProto.DirLid{
 			Did:  folderId.Id,
 			Lid:  lid,
-			Type: false,
+			Type: true,
 		})
 	} else {
 		resp, er = d.lsClient.AddLetterToDir(r.Context(), &mailProto.DirLid{
 			Did:  folderId.Id,
 			Lid:  lid,
-			Type: true,
+			Type: false,
 		})
 	}
 	if er != nil {
