@@ -20,6 +20,8 @@ import (
 	sync "sync"
 )
 
+//go:generate mockgen -source=./user.pb.go -destination=./ProtoMock.go
+
 const (
 	// Verify that this generated code is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
