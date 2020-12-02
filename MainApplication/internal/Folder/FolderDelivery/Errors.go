@@ -3,7 +3,6 @@ package FolderDelivery
 import (
 	mailProto "MainApplication/proto/MailService"
 	userProto "MainApplication/proto/UserServise"
-	"encoding/json"
 )
 
 func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
@@ -11,7 +10,7 @@ func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
 		Code:    200,
 		Folders: ProtoToModelList(folders),
 	}
-	res, err := json.Marshal(ans)
+	res, err := ans.MarshalJSON()
 	if err!=nil{
 		return nil
 	}
@@ -20,7 +19,7 @@ func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
 
 func SuccessRespAns() []byte {
 	ans := SuccessAns{Code: 200}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
 }
 
@@ -29,7 +28,7 @@ func GetFoldersError(err error) []byte {
 		Code:        400,
 		Description: err.Error(),
 	}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
 }
 
@@ -42,7 +41,7 @@ func ProtoResponseAnswer(pbLetter *mailProto.Response) []byte {
 		Code:        code,
 		Description: pbLetter.Description,
 	}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
 }
 
@@ -56,6 +55,15 @@ func ProtoLetterListAnswer(pbLetter *mailProto.LetterListResponse) []byte {
 		Description: pbLetter.Result.Description,
 		letter:      pbLetter.Letter,
 	}
-	res, _ := json.Marshal(ans)
+	res, _ := ans.MarshalJSON()
 	return res
+}
+
+func ProtoToModelList(pbLetter []*userProto.FolderNameType) []Folder{
+	var folders []Folder
+	for _, letter:=range pbLetter{
+		letterModel:=Folder{Name: letter.Name, Type: letter.Type}
+		folders=append(folders, letterModel)
+	}
+	return folders
 }
