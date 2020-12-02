@@ -3,6 +3,7 @@
 package FolderDelivery
 
 import (
+	LetterModel "MainApplication/internal/Letter/LetterModel"
 	json "encoding/json"
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"
@@ -106,6 +107,29 @@ func easyjsonE0ad3eebDecodeMainApplicationInternalFolderFolderDelivery1(in *jlex
 			out.Code = int(in.Int())
 		case "Description":
 			out.Description = string(in.String())
+		case "Letter":
+			if in.IsNull() {
+				in.Skip()
+				out.Letter = nil
+			} else {
+				in.Delim('[')
+				if out.Letter == nil {
+					if !in.IsDelim(']') {
+						out.Letter = make([]LetterModel.Letter, 0, 0)
+					} else {
+						out.Letter = []LetterModel.Letter{}
+					}
+				} else {
+					out.Letter = (out.Letter)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v1 LetterModel.Letter
+					(v1).UnmarshalEasyJSON(in)
+					out.Letter = append(out.Letter, v1)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		default:
 			in.SkipRecursive()
 		}
@@ -129,6 +153,22 @@ func easyjsonE0ad3eebEncodeMainApplicationInternalFolderFolderDelivery1(out *jwr
 		const prefix string = ",\"Description\":"
 		out.RawString(prefix)
 		out.String(string(in.Description))
+	}
+	{
+		const prefix string = ",\"Letter\":"
+		out.RawString(prefix)
+		if in.Letter == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v2, v3 := range in.Letter {
+				if v2 > 0 {
+					out.RawByte(',')
+				}
+				(v3).MarshalEasyJSON(out)
+			}
+			out.RawByte(']')
+		}
 	}
 	out.RawByte('}')
 }
@@ -266,9 +306,9 @@ func easyjsonE0ad3eebDecodeMainApplicationInternalFolderFolderDelivery3(in *jlex
 					out.Folders = (out.Folders)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v1 Folder
-					(v1).UnmarshalEasyJSON(in)
-					out.Folders = append(out.Folders, v1)
+					var v4 Folder
+					(v4).UnmarshalEasyJSON(in)
+					out.Folders = append(out.Folders, v4)
 					in.WantComma()
 				}
 				in.Delim(']')
@@ -299,11 +339,11 @@ func easyjsonE0ad3eebEncodeMainApplicationInternalFolderFolderDelivery3(out *jwr
 			out.RawString("null")
 		} else {
 			out.RawByte('[')
-			for v2, v3 := range in.Folders {
-				if v2 > 0 {
+			for v5, v6 := range in.Folders {
+				if v5 > 0 {
 					out.RawByte(',')
 				}
-				(v3).MarshalEasyJSON(out)
+				(v6).MarshalEasyJSON(out)
 			}
 			out.RawByte(']')
 		}
