@@ -4,7 +4,7 @@ import (
 	"MainApplication/internal/Letter/LetterModel"
 	"errors"
 )
-
+//go:generate mockgen -source=./DataBaseRequests.go -destination=./LetterRepositoryMock.go
 var DbError = errors.New("Data Base error!")
 var ReceiverNotFound = errors.New("Receiver not found!")
 var SaveLetterError = errors.New("Save letter error!")
