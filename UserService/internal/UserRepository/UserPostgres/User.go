@@ -20,9 +20,9 @@ func New(db pgwrapper.DB) UserRepository.UserDB {
 	return dataBase{DB: db}
 }
 
-func (dbInfo dataBase) GetFoldersList(uid uint64) (folders []*UserModel.Folder, err error) {
+func (dbInfo dataBase) GetFoldersList(uid uint64, kind string) (folders []*UserModel.Folder, err error) {
 	var res []*UserModel.Folder
-	err = dbInfo.DB.Model(&res).Where("uid=?", uid).Select()
+	err = dbInfo.DB.Model(&res).Where("uid=? and type=?", uid, kind).Select()
 	if err != nil {
 		fmt.Println("GET FOLDERS ERROR", err)
 		return nil, err

@@ -24,7 +24,7 @@ type Interface interface {
 	CreateFolder(*proto.Folder) (*proto.Nothing, error)
 	RenameFolder(*proto.RenameFolderMsg) (*proto.Nothing, error)
 	RemoveFolder(*proto.Folder) (*proto.FolderId, error)
-	GetFoldersList(*proto.Uid) (*proto.FolderList, error)
+	GetFoldersList(*proto.FolderUidType) (*proto.FolderList, error)
 }
 
 var RemoveFolderErr = errors.New("REMOVE FOLDER ERROR")
@@ -37,8 +37,8 @@ func New(db UserRepository.UserDB) Interface {
 	return UseCase{db: db}
 }
 
-func (u UseCase) GetFoldersList(uid *proto.Uid) (*proto.FolderList, error) {
-	folders, err := u.db.GetFoldersList(uid.Uid)
+func (u UseCase) GetFoldersList(msg *proto.FolderUidType) (*proto.FolderList, error) {
+	folders, err := u.db.GetFoldersList(msg.Uid, msg.Type)
 	if err != nil {
 		return nil, err
 	}
