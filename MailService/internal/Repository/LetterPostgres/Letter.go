@@ -37,7 +37,7 @@ func (dbInfo dataBase) GenerateLID() uint64 {
 
 func (dbInfo dataBase) GetLettersByFolder(did uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	exist := dbInfo.DB.Model(&letters).Where("directoryrecv=? or directorysend=?", did, did).Select()
+	exist := dbInfo.DB.Model(&letters).Where("directory_recv=? or directory_send=?", did, did).Select()
 	if exist != nil {
 		return Repository.SentLetterError, nil
 	}
@@ -50,7 +50,7 @@ func (dbInfo dataBase) SetLetterWatched(lid uint64) (error, Model.Letter) {
 		return Repository.GetByLidError, letter
 	}
 	letter.IsWatched = true
-	_, err = dbInfo.DB.Model(letter).Column("iswatched").Where("id=?", lid).Update()
+	_, err = dbInfo.DB.Model(&letter).Column("is_watched").Where("id=?", lid).Update()
 	if err != nil {
 		return Repository.SetLetterWatchedError, letter
 	}
@@ -68,7 +68,7 @@ func (dbInfo dataBase) GetLetterByLid(lid uint64) (error, Model.Letter) {
 
 func (dbInfo dataBase) GetLettersRecvDir(Did uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	exist := dbInfo.DB.Model(&letters).Where("directoryrecv=?", Did).Select()
+	exist := dbInfo.DB.Model(&letters).Where("directory_recv=?", Did).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
@@ -77,7 +77,7 @@ func (dbInfo dataBase) GetLettersRecvDir(Did uint64) (error, []Model.Letter) {
 
 func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	exist := dbInfo.DB.Model(&letters).Where("directorysend=?", Did).Select()
+	exist := dbInfo.DB.Model(&letters).Where("directory_send=?", Did).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
@@ -109,18 +109,17 @@ func (dbInfo dataBase) AddLetterToDir(lid uint64, did uint64, flag bool) error {
 	}
 	if flag {
 		letter.DirectoryRecv = did
-		_, err = dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", lid).Update()
+		_, err = dbInfo.DB.Model(&letter).Column("directory_recv").Where("id=?", lid).Update()
 		if err != nil {
 			return err
 		}
 	} else {
 		letter.DirectorySend = did
-		_, err = dbInfo.DB.Model(letter).Column("directorysend").Where("id=?", lid).Update()
+		_, err = dbInfo.DB.Model(&letter).Column("directory_send").Where("id=?", lid).Update()
 		if err != nil {
 			return err
 		}
 	}
-
 	return nil
 }
 func (dbInfo dataBase) RemoveLetterFromDir(lid uint64, did uint64, flag bool) error {
@@ -130,13 +129,13 @@ func (dbInfo dataBase) RemoveLetterFromDir(lid uint64, did uint64, flag bool) er
 	}
 	if flag {
 		letter.DirectoryRecv = 0
-		_, err = dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", lid).Update()
+		_, err = dbInfo.DB.Model(&letter).Column("directory_recv").Where("id=?", lid).Update()
 		if err != nil {
 			return err
 		}
 	} else {
 		letter.DirectorySend = 0
-		_, err = dbInfo.DB.Model(letter).Column("directorysend").Where("id=?", lid).Update()
+		_, err = dbInfo.DB.Model(&letter).Column("directory_send").Where("id=?", lid).Update()
 		if err != nil {
 			return err
 		}
@@ -153,10 +152,10 @@ func (dbInfo dataBase) RemoveDir(did uint64, flag bool) error {
 	for _, letter := range letters {
 		if flag {
 			letter.DirectoryRecv = 0
-			_, err = dbInfo.DB.Model(letter).Column("directoryrecv").Where("id=?", letter.Id).Update()
+			_, err = dbInfo.DB.Model(&letter).Column("directory_recv").Where("id=?", letter.Id).Update()
 		} else {
 			letter.DirectorySend = 0
-			_, err = dbInfo.DB.Model(letter).Column("directorysend").Where("id=?", letter.Id).Update()
+			_, err = dbInfo.DB.Model(&letter).Column("directory_send").Where("id=?", letter.Id).Update()
 		}
 	}
 	return err

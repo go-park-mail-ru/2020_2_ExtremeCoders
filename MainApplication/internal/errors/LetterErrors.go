@@ -2,21 +2,16 @@ package errors
 
 import (
 	"MainApplication/internal/Letter/LetterModel"
-	"encoding/json"
 )
 
-type LetterAns struct {
-	Code    int
-	Lid     uint64
-	Letters []LetterModel.Letter
-}
+
 
 func GetErrorSaveErrorAns() []byte {
 	err := &AnswerGet{
 		Code:        400,
 		Description: "Could not save letter",
 	}
-	ans, _ := json.Marshal(err)
+	ans, _ := err.MarshalJSON()
 	return ans
 }
 
@@ -25,7 +20,7 @@ func GetErrorNoRecieverAns() []byte {
 		Code:        408,
 		Description: "No such user in DB",
 	}
-	ans, _ := json.Marshal(err)
+	ans, _ := err.MarshalJSON()
 	return ans
 }
 
@@ -34,7 +29,7 @@ func GetErrorReceivedLetterAns() []byte {
 		Code:        408,
 		Description: "Could not get letters",
 	}
-	ans, _ := json.Marshal(err)
+	ans, _ := err.MarshalJSON()
 	return ans
 }
 
@@ -43,7 +38,7 @@ func GetGetLettersOkAns(letters []LetterModel.Letter) []byte {
 		Code:    200,
 		Letters: letters,
 	}
-	ans, _ := json.Marshal(ok)
+	ans, _ := ok.MarshalJSON()
 	return ans
 }
 
@@ -52,6 +47,6 @@ func GetSendOkAns(letters LetterModel.Letter) []byte {
 		Code: 200,
 		Lid:  letters.Id,
 	}
-	ans, _ := json.Marshal(ok)
+	ans, _ := ok.MarshalJSON()
 	return ans
 }

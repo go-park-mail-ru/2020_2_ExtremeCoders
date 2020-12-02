@@ -67,6 +67,11 @@ message FolderList{
   repeated FolderNameType res  = 1;
 }
 
+message FolderUidType{
+  uint64 uid = 1;
+  string type = 2;
+}
+
 service UserService{
   rpc IsEmailExists(Email) returns(Nothing);
   rpc AddSession(AddSessionMsg) returns(Nothing);
@@ -83,7 +88,7 @@ service UserService{
   rpc CreateFolder(Folder) returns(Nothing);
   rpc RenameFolder(RenameFolderMsg) returns(Nothing);
   rpc RemoveFolder(Folder) returns(FolderId);
-  rpc GetFoldersList(Uid) returns(FolderList);
+  rpc GetFoldersList(FolderUidType) returns(FolderList);
 }
 
 

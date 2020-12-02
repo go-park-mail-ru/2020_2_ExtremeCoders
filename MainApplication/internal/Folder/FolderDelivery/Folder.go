@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"github.com/gorilla/mux"
 )
 
 //get /user/folders/{recived/sended} - список папок
@@ -30,8 +31,8 @@ type Interface interface {
 	RemoveFolder(w http.ResponseWriter, r *http.Request)
 }
 
-func New() Interface {
-	return Delivery{}
+func New(usClient userService.UserServiceClient, lsClient letterService.LetterServiceClient) Interface {
+	return Delivery{usClient: usClient, lsClient: lsClient}
 }
 
 type Delivery struct {
@@ -54,7 +55,7 @@ func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	folders, er := d.usClient.GetFoldersList(r.Context(), &userProto.Uid{Uid: user.Id})
+	folders, er := d.usClient.GetFoldersList(r.Context(), &userProto.FolderUidType{Uid: user.Id, Type: kind})
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
@@ -65,6 +66,8 @@ func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 
 //get /user/foders/{recived/sended}/folderName - письма
 func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	folderName := vars["folderName"]
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"))
 	kind := "sended"
 	if strings.Contains(r.URL.Path, "recived") {
@@ -77,7 +80,7 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: kind})
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Name: folderName, Type: kind})
 	if er != nil {
 		fmt.Println("Er", er)
 		w.Write(GetFoldersError(er))
@@ -113,7 +116,8 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	_, er = d.usClient.CreateFolder(r.Context(), &userProto.Folder{Uid: user.Id, Name: folderName})
+	userProtoStruct:=&userProto.Folder{Uid: user.Id, Name: folderName, Type: kind}
+	_, er = d.usClient.CreateFolder(r.Context(), userProtoStruct)
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
@@ -136,12 +140,14 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		kind = "recived"
 	}
 	fmt.Println("KIND", kind)
+	folderName:=context.GetStrFormValueSafety(r, "folderName")
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: kind})
+
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: kind, Name: folderName})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))

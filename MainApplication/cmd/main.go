@@ -18,6 +18,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net/http"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -66,8 +67,9 @@ func main() {
 	var lUC = LetterUseCase.New(lDB)
 	var lDE = LetterDelivery.New(lUC)
 
-	var fDe = FolderDelivery.New()
-	mux := http.NewServeMux()
+	var fDe = FolderDelivery.New(userManager, mailManager)
+
+	mux := mux.NewRouter()
 
 	mux.HandleFunc("/session", uDE.Session)
 	mux.HandleFunc("/user", uDE.Profile)
@@ -80,16 +82,16 @@ func main() {
 	mux.HandleFunc("/user/folders/recived", fDe.GetFolderList)
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
 	//get /user/foders/{recived/sended}/folderName - письма
-	mux.HandleFunc("/user/foders/recived/folderName", fDe.GetLettersByFolder)
-	mux.HandleFunc("/user/foders/sended/folderName", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/recived/{folderName:.*}", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/sended/{folderName:.*}", fDe.GetLettersByFolder)
 	//post /user/folders/{recived/sended}/folderName - добавить папку
 	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)
 	mux.HandleFunc("/user/folders/sended/folderName", fDe.AddFolder)
 	//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
-	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.RenameFolder)
+	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
 	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
-	mux.HandleFunc("/user/folders/recived/folderName ", fDe.AddLetterInFolder)
+	mux.HandleFunc("/user/folders/recived/folderName ", fDe.RenameFolder)
 	mux.HandleFunc("/user/folders/sended/folderName ", fDe.RenameFolder)
 	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
 	mux.HandleFunc("/user/folders/recived/folderName/letter  ", fDe.RemoveLetterInFolder)
