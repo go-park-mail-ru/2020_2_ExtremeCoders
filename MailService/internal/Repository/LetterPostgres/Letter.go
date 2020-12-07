@@ -160,3 +160,15 @@ func (dbInfo dataBase) RemoveDir(did uint64, flag bool) error {
 	}
 	return err
 }
+
+func (dbInfo dataBase) RemoveLetter(lid uint64) error{
+	err, letter:=dbInfo.GetLetterByLid(lid)
+	if err!=nil{
+		return err
+	}
+	_, err=dbInfo.DB.Model(letter).Where("id=?", lid).Delete()
+	if err!=nil{
+		return Repository.DeleteLetterError
+	}
+	return nil
+}

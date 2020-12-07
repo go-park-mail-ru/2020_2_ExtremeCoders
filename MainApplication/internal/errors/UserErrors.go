@@ -98,6 +98,15 @@ func GetOkAns(cocky string) []byte {
 	return ans
 }
 
+func GetOk() []byte {
+	ok := &AnswerGet{
+		Code:        200,
+		Description: "ok",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
+
 func GetOkAnsData(cocky string, data UserModel.User) []byte {
 	fmt.Println("DATA::::::::::", data.Email, data.Name, data.Password)
 	ok := &AnswerGet{

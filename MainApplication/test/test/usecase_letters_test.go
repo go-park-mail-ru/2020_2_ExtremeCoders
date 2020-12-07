@@ -35,7 +35,7 @@ func TestGetRecivedLettersDir(t *testing.T) {
 	uc.GetReceivedLettersDir(uint64(12))
 }
 
-func TestGetSendedLettersDir(t *testing.T) {
+func TestGetSendedLettersDirasdf(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockLetter := mock.NewMockLetterDB(ctrl)
@@ -44,7 +44,7 @@ func TestGetSendedLettersDir(t *testing.T) {
 	uc.GetSendedLettersDir(uint64(12))
 }
 
-func TestSaveMail(t *testing.T) {
+func TestSaveMailasdf(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockLetter := mock.NewMockLetterDB(ctrl)

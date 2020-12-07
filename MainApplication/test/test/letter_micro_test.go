@@ -89,7 +89,7 @@ func TestGetReceivedLetters(t *testing.T) {
 }
 
 
-func TestGetSendedLetters(t *testing.T) {
+func TestGetSendedLettersewr(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 

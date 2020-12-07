@@ -12,6 +12,7 @@ type LetterUseCase interface {
 	GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter)
 	GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter)
 	WatchLetter(lid uint64) (error, LetterModel.Letter)
+	DeleteLetter(lid uint64) error
 }
 
 type useCase struct {
@@ -68,4 +69,8 @@ func (uc useCase) GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter) 
 		return err, nil
 	}
 	return nil, letters
+}
+
+func (uc useCase) DeleteLetter(lid uint64) error{
+	return uc.Db.DeleteLetter(lid)
 }

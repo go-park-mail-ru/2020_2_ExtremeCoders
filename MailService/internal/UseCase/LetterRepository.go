@@ -20,6 +20,7 @@ type Interface interface {
 	AddLetterToDir(uint64, uint64, bool) error
 	RemoveLetterFromDir(uint64, uint64, bool) error
 	RemoveDir(uint64, bool) error
+	RemoveLetter(uint64) error
 }
 
 //go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
@@ -65,4 +66,8 @@ func (uc UseCase) RemoveLetterFromDir(lid uint64, did uint64, flag bool) error {
 }
 func (uc UseCase) RemoveDir(did uint64, flag bool) error {
 	return uc.re.RemoveDir(did, flag)
+}
+
+func (uc UseCase) RemoveLetter(lid uint64) error{
+	return uc.re.RemoveLetter(lid)
 }

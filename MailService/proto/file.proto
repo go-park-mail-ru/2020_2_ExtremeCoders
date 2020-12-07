@@ -53,6 +53,7 @@ service LetterService{
   rpc GetLettersSend(Email) returns (LetterListResponse);
   rpc SaveLetter(Letter) returns (Response);
   rpc WatchedLetter(Lid) returns (LetterResponse);
+  rpc RemoveLetter(Lid) returns (Response);
 
   rpc AddLetterToDir(DirLid) returns (Response);
   rpc RemoveLetterFromDir(DirLid) returns (Response);

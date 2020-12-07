@@ -15,6 +15,7 @@ type Interface interface {
 	GetRecvLetters(w http.ResponseWriter, r *http.Request)
 	GetSendLetters(w http.ResponseWriter, r *http.Request)
 	WatchLetter(w http.ResponseWriter, r *http.Request)
+	DeleteLetter(w http.ResponseWriter, r *http.Request)
 }
 
 type delivery struct {
@@ -25,7 +26,21 @@ func New(usecase LetterUseCase.LetterUseCase) Interface {
 	return delivery{Uc: usecase}
 }
 
+func (de delivery)DeleteLetter(w http.ResponseWriter, r *http.Request){
+	id := context.GetStrFormValueSafety(r, "id")
+	intID,err:=strconv.Atoi(id)
+	if err!=nil{
+		w.Write(GetDeleteLetterError(err))
+		return
+	}
+	err=de.Uc.DeleteLetter(uint64(intID))
+	w.Write(GetDeleteLetterError(err))
+}
+
 func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
+	if r.Method==http.MethodDelete{
+		de.DeleteLetter(w, r)
+	}
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return

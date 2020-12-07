@@ -114,3 +114,15 @@ func (ld Delivery) RemoveDir(ctx context.Context, dirlid *pb.DirLid) (*pb.Respon
 	}
 	return &resp, nil
 }
+
+func (ld Delivery) RemoveLetter(ctx context.Context, Lid *pb.Lid)(*pb.Response, error){
+	err:=ld.uc.RemoveLetter(Lid.Lid)
+	resp := pb.Response{Ok: true, Description: ""}
+	if err!=nil{
+		resp.Ok=false
+		resp.Description=err.Error()
+	}else{
+		resp.Description="ok"
+	}
+	return &resp, nil
+}

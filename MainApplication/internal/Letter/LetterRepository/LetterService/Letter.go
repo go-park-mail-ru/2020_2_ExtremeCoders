@@ -67,3 +67,12 @@ func (lsManager LetterServiceManager) GetSendedLettersDir(dir uint64) (error, []
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
 }
+
+func (lsManager LetterServiceManager) DeleteLetter(lid uint64) error{
+	ctx := context.Background()
+	resp, _:=lsManager.lsClient.RemoveLetter(ctx, &letterService.Lid{Lid: lid})
+	if resp.Ok==false{
+		return LetterRepository.DeleteLetterError
+	}
+	return nil
+}
