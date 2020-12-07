@@ -15,7 +15,7 @@ var WatchLetterError = errors.New("Could not watch letter!")
 var DeleteLetterError = errors.New("Could not delete letter!")
 type LetterDB interface {
 	SaveMail(LetterModel.Letter) error
-	GetReceivedLetters(string) (error, []LetterModel.Letter)
+	GetReceivedLetters(string, uint64, uint64) (error, []LetterModel.Letter)
 	GetSendedLetters(string) (error, []LetterModel.Letter)
 	GetReceivedLettersDir(uint64) (error, []LetterModel.Letter)
 	GetSendedLettersDir(uint64) (error, []LetterModel.Letter)

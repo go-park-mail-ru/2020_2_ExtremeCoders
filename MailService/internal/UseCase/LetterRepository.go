@@ -11,9 +11,9 @@ type UseCase struct {
 
 type Interface interface {
 	GetLettersSendDir(dir uint64) (error, []Model.Letter)
-	GetLettersRecvDir(dir uint64) (error, []Model.Letter)
+	GetLettersRecvDir(dir uint64, limit uint64, offset uint64) (error, []Model.Letter)
 	GetLettersSend(email string) (error, []Model.Letter)
-	GetLettersRecv(email string) (error, []Model.Letter)
+	GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter)
 	SaveLetter(letter Model.Letter) error
 	WatchLetter(lid uint64) (error, Model.Letter)
 
@@ -29,8 +29,8 @@ func New(repo Repository.LetterDB) Interface {
 	return UseCase{re: repo}
 }
 
-func (uc UseCase) GetLettersRecvDir(dir uint64) (error, []Model.Letter) {
-	err, letters := uc.re.GetLettersRecvDir(dir)
+func (uc UseCase) GetLettersRecvDir(dir uint64, limit uint64, offset uint64) (error, []Model.Letter) {
+	err, letters := uc.re.GetLettersRecvDir(dir, limit, offset)
 	return err, letters
 }
 
@@ -53,8 +53,8 @@ func (uc UseCase) GetLettersSend(email string) (error, []Model.Letter) {
 	return err, letters
 }
 
-func (uc UseCase) GetLettersRecv(email string) (error, []Model.Letter) {
-	err, letters := uc.re.GetLettersRecv(email)
+func (uc UseCase) GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter) {
+	err, letters := uc.re.GetLettersRecv(email, limit, offset)
 	return err, letters
 }
 

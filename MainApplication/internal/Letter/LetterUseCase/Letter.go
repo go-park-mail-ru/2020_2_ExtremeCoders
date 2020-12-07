@@ -7,7 +7,7 @@ import (
 
 type LetterUseCase interface {
 	SaveLetter(letter *LetterModel.Letter) error
-	GetReceivedLetters(email string) (error, []LetterModel.Letter)
+	GetReceivedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter)
 	GetSendedLetters(email string) (error, []LetterModel.Letter)
 	GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter)
 	GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter)
@@ -31,8 +31,8 @@ func (uc useCase) SaveLetter(letter *LetterModel.Letter) error {
 	return nil
 }
 
-func (uc useCase) GetReceivedLetters(email string) (error, []LetterModel.Letter) {
-	err, letters := uc.Db.GetReceivedLetters(email)
+func (uc useCase) GetReceivedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter) {
+	err, letters := uc.Db.GetReceivedLetters(email, limit, offset)
 	if err != nil {
 		return err, nil
 	}

@@ -33,9 +33,13 @@ func (lsManager LetterServiceManager) SaveMail(letter LetterModel.Letter) error 
 	}
 	return nil
 }
-func (lsManager LetterServiceManager) GetReceivedLetters(email string) (error, []LetterModel.Letter) {
+func (lsManager LetterServiceManager) GetReceivedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter) {
 	ctx := context.Background()
-	resp, err := lsManager.lsClient.GetLettersRecv(ctx, &letterService.Email{Email: email})
+	resp, err := lsManager.lsClient.GetLettersRecv(ctx, &letterService.Email{
+		Email: email,
+		Limit: limit,
+		Offset: offset,
+	})
 	if err != nil {
 		return LetterRepository.ReceivedLetterError, nil
 	}

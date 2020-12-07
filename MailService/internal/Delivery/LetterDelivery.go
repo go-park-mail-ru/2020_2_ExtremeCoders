@@ -18,7 +18,7 @@ func New(usecase UseCase.Interface) pb.LetterServiceServer {
 
 func (ld Delivery) GetLettersByDirRecv(ctx context.Context, dir *pb.DirName) (*pb.LetterListResponse, error) {
 	fmt.Println("recv dir")
-	err, letters := ld.uc.GetLettersRecvDir(dir.DirName)
+	err, letters := ld.uc.GetLettersRecvDir(dir.DirName, dir.Limit, dir.Offset)
 	resp := pb.Response{Ok: true}
 	if err != nil || letters == nil {
 		return &pb.LetterListResponse{}, err
@@ -62,7 +62,7 @@ func (ld Delivery) WatchedLetter(ctx context.Context, Lid *pb.Lid) (*pb.LetterRe
 }
 
 func (ld Delivery) GetLettersRecv(ctx context.Context, email *pb.Email) (*pb.LetterListResponse, error) {
-	err, letters := ld.uc.GetLettersRecv(email.Email)
+	err, letters := ld.uc.GetLettersRecv(email.Email, email.Limit, email.Offset)
 	resp := pb.Response{Ok: true}
 	if err != nil || letters == nil {
 		return &pb.LetterListResponse{}, err
