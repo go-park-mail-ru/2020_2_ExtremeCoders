@@ -4,9 +4,12 @@ import "time"
 
 const (
 	DbUser = "postgres"
+	//DbUser = "mark"
 	//DbPassword   = "123456yhn"
-	DbPassword   = "1538"
-	DbDB         = "maila"
+	DbPassword = "1538"
+	//DbPassword   = "mark"
+	DbDB = "maila"
+	//DbDB         = "mail_db"
 	Port         = ":8080"
 	ReadTimeout  = 10 * time.Second
 	WriteTimeout = 10 * time.Second
