@@ -50,6 +50,19 @@ message DirLid{
   bool type=3;// 0: send; 1: recv;
 }
 
+message Similar{
+  string sim=1;
+}
+
+message SimRes{
+  string res=1;
+}
+
+message GetBy{
+  string what=1;
+  string value=2;
+}
+
 service LetterService{
   rpc GetLettersByDirRecv(DirName) returns (LetterListResponse);
   rpc GetLettersByDirSend(DirName) returns (LetterListResponse);
@@ -62,5 +75,9 @@ service LetterService{
   rpc AddLetterToDir(DirLid) returns (Response);
   rpc RemoveLetterFromDir(DirLid) returns (Response);
   rpc RemoveDir(DirLid) returns (Response);
+
+  rpc FindSimilar(Similar) returns (SimRes);
+
+  rpc GetLetterBy(GetBy) returns (LetterListResponse);
 }
 

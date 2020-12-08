@@ -80,3 +80,18 @@ func (lsManager LetterServiceManager) DeleteLetter(lid uint64) error{
 	}
 	return nil
 }
+
+func (lsManager LetterServiceManager) FindSimilar(sim string) string{
+	ctx := context.Background()
+	resp, _:=lsManager.lsClient.FindSimilar(ctx, &letterService.Similar{Sim: sim})
+	return resp.Res
+}
+
+func (lsManager LetterServiceManager) GetLetterBy(what string, val string) (error, []LetterModel.Letter){
+	ctx := context.Background()
+	resp, _:=lsManager.lsClient.GetLetterBy(ctx, &letterService.GetBy{What: what, Value: val})
+	if resp.Result.Ok == false {
+		return LetterRepository.ReceivedLetterError, nil
+	}
+	return nil, convert.ProtoToModelList(resp.Letter)
+}

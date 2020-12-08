@@ -96,7 +96,9 @@ func main() {
 	mux.HandleFunc("/letter", lDE.SendLetter)
 	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
 	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
+	mux.HandleFunc("/letter/{similar}", lDE.Search)
 	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
+	mux.HandleFunc("/letter/by/{what}/{value}", lDE.GetLetterBy)
 	//get /user/folders/{recived/sended} - список папок
 	mux.HandleFunc("/user/folders/recived", fDe.GetFolderList)
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)

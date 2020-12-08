@@ -126,3 +126,26 @@ func (ld Delivery) RemoveLetter(ctx context.Context, Lid *pb.Lid)(*pb.Response, 
 	}
 	return &resp, nil
 }
+
+func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar)(*pb.SimRes, error){
+	res:=ld.uc.FindSimilar(Similar.Sim)
+	searchResult:=&pb.SimRes{}
+	strRes, _ := res.MarshalJSON()
+	searchResult.Res=string(strRes)
+	return searchResult, nil
+}
+
+func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy)(*pb.LetterListResponse, error){
+	err, letters:=ld.uc.GetLetterBy(GetBy.What, GetBy.Value)
+	var pbLetter pb.LetterListResponse
+	pbLetter.Result.Ok=true
+	pbLetter.Result.Description=""
+	if err!=nil{
+		pbLetter.Result.Ok=true
+		pbLetter.Result.Description=err.Error()
+	}else{
+		pbLetter.Result.Description="ok"
+	}
+	pbLetter.Letter=convert.ModelToProtoList(&letters)
+	return &pbLetter, nil
+}

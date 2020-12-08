@@ -17,6 +17,8 @@ type Interface interface {
 	GetSendLetters(w http.ResponseWriter, r *http.Request)
 	WatchLetter(w http.ResponseWriter, r *http.Request)
 	DeleteLetter(w http.ResponseWriter, r *http.Request)
+	Search(w http.ResponseWriter, r *http.Request)
+	GetLetterBy(w http.ResponseWriter, r *http.Request)
 }
 
 type delivery struct {
@@ -95,4 +97,27 @@ func (de delivery) WatchLetter(w http.ResponseWriter, r *http.Request) {
 	id := context.GetStrFormValueSafety(r, "id")
 	num, _:=strconv.Atoi(id)
 	de.Uc.WatchLetter(uint64(num))
+}
+
+func (de delivery) Search(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+	vars := mux.Vars(r)
+	sim := vars["similar"]
+	searchRes:=de.Uc.FindSim(sim)
+	w.Write([]byte(searchRes))
+}
+
+func (de delivery) GetLetterBy(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+	vars := mux.Vars(r)
+	what := vars["what"]
+	val:=vars["value"]
+	err, letters:=de.Uc.GetLetterBy(what, val)
+	w.Write(GetLettersError(err, letters))
 }

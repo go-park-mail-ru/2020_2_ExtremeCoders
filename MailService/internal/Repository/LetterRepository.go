@@ -14,6 +14,8 @@ var SentLetterError = errors.New("Could not get sent letters!")
 var GetByLidError = errors.New("Could not get letter by lid!")
 var SetLetterWatchedError = errors.New("Could not set letter watched!")
 var DeleteLetterError = errors.New("Could not delete letter!")
+var GetLetterByError = errors.New("Could not get letter by!")
+
 //go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
 type LetterDB interface {
 	SaveMail(Model.Letter) error
@@ -31,4 +33,11 @@ type LetterDB interface {
 	RemoveLetterFromDir(uint64, uint64, bool) error
 	RemoveDir(uint64, bool) error
 	RemoveLetter(uint64) error
+
+	FindSender(string) ([]string, error)
+	FindReceiver(string) ([]string, error)
+	FindTheme(string) ([]string, error)
+	FindText(string) ([]string, error)
+
+	GetLetterBy(string, string) (error, []Model.Letter)
 }

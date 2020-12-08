@@ -6,6 +6,7 @@ require (
 	github.com/go-pg/pg/v9 v9.1.5
 	github.com/golang/mock v1.4.4
 	github.com/golang/protobuf v1.4.3
+	github.com/mailru/easyjson v0.7.6
 	github.com/stretchr/testify v1.5.1
 	gitlab.com/slax0rr/go-pg-wrapper v0.0.0-20200404125312-fa845276fc02
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect

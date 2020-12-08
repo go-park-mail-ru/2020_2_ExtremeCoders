@@ -13,6 +13,7 @@ var ReceivedLetterError = errors.New("Could not get received letters!")
 var SentLetterError = errors.New("Could not get sent letters!")
 var WatchLetterError = errors.New("Could not watch letter!")
 var DeleteLetterError = errors.New("Could not delete letter!")
+var GetLetterByError = errors.New("Could not get letter by!")
 type LetterDB interface {
 	SaveMail(LetterModel.Letter) error
 	GetReceivedLetters(string, uint64, uint64) (error, []LetterModel.Letter)
@@ -22,4 +23,6 @@ type LetterDB interface {
 	WatchLetter(uint64) (error, LetterModel.Letter)
 
 	DeleteLetter(uint64) error
+	FindSimilar(string) string
+	GetLetterBy(string, string) (error, []LetterModel.Letter)
 }

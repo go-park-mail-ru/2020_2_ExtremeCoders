@@ -63,3 +63,14 @@ func GetDeleteLetterError(err error) []byte {
 	}
 	return returned
 }
+
+func GetSearchSimError(res string) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": string(returned),
+		}).Info("sent")
+	}()
+
+	return returned
+}
