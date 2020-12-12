@@ -112,11 +112,8 @@ func main() {
 	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
 	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
-	mux.HandleFunc("/user/folders/recived/folderName ", fDe.RenameFolder)
-	mux.HandleFunc("/user/folders/sended/folderName ", fDe.RenameFolder)
 	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
-	mux.HandleFunc("/user/folders/recived/folderName/letter  ", fDe.RemoveLetterInFolder)
-	mux.HandleFunc("/user/folders/sended/folderName/letter  ", fDe.RemoveLetterInFolder)
+
 
 	//mux.Handle("/metrics", promhttp.Handler())
 
