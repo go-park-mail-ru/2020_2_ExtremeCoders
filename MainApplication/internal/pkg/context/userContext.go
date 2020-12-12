@@ -1,8 +1,8 @@
 package context
 
 import (
-	"MainApplication/config"
-	"MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/User/UserModel"
+	"Mailer/config"
 
 	"context"
 	crypto "crypto/rand"

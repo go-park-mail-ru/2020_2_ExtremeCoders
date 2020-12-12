@@ -1,16 +1,16 @@
 package FolderDelivery
 
 import (
-	"MainApplication/internal/pkg/context"
-	letterService "MainApplication/proto/MailService"
-	mailProto "MainApplication/proto/MailService"
-	userProto "MainApplication/proto/UserServise"
-	userService "MainApplication/proto/UserServise"
+	letterService "Mailer/MailService/proto"
+	mailProto "Mailer/MailService/proto"
+	"Mailer/MainApplication/internal/pkg/context"
+	userProto "Mailer/UserService/proto"
+	userService "Mailer/UserService/proto"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 	"strings"
-	"github.com/gorilla/mux"
 )
 
 //get /user/folders/{recived/sended} - список папок

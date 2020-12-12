@@ -1,9 +1,9 @@
 package test
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/Letter/LetterUseCase"
-	mock "MainApplication/test/mock_LetterRepository"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterUseCase"
+	mock "Mailer/MainApplication/test/mock_LetterRepository"
 	"github.com/golang/mock/gomock"
 	"testing"
 )

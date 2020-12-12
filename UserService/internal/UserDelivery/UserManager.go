@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 )
-import proto "UserService/proto"
-import "UserService/internal/UserUseCase"
+import proto "Mailer/UserService/proto"
+import "Mailer/UserService/internal/UserUseCase"
 
 type UserManager struct {
 	useCase UserUseCase.Interface

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/emersion/go-smtp"
 	"log"
-	"smtpTest/internal/GetLetters"
+	"Mailer/SmtpService/internal/GetLetters"
 	"time"
 )
 

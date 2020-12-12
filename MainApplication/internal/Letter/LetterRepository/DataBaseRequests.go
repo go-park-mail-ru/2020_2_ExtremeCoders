@@ -1,7 +1,7 @@
 package LetterRepository
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
 	"errors"
 )
 //go:generate mockgen -source=./DataBaseRequests.go -destination=./LetterRepositoryMock.go

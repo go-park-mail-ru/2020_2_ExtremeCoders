@@ -1,6 +1,7 @@
 package SendLetters
 
 import (
+	pb "Mailer/SmtpService/proto"
 	"crypto/tls"
 	"fmt"
 	"github.com/emersion/go-smtp"
@@ -8,7 +9,6 @@ import (
 	"net"
 	"net/mail"
 	baseSMTP "net/smtp"
-	pb "smtpTest/proto"
 	"strings"
 )
 

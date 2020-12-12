@@ -5,7 +5,7 @@
 package mock_LetterRepository
 
 import (
-	Model "MailService/internal/Model"
+	Model "Mailer/MailService/internal/Model"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

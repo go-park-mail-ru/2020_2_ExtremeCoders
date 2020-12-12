@@ -1,9 +1,9 @@
 package UserDelivery
 
 import (
-	"UserService/internal/UserModel"
-	mock "UserService/internal/mocks"
-	proto "UserService/proto"
+	"Mailer/UserService/internal/UserModel"
+	mock "Mailer/UserService/internal/mocks"
+	proto "Mailer/UserService/proto"
 	"context"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"

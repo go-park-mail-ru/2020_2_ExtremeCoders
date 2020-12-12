@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"MainApplication/internal/User/UserRepository"
-	"MainApplication/internal/pkg/context"
+	"Mailer/MainApplication/internal/User/UserRepository"
+	"Mailer/MainApplication/internal/pkg/context"
 	"errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"

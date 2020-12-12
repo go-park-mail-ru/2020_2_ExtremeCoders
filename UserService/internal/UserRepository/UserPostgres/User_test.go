@@ -1,8 +1,8 @@
 package UserPostgres
 
 import (
-	"UserService/internal/UserModel"
-	"UserService/internal/UserRepository"
+	"Mailer/UserService/internal/UserModel"
+	"Mailer/UserService/internal/UserRepository"
 	model "github.com/go-pg/pg/v9/orm"
 	"github.com/stretchr/testify/assert"
 	"gitlab.com/slax0rr/go-pg-wrapper/mocks"

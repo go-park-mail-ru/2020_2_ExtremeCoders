@@ -1,7 +1,7 @@
 package Repository
 
 import (
-	"MailService/internal/Model"
+	"Mailer/MailService/internal/Model"
 	"errors"
 )
 

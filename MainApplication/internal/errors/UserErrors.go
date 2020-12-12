@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/User/UserModel"
 	"fmt"
 )
 

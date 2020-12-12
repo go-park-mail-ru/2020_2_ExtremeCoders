@@ -1,8 +1,8 @@
 package Delivery
 
 import (
-	"FileService/internal/File/UseCase"
-	fileProto "FileService/proto"
+	"Mailer/FileService/internal/File/UseCase"
+	fileProto "Mailer/FileService/proto"
 	"fmt"
 	"golang.org/x/net/context"
 )

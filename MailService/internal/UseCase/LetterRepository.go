@@ -1,8 +1,8 @@
 package UseCase
 
 import (
-	"MailService/internal/Model"
-	"MailService/internal/Repository"
+	"Mailer/MailService/internal/Model"
+	"Mailer/MailService/internal/Repository"
 )
 
 type UseCase struct {

@@ -1,8 +1,8 @@
 package errors
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/User/UserModel"
 )
 
 type LetterAns struct {

@@ -1,7 +1,7 @@
 package Repository
 
 import (
-	fileProto "FileService/proto"
+	fileProto "Mailer/FileService/proto"
 )
 //go:generate mockgen -source=repoInterface.go -destination=RepositoryMock.go
 type Interface interface {

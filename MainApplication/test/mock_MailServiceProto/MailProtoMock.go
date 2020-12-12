@@ -5,7 +5,7 @@
 package mock_MailServiceProto
 
 import (
-	MailService "MainApplication/proto/MailService"
+	MailService "Mailer/MainApplication/proto/MailService"
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"

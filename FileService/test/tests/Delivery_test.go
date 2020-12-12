@@ -1,9 +1,9 @@
 package test
 
 import (
-	"FileService/internal/File/Delivery"
-	proto "FileService/proto"
-	mock "FileService/test/mock_UseCase"
+	"Mailer/FileService/internal/File/Delivery"
+	proto "Mailer/FileService/proto"
+	mock "Mailer/FileService/test/mock_UseCase"
 	"context"
 	"github.com/golang/mock/gomock"
 	"testing"

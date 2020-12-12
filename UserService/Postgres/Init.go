@@ -1,7 +1,7 @@
 package Postgres
 
 import (
-	"UserService/internal/UserModel"
+	"Mailer/UserService/internal/UserModel"
 	"fmt"
 	"github.com/go-pg/pg/v9"
 	"github.com/go-pg/pg/v9/orm"

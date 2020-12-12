@@ -1,10 +1,10 @@
 package test
 
 import (
-	"MainApplication/internal/User/UserModel"
-	"MainApplication/internal/User/UserRepository/UserMicroservice"
-	userService "MainApplication/proto/UserServise"
-	mock "MainApplication/test/mock_UserProto"
+	"Mailer/MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/User/UserRepository/UserMicroservice"
+	userService "Mailer/MainApplication/proto/UserServise"
+	mock "Mailer/MainApplication/test/mock_UserProto"
 	"context"
 	"github.com/golang/mock/gomock"
 	"testing"

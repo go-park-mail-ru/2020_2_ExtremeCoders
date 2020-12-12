@@ -1,10 +1,10 @@
 package LetterDelivery
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/Letter/LetterRepository"
-	"MainApplication/internal/errors"
-	"MainApplication/internal/pkg/context"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterRepository"
+	"Mailer/MainApplication/internal/errors"
+	"Mailer/MainApplication/internal/pkg/context"
 	log "github.com/sirupsen/logrus"
 )
 

@@ -1,10 +1,10 @@
 package test
 
 import (
-	Model "MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/Letter/LetterRepository/LetterService"
-	letterService "MainApplication/proto/MailService"
-	mock "MainApplication/test/mock_MailServiceProto"
+	Model "Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterRepository/LetterService"
+	letterService "Mailer/MainApplication/proto/MailService"
+	mock "Mailer/MainApplication/test/mock_MailServiceProto"
 	"context"
 	"github.com/golang/mock/gomock"
 	"testing"

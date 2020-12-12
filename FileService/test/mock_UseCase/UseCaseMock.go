@@ -5,7 +5,7 @@
 package mock_UseCase
 
 import (
-	fileService "FileService/proto"
+	fileService "Mailer/FileService/proto"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

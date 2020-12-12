@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
 )
 
 

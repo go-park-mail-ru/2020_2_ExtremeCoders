@@ -1,12 +1,12 @@
 package main
 
 import (
-	"MailService/Postgres"
-	"MailService/config"
-	"MailService/internal/Delivery"
-	"MailService/internal/Repository/LetterPostgres"
-	"MailService/internal/UseCase"
-	letterProto "MailService/proto"
+	"Mailer/MailService/Postgres"
+	"Mailer/config"
+	"Mailer/MailService/internal/Delivery"
+	"Mailer/MailService/internal/Repository/LetterPostgres"
+	"Mailer/MailService/internal/UseCase"
+	letterProto "Mailer/MailService/proto"
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
