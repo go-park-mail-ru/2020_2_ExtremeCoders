@@ -15,6 +15,7 @@ message Letter{
   string text=5;
   uint64 dateTime=6;
   bool isWatched=7;
+  int64 directoryRecv=8;
 }
 
 message DirName{
