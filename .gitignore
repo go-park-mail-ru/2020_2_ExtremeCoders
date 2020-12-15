@@ -4,4 +4,4 @@ MainApplication/go.sum
 .idea/workspace.xml
 ../go.sum
 /CleanArch
-*.jpeg
+#*.jpeg
