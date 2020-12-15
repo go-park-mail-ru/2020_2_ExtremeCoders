@@ -118,7 +118,7 @@ func main() {
 	//mux.Handle("/metrics", promhttp.Handler())
 
 	//delete /user/folders/{recived/sended}/folderName  - удалить папку
-	//mux.HandleFunc("/user/folders/recived/folderName " , fDe.RemoveFolder)
+	mux.HandleFunc("/user/folders/recived/folderName" , fDe.RemoveFolder)
 	//mux.HandleFunc("/user/folders/sended/folderName/letter" , fDe.RemoveFolder)
 
 	//siteHandler := middleware.AccessLogMiddleware(mux)

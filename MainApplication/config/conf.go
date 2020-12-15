@@ -4,12 +4,8 @@ import "time"
 
 const (
 	DbUser = "postgres"
-	//DbUser = "mark"
-	//DbPassword   = "123456yhn"
-	DbPassword = "1538"
-	//DbPassword   = "mark"
+	DbPassword   = "987654321"
 	DbDB = "maila"
-	//DbDB         = "mail_db"
 	Port         = ":8080"
 	ReadTimeout  = 10 * time.Second
 	WriteTimeout = 10 * time.Second
@@ -18,7 +14,7 @@ const (
 var AllowedOriginsCORS = []string{"http://localhost:80", "http://127.0.0.1:80",
 	"http://localhost", "http://127.0.0.1",
 	"http://localhost:3000", "http://127.0.0.1:3000",
-	"http://95.163.209.195:3000"}
+	"http://95.163.209.195:3000", "http://95.163.209.195", "http://mailer.ru.com"}
 var AllowedHeadersCORS = []string{"Version", "Authorization", "Content-Type", "csrf_token"}
 var AllowedMethodsCORS = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 
