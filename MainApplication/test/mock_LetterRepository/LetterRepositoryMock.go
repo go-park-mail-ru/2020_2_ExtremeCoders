@@ -48,18 +48,18 @@ func (mr *MockLetterDBMockRecorder) SaveMail(arg0 interface{}) *gomock.Call {
 }
 
 // GetReceivedLetters mocks base method
-func (m *MockLetterDB) GetReceivedLetters(arg0 string) (error, []LetterModel.Letter) {
+func (m *MockLetterDB) GetReceivedLetters(arg0 string, arg1, arg2 uint64) (error, []LetterModel.Letter) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetReceivedLetters", arg0)
+	ret := m.ctrl.Call(m, "GetReceivedLetters", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	ret1, _ := ret[1].([]LetterModel.Letter)
 	return ret0, ret1
 }
 
 // GetReceivedLetters indicates an expected call of GetReceivedLetters
-func (mr *MockLetterDBMockRecorder) GetReceivedLetters(arg0 interface{}) *gomock.Call {
+func (mr *MockLetterDBMockRecorder) GetReceivedLetters(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetReceivedLetters", reflect.TypeOf((*MockLetterDB)(nil).GetReceivedLetters), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetReceivedLetters", reflect.TypeOf((*MockLetterDB)(nil).GetReceivedLetters), arg0, arg1, arg2)
 }
 
 // GetSendedLetters mocks base method
@@ -120,4 +120,47 @@ func (m *MockLetterDB) WatchLetter(arg0 uint64) (error, LetterModel.Letter) {
 func (mr *MockLetterDBMockRecorder) WatchLetter(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WatchLetter", reflect.TypeOf((*MockLetterDB)(nil).WatchLetter), arg0)
+}
+
+// DeleteLetter mocks base method
+func (m *MockLetterDB) DeleteLetter(arg0 uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteLetter", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteLetter indicates an expected call of DeleteLetter
+func (mr *MockLetterDBMockRecorder) DeleteLetter(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteLetter", reflect.TypeOf((*MockLetterDB)(nil).DeleteLetter), arg0)
+}
+
+// FindSimilar mocks base method
+func (m *MockLetterDB) FindSimilar(arg0 string) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindSimilar", arg0)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// FindSimilar indicates an expected call of FindSimilar
+func (mr *MockLetterDBMockRecorder) FindSimilar(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindSimilar", reflect.TypeOf((*MockLetterDB)(nil).FindSimilar), arg0)
+}
+
+// GetLetterBy mocks base method
+func (m *MockLetterDB) GetLetterBy(arg0, arg1 string) (error, []LetterModel.Letter) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLetterBy", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	ret1, _ := ret[1].([]LetterModel.Letter)
+	return ret0, ret1
+}
+
+// GetLetterBy indicates an expected call of GetLetterBy
+func (mr *MockLetterDBMockRecorder) GetLetterBy(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterBy", reflect.TypeOf((*MockLetterDB)(nil).GetLetterBy), arg0, arg1)
 }

@@ -5,6 +5,7 @@
 // source: mail.proto
 
 // protoc --go_out=plugins=grpc:. *.proto
+//go:generate mockgen -source=mail.pb.go -destination=MailProtoMock.go
 
 package MailService
 

@@ -5,6 +5,8 @@ import (
 	"Mailer/MainApplication/internal/Letter/LetterRepository"
 )
 
+//go:generate mockgen -source=./Letter.go -destination=../../../test/mock_LetterUseCase/LetterUseCaseMock.go
+
 type LetterUseCase interface {
 	SaveLetter(letter *LetterModel.Letter) error
 	GetReceivedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter)
@@ -73,14 +75,14 @@ func (uc useCase) GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter) 
 	return nil, letters
 }
 
-func (uc useCase) DeleteLetter(lid uint64) error{
+func (uc useCase) DeleteLetter(lid uint64) error {
 	return uc.Db.DeleteLetter(lid)
 }
 
-func (uc useCase) FindSim(sim string) string{
+func (uc useCase) FindSim(sim string) string {
 	return uc.Db.FindSimilar(sim)
 }
 
-func (uc useCase) GetLetterBy(what string, val string) (error, []LetterModel.Letter){
+func (uc useCase) GetLetterBy(what string, val string) (error, []LetterModel.Letter) {
 	return uc.Db.GetLetterBy(what, val)
 }

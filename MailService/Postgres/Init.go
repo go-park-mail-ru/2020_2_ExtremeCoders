@@ -39,8 +39,7 @@ func createSchema(db pgwrapper.DB) error {
 	}
 
 	for _, model := range models {
-		err := db.Model(model).CreateTable(&orm.CreateTableOptions{
-		})
+		err := db.Model(model).CreateTable(&orm.CreateTableOptions{})
 		if err != nil {
 			return err
 		}

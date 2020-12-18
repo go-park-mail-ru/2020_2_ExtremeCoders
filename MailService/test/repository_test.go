@@ -1,8 +1,8 @@
 package test
 
 import (
-	"Mailer/MailService/internal/UseCase"
 	"Mailer/MailService/internal/Model"
+	"Mailer/MailService/internal/UseCase"
 	mock "Mailer/MailService/test/mock_LetterRepository"
 	"github.com/golang/mock/gomock"
 	"testing"
@@ -15,10 +15,10 @@ func TestGetLettersRecvDir(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetLettersRecvDir(uint64(0)).Return(nil, nil)
+	mockLetter.EXPECT().GetLettersRecvDir(uint64(0), uint64(0), uint64(0)).Return(nil, nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.GetLettersRecvDir(0)
+	_, _ = uc.GetLettersRecvDir(uint64(0), uint64(0), uint64(0))
 }
 
 func TestGetLettersSendDir(t *testing.T) {
@@ -29,7 +29,7 @@ func TestGetLettersSendDir(t *testing.T) {
 	mockLetter.EXPECT().GetLettersSentDir(uint64(0)).Return(nil, nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.GetLettersSendDir(0)
+	_, _ = uc.GetLettersSendDir(0)
 }
 
 func TestSaveLetter(t *testing.T) {
@@ -40,7 +40,7 @@ func TestSaveLetter(t *testing.T) {
 	mockLetter.EXPECT().SaveMail(Letter).Return(nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.SaveLetter(Letter)
+	_ = uc.SaveLetter(Letter)
 }
 
 func TestWatchLetter(t *testing.T) {
@@ -51,9 +51,8 @@ func TestWatchLetter(t *testing.T) {
 	mockLetter.EXPECT().SetLetterWatched(uint64(0)).Return(nil, Letter)
 	uc := UseCase.New(mockLetter)
 
-	uc.WatchLetter(0)
+	_, _ = uc.WatchLetter(0)
 }
-
 
 func TestGetLettersSend(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -63,19 +62,18 @@ func TestGetLettersSend(t *testing.T) {
 	mockLetter.EXPECT().GetLettersSent(Letter.Receiver).Return(nil, nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.GetLettersSend(Letter.Receiver)
+	_, _ = uc.GetLettersSend(Letter.Receiver)
 }
-
 
 func TestGetLettersRecv(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetLettersRecv(Letter.Receiver).Return(nil, nil)
+	mockLetter.EXPECT().GetLettersRecv(Letter.Receiver, uint64(0), uint64(0)).Return(nil, nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.GetLettersRecv(Letter.Receiver)
+	_, _ = uc.GetLettersRecv(Letter.Receiver, uint64(0), uint64(0))
 }
 
 func TestAddLetterToDir(t *testing.T) {
@@ -86,7 +84,7 @@ func TestAddLetterToDir(t *testing.T) {
 	mockLetter.EXPECT().AddLetterToDir(uint64(0), uint64(0), true).Return(nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.AddLetterToDir(uint64(0), uint64(0), true)
+	_ = uc.AddLetterToDir(uint64(0), uint64(0), true)
 }
 
 func TestRemoveLetterToDir(t *testing.T) {
@@ -97,7 +95,7 @@ func TestRemoveLetterToDir(t *testing.T) {
 	mockLetter.EXPECT().RemoveLetterFromDir(uint64(0), uint64(0), true).Return(nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.RemoveLetterFromDir(uint64(0), uint64(0), true)
+	_ = uc.RemoveLetterFromDir(uint64(0), uint64(0), true)
 }
 
 func TestRemoveDir(t *testing.T) {
@@ -108,5 +106,5 @@ func TestRemoveDir(t *testing.T) {
 	mockLetter.EXPECT().RemoveDir(uint64(0), true).Return(nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.RemoveDir(uint64(0), true)
+	_ = uc.RemoveDir(uint64(0), true)
 }

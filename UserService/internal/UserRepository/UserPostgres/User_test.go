@@ -25,42 +25,37 @@ func (r MockResult) RowsReturned() int {
 
 var (
 	testUser = UserModel.User{
-		Id:      	1,
-		Name: 		"UserName",
-		Surname:  	"UserSurname",
-		Email:      "UserEmail",
-		Password:   "UserPassword",
-		Img:     	"UserImg",
+		Id:       1,
+		Name:     "UserName",
+		Surname:  "UserSurname",
+		Email:    "UserEmail",
+		Password: "UserPassword",
+		Img:      "UserImg",
 	}
 
 	testSession = UserModel.Session{
-		Id:        	"SessionId",
-		UserId: 	1,
-		User:		&testUser,
+		Id:     "SessionId",
+		UserId: 1,
+		User:   &testUser,
 	}
 
 	testFolder = UserModel.Folder{
-		Uid:		1,
-		Type: 		"FolderType",
-		Name:		"FolderName",
+		Uid:  1,
+		Type: "FolderType",
+		Name: "FolderName",
 	}
 )
 
 var repository *dataBase
 
-var mockRes MockResult
 
 // go test -coverprofile=coverage.out -coverpkg=./... -cover ./... && go tool cover -html=coverage.out
 // go test `go list all | grep "UserService" | grep -v "mocks"`  -coverprofile=coverage.out.tmp -cover ./...
 
-func NewRepo(t *testing.T) *dataBase {
-	db := new(mocks.DB)
-	repository = &dataBase{DB: db}
-	return repository
-}
+
 
 func TestDataBase_AddSession(t *testing.T) {
-	mockRes:= MockResult{}
+	mockRes := MockResult{}
 
 	db := new(mocks.DB)
 	query := new(ormmocks.Query)
@@ -75,7 +70,7 @@ func TestDataBase_AddSession(t *testing.T) {
 }
 
 func TestDataBase_AddUser(t *testing.T) {
-	mockRes:= MockResult{}
+	mockRes := MockResult{}
 
 	db := new(mocks.DB)
 	query := new(ormmocks.Query)
@@ -285,6 +280,7 @@ func TestDataBase_IsOkSession(t *testing.T) {
 
 func TestDataBase_RemoveFolder(t *testing.T) {
 	folder := UserModel.Folder{Id: testFolder.Id}
+	var mockRes MockResult
 
 	db := new(mocks.DB)
 	whereQuery := new(ormmocks.Query)
@@ -303,6 +299,7 @@ func TestDataBase_RemoveFolder(t *testing.T) {
 
 func TestDataBase_RemoveSession(t *testing.T) {
 	session := UserModel.Session{Id: testSession.Id}
+	var mockRes MockResult
 
 	db := new(mocks.DB)
 	whereQuery := new(ormmocks.Query)
@@ -322,6 +319,7 @@ func TestDataBase_RemoveSession(t *testing.T) {
 
 func TestDataBase_RenameFolder(t *testing.T) {
 	oldFolder := UserModel.Folder{Uid: testFolder.Uid, Name: testFolder.Name}
+	var mockRes MockResult
 
 	db := new(mocks.DB)
 	whereColumnQuery := new(ormmocks.Query)
@@ -345,6 +343,7 @@ func TestDataBase_RenameFolder(t *testing.T) {
 
 func TestDataBase_UpdateProfile(t *testing.T) {
 	oldUser := UserModel.User{Email: testUser.Email}
+	var mockRes MockResult
 
 	db := new(mocks.DB)
 	whereColumnQuery := new(ormmocks.Query)

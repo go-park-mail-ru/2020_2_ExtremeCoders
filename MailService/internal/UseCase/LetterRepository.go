@@ -25,7 +25,7 @@ type Interface interface {
 	GetLetterBy(what string, val string) (error, []Model.Letter)
 }
 
-//go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
+//go:generate mockgen -source=./LetterRepository.go -destination=../../test/mock_LetterUseCase/RepositoryMock.go
 
 func New(repo Repository.LetterDB) Interface {
 	return UseCase{re: repo}
@@ -70,32 +70,32 @@ func (uc UseCase) RemoveDir(did uint64, flag bool) error {
 	return uc.re.RemoveDir(did, flag)
 }
 
-func (uc UseCase) RemoveLetter(lid uint64) error{
+func (uc UseCase) RemoveLetter(lid uint64) error {
 	return uc.re.RemoveLetter(lid)
 }
 
 func (uc UseCase) FindSimilar(similar string) SearchResult {
-	res:= SearchResult{}
-	res.SimilarTo=similar
-	recv, err:=uc.re.FindReceiver(similar)
-	if err==nil{
-		res.Receivers=recv
+	res := SearchResult{}
+	res.SimilarTo = similar
+	recv, err := uc.re.FindReceiver(similar)
+	if err == nil {
+		res.Receivers = recv
 	}
-	send, err:=uc.re.FindSender(similar)
-	if err==nil{
-		res.Senders=send
+	send, err := uc.re.FindSender(similar)
+	if err == nil {
+		res.Senders = send
 	}
-	theme, err:=uc.re.FindTheme(similar)
-	if err==nil{
-		res.Themes=theme
+	theme, err := uc.re.FindTheme(similar)
+	if err == nil {
+		res.Themes = theme
 	}
-	text, err:=uc.re.FindText(similar)
-	if err==nil{
-		res.Texts=text
+	text, err := uc.re.FindText(similar)
+	if err == nil {
+		res.Texts = text
 	}
 	return res
 }
 
-func (uc UseCase) GetLetterBy(what string, val string) (error, []Model.Letter){
+func (uc UseCase) GetLetterBy(what string, val string) (error, []Model.Letter) {
 	return uc.re.GetLetterBy(what, val)
 }

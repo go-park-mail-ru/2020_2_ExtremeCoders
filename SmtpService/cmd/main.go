@@ -1,10 +1,10 @@
 package main
 
 import (
+	"Mailer/SmtpService/internal/GetLetters"
 	"fmt"
 	"github.com/emersion/go-smtp"
 	"log"
-	"Mailer/SmtpService/internal/GetLetters"
 	"time"
 )
 

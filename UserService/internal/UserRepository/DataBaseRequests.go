@@ -1,5 +1,7 @@
 package UserRepository
 
+//go:generate mockgen -source=DataBaseRequests.go -destination=../../test/mock_Repository/mock_UserRepository.go
+
 import (
 	"Mailer/UserService/internal/UserModel"
 	"errors"

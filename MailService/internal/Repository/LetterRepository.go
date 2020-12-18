@@ -16,7 +16,7 @@ var SetLetterWatchedError = errors.New("Could not set letter watched!")
 var DeleteLetterError = errors.New("Could not delete letter!")
 var GetLetterByError = errors.New("Could not get letter by!")
 
-//go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
+//go:generate mockgen -source=./LetterRepository.go -destination=../../test/mock_LetterRepository/RepositoryMock.go
 type LetterDB interface {
 	SaveMail(Model.Letter) error
 	GenerateLID() uint64

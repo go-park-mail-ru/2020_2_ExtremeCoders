@@ -1,7 +1,9 @@
 /.idea/
-Mailer/MainApplication/go.sum
+MainApplication/go.sum
 .idea
 .idea/workspace.xml
 ../go.sum
 /CleanArch
-*.jpeg
+/.travis/deploy_key
+/.travis/deploy_key.pub
+/.travis/set_up_ssh.sh

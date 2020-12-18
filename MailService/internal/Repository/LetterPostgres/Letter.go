@@ -170,76 +170,76 @@ func (dbInfo dataBase) RemoveDir(did uint64, flag bool) error {
 	return err
 }
 
-func (dbInfo dataBase) RemoveLetter(lid uint64) error{
-	err, letter:=dbInfo.GetLetterByLid(lid)
-	if err!=nil{
+func (dbInfo dataBase) RemoveLetter(lid uint64) error {
+	err, letter := dbInfo.GetLetterByLid(lid)
+	if err != nil {
 		return err
 	}
-	_, err=dbInfo.DB.Model(&letter).Where("id=?", lid).Delete()
-	if err!=nil{
+	_, err = dbInfo.DB.Model(&letter).Where("id=?", lid).Delete()
+	if err != nil {
 		return Repository.DeleteLetterError
 	}
 	return nil
 }
 
-func (dbInfo dataBase)FindSender(email string) ([]string, error){
+func (dbInfo dataBase) FindSender(email string) ([]string, error) {
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("sender LIKE '%?%'", email).Select()
-	if err!=nil{
+	err := dbInfo.DB.Model(&letter).Where("sender LIKE '%?%'", email).Select()
+	if err != nil {
 		return nil, err
 	}
 	var data []string
-	for _, let:=range letter{
-		data=append(data, let.Sender)
+	for _, let := range letter {
+		data = append(data, let.Sender)
 	}
 	return data, nil
 }
 
-func (dbInfo dataBase)FindReceiver(email string) ([]string, error){
+func (dbInfo dataBase) FindReceiver(email string) ([]string, error) {
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("receiver LIKE '%?%'", email).Select()
-	if err!=nil{
+	err := dbInfo.DB.Model(&letter).Where("receiver LIKE '%?%'", email).Select()
+	if err != nil {
 		return nil, err
 	}
 	var data []string
-	for _, let:=range letter{
-		data=append(data, let.Receiver)
+	for _, let := range letter {
+		data = append(data, let.Receiver)
 	}
 	return data, nil
 }
 
-func (dbInfo dataBase)FindTheme(email string) ([]string, error){
+func (dbInfo dataBase) FindTheme(email string) ([]string, error) {
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("theme LIKE '%?%'", email).Select()
-	if err!=nil{
+	err := dbInfo.DB.Model(&letter).Where("theme LIKE '%?%'", email).Select()
+	if err != nil {
 		return nil, err
 	}
 
 	var data []string
-	for _, let:=range letter{
-		data=append(data, let.Theme)
+	for _, let := range letter {
+		data = append(data, let.Theme)
 	}
 	return data, nil
 }
 
-func (dbInfo dataBase)FindText(email string) ([]string, error){
+func (dbInfo dataBase) FindText(email string) ([]string, error) {
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("text LIKE '%?%'", email).Select()
-	if err!=nil{
+	err := dbInfo.DB.Model(&letter).Where("text LIKE '%?%'", email).Select()
+	if err != nil {
 		return nil, err
 	}
 
 	var data []string
-	for _, let:=range letter{
-		data=append(data, let.Text)
+	for _, let := range letter {
+		data = append(data, let.Text)
 	}
 	return data, nil
 }
 
-func (dbInfo dataBase)GetLetterBy(what string, val string) (error, []Model.Letter){
+func (dbInfo dataBase) GetLetterBy(what string, val string) (error, []Model.Letter) {
 	var letters []Model.Letter
-	err:=dbInfo.DB.Model(&letters).Where("?=?", what, val).Select()
-	if err!=nil{
+	err := dbInfo.DB.Model(&letters).Where("?=?", what, val).Select()
+	if err != nil {
 		return Repository.GetLetterByError, nil
 	}
 	return nil, letters

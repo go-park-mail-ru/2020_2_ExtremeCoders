@@ -12,7 +12,7 @@ func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
 		Folders: ProtoToModelList(folders),
 	}
 	res, err := ans.MarshalJSON()
-	if err!=nil{
+	if err != nil {
 		return nil
 	}
 	return res
@@ -60,28 +60,28 @@ func ProtoLetterListAnswer(pbLetter *mailProto.LetterListResponse) []byte {
 	return res
 }
 
-func ProtoToModelList(pbLetter []*userProto.FolderNameType) []Folder{
+func ProtoToModelList(pbLetter []*userProto.FolderNameType) []Folder {
 	var folders []Folder
-	for _, letter:=range pbLetter{
-		letterModel:=Folder{Name: letter.Name, Type: letter.Type}
-		folders=append(folders, letterModel)
+	for _, letter := range pbLetter {
+		letterModel := Folder{Name: letter.Name, Type: letter.Type}
+		folders = append(folders, letterModel)
 	}
 	return folders
 }
 
-func ProtoToModelMail(pbLetter *mailProto.LetterListResponse) []Model.Letter{
+func ProtoToModelMail(pbLetter *mailProto.LetterListResponse) []Model.Letter {
 	var letters []Model.Letter
-	for _, pb:=range pbLetter.Letter{
-		letter:=Model.Letter{
-			Sender: pb.Sender,
-			Receiver: pb.Receiver,
-			Text: pb.Text,
-			Theme: pb.Theme,
+	for _, pb := range pbLetter.Letter {
+		letter := Model.Letter{
+			Sender:    pb.Sender,
+			Receiver:  pb.Receiver,
+			Text:      pb.Text,
+			Theme:     pb.Theme,
 			IsWatched: pb.IsWatched,
-			Id: pb.Lid,
-			DateTime: int64(pb.DateTime),
+			Id:        pb.Lid,
+			DateTime:  int64(pb.DateTime),
 		}
-		letters=append(letters, letter)
+		letters = append(letters, letter)
 	}
 	return letters
 }

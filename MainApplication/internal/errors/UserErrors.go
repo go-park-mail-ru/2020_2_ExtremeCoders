@@ -5,8 +5,6 @@ import (
 	"fmt"
 )
 
-
-
 func GetErrorBadJsonAns() []byte {
 	err := &AnswerGet{
 		Code:        400,

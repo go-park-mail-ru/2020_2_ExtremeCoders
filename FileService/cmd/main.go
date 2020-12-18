@@ -23,5 +23,5 @@ func main() {
 	fileProto.RegisterFileServiceServer(server, Delivery.NewFileManager(uc))
 
 	fmt.Println("starting File at :8081")
-	server.Serve(lis)
+	_ = server.Serve(lis)
 }

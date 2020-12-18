@@ -55,7 +55,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("cant connect to grpc mail service")
 	}
-	defer grcpMailService.Close()
+	defer func() { _ = grcpMailService.Close() }()
+
 	mailManager := protoMail.NewLetterServiceClient(grcpMailService)
 
 	grcpFileService, err := grpc.Dial(
@@ -65,7 +66,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("cant connect to grpc file service")
 	}
-	defer grcpFileService.Close()
+	defer func() { _ = grcpFileService.Close() }()
 	fileManager := protoFs.NewFileServiceClient(grcpFileService)
 
 	grcpUserService, err := grpc.Dial(
@@ -75,7 +76,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("cant connect to grpc file service")
 	}
-	defer grcpUserService.Close()
+	defer func() { _ = grcpUserService.Close() }()
 	userManager := protoUs.NewUserServiceClient(grcpUserService)
 
 	var uDB = UserMicroservice.New(userManager)

@@ -28,7 +28,7 @@ func (lsManager LetterServiceManager) WatchLetter(lid uint64) (error, LetterMode
 func (lsManager LetterServiceManager) SaveMail(letter LetterModel.Letter) error {
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.SaveLetter(ctx, convert.ModelToProto(letter))
-	if resp.Ok == false {
+	if !resp.Ok {
 		return LetterRepository.SaveLetterError
 	}
 	return nil
@@ -36,8 +36,8 @@ func (lsManager LetterServiceManager) SaveMail(letter LetterModel.Letter) error 
 func (lsManager LetterServiceManager) GetReceivedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter) {
 	ctx := context.Background()
 	resp, err := lsManager.lsClient.GetLettersRecv(ctx, &msProto.Email{
-		Email: email,
-		Limit: limit,
+		Email:  email,
+		Limit:  limit,
 		Offset: offset,
 	})
 	if err != nil {
@@ -48,7 +48,7 @@ func (lsManager LetterServiceManager) GetReceivedLetters(email string, limit uin
 func (lsManager LetterServiceManager) GetSendedLetters(email string) (error, []LetterModel.Letter) {
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.GetLettersSend(ctx, &msProto.Email{Email: email})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
@@ -57,7 +57,7 @@ func (lsManager LetterServiceManager) GetSendedLetters(email string) (error, []L
 func (lsManager LetterServiceManager) GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter) {
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.GetLettersByDirRecv(ctx, &msProto.DirName{DirName: dir})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
@@ -66,31 +66,31 @@ func (lsManager LetterServiceManager) GetReceivedLettersDir(dir uint64) (error, 
 func (lsManager LetterServiceManager) GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter) {
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.GetLettersByDirSend(ctx, &msProto.DirName{DirName: dir})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
 }
 
-func (lsManager LetterServiceManager) DeleteLetter(lid uint64) error{
+func (lsManager LetterServiceManager) DeleteLetter(lid uint64) error {
 	ctx := context.Background()
-	resp, _:=lsManager.lsClient.RemoveLetter(ctx, &msProto.Lid{Lid: lid})
-	if resp.Ok==false{
+	resp, _ := lsManager.lsClient.RemoveLetter(ctx, &msProto.Lid{Lid: lid})
+	if !resp.Ok {
 		return LetterRepository.DeleteLetterError
 	}
 	return nil
 }
 
-func (lsManager LetterServiceManager) FindSimilar(sim string) string{
+func (lsManager LetterServiceManager) FindSimilar(sim string) string {
 	ctx := context.Background()
-	resp, _:=lsManager.lsClient.FindSimilar(ctx, &msProto.Similar{Sim: sim})
+	resp, _ := lsManager.lsClient.FindSimilar(ctx, &msProto.Similar{Sim: sim})
 	return resp.Res
 }
 
-func (lsManager LetterServiceManager) GetLetterBy(what string, val string) (error, []LetterModel.Letter){
+func (lsManager LetterServiceManager) GetLetterBy(what string, val string) (error, []LetterModel.Letter) {
 	ctx := context.Background()
-	resp, _:=lsManager.lsClient.GetLetterBy(ctx, &msProto.GetBy{What: what, Value: val})
-	if resp.Result.Ok == false {
+	resp, _ := lsManager.lsClient.GetLetterBy(ctx, &msProto.GetBy{What: what, Value: val})
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)

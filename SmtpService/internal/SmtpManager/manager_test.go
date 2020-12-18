@@ -1,18 +1,18 @@
 package SmtpManager
 
 import (
-	"github.com/stretchr/testify/assert"
 	pb "Mailer/SmtpService/proto"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestManager_GetLettersByDir(t *testing.T) {
 	pbLetter := &pb.Letter{
-		Lid: 1,
-		Sender: "Sender",
+		Lid:      1,
+		Sender:   "Sender",
 		Receiver: "Reciever",
-		Theme: "Theme",
-		Text: "Text",
+		Theme:    "Theme",
+		Text:     "Text",
 		DateTime: 1,
 	}
 
@@ -29,8 +29,8 @@ func assertPanic(t *testing.T, manager Manager, letter *pb.Letter) {
 		}
 	}()
 
-	pbResponse := &pb.Response {
-		Ok: true,
+	pbResponse := &pb.Response{
+		Ok:          true,
 		Description: "Description",
 	}
 

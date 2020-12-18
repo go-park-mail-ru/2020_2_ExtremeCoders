@@ -22,8 +22,8 @@ func sendAnswer(email string) {
 		}
 	}()
 	fmt.Println("HUI_1")
-	from := mail.Address{"", "bot@mailer.ru.com"}
-	to := mail.Address{"", email}
+	from := mail.Address{Address: "bot@mailer.ru.com"}
+	to := mail.Address{Address: email}
 	subj := "Hello"
 	body := "We are happy to see you in our alfa smtp-test!"
 
@@ -93,7 +93,7 @@ func sendAnswer(email string) {
 		log.Panic(err)
 	}
 	fmt.Println("HUI_12")
-	c.Quit()
+	_ = c.Quit()
 	fmt.Println("Sent answer to: ", email)
 }
 
