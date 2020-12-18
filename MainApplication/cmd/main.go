@@ -94,8 +94,8 @@ func main() {
 	mux.HandleFunc("/user", uDE.Profile)
 	mux.HandleFunc("/user/avatar", uDE.GetAvatar)
 	mux.HandleFunc("/letter", lDE.SendLetter)
-	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
-	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
+	mux.HandleFunc("/user/letter/sent/{limit}/{offset}", lDE.GetSendLetters)
+	mux.HandleFunc("/user/letter/received/{limit}/{offset}", lDE.GetRecvLetters)
 	mux.HandleFunc("/letter/{similar}", lDE.Search)
 	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
 	mux.HandleFunc("/letter/by/{what}/{value}", lDE.GetLetterBy)
@@ -103,7 +103,7 @@ func main() {
 	mux.HandleFunc("/user/folders/recived", fDe.GetFolderList)
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
 	//get /user/foders/{recived/sended}/folderName - письма
-	mux.HandleFunc("/user/foders/recived/{folderName}", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/recived/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
 	mux.HandleFunc("/user/foders/sended/{folderName}", fDe.GetLettersByFolder)
 	//post /user/folders/{recived/sended}/folderName - добавить папку
 	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)

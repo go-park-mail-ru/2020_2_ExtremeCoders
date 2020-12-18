@@ -45,18 +45,27 @@ func (lsManager LetterServiceManager) GetReceivedLetters(email string, limit uin
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
 }
-func (lsManager LetterServiceManager) GetSendedLetters(email string) (error, []LetterModel.Letter) {
+
+func (lsManager LetterServiceManager) GetSendedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter) {
 	ctx := context.Background()
-	resp, _ := lsManager.lsClient.GetLettersSend(ctx, &letterService.Email{Email: email})
+	resp, _ := lsManager.lsClient.GetLettersSend(ctx,&letterService.Email{
+		Email: email,
+		Limit: limit,
+		Offset: offset,
+	})
 	if resp.Result.Ok == false {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
 }
 
-func (lsManager LetterServiceManager) GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter) {
+func (lsManager LetterServiceManager) GetReceivedLettersDir(dir uint64, limit uint64, offset uint64) (error, []LetterModel.Letter) {
 	ctx := context.Background()
-	resp, _ := lsManager.lsClient.GetLettersByDirRecv(ctx, &letterService.DirName{DirName: dir})
+	resp, _ := lsManager.lsClient.GetLettersByDirRecv(ctx, &letterService.DirName{
+		DirName: dir,
+		Limit: limit,
+		Offset: offset,
+		})
 	if resp.Result.Ok == false {
 		return LetterRepository.ReceivedLetterError, nil
 	}

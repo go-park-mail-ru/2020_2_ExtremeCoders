@@ -96,9 +96,10 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 	return nil, letters
 }
 
-func (dbInfo dataBase) GetLettersSent(email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).Select()
+	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).
+		Limit(int(limit)).Offset(int(offset)).Order("date_time DESC").Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
