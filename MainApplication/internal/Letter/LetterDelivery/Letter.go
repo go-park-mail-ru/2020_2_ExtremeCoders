@@ -66,7 +66,7 @@ func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 func (de delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	limit := vars["limit"]
-	offset:=vars["offset"]
+	offset:= vars["offset"]
 	intLim, err:=strconv.Atoi(limit)
 	intOff, err:=strconv.Atoi(offset)
 
