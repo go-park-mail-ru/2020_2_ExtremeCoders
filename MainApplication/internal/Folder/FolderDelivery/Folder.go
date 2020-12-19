@@ -103,6 +103,9 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 
 //post /user/folders/{recived/sended}/folderName - добавить папку
 func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
+	if r.Method==http.MethodPut{
+		d.RenameFolder(w, r)
+	}
 	folderName := r.FormValue("folderName")
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"),
 		folderName)
@@ -128,6 +131,9 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 
 //put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
 func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
+	if r.Method==http.MethodDelete{
+		d.RemoveLetterInFolder(w, r)
+	}
 	param := r.FormValue("letterId")
 	lid, err := strconv.ParseUint(param, 10, 64)
 	if err != nil {
@@ -179,6 +185,7 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 
 //put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
 func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
+	fmt.Print("\n\n\nHUIn\n\n\n")
 	oldName := r.FormValue("oldName")
 	newName := r.FormValue("newName")
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), oldName, newName)
@@ -187,6 +194,7 @@ func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 		kind = "recived"
 	}
 	fmt.Println("KIND", kind)
+	fmt.Print("\n\n\nHUIn\n\n\n")
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		_, _ = w.Write(GetFoldersError(er))

@@ -10,8 +10,8 @@ import (
 type LetterUseCase interface {
 	SaveLetter(letter *LetterModel.Letter) error
 	GetReceivedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter)
-	GetSendedLetters(email string) (error, []LetterModel.Letter)
-	GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter)
+	GetSendedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter)
+	GetReceivedLettersDir(dir uint64, limit uint64, offset uint64) (error, []LetterModel.Letter)
 	GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter)
 	WatchLetter(lid uint64) (error, LetterModel.Letter)
 	DeleteLetter(lid uint64) error
@@ -43,8 +43,8 @@ func (uc useCase) GetReceivedLetters(email string, limit uint64, offset uint64) 
 	return nil, letters
 }
 
-func (uc useCase) GetSendedLetters(email string) (error, []LetterModel.Letter) {
-	err, letters := uc.Db.GetSendedLetters(email)
+func (uc useCase) GetSendedLetters(email string, limit uint64, offset uint64) (error, []LetterModel.Letter) {
+	err, letters := uc.Db.GetSendedLetters(email, limit, offset)
 	if err != nil {
 		return err, nil
 	}
@@ -59,8 +59,8 @@ func (uc useCase) WatchLetter(lid uint64) (error, LetterModel.Letter) {
 	return nil, letters
 }
 
-func (uc useCase) GetReceivedLettersDir(dir uint64) (error, []LetterModel.Letter) {
-	err, letters := uc.Db.GetReceivedLettersDir(dir)
+func (uc useCase) GetReceivedLettersDir(dir uint64, limit uint64, offset uint64) (error, []LetterModel.Letter) {
+	err, letters := uc.Db.GetReceivedLettersDir(dir, limit, offset)
 	if err != nil {
 		return err, nil
 	}

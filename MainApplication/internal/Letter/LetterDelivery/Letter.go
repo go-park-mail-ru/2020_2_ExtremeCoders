@@ -80,13 +80,20 @@ func (de delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	limit := vars["limit"]
+	offset:=vars["offset"]
+	intLim, err:=strconv.Atoi(limit)
+	intOff, err:=strconv.Atoi(offset)
+
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		_, _ = w.Write(GetLettersError(er, nil))
 		return
 	}
-	err, letters := de.Uc.GetSendedLetters(user.Email)
-	_, _ = w.Write(GetLettersError(err, letters))
+
+	err, letters := de.Uc.GetSendedLetters(user.Email, uint64(intLim), uint64(intOff))
+	w.Write(GetLettersError(err, letters))
 }
 
 func (de delivery) WatchLetter(w http.ResponseWriter, r *http.Request) {

@@ -197,7 +197,7 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("GET AVATAR ERROR ", err)
 		}
-		w.Header().Set("Content-Type", "image/jpeg")
+		w.Header().Set("Content-Type", "image")
 		w.Header().Set("Content-Length", strconv.Itoa(len(avatar.Content)))
 		if _, err := w.Write(avatar.Content); err != nil {
 			_, _ = w.Write(errors.GetErrorUnexpectedAns())
