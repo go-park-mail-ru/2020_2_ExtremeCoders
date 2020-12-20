@@ -36,7 +36,7 @@ func (dbInfo dataBase) GenerateLID() uint64 {
 }
 
 func (dbInfo dataBase) GetLettersByFolder(did uint64) (error, []Model.Letter) {
-	var letters []Model.Letter
+	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("directory_recv=? or directory_send=?", did, did).
 		Select()
 	if exist != nil {
@@ -68,7 +68,7 @@ func (dbInfo dataBase) GetLetterByLid(lid uint64) (error, Model.Letter) {
 }
 
 func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64) (error, []Model.Letter) {
-	var letters []Model.Letter
+	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("directory_recv=?", Did).
 		Limit(int(limit)).Offset(int(offset)).Order("date_time DESC").Select()
 	if exist != nil {
@@ -78,7 +78,7 @@ func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64
 }
 
 func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
-	var letters []Model.Letter
+	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("directory_send=?", Did).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -87,7 +87,7 @@ func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 }
 
 func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter) {
-	var letters []Model.Letter
+	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).
 		Limit(int(limit)).Offset(int(offset)).Order("date_time DESC").Select()
 	if exist != nil {
@@ -97,7 +97,7 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 }
 
 func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64) (error, []Model.Letter) {
-	var letters []Model.Letter
+	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).
 		Limit(int(limit)).Offset(int(offset)).Order("date_time DESC").Select()
 	if exist != nil {
