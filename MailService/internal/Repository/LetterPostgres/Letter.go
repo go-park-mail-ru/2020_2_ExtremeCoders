@@ -5,6 +5,8 @@ import (
 	"MailService/internal/Repository"
 	crypto "crypto/rand"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
+	"sort"
+
 	"math/big"
 )
 
@@ -183,56 +185,72 @@ func (dbInfo dataBase) RemoveLetter(lid uint64) error{
 	return nil
 }
 
-func (dbInfo dataBase)FindSender(email string) ([]string, error){
+func (dbInfo dataBase)FindSender(theme string, email string) ([]string, error){
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("sender LIKE '%?%'", email).Select()
+	_, err := dbInfo.DB.Query(&letter, "SELECT * FROM letters WHERE sender LIKE '%' || ? || '%'", theme)
 	if err!=nil{
 		return nil, err
 	}
 	var data []string
 	for _, let:=range letter{
-		data=append(data, let.Sender)
+		pos:=sort.SearchStrings(data, let.Sender)
+		if pos== len(data){
+			data=append(data, let.Sender)
+		}
 	}
 	return data, nil
 }
 
-func (dbInfo dataBase)FindReceiver(email string) ([]string, error){
+func (dbInfo dataBase)FindReceiver(theme string, email string) ([]string, error){
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("receiver LIKE '%?%'", email).Select()
+	_, err := dbInfo.DB.Query(&letter, "SELECT * FROM letters WHERE receiver LIKE '%' || ? || '%'", theme)
 	if err!=nil{
 		return nil, err
 	}
 	var data []string
 	for _, let:=range letter{
-		data=append(data, let.Receiver)
+		pos:=sort.SearchStrings(data, let.Receiver)
+		if pos== len(data){
+			data=append(data, let.Receiver)
+		}
 	}
 	return data, nil
 }
 
-func (dbInfo dataBase)FindTheme(email string) ([]string, error){
+func (dbInfo dataBase)FindTheme(theme string, email string) ([]string, error){
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("theme LIKE '%?%'", email).Select()
+	_, err := dbInfo.DB.Query(&letter, "SELECT * FROM letters WHERE theme LIKE '%' || ? || '%'", theme)
 	if err!=nil{
 		return nil, err
 	}
 
 	var data []string
 	for _, let:=range letter{
-		data=append(data, let.Theme)
+		if let.Receiver==email || let.Sender==email{
+			pos:=sort.SearchStrings(data, let.Theme)
+			if pos== len(data){
+				data=append(data, let.Theme)
+			}
+		}
 	}
 	return data, nil
 }
 
-func (dbInfo dataBase)FindText(email string) ([]string, error){
+func (dbInfo dataBase)FindText(text string, email string) ([]string, error){
 	var letter []Model.Letter
-	err:=dbInfo.DB.Model(&letter).Where("text LIKE '%?%'", email).Select()
+	_, err := dbInfo.DB.Query(&letter, "SELECT DISTINCT * FROM letters WHERE text LIKE '%' || ? || '%'", text)
 	if err!=nil{
 		return nil, err
 	}
 
 	var data []string
 	for _, let:=range letter{
-		data=append(data, let.Text)
+		if let.Receiver==email || let.Sender==email{
+			pos:=sort.SearchStrings(data, let.Theme)
+			if pos== len(data){
+				data=append(data, let.Text)
+			}
+		}
 	}
 	return data, nil
 }

@@ -2,6 +2,7 @@ package UserDelivery
 
 import (
 	"MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserRepository"
 	"MainApplication/internal/User/UserUseCase"
 	"MainApplication/internal/errors"
 	"MainApplication/internal/pkg/context"
@@ -67,7 +68,7 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, cookie)
 		response = SignUpError(err, cookie)
 	} else {
-		response = SignUpError(err, nil)
+		response = SignUpError(UserRepository.CantAddUser, nil)
 	}
 
 	w.Write(response)

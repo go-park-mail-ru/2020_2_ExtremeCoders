@@ -21,7 +21,7 @@ type Interface interface {
 	RemoveLetterFromDir(uint64, uint64, bool) error
 	RemoveDir(uint64, bool) error
 	RemoveLetter(uint64) error
-	FindSimilar(similar string) SearchResult
+	FindSimilar(similar string, email string) SearchResult
 	GetLetterBy(what string, val string) (error, []Model.Letter)
 }
 
@@ -74,22 +74,22 @@ func (uc UseCase) RemoveLetter(lid uint64) error{
 	return uc.re.RemoveLetter(lid)
 }
 
-func (uc UseCase) FindSimilar(similar string) SearchResult {
+func (uc UseCase) FindSimilar(similar string, email string) SearchResult {
 	res:= SearchResult{}
 	res.SimilarTo=similar
-	recv, err:=uc.re.FindReceiver(similar)
+	recv, err:=uc.re.FindReceiver(similar, email)
 	if err==nil{
 		res.Receivers=recv
 	}
-	send, err:=uc.re.FindSender(similar)
+	send, err:=uc.re.FindSender(similar, email)
 	if err==nil{
 		res.Senders=send
 	}
-	theme, err:=uc.re.FindTheme(similar)
+	theme, err:=uc.re.FindTheme(similar, email)
 	if err==nil{
 		res.Themes=theme
 	}
-	text, err:=uc.re.FindText(similar)
+	text, err:=uc.re.FindText(similar, email)
 	if err==nil{
 		res.Texts=text
 	}

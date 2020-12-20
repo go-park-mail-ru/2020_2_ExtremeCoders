@@ -34,10 +34,10 @@ type LetterDB interface {
 	RemoveDir(uint64, bool) error
 	RemoveLetter(uint64) error
 
-	FindSender(string) ([]string, error)
-	FindReceiver(string) ([]string, error)
-	FindTheme(string) ([]string, error)
-	FindText(string) ([]string, error)
+	FindSender(string, string) ([]string, error)
+	FindReceiver(string, string) ([]string, error)
+	FindTheme(string, string) ([]string, error)
+	FindText(string, string) ([]string, error)
 
 	GetLetterBy(string, string) (error, []Model.Letter)
 }

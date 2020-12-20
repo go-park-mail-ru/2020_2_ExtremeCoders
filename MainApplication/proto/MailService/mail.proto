@@ -18,6 +18,7 @@ message Letter{
   int64 directoryRecv=8;
 }
 
+
 message DirName{
   uint64 dirName=1;
   uint64 limit=2;
@@ -53,6 +54,7 @@ message DirLid{
 
 message Similar{
   string sim=1;
+  string email=2;
 }
 
 message SimRes{

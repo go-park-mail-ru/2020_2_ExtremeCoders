@@ -128,7 +128,7 @@ func (ld Delivery) RemoveLetter(ctx context.Context, Lid *pb.Lid)(*pb.Response, 
 }
 
 func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar)(*pb.SimRes, error){
-	res:=ld.uc.FindSimilar(Similar.Sim)
+	res:=ld.uc.FindSimilar(Similar.Sim, Similar.Email)
 	searchResult:=&pb.SimRes{}
 	strRes, _ := res.MarshalJSON()
 	searchResult.Res=string(strRes)
