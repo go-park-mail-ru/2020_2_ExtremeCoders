@@ -16,6 +16,7 @@ type Repo struct {
 }
 
 func New() repo.Interface {
+	//err := os.Chdir("..")
 	curPath, _ := os.Getwd()
 	fmt.Println("CUR PATh", curPath)
 	err := os.Chdir(curPath + "/web/static")
@@ -45,7 +46,7 @@ func (fsr Repo) SaveAvatar(avatar *fileProto.Avatar) error {
 		fmt.Println("ERROR", err)
 		return repo.SaveAvatarError
 	}
-	defer func() { _ = f.Close() }()
+	defer f.Close()
 	_, err = f.Write(avatar.Content)
 	if err != nil {
 		fmt.Println("ERROR", err)

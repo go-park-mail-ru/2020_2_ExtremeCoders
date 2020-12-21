@@ -1,6 +1,5 @@
 package UserPostgres
 
-
 import (
 	"Mailer/UserService/internal/UserModel"
 	"Mailer/UserService/internal/UserRepository"
@@ -12,6 +11,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"math/big"
 )
+
+//go:generate mockgen -destination=../mocks/mock_User.go -package=mocks -source=./DataBaseRequests.go
 
 type dataBase struct {
 	DB pgwrapper.DB
@@ -61,8 +62,8 @@ func (dbInfo dataBase) CreateFolder(name string, kind string, uid uint64) error 
 		Type: kind,
 		Name: name,
 	}
-	exist := dbInfo.DB.Model(folder).Where("type=? and name=? and uid=?", folder.Type, folder.Name, folder.Uid).Select()
-	if exist == nil {
+	exist:=dbInfo.DB.Model(folder).Where("type=? and name=? and uid=?", folder.Type, folder.Name, folder.Uid).Select()
+	if exist==nil{
 		return UserRepository.CreateFolderError
 	}
 	_, err := dbInfo.DB.Model(folder).Insert()
@@ -202,7 +203,7 @@ func (dbInfo dataBase) UpdateProfile(newUser UserModel.User, email string) error
 func (dbInfo dataBase) RemoveSession(sid string) (err error, uid uint64) {
 	fmt.Println("CALL RemoveSession")
 	session := &UserModel.Session{Id: sid}
-	_ = dbInfo.DB.Model(session).Where("id=?", sid).Select()
+	err = dbInfo.DB.Model(session).Where("id=?", sid).Select()
 	_, err = dbInfo.DB.Model(session).Where("id=?", sid).Delete()
 	if err != nil {
 		return UserRepository.RemoveSessionError, 0

@@ -1,7 +1,7 @@
 package UserDelivery
 
 import (
-	fsProto "Mailer/FileService/proto"
+	FileServise "Mailer/FileService/proto"
 	"Mailer/MainApplication/internal/User/UserModel"
 	"Mailer/MainApplication/internal/User/UserRepository"
 	"Mailer/MainApplication/internal/User/UserUseCase"
@@ -30,10 +30,10 @@ type Interface interface {
 
 type delivery struct {
 	Uc          UserUseCase.UserUseCase
-	FileManager fsProto.FileServiceClient
+	FileManager FileServise.FileServiceClient
 }
 
-func New(usecase UserUseCase.UserUseCase, fileManager fsProto.FileServiceClient) Interface {
+func New(usecase UserUseCase.UserUseCase, fileManager FileServise.FileServiceClient) Interface {
 	return delivery{Uc: usecase, FileManager: fileManager}
 }
 
@@ -71,12 +71,12 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		response = SignUpError(UserRepository.CantAddUser, nil)
 	}
 
-	_, _ = w.Write(response)
+	w.Write(response)
 }
 
 func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		_, _ = w.Write(errors.GetErrorNotPostAns())
+		w.Write(errors.GetErrorNotPostAns())
 		return
 	}
 	var user UserModel.User
@@ -97,7 +97,7 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	} else {
 		response = SignInError(err, nil)
 	}
-	_, _ = w.Write(response)
+	w.Write(response)
 }
 
 func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
@@ -123,11 +123,11 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	}
 	user, session, err := de.GetUserByRequest(r)
 	if err != 200 {
-		_, _ = w.Write(CookieError(err))
+		w.Write(CookieError(err))
 		return
 	}
 	if r.Method == http.MethodGet {
-		_, _  = w.Write(errors.GetOkAnsData(session.Value, *user))
+		w.Write(errors.GetOkAnsData(session.Value, *user))
 		return
 	} else if r.Method == http.MethodPut {
 		var up UserModel.User
@@ -136,20 +136,20 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		up.Surname = context.GetStrFormValueSafety(r, "profile_lastName")
 		de.LoadFile(&up, r)
 		err := de.Uc.Profile(up)
-		_, _  = w.Write(ProfileError(err, session))
+		w.Write(ProfileError(err, session))
 		return
 	}
-	_, _ = w.Write(errors.GetErrorUnexpectedAns())
+	w.Write(errors.GetErrorUnexpectedAns())
 }
 
 func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
-		_, _ = w.Write(errors.GetErrorNotPostAns())
+		w.Write(errors.GetErrorNotPostAns())
 		return
 	} else {
 		_, session, err := de.GetUserByRequest(r)
 		if err != 200 {
-			_, _ = w.Write(CookieError(err))
+			w.Write(CookieError(err))
 			return
 		}
 
@@ -158,10 +158,11 @@ func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 			session.Expires = time.Now().AddDate(0, 0, -1)
 			http.SetCookie(w, session)
 		}
-		_, _ = w.Write(LogoutError(e))
+		w.Write(LogoutError(e))
 		return
 	}
 
+	w.Write(errors.GetErrorUnexpectedAns())
 }
 
 func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
@@ -176,17 +177,17 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	if _, err := io.Copy(buf, file); err != nil {
 		log.Println("EEERR", err)
 	}
-	avatar := fsProto.Avatar{
+	avatar := FileServise.Avatar{
 		Email:    (*user).Email,
 		FileName: fileHeader.Filename,
 		Content:  buf.Bytes(),
 	}
-	_, _ = de.FileManager.SetAvatar(r.Context(), &avatar)
+	de.FileManager.SetAvatar(r.Context(), &avatar)
 }
 
 func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
-		_, _ = w.Write([]byte(""))
+		w.Write([]byte(""))
 		return
 	}
 	if r.Method == http.MethodGet {
@@ -195,14 +196,14 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 			CookieError(Err)
 			return
 		}
-		avatar, err := de.FileManager.GetAvatar(r.Context(), &fsProto.User{Email: user.Email})
+		avatar, err := de.FileManager.GetAvatar(r.Context(), &FileServise.User{Email: user.Email})
 		if err != nil {
 			fmt.Println("GET AVATAR ERROR ", err)
 		}
-		w.Header().Set("Content-Type", "image/jpeg")
+		w.Header().Set("Content-Type", "image")
 		w.Header().Set("Content-Length", strconv.Itoa(len(avatar.Content)))
 		if _, err := w.Write(avatar.Content); err != nil {
-			_, _ = w.Write(errors.GetErrorUnexpectedAns())
+			w.Write(errors.GetErrorUnexpectedAns())
 			return
 		}
 		return

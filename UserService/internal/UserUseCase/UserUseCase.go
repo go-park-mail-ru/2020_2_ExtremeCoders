@@ -6,11 +6,11 @@ package UserUseCase
 
 import (
 	"Mailer/UserService/internal/UserModel"
+	"Mailer/UserService/internal/UserRepository"
 	proto "Mailer/UserService/proto"
 	"errors"
 	"fmt"
 )
-import "Mailer/UserService/internal/UserRepository"
 
 type Interface interface {
 	IsEmailExists(*proto.Email) (*proto.Nothing, error)

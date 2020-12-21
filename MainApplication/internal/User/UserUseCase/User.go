@@ -9,6 +9,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+
+//go:generate mockgen -source=./User.go -destination=../../../test/mock_UserUseCase/UserUseCase_mock.go
+
 type UserUseCase interface {
 	Signup(user UserModel.User) (error, string)
 	SignIn(user UserModel.User) (error, string)
@@ -16,7 +19,6 @@ type UserUseCase interface {
 	Profile(user UserModel.User) error
 	GetDB() UserRepository.UserDB
 }
-//go:generate mockgen -source=./User.go -destination=../../../test/mock_UserUseCase/UserUseCase_mock.go
 
 type useCase struct {
 	Db UserRepository.UserDB

@@ -1,11 +1,10 @@
 package UserRepository
 
-//go:generate mockgen -source=DataBaseRequests.go -destination=../../test/mock_Repository/mock_UserRepository.go
-
 import (
 	"Mailer/UserService/internal/UserModel"
 	"errors"
 )
+//go:generate mockgen -source=DataBaseRequests.go -destination=../../test/mock_Repository/mock_UserRepository.go
 
 var EmailAlreadyExists = errors.New("Email already exist!")
 var DbError = errors.New("Data Base error!")

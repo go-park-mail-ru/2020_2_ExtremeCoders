@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 )
+
 type Delivery struct {
 	uc UseCase.Interface
 }

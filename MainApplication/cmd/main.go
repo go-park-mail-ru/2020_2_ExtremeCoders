@@ -72,13 +72,6 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	//var db = Postgres.DataBase{}
-	//DataBase, err := db.Init(config.DbUser, config.DbPassword, config.DbDB)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-
 	grcpMailService, err := grpc.Dial(
 		"127.0.0.1:8083",
 		grpc.WithInsecure(),
