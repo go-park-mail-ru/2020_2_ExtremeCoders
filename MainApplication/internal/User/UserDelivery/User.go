@@ -6,7 +6,7 @@ import (
 	"Mailer/MainApplication/internal/User/UserUseCase"
 	"Mailer/MainApplication/internal/errors"
 	"Mailer/MainApplication/internal/pkg/context"
-	"Mailer/MainApplication/proto/FileServise"
+	FileServise "Mailer/FileService/proto"
 
 	"bytes"
 	"fmt"

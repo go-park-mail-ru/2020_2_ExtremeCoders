@@ -3,7 +3,7 @@ package UserMicroservice
 import (
 	"Mailer/MainApplication/internal/User/UserModel"
 	"Mailer/MainApplication/internal/User/UserRepository"
-	"Mailer/MainApplication/proto/UserServise"
+	"Mailer/UserService/proto"
 	"context"
 )
 

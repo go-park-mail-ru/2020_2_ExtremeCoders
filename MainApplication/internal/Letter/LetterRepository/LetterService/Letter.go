@@ -4,7 +4,7 @@ import (
 	"Mailer/MainApplication/internal/Letter/LetterModel"
 	"Mailer/MainApplication/internal/Letter/LetterRepository"
 	"Mailer/MainApplication/internal/pkg/convert"
-	"Mailer/MainApplication/proto/MailService"
+	letterService "Mailer/MailService/proto"
 	"context"
 )
 

@@ -1,16 +1,14 @@
 package FolderDelivery
 
 import (
+	letterService "Mailer/MailService/proto"
 	"Mailer/MainApplication/internal/pkg/context"
-	letterService "Mailer/MainApplication/proto/MailService"
-	mailProto "Mailer/MainApplication/proto/MailService"
-	userProto "Mailer/MainApplication/proto/UserServise"
-	userService "Mailer/MainApplication/proto/UserServise"
+	userService "Mailer/UserService/proto"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 	"strings"
-	"github.com/gorilla/mux"
 )
 
 //get /user/folders/{recived/sended} - список папок
@@ -55,7 +53,7 @@ func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	folders, er := d.usClient.GetFoldersList(r.Context(), &userProto.FolderUidType{Uid: user.Id, Type: kind})
+	folders, er := d.usClient.GetFoldersList(r.Context(), &userService.FolderUidType{Uid: user.Id, Type: kind})
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
@@ -80,17 +78,17 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Name: folderName, Type: kind})
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userService.Folder{Uid: user.Id, Name: folderName, Type: kind})
 	if er != nil {
 		fmt.Println("Er", er)
 		w.Write(GetFoldersError(er))
 		return
 	}
-	var letterList *mailProto.LetterListResponse
+	var letterList *letterService.LetterListResponse
 	if kind == "recived" {
-		letterList, er = d.lsClient.GetLettersByDirRecv(r.Context(), &mailProto.DirName{DirName: folderId.Id})
+		letterList, er = d.lsClient.GetLettersByDirRecv(r.Context(), &letterService.DirName{DirName: folderId.Id})
 	} else {
-		letterList, er = d.lsClient.GetLettersByDirSend(r.Context(), &mailProto.DirName{DirName: folderId.Id})
+		letterList, er = d.lsClient.GetLettersByDirSend(r.Context(), &letterService.DirName{DirName: folderId.Id})
 	}
 	if er != nil {
 		fmt.Println("Er", er)
@@ -119,8 +117,8 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	userProtoStruct:=&userProto.Folder{Uid: user.Id, Name: folderName, Type: kind}
-	_, er = d.usClient.CreateFolder(r.Context(), userProtoStruct)
+	userServiceStruct:=&userService.Folder{Uid: user.Id, Name: folderName, Type: kind}
+	_, er = d.usClient.CreateFolder(r.Context(), userServiceStruct)
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
@@ -153,22 +151,22 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: kind, Name: folderName})
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userService.Folder{Uid: user.Id, Type: kind, Name: folderName})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
 	}
 
-	var resp *mailProto.Response
+	var resp *letterService.Response
 	if kind == "recived" {
-		resp, er = d.lsClient.AddLetterToDir(r.Context(), &mailProto.DirLid{
+		resp, er = d.lsClient.AddLetterToDir(r.Context(), &letterService.DirLid{
 			Did:  folderId.Id,
 			Lid:  lid,
 			Type: true,
 		})
 	} else {
-		resp, er = d.lsClient.AddLetterToDir(r.Context(), &mailProto.DirLid{
+		resp, er = d.lsClient.AddLetterToDir(r.Context(), &letterService.DirLid{
 			Did:  folderId.Id,
 			Lid:  lid,
 			Type: false,
@@ -200,7 +198,7 @@ func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	_, er = d.usClient.RenameFolder(r.Context(), &userProto.RenameFolderMsg{Uid: user.Id, Type: kind, OldName: oldName, NewName: newName})
+	_, er = d.usClient.RenameFolder(r.Context(), &userService.RenameFolderMsg{Uid: user.Id, Type: kind, OldName: oldName, NewName: newName})
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
@@ -233,14 +231,14 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind})
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userService.Folder{Uid: user.Id, Type: textKind})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
 	}
 
-	resp, err := d.lsClient.RemoveLetterFromDir(r.Context(), &mailProto.DirLid{
+	resp, err := d.lsClient.RemoveLetterFromDir(r.Context(), &letterService.DirLid{
 		Did:  folderId.Id,
 		Lid:  lid,
 		Type: kind,
@@ -267,13 +265,13 @@ func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	folderId, er := d.usClient.RemoveFolder(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind})
+	folderId, er := d.usClient.RemoveFolder(r.Context(), &userService.Folder{Uid: user.Id, Type: textKind})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))
 		return
 	}
-	resp, _ := d.lsClient.RemoveDir(r.Context(), &mailProto.DirLid{
+	resp, _ := d.lsClient.RemoveDir(r.Context(), &letterService.DirLid{
 		Did:  folderId.Id,
 		Type: kind,
 	})

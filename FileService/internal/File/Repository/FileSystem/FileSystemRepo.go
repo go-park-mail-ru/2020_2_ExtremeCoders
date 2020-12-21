@@ -16,10 +16,9 @@ type Repo struct {
 }
 
 func New() repo.Interface {
-	err := os.Chdir("..")
 	curPath, _ := os.Getwd()
 	fmt.Println("CUR PATh", curPath)
-	err = os.Chdir(curPath + "/web/static")
+	err := os.Chdir(curPath + "/web/static")
 	if err != nil {
 		fmt.Println("ERROR", err)
 	}
