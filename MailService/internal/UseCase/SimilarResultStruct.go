@@ -1,9 +1,9 @@
 package UseCase
 
-type SearchResult struct {
-	Senders   []string
+type SearchResult struct{
+	Senders []string
 	Receivers []string
-	Themes    []string
-	Texts     []string
+	Themes []string
+	Texts []string
 	SimilarTo string
 }

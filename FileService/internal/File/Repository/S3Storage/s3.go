@@ -1,8 +1,8 @@
 package S3Storage
 
 import (
-	repo "Mailer/FileService/internal/File/Repository"
-	fileProto "Mailer/FileService/proto"
+	repo "FileService/internal/File/Repository"
+	fileProto "FileService/proto"
 	"bytes"
 	"context"
 	"fmt"

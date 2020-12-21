@@ -1,8 +1,8 @@
 package FileSystem
 
 import (
-	repo "Mailer/FileService/internal/File/Repository"
-	fileProto "Mailer/FileService/proto"
+	repo "FileService/internal/File/Repository"
+	fileProto "FileService/proto"
 	"bytes"
 	"fmt"
 	"image"
@@ -16,10 +16,10 @@ type Repo struct {
 }
 
 func New() repo.Interface {
-	//err := os.Chdir("..")
+	err := os.Chdir("..")
 	curPath, _ := os.Getwd()
 	fmt.Println("CUR PATh", curPath)
-	err := os.Chdir(curPath + "/web/static")
+	err = os.Chdir(curPath + "/web/static")
 	if err != nil {
 		fmt.Println("ERROR", err)
 	}

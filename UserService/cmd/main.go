@@ -1,12 +1,12 @@
 package main
 
 import (
-	"Mailer/UserService/Postgres"
-	"Mailer/UserService/internal/UserDelivery"
-	"Mailer/UserService/internal/UserRepository/UserPostgres"
-	"Mailer/UserService/internal/UserUseCase"
-	proto "Mailer/UserService/proto"
-	"Mailer/config"
+	"UserService/Postgres"
+	"UserService/config"
+	"UserService/internal/UserDelivery"
+	"UserService/internal/UserRepository/UserPostgres"
+	"UserService/internal/UserUseCase"
+	proto "UserService/proto"
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
@@ -32,5 +32,5 @@ func main() {
 	proto.RegisterUserServiceServer(server, UserDelivery.New(uc))
 
 	fmt.Println("starting File at :8082")
-	_ = server.Serve(lis)
+	server.Serve(lis)
 }

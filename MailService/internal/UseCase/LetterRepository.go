@@ -1,12 +1,9 @@
 package UseCase
 
 import (
-	"Mailer/MailService/internal/Model"
-	"Mailer/MailService/internal/Repository"
+	"MailService/internal/Model"
+	"MailService/internal/Repository"
 )
-
-
-//go:generate mockgen -source=./LetterRepository.go -destination=../../test/mock_LetterUseCase/RepositoryMock.go
 
 type UseCase struct {
 	re Repository.LetterDB

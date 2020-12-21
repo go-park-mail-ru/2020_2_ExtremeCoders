@@ -1,9 +1,9 @@
 package Delivery
 
 import (
-	"Mailer/MailService/internal/UseCase"
-	"Mailer/MailService/pkg/convert"
-	pb "Mailer/MailService/proto"
+	"MailService/internal/UseCase"
+	"MailService/pkg/convert"
+	pb "MailService/proto"
 	"context"
 	"fmt"
 )

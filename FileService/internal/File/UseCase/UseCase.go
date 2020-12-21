@@ -1,9 +1,8 @@
 package UseCase
 
-import fileProto "Mailer/FileService/proto"
-import "Mailer/FileService/internal/File/Repository"
-
-//go:generate mockgen -source=UseCase.go -destination=../../../test/mock_UseCase/UseCaseMock.go
+import fileProto "FileService/proto"
+import "FileService/internal/File/Repository"
+//go:generate mockgen -source=UseCase.go -destination=UseCaseMock.go
 
 type Interface interface {
 	SaveFiles(*fileProto.Files) error

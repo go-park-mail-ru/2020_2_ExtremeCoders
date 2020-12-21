@@ -1,12 +1,13 @@
 package LetterService
 
 import (
-	"Mailer/MainApplication/internal/Letter/LetterModel"
-	"Mailer/MainApplication/internal/Letter/LetterRepository"
-	"Mailer/MainApplication/internal/pkg/convert"
-	letterService "Mailer/MailService/proto"
+	"MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterRepository"
+	"MainApplication/internal/pkg/convert"
+	"MainApplication/proto/MailService"
 	"context"
 )
+
 type LetterServiceManager struct {
 	lsClient letterService.LetterServiceClient
 }
@@ -64,7 +65,7 @@ func (lsManager LetterServiceManager) GetReceivedLettersDir(dir uint64, limit ui
 		DirName: dir,
 		Limit: limit,
 		Offset: offset,
-	})
+		})
 	if resp.Result.Ok == false {
 		return LetterRepository.ReceivedLetterError, nil
 	}

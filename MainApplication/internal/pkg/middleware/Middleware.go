@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"Mailer/MainApplication/internal/User/UserRepository"
-	"Mailer/MainApplication/internal/pkg/context"
+	"MainApplication/internal/User/UserRepository"
+	"MainApplication/internal/pkg/context"
 	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -54,7 +54,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		csrf, Error := r.Cookie(context.CsrfCookieName)
-		fmt.Println("REQ", r.URL.Path)
+		fmt.Printf("REQ", r.URL.Path)
 		//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
 		//fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
 		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method == http.MethodGet {
@@ -95,7 +95,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 				return
 			}
 			//либо злоумышленник либо что-то пошло совсем не так...
-			_, _ = w.Write(authError(csrfError))
+			w.Write(authError(csrfError))
 			log.WithFields(log.Fields{
 				"RECOVERED": csrfError,
 			}).Error("got")

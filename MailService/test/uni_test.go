@@ -1,10 +1,9 @@
 package test
-
 //
 //import (
-//	"Mailer/MailService/internal/Model"
-//	"Mailer/MailService/pkg/convert"
-//	//letterService "Mailer/MailService/proto"
+//	"MailService/internal/Model"
+//	"MailService/pkg/convert"
+//	//letterService "MailService/proto"
 //	"log"
 //	"testing"
 //)

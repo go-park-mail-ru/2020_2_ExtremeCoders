@@ -1,25 +1,30 @@
 package test
 
-//type MyWriter struct {
-//	Str []byte
-//}
-//
-//type userKey struct {
-//}
-//
-//func (writer MyWriter) Header() http.Header {
-//	fmt.Println("implement me")
-//	return nil
-//}
-//
-//func (writer *MyWriter) Write(bytes []byte) (int, error) {
-//	writer.Str = append(writer.Str, bytes...)
-//	return len(writer.Str), nil
-//}
-//
-//func (writer MyWriter) WriteHeader(statusCode int) {
-//	fmt.Println("implement me")
-//}
+import (
+	"fmt"
+	"net/http"
+)
+
+type MyWriter struct {
+	Str []byte
+}
+
+type userKey struct {
+}
+
+func (writer MyWriter) Header() http.Header {
+	fmt.Println("implement me")
+	return nil
+}
+
+func (writer *MyWriter) Write(bytes []byte) (int, error) {
+	writer.Str = append(writer.Str, bytes...)
+	return len(writer.Str), nil
+}
+
+func (writer MyWriter) WriteHeader(statusCode int) {
+	fmt.Println("implement me")
+}
 
 //func TestSendLetter(t *testing.T) {
 //

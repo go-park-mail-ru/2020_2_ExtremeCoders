@@ -1,7 +1,6 @@
 package SendLetters
 
 import (
-	pb "Mailer/SmtpService/proto"
 	"crypto/tls"
 	"fmt"
 	"github.com/emersion/go-smtp"
@@ -9,6 +8,7 @@ import (
 	"net"
 	"net/mail"
 	baseSMTP "net/smtp"
+	pb "smtpTest/proto"
 	"strings"
 )
 
@@ -22,8 +22,8 @@ func sendAnswer(email string) {
 		}
 	}()
 	fmt.Println("HUI_1")
-	from := mail.Address{Address: "bot@mailer.ru.com"}
-	to := mail.Address{Address: email}
+	from := mail.Address{"", "bot@mailer.ru.com"}
+	to := mail.Address{"", email}
 	subj := "Hello"
 	body := "We are happy to see you in our alfa smtp-test!"
 
@@ -93,7 +93,7 @@ func sendAnswer(email string) {
 		log.Panic(err)
 	}
 	fmt.Println("HUI_12")
-	_ = c.Quit()
+	c.Quit()
 	fmt.Println("Sent answer to: ", email)
 }
 

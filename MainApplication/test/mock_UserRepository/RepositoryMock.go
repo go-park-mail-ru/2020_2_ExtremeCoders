@@ -5,7 +5,7 @@
 package mock_UserRepository
 
 import (
-	UserModel "Mailer/MainApplication/internal/User/UserModel"
+	UserModel "MainApplication/internal/User/UserModel"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

@@ -3,7 +3,7 @@
 package FolderDelivery
 
 import (
-	LetterModel "Mailer/MainApplication/internal/Letter/LetterModel"
+	LetterModel "MainApplication/internal/Letter/LetterModel"
 	json "encoding/json"
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"

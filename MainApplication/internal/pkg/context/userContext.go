@@ -1,8 +1,8 @@
 package context
 
 import (
-	"Mailer/MainApplication/internal/User/UserModel"
-	"Mailer/config"
+	"MainApplication/config"
+	"MainApplication/internal/User/UserModel"
 
 	"context"
 	crypto "crypto/rand"
@@ -46,9 +46,9 @@ func GenerateCSRF() string {
 }
 
 func GetStrFormValueSafety(r *http.Request, field string) string {
-	xss := r.FormValue(field)
+	xss:=r.FormValue(field)
 	p := bluemonday.UGCPolicy()
-	ok := p.Sanitize(xss)
+	ok:=p.Sanitize(xss)
 	return ok
 }
 

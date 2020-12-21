@@ -4,9 +4,4 @@ MainApplication/go.sum
 .idea/workspace.xml
 ../go.sum
 /CleanArch
-/.travis/deploy_key
-/.travis/deploy_key.pub
-/.travis/set_up_ssh.sh
-*.txt
-
 /vendor/

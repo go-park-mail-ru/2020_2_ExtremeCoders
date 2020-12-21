@@ -1,10 +1,10 @@
 package main
 
 import (
-	"Mailer/FileService/internal/File/Delivery"
-	fsRepo "Mailer/FileService/internal/File/Repository/FileSystem"
-	"Mailer/FileService/internal/File/UseCase"
-	fileProto "Mailer/FileService/proto"
+	"FileService/internal/File/Delivery"
+	fsRepo "FileService/internal/File/Repository/FileSystem"
+	"FileService/internal/File/UseCase"
+	fileProto "FileService/proto"
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
@@ -23,5 +23,5 @@ func main() {
 	fileProto.RegisterFileServiceServer(server, Delivery.NewFileManager(uc))
 
 	fmt.Println("starting File at :8081")
-	_ = server.Serve(lis)
+	server.Serve(lis)
 }

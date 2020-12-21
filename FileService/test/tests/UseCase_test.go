@@ -1,12 +1,12 @@
 package test
 
 import (
-	"Mailer/FileService/internal/File/UseCase"
-	proto "Mailer/FileService/proto"
-	mock "Mailer/FileService/test/mock_Repository"
+"FileService/internal/File/UseCase"
+mock "FileService/test/mock_Repository"
+proto "FileService/proto"
 	"errors"
 	"github.com/golang/mock/gomock"
-	"testing"
+"testing"
 )
 
 func TestGetAvatar(t *testing.T) {
@@ -17,35 +17,35 @@ func TestGetAvatar(t *testing.T) {
 	mockRepo.EXPECT().GetAvatar(user).Return(&proto.Avatar{}, errors.New("sdf"))
 	mockRepo.EXPECT().GetDefaultAvatar().Times(1)
 	uc := UseCase.New(mockRepo)
-	_, _ = uc.GetAvatar(user)
+	uc.GetAvatar(user)
 }
 
-func TestGetFiles(t *testing.T) {
+func TestGetFiles(t *testing.T)  {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	lid := &proto.LetterId{Id: 1}
 	mockRepo := mock.NewMockInterface(ctrl)
 	mockRepo.EXPECT().GetFiles(lid)
 	uc := UseCase.New(mockRepo)
-	_, _ = uc.GetFiles(lid)
+	uc.GetFiles(lid)
 }
 
-func TestSaveAvatar(t *testing.T) {
+func TestSaveAvatar(t *testing.T)  {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	avatar := &proto.Avatar{Email: "email"}
+	avatar := &proto.Avatar{Email:"email"}
 	mockRepo := mock.NewMockInterface(ctrl)
 	mockRepo.EXPECT().SaveAvatar(avatar).Times(1)
 	uc := UseCase.New(mockRepo)
-	_ = uc.SaveAvatar(avatar)
+	uc.SaveAvatar(avatar)
 }
 
-func Test(t *testing.T) {
+func Test(t *testing.T)  {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	file := &proto.Files{}
+	file:= &proto.Files{}
 	mockRepo := mock.NewMockInterface(ctrl)
 	mockRepo.EXPECT().SaveFiles(file).Times(1)
 	uc := UseCase.New(mockRepo)
-	_ = uc.SaveFiles(file)
+	uc.SaveFiles(file)
 }

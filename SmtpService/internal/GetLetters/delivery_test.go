@@ -13,6 +13,7 @@ func TestBackend_AnonymousLogin(t *testing.T) {
 	session := &Session{}
 	back := Backend{}
 
+
 	output, err := back.AnonymousLogin(state)
 
 	assert.Nil(t, err)
@@ -26,6 +27,7 @@ func TestBackend_Login(t *testing.T) {
 
 	session := &Session{}
 	back := Backend{}
+
 
 	output, err := back.Login(state, username, password)
 
@@ -50,7 +52,7 @@ func TestSession_Mail(t *testing.T) {
 	session := &Session{}
 
 	opts := smtp.MailOptions{}
-	from := "roofinda@gmail.com"
+	from :=  "roofinda@gmail.com"
 
 	err := session.Mail(from, opts)
 	assert.Nil(t, err)
@@ -58,7 +60,7 @@ func TestSession_Mail(t *testing.T) {
 
 func TestSession_Rcpt(t *testing.T) {
 	session := &Session{}
-	to := "roofinda@gmail.com"
+	to :=  "roofinda@gmail.com"
 
 	err := session.Rcpt(to)
 	assert.Nil(t, err)

@@ -1,8 +1,8 @@
 package SmtpManager
 
 import (
-	"Mailer/SmtpService/internal/SendLetters"
-	pb "Mailer/SmtpService/proto"
+	"smtpTest/internal/SendLetters"
+	pb "smtpTest/proto"
 )
 
 type Manager struct {

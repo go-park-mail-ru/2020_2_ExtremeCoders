@@ -1,8 +1,10 @@
 package errors
 
 import (
-	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"MainApplication/internal/Letter/LetterModel"
 )
+
+
 
 func GetErrorSaveErrorAns() []byte {
 	err := &AnswerGet{
@@ -49,11 +51,11 @@ func GetSendOkAns(letters LetterModel.Letter) []byte {
 	return ans
 }
 
-func GetDeleteLetterError(err error) []byte {
-	ans := &AnswerGet{
+func GetDeleteLetterError(err error)[]byte{
+	ans:= &AnswerGet{
 		Code:        500,
 		Description: err.Error(),
 	}
-	jsAns, _ := ans.MarshalJSON()
+	jsAns, _:=ans.MarshalJSON()
 	return jsAns
 }

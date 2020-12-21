@@ -1,16 +1,13 @@
 package UserUseCase
 
 import (
-	"Mailer/MainApplication/internal/User/UserModel"
-	"Mailer/MainApplication/internal/User/UserRepository"
+	"MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserRepository"
 	"fmt"
 
 	err "errors"
 	"golang.org/x/crypto/bcrypt"
 )
-
-
-//go:generate mockgen -source=./User.go -destination=../../../test/mock_UserUseCase/UserUseCase_mock.go
 
 type UserUseCase interface {
 	Signup(user UserModel.User) (error, string)

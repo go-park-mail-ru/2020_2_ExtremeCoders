@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"Mailer/MailService/internal/Model"
-	pb "Mailer/MailService/proto"
+	"MailService/internal/Model"
+	pb "MailService/proto"
 )
 
 func ModelToProto(letter Model.Letter) pb.Letter {
@@ -29,6 +29,7 @@ func ModelToProtoList(letters *[]Model.Letter) []*pb.Letter {
 			Theme:     letter.Theme,
 			Text:      letter.Text,
 			IsWatched: letter.IsWatched,
+			DirectoryRecv: int64(letter.DirectoryRecv),
 		}
 		list = append(list, &pbLetter)
 	}

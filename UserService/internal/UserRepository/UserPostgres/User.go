@@ -1,9 +1,11 @@
 package UserPostgres
 
+//go:generate mockgen -destination=../mocks/mock_User.go -package=mocks -source=./DataBaseRequests.go
+
 import (
-	"Mailer/UserService/internal/UserModel"
-	"Mailer/UserService/internal/UserRepository"
-	"Mailer/config"
+	"UserService/config"
+	"UserService/internal/UserModel"
+	"UserService/internal/UserRepository"
 	crypto "crypto/rand"
 	"fmt"
 	"github.com/go-pg/pg/v9"
@@ -11,8 +13,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"math/big"
 )
-
-//go:generate mockgen -destination=../mocks/mock_User.go -package=mocks -source=./DataBaseRequests.go
 
 type dataBase struct {
 	DB pgwrapper.DB

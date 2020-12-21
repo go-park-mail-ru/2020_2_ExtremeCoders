@@ -2,15 +2,15 @@ package UserUseCase
 
 // go generate ./...
 
-//go:generate mockgen -source=UserUseCase.go -destination=../../test/mock_UseCase/mock_UserUseCase.go
+//go:generate mockgen -destination=../mocks/mock_UserUseCase.go -package=mocks -source=./UserUseCase.go
 
 import (
-	"Mailer/UserService/internal/UserModel"
-	"Mailer/UserService/internal/UserRepository"
-	proto "Mailer/UserService/proto"
+	"UserService/internal/UserModel"
+	proto "UserService/proto"
 	"errors"
 	"fmt"
 )
+import "UserService/internal/UserRepository"
 
 type Interface interface {
 	IsEmailExists(*proto.Email) (*proto.Nothing, error)

@@ -5,7 +5,7 @@
 package mock_FileServiceProto
 
 import (
-	FileServise "Mailer/FileService/proto"
+	FileServise "MainApplication/proto/FileServise"
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"

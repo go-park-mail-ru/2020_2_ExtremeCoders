@@ -3,8 +3,8 @@
 package errors
 
 import (
-	LetterModel "Mailer/MainApplication/internal/Letter/LetterModel"
-	UserModel "Mailer/MainApplication/internal/User/UserModel"
+	LetterModel "MainApplication/internal/Letter/LetterModel"
+	UserModel "MainApplication/internal/User/UserModel"
 	json "encoding/json"
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"

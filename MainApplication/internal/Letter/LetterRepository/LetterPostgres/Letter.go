@@ -1,9 +1,8 @@
 package LetterPostgres
-
 //
 //import (
-//	"Mailer/MainApplication/internal/Letter/LetterModel"
-//	"Mailer/MainApplication/internal/Letter/LetterRepository"
+//	"MainApplication/internal/Letter/LetterModel"
+//	"MainApplication/internal/Letter/LetterRepository"
 //	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
 //)
 //

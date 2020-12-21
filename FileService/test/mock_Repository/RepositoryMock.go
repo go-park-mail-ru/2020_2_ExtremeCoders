@@ -5,7 +5,7 @@
 package mock_Repository
 
 import (
-	fileService "Mailer/FileService/proto"
+	fileService "FileService/proto"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

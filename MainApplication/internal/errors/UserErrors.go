@@ -1,9 +1,11 @@
 package errors
 
 import (
-	"Mailer/MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserModel"
 	"fmt"
 )
+
+
 
 func GetErrorBadJsonAns() []byte {
 	err := &AnswerGet{
