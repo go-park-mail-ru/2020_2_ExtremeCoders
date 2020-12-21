@@ -52,7 +52,12 @@ func (dbInfo dataBase) SetLetterWatched(lid uint64) (error, Model.Letter) {
 	if err != nil {
 		return Repository.GetByLidError, letter
 	}
-	letter.IsWatched = true
+	if letter.IsWatched{
+		letter.IsWatched=false
+	}else{
+		letter.IsWatched = true
+	}
+
 	_, err = dbInfo.DB.Model(&letter).Column("is_watched").Where("id=?", lid).Update()
 	if err != nil {
 		return Repository.SetLetterWatchedError, letter
@@ -72,7 +77,7 @@ func (dbInfo dataBase) GetLetterByLid(lid uint64) (error, Model.Letter) {
 func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("directory_recv=?", Did).
-		Limit(int(limit)).Offset(int(offset)).Order("date_time DESC").Select()
+		Limit(int(limit)).Offset(int(offset)).Order("date_time ASC").Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
@@ -91,7 +96,7 @@ func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).
-		Limit(int(limit)).Offset(int(offset)).Order("date_time DESC").Select()
+		Limit(int(limit)).Offset(int(offset)).Order("date_time ACS").Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
@@ -101,7 +106,7 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
 	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).
-		Limit(int(limit)).Offset(int(offset)).Order("date_time DESC").Select()
+		Limit(int(limit)).Offset(int(offset)).Order("date_time ACS").Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
