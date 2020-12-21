@@ -185,10 +185,7 @@ func main() {
 	//delete /user/folders/sended/folderName/letter body{letterID:Id} - удалить письмо из папки в отправленных
 	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 
-	mux.HandleFunc("/api", func(writer http.ResponseWriter, request *http.Request) {
-		writer.Write([]byte(docs.Text))
-	})
-	mux.HandleFunc("/docs", httpSwagger.WrapHandler)
+	mux.HandleFunc("/api", httpSwagger.WrapHandler)
 
 	//mux.Handle("/metrics", promhttp.Handler())
 	//siteHandler := middleware.AccessLogMiddleware(mux)
