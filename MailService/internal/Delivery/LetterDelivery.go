@@ -138,6 +138,8 @@ func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar)(*pb.Sim
 func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy)(*pb.LetterListResponse, error){
 	err, letters:=ld.uc.GetLetterBy(GetBy.What, GetBy.Value)
 	var pbLetter pb.LetterListResponse
+	var pbRes pb.Response
+	pbLetter.Result=&pbRes
 	pbLetter.Result.Ok=true
 	pbLetter.Result.Description=""
 	if err!=nil{
