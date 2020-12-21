@@ -129,6 +129,11 @@ func (de delivery) GetLetterBy(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	what := vars["what"]
 	val:=vars["value"]
-	err, letters:=de.Uc.GetLetterBy(what, val)
+	er, user := context.GetUserFromCtx(r.Context())
+	if er != nil {
+		w.Write(GetLettersError(er, nil))
+		return
+	}
+	err, letters:=de.Uc.GetLetterBy(what, val, user.Email)
 	w.Write(GetLettersError(err, letters))
 }
