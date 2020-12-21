@@ -1,0 +1,7 @@
+starting Main at  :8080
+REQ%!(EXTRA string=/user)REQ%!(EXTRA string=/user/avatar)time="2020-12-21T10:38:55+03:00" level=info msg=sent RESPONSE="{\"Code\":401,\"Description\":\"not authorized user\",\"User\":{\"Id\":0,\"Name\":\"\",\"Surname\":\"\",\"Email\":\"\",\"Password\":\"\",\"Img\":\"\"}}"
+time="2020-12-21T10:38:55+03:00" level=info msg=sent RESPONSE="{\"Code\":401,\"Description\":\"not authorized user\",\"User\":{\"Id\":0,\"Name\":\"\",\"Surname\":\"\",\"Email\":\"\",\"Password\":\"\",\"Img\":\"\"}}"
+REQ%!(EXTRA string=/session)time="2020-12-21T10:39:07+03:00" level=info msg=sent RESPONSE="{\"Code\":404,\"Description\":\"Do not find this user in db\",\"User\":{\"Id\":0,\"Name\":\"\",\"Surname\":\"\",\"Email\":\"\",\"Password\":\"\",\"Img\":\"\"}}"
+REQ%!(EXTRA string=/session)time="2020-12-21T10:39:51+03:00" level=info msg=sent RESPONSE="{\"Code\":404,\"Description\":\"Do not find this user in db\",\"User\":{\"Id\":0,\"Name\":\"\",\"Surname\":\"\",\"Email\":\"\",\"Password\":\"\",\"Img\":\"\"}}"
+REQ%!(EXTRA string=/user)time="2020-12-21T10:40:31+03:00" level=info msg=sent RESPONSE="{\"Code\":407,\"Description\":\"Could not add user\",\"User\":{\"Id\":0,\"Name\":\"\",\"Surname\":\"\",\"Email\":\"\",\"Password\":\"\",\"Img\":\"\"}}"
+signal: terminated

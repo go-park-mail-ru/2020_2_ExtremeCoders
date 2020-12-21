@@ -115,28 +115,28 @@ func (ld Delivery) RemoveDir(ctx context.Context, dirlid *pb.DirLid) (*pb.Respon
 	return &resp, nil
 }
 
-func (ld Delivery) RemoveLetter(ctx context.Context, Lid *pb.Lid)(*pb.Response, error){
-	err:=ld.uc.RemoveLetter(Lid.Lid)
+func (ld Delivery) RemoveLetter(ctx context.Context, Lid *pb.Lid) (*pb.Response, error) {
+	err := ld.uc.RemoveLetter(Lid.Lid)
 	resp := pb.Response{Ok: true, Description: ""}
-	if err!=nil{
-		resp.Ok=false
-		resp.Description=err.Error()
-	}else{
-		resp.Description="ok"
+	if err != nil {
+		resp.Ok = false
+		resp.Description = err.Error()
+	} else {
+		resp.Description = "ok"
 	}
 	return &resp, nil
 }
 
-func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar)(*pb.SimRes, error){
-	res:=ld.uc.FindSimilar(Similar.Sim, Similar.Email)
-	searchResult:=&pb.SimRes{}
+func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar) (*pb.SimRes, error) {
+	res := ld.uc.FindSimilar(Similar.Sim, Similar.Email)
+	searchResult := &pb.SimRes{}
 	strRes, _ := res.MarshalJSON()
-	searchResult.Res=string(strRes)
+	searchResult.Res = string(strRes)
 	return searchResult, nil
 }
 
-func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy)(*pb.LetterListResponse, error){
-	err, letters:=ld.uc.GetLetterBy(GetBy.What, GetBy.Value)
+func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy) (*pb.LetterListResponse, error) {
+	err, letters := ld.uc.GetLetterBy(GetBy.What, GetBy.Value)
 	var pbLetter pb.LetterListResponse
 	var pbRes pb.Response
 	pbLetter.Result=&pbRes
@@ -147,7 +147,8 @@ func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy)(*pb.LetterL
 		pbLetter.Result.Description=err.Error()
 	}else{
 		pbLetter.Result.Description="ok"
+
 	}
-	pbLetter.Letter=convert.ModelToProtoList(&letters)
+	pbLetter.Letter = convert.ModelToProtoList(&letters)
 	return &pbLetter, nil
 }

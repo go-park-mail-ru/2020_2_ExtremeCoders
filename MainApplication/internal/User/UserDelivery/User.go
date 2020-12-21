@@ -18,6 +18,7 @@ import (
 )
 
 type Interface interface {
+
 	Session(w http.ResponseWriter, r *http.Request)
 	Signup(w http.ResponseWriter, r *http.Request)
 	SignIn(w http.ResponseWriter, r *http.Request)
