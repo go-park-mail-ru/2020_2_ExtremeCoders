@@ -12,7 +12,7 @@ type UseCase struct {
 type Interface interface {
 	GetLettersSendDir(dir uint64) (error, []Model.Letter)
 	GetLettersRecvDir(dir uint64, limit uint64, offset uint64) (error, []Model.Letter)
-	GetLettersSend(email string, limit uint64, offset uint64) (error, []Model.Letter)
+	GetLettersSend(email string) (error, []Model.Letter)
 	GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter)
 	SaveLetter(letter Model.Letter) error
 	WatchLetter(lid uint64) (error, Model.Letter)
@@ -50,8 +50,8 @@ func (uc UseCase) WatchLetter(lid uint64) (error, Model.Letter) {
 	return uc.re.SetLetterWatched(lid)
 }
 
-func (uc UseCase) GetLettersSend(email string, limit uint64, offset uint64) (error, []Model.Letter) {
-	err, letters := uc.re.GetLettersSent(email, limit, offset)
+func (uc UseCase) GetLettersSend(email string) (error, []Model.Letter) {
+	err, letters := uc.re.GetLettersSent(email)
 	return err, letters
 }
 

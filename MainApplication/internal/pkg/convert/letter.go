@@ -46,7 +46,6 @@ func ProtoToModelList(letters []*pb.Letter) []Model.Letter {
 			Theme:     letter.Theme,
 			Text:      letter.Text,
 			IsWatched: letter.IsWatched,
-			DirectoryRecv: letter.DirectoryRecv,
 		}
 		list = append(list, pbLetter)
 	}

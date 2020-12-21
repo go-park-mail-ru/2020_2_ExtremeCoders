@@ -50,8 +50,6 @@ func easyjson69af0b64DecodeMainApplicationInternalLetterLetterModel(in *jlexer.L
 			out.DateTime = int64(in.Int64())
 		case "IsWatched":
 			out.IsWatched = bool(in.Bool())
-		case "DirectoryRecv":
-			out.DirectoryRecv = int64(in.Int64())
 		default:
 			in.SkipRecursive()
 		}
@@ -100,11 +98,6 @@ func easyjson69af0b64EncodeMainApplicationInternalLetterLetterModel(out *jwriter
 		const prefix string = ",\"IsWatched\":"
 		out.RawString(prefix)
 		out.Bool(bool(in.IsWatched))
-	}
-	{
-		const prefix string = ",\"DirectoryRecv\":"
-		out.RawString(prefix)
-		out.Int64(int64(in.DirectoryRecv))
 	}
 	out.RawByte('}')
 }

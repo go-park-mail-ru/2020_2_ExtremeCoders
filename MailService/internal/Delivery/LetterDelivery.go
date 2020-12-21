@@ -73,7 +73,7 @@ func (ld Delivery) GetLettersRecv(ctx context.Context, email *pb.Email) (*pb.Let
 }
 
 func (ld Delivery) GetLettersSend(ctx context.Context, email *pb.Email) (*pb.LetterListResponse, error) {
-	err, letters := ld.uc.GetLettersSend(email.Email, email.Limit, email.Offset)
+	err, letters := ld.uc.GetLettersSend(email.Email)
 	resp := pb.Response{Ok: true}
 	if err != nil || letters == nil {
 		return &pb.LetterListResponse{}, err

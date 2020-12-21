@@ -35,13 +35,6 @@ func GetFoldersError(err error) []byte {
 
 func ProtoResponseAnswer(pbLetter *mailProto.Response) []byte {
 	code := 200
-	if pbLetter==nil{
-		ans := LetterList{
-			Code:        500,
-		}
-		res, _ := ans.MarshalJSON()
-		return res
-	}
 	if !pbLetter.Ok {
 		code = 409
 	}
@@ -55,13 +48,6 @@ func ProtoResponseAnswer(pbLetter *mailProto.Response) []byte {
 
 func ProtoLetterListAnswer(pbLetter *mailProto.LetterListResponse) []byte {
 	code := 200
-	if pbLetter==nil || pbLetter.Letter==nil || pbLetter.Result==nil{
-		ans := LetterList{
-			Code:        500,
-		}
-		res, _ := ans.MarshalJSON()
-		return res
-	}
 	if !pbLetter.Result.Ok {
 		code = 409
 	}

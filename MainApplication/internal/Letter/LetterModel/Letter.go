@@ -8,5 +8,4 @@ type Letter struct {
 	Text      string
 	DateTime  int64
 	IsWatched bool
-	DirectoryRecv int64
 }

@@ -41,12 +41,6 @@ var (
 )
 
 func main() {
-	//var db = Postgres.DataBase{}
-	//DataBase, err := db.Init(config.DbUser, config.DbPassword, config.DbDB)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
 
 	grcpMailService, err := grpc.Dial(
 		"127.0.0.1:8083",
@@ -95,8 +89,8 @@ func main() {
 	mux.HandleFunc("/user", uDE.Profile)
 	mux.HandleFunc("/user/avatar", uDE.GetAvatar)
 	mux.HandleFunc("/letter", lDE.SendLetter)
-	mux.HandleFunc("/user/letter/sent/{limit}/{offset}", lDE.GetSendLetters)
-	mux.HandleFunc("/user/letter/received/{limit}/{offset}", lDE.GetRecvLetters)
+	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
+	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
 	mux.HandleFunc("/letter/{similar}", lDE.Search)
 	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
 	mux.HandleFunc("/letter/by/{what}/{value}", lDE.GetLetterBy)
@@ -104,7 +98,7 @@ func main() {
 	mux.HandleFunc("/user/folders/recived", fDe.GetFolderList)
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
 	//get /user/foders/{recived/sended}/folderName - письма
-	mux.HandleFunc("/user/foders/recived/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
+	mux.HandleFunc("/user/foders/recived/{folderName}", fDe.GetLettersByFolder)
 	mux.HandleFunc("/user/foders/sended/{folderName}", fDe.GetLettersByFolder)
 	//post /user/folders/{recived/sended}/folderName - добавить папку
 	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)
@@ -113,8 +107,11 @@ func main() {
 	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
 	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
+	mux.HandleFunc("/user/folders/recived/folderName ", fDe.RenameFolder)
+	mux.HandleFunc("/user/folders/sended/folderName ", fDe.RenameFolder)
 	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
-
+	mux.HandleFunc("/user/folders/recived/folderName/letter  ", fDe.RemoveLetterInFolder)
+	mux.HandleFunc("/user/folders/sended/folderName/letter  ", fDe.RemoveLetterInFolder)
 
 	//mux.Handle("/metrics", promhttp.Handler())
 

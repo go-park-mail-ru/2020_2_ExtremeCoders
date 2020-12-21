@@ -29,7 +29,6 @@ func ModelToProtoList(letters *[]Model.Letter) []*pb.Letter {
 			Theme:     letter.Theme,
 			Text:      letter.Text,
 			IsWatched: letter.IsWatched,
-			DirectoryRecv: int64(letter.DirectoryRecv),
 		}
 		list = append(list, &pbLetter)
 	}
