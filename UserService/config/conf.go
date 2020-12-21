@@ -10,7 +10,6 @@ const (
 	//DbPassword   = "123456yhn"
 	//DbPassword = "1538"
 	//DbPassword   = "mark"
-	DbPassword = "987654321"
 	DbDB = "maila"
 	//DbDB         = "mail_db"
 	Port         = ":8080"
