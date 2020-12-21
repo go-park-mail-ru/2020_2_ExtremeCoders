@@ -19,6 +19,7 @@ require (
 	github.com/sirupsen/logrus v1.7.0
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.6.1
+	github.com/swaggo/http-swagger v1.0.0
 	github.com/vmihailenco/tagparser v0.1.2 // indirect
 	gitlab.com/slax0rr/go-pg-wrapper v0.0.0-20200404125312-fa845276fc02
 	golang.org/x/crypto v0.0.0-20201208171446-5f87f3452ae9

@@ -22,6 +22,7 @@ import (
 	"google.golang.org/grpc"
 	"net/http"
 	"time"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type tmp struct {
@@ -57,9 +58,6 @@ var (
 	})
 )
 
-<<<<<<< HEAD
-func main() {
-=======
 // ShowAccount godoc
 // @Summary Show a account
 // @Description get user by ID
@@ -72,9 +70,15 @@ func main() {
 func handleUsers(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "ok"}`))
 }
->>>>>>> CleanArch
 
 func main() {
+	//var db = Postgres.DataBase{}
+	//DataBase, err := db.Init(config.DbUser, config.DbPassword, config.DbDB)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+
 	grcpMailService, err := grpc.Dial(
 		"127.0.0.1:8083",
 		grpc.WithInsecure(),
@@ -82,8 +86,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("cant connect to grpc mail service")
 	}
-	defer func() { _ = grcpMailService.Close() }()
-
+	defer grcpMailService.Close()
 	mailManager := protoMail.NewLetterServiceClient(grcpMailService)
 
 	grcpFileService, err := grpc.Dial(
@@ -93,7 +96,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("cant connect to grpc file service")
 	}
-	defer func() { _ = grcpFileService.Close() }()
+	defer grcpFileService.Close()
 	fileManager := protoFs.NewFileServiceClient(grcpFileService)
 
 	grcpUserService, err := grpc.Dial(
@@ -103,7 +106,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("cant connect to grpc file service")
 	}
-	defer func() { _ = grcpUserService.Close() }()
+	defer grcpUserService.Close()
 	userManager := protoUs.NewUserServiceClient(grcpUserService)
 
 	var uDB = UserMicroservice.New(userManager)
@@ -133,10 +136,6 @@ func main() {
 	//delete letter - удалить письмо
 	//post letter {to:'receiver', theme:'theme', text:'letter content'}- отправить письмо
 	mux.HandleFunc("/letter", lDE.SendLetter)
-<<<<<<< HEAD
-	mux.HandleFunc("/user/letter/sent", lDE.GetSendLetters)
-	mux.HandleFunc("/user/letter/received", lDE.GetRecvLetters)
-=======
 
 	//get user/letter/sent/{limit}/{offset} - получить отправленные письма
 	mux.HandleFunc("/user/letter/sent/{limit}/{offset}", lDE.GetSendLetters)
@@ -145,7 +144,6 @@ func main() {
 	mux.HandleFunc("/user/letter/received/{limit}/{offset}", lDE.GetRecvLetters)
 
 	//get letter/{similar} - поиск по всем элементам
->>>>>>> CleanArch
 	mux.HandleFunc("/letter/{similar}", lDE.Search)
 
 	//put watch/letter {id:10} - пометить письмо как прочитанное
@@ -160,16 +158,11 @@ func main() {
 
 	//get user/folders/recived - список папок в полученных
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
-<<<<<<< HEAD
-	//get /user/foders/{recived/sended}/folderName - письма
-	mux.HandleFunc("/user/foders/recived/{folderName}", fDe.GetLettersByFolder)
-=======
 
 	//get user/foders/{recived/sended}/{folderName} - письма из папки в полученых, письма из папки в отправленнх
 	mux.HandleFunc("/user/foders/recived/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
 
 	//get user/foders/sended/{folderName} - письма из папки в отправленнх
->>>>>>> CleanArch
 	mux.HandleFunc("/user/foders/sended/{folderName}", fDe.GetLettersByFolder)
 
 	//post user/folders/recived/folderName {folderName:"folderName"} - добавить папку в полученные
@@ -187,17 +180,8 @@ func main() {
 	//put user/folders/sended/folderName/letter body{letterID: id} - добавить письмо в папку из отправленных
 	//delete /user/folders/sended/folderName/letter body{letterID:Id} - удалить письмо из папки в отправленных
 	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
-<<<<<<< HEAD
-	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
-	mux.HandleFunc("/user/folders/recived/folderName ", fDe.RenameFolder)
-	mux.HandleFunc("/user/folders/sended/folderName ", fDe.RenameFolder)
-	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
-	mux.HandleFunc("/user/folders/recived/folderName/letter  ", fDe.RemoveLetterInFolder)
-	mux.HandleFunc("/user/folders/sended/folderName/letter  ", fDe.RemoveLetterInFolder)
-=======
 
 	mux.HandleFunc("/api", httpSwagger.WrapHandler)
->>>>>>> CleanArch
 
 	//mux.Handle("/metrics", promhttp.Handler())
 	//siteHandler := middleware.AccessLogMiddleware(mux)
