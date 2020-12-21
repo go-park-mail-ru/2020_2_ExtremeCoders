@@ -90,12 +90,23 @@ func main() {
 
 	mux := mux.NewRouter()
 
+	//post session - логин
+	//delete session - логаут
 	mux.HandleFunc("/session", uDE.Session)
+	//post user - регистрация
+	//get user - информация о пользователе
+	//put user - изменить профиль
 	mux.HandleFunc("/user", uDE.Profile)
+	//get user/avatar - получить аватарку
 	mux.HandleFunc("/user/avatar", uDE.GetAvatar)
+	//delete letter - удалить письмо
+	//post letter {to:'receiver', theme:'theme', text:'letter content'}- отправить письмо
 	mux.HandleFunc("/letter", lDE.SendLetter)
+	//get user/letter/sent/{limit}/{offset} - получить отправленные письма
 	mux.HandleFunc("/user/letter/sent/{limit}/{offset}", lDE.GetSendLetters)
+	//get user/letter/sent/{limit}/{offset} - получить принятые письма
 	mux.HandleFunc("/user/letter/received/{limit}/{offset}", lDE.GetRecvLetters)
+	//get letter/{similar}
 	mux.HandleFunc("/letter/{similar}", lDE.Search)
 	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
 	mux.HandleFunc("/letter/by/{what}/{value}", lDE.GetLetterBy)
@@ -111,6 +122,7 @@ func main() {
 	//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
 	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
 	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
+
 	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
 	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
 
