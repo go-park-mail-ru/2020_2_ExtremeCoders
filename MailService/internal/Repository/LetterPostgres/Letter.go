@@ -255,9 +255,40 @@ func (dbInfo dataBase)FindText(text string, email string) ([]string, error){
 	return data, nil
 }
 
-func (dbInfo dataBase)GetLetterBy(what string, val string) (error, []Model.Letter){
+func (dbInfo dataBase) GetLetterByTheme(val string) (error, []Model.Letter){
 	var letters []Model.Letter
-	err:=dbInfo.DB.Model(&letters).Where("?=?", what, val).Select()
+	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE theme = ?", val)
+
+	if err!=nil{
+		return Repository.GetLetterByError, nil
+	}
+	return nil, letters
+}
+
+func (dbInfo dataBase) GetLetterByText(val string) (error, []Model.Letter){
+	var letters []Model.Letter
+	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE text = ?", val)
+
+	if err!=nil{
+		return Repository.GetLetterByError, nil
+	}
+	return nil, letters
+}
+
+func (dbInfo dataBase) GetLetterBySender(val string) (error, []Model.Letter){
+	var letters []Model.Letter
+	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE sender = ?", val)
+
+	if err!=nil{
+		return Repository.GetLetterByError, nil
+	}
+	return nil, letters
+}
+
+func (dbInfo dataBase) GetLetterByReceiver(val string) (error, []Model.Letter){
+	var letters []Model.Letter
+	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE receiver = ?", val)
+
 	if err!=nil{
 		return Repository.GetLetterByError, nil
 	}

@@ -91,10 +91,10 @@ func (uc useCase) Logout(sid string) error {
 	if ok != nil {
 		return ok
 	}
-	e, _ := uc.Db.RemoveSession(sid)
-	if e != nil {
-		return e
-	}
+	//e, _ := uc.Db.RemoveSession(sid)
+	//if e != nil {
+	//	return e
+	//}
 	return nil
 }
 
