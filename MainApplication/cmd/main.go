@@ -90,10 +90,10 @@ func main() {
 
 	mux := mux.NewRouter()
 
-	//post session - логин
+	//post session {email:"email@mail.ru", password: "password"}- логин
 	//delete session - логаут
 	mux.HandleFunc("/session", uDE.Session)
-	//post user - регистрация
+	//post user {profile_firstName:"Sam", profile_lastName: "Potter", avatar: "img"}- регистрация
 	//get user - информация о пользователе
 	//put user - изменить профиль
 	mux.HandleFunc("/user", uDE.Profile)
@@ -106,33 +106,40 @@ func main() {
 	mux.HandleFunc("/user/letter/sent/{limit}/{offset}", lDE.GetSendLetters)
 	//get user/letter/sent/{limit}/{offset} - получить принятые письма
 	mux.HandleFunc("/user/letter/received/{limit}/{offset}", lDE.GetRecvLetters)
-	//get letter/{similar}
+	//get letter/{similar} - поиск по всем элементам
 	mux.HandleFunc("/letter/{similar}", lDE.Search)
+	//put watch/letter {id:10} - пометить письмо как прочитанное
 	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
+	//get letter/by/{what}/{value} - what in (id, sender, receiver, theme, text, date_time, directory_recv, directory_send)
+	//поиск по письмам
 	mux.HandleFunc("/letter/by/{what}/{value}", lDE.GetLetterBy)
-	//get /user/folders/{recived/sended} - список папок
+	//get user/folders/recived - список папок в отправленных
 	mux.HandleFunc("/user/folders/recived", fDe.GetFolderList)
+	//get user/folders/recived - список папок в полученных
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
-	//get /user/foders/{recived/sended}/folderName - письма
+	//get user/foders/{recived/sended}/{folderName} - письма из папки в полученых, письма из папки в отправленнх
 	mux.HandleFunc("/user/foders/recived/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
+	//get user/foders/sended/{folderName} - письма из папки в отправленнх
 	mux.HandleFunc("/user/foders/sended/{folderName}", fDe.GetLettersByFolder)
-	//post /user/folders/{recived/sended}/folderName - добавить папку
-	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)
-	mux.HandleFunc("/user/folders/sended/folderName", fDe.AddFolder)
-	//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
-	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
-	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 
-	//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
-	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
+	//post user/folders/recived/folderName {folderName:"folderName"} - добавить папку в полученные
+	//put user/folders/recived/folderName {oldName:"oldName", newName"":} - переименовать папку в полученных
+	mux.HandleFunc("/user/folders/recived/folderName", fDe.AddFolder)
+
+	//post user/folders/sended/folderName {folderName:"folderName"} - добавить папку в отправленные
+	//put user/folders/sended/folderName {oldName:"oldName", newName"":} - переименовать папку в отправленных
+	mux.HandleFunc("/user/folders/sended/folderName", fDe.AddFolder)
+
+	//put user/folders/recived/folderName/letter body{letterID: id} - добавить письмо в папку из полученных
+	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки в полученных
+	mux.HandleFunc("/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
+
+	//put user/folders/sended/folderName/letter body{letterID: id} - добавить письмо в папку из отправленных
+	//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки в отправленных
+	mux.HandleFunc("/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 
 
 	//mux.Handle("/metrics", promhttp.Handler())
-
-	//delete /user/folders/{recived/sended}/folderName  - удалить папку
-	//mux.HandleFunc("/user/folders/recived/folderName " , fDe.RemoveFolder)
-	//mux.HandleFunc("/user/folders/sended/folderName/letter" , fDe.RemoveFolder)
-
 	//siteHandler := middleware.AccessLogMiddleware(mux)
 	//siteHandler = middleware.PanicMiddleware(siteHandler)
 	a := middleware.AuthMiddleware{Sessions: uDB}
