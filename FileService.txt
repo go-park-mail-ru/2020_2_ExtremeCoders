@@ -1,4 +1,0 @@
-CUR PATh /home/sergiy/go/src/2020_2_ExtremeCoders
-CUR PATh /home/sergiy/go/src/2020_2_ExtremeCoders/web/static
-starting File at :8081
-signal: terminated
