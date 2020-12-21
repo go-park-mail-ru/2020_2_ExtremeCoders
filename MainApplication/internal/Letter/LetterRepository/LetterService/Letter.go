@@ -96,9 +96,9 @@ func (lsManager LetterServiceManager) FindSimilar(sim string, email string) stri
 	return resp.Res
 }
 
-func (lsManager LetterServiceManager) GetLetterBy(what string, val string) (error, []LetterModel.Letter){
+func (lsManager LetterServiceManager) GetLetterBy(what string, val string, email string) (error, []LetterModel.Letter){
 	ctx := context.Background()
-	resp, _:=lsManager.lsClient.GetLetterBy(ctx, &letterService.GetBy{What: what, Value: val})
+	resp, _:=lsManager.lsClient.GetLetterBy(ctx, &letterService.GetBy{What: what, Value: val, Email: email})
 	if resp.Result.Ok == false {
 		return LetterRepository.ReceivedLetterError, nil
 	}

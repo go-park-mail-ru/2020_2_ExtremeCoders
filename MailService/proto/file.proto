@@ -64,6 +64,7 @@ message SimRes{
 message GetBy{
   string what=1;
   string value=2;
+  string email=3;
 }
 
 service LetterService{

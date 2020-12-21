@@ -22,7 +22,7 @@ type Interface interface {
 	RemoveDir(uint64, bool) error
 	RemoveLetter(uint64) error
 	FindSimilar(similar string, email string) SearchResult
-	GetLetterBy(what string, val string) (error, []Model.Letter)
+	GetLetterBy(what string, val string, email string) (error, []Model.Letter)
 }
 
 //go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
@@ -96,16 +96,16 @@ func (uc UseCase) FindSimilar(similar string, email string) SearchResult {
 	return res
 }
 
-func (uc UseCase) GetLetterBy(what string, val string) (error, []Model.Letter){
+func (uc UseCase) GetLetterBy(what string, val string, email string) (error, []Model.Letter){
 	switch what {
 	case "sender":
-		return uc.re.GetLetterBySender(val)
+		return uc.re.GetLetterBySender(val, email)
 	case "receiver":
-		return uc.re.GetLetterByReceiver(val)
+		return uc.re.GetLetterByReceiver(val, email)
 	case "theme":
-		return uc.re.GetLetterByTheme(val)
+		return uc.re.GetLetterByTheme(val, email)
 	case "text":
-		return uc.re.GetLetterByText(val)
+		return uc.re.GetLetterByText(val, email)
 	}
 	return Repository.GetLetterByError, nil
 }
