@@ -1,11 +1,11 @@
 package FolderDelivery
 
 import (
-	"MainApplication/internal/pkg/context"
-	letterService "MainApplication/proto/MailService"
-	mailProto "MainApplication/proto/MailService"
-	userProto "MainApplication/proto/UserServise"
-	userService "MainApplication/proto/UserServise"
+	"Mailer/MainApplication/internal/pkg/context"
+	letterService "Mailer/MainApplication/proto/MailService"
+	mailProto "Mailer/MainApplication/proto/MailService"
+	userProto "Mailer/MainApplication/proto/UserServise"
+	userService "Mailer/MainApplication/proto/UserServise"
 	"fmt"
 	"net/http"
 	"strconv"

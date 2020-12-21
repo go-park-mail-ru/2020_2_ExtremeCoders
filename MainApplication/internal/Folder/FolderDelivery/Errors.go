@@ -1,9 +1,9 @@
 package FolderDelivery
 
 import (
-	Model "MainApplication/internal/Letter/LetterModel"
-	mailProto "MainApplication/proto/MailService"
-	userProto "MainApplication/proto/UserServise"
+	Model "Mailer/MainApplication/internal/Letter/LetterModel"
+	mailProto "Mailer/MainApplication/proto/MailService"
+	userProto "Mailer/MainApplication/proto/UserServise"
 )
 
 func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {

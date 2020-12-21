@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.25.0
 // 	protoc        v3.13.0
-// source: MailService/proto/file.proto
+// source: Mailer/MailService/proto/file.proto
 
 // protoc --go_out=plugins=grpc:. *.proto
 
@@ -1504,5 +1504,5 @@ var _LetterService_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "MailService/proto/file.proto",
+	Metadata: "Mailer/MailService/proto/file.proto",
 }

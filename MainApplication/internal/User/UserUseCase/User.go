@@ -1,8 +1,8 @@
 package UserUseCase
 
 import (
-	"MainApplication/internal/User/UserModel"
-	"MainApplication/internal/User/UserRepository"
+	"Mailer/MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/User/UserRepository"
 	"fmt"
 
 	err "errors"

@@ -554,7 +554,7 @@ func NewFileServiceClient(cc grpc.ClientConnInterface) FileServiceClient {
 
 func (c *fileServiceClient) SetAvatar(ctx context.Context, in *Avatar, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/SetAvatar", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.Mailer/FileService/SetAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -563,7 +563,7 @@ func (c *fileServiceClient) SetAvatar(ctx context.Context, in *Avatar, opts ...g
 
 func (c *fileServiceClient) GetAvatar(ctx context.Context, in *User, opts ...grpc.CallOption) (*Avatar, error) {
 	out := new(Avatar)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/GetAvatar", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.Mailer/FileService/GetAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -572,7 +572,7 @@ func (c *fileServiceClient) GetAvatar(ctx context.Context, in *User, opts ...grp
 
 func (c *fileServiceClient) SaveFiles(ctx context.Context, in *Files, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/SaveFiles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.Mailer/FileService/SaveFiles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -581,7 +581,7 @@ func (c *fileServiceClient) SaveFiles(ctx context.Context, in *Files, opts ...gr
 
 func (c *fileServiceClient) GetFiles(ctx context.Context, in *LetterId, opts ...grpc.CallOption) (*Files, error) {
 	out := new(Files)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/GetFiles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.Mailer/FileService/GetFiles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -627,7 +627,7 @@ func _FileService_SetAvatar_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/SetAvatar",
+		FullMethod: "/fileService.Mailer/FileService/SetAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).SetAvatar(ctx, req.(*Avatar))
@@ -645,7 +645,7 @@ func _FileService_GetAvatar_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/GetAvatar",
+		FullMethod: "/fileService.Mailer/FileService/GetAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).GetAvatar(ctx, req.(*User))
@@ -663,7 +663,7 @@ func _FileService_SaveFiles_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/SaveFiles",
+		FullMethod: "/fileService.Mailer/FileService/SaveFiles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).SaveFiles(ctx, req.(*Files))
@@ -681,7 +681,7 @@ func _FileService_GetFiles_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/GetFiles",
+		FullMethod: "/fileService.Mailer/FileService/GetFiles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).GetFiles(ctx, req.(*LetterId))

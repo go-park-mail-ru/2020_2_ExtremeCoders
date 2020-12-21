@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.25.0
 // 	protoc        v3.13.0
-// source: MainApplication/proto/UserServise/user.proto
+// source: Mailer/MainApplication/proto/UserServise/user.proto
 
 // protoc --go_out=plugins=grpc:. *.proto
 
@@ -1220,7 +1220,7 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 
 func (c *userServiceClient) IsEmailExists(ctx context.Context, in *Email, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/userService.UserService/IsEmailExists", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/IsEmailExists", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1229,7 +1229,7 @@ func (c *userServiceClient) IsEmailExists(ctx context.Context, in *Email, opts .
 
 func (c *userServiceClient) AddSession(ctx context.Context, in *AddSessionMsg, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/userService.UserService/AddSession", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/AddSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1238,7 +1238,7 @@ func (c *userServiceClient) AddSession(ctx context.Context, in *AddSessionMsg, o
 
 func (c *userServiceClient) AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/userService.UserService/AddUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/AddUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1247,7 +1247,7 @@ func (c *userServiceClient) AddUser(ctx context.Context, in *User, opts ...grpc.
 
 func (c *userServiceClient) GenerateSID(ctx context.Context, in *Nothing, opts ...grpc.CallOption) (*Sid, error) {
 	out := new(Sid)
-	err := c.cc.Invoke(ctx, "/userService.UserService/GenerateSID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/GenerateSID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1256,7 +1256,7 @@ func (c *userServiceClient) GenerateSID(ctx context.Context, in *Nothing, opts .
 
 func (c *userServiceClient) GenerateUID(ctx context.Context, in *Nothing, opts ...grpc.CallOption) (*Uid, error) {
 	out := new(Uid)
-	err := c.cc.Invoke(ctx, "/userService.UserService/GenerateUID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/GenerateUID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1265,7 +1265,7 @@ func (c *userServiceClient) GenerateUID(ctx context.Context, in *Nothing, opts .
 
 func (c *userServiceClient) GetUserByEmail(ctx context.Context, in *Email, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
-	err := c.cc.Invoke(ctx, "/userService.UserService/GetUserByEmail", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/GetUserByEmail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1274,7 +1274,7 @@ func (c *userServiceClient) GetUserByEmail(ctx context.Context, in *Email, opts 
 
 func (c *userServiceClient) GetUserByUID(ctx context.Context, in *Uid, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
-	err := c.cc.Invoke(ctx, "/userService.UserService/GetUserByUID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/GetUserByUID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1283,7 +1283,7 @@ func (c *userServiceClient) GetUserByUID(ctx context.Context, in *Uid, opts ...g
 
 func (c *userServiceClient) IsOkSession(ctx context.Context, in *Sid, opts ...grpc.CallOption) (*Uid, error) {
 	out := new(Uid)
-	err := c.cc.Invoke(ctx, "/userService.UserService/IsOkSession", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/IsOkSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1292,7 +1292,7 @@ func (c *userServiceClient) IsOkSession(ctx context.Context, in *Sid, opts ...gr
 
 func (c *userServiceClient) UpdateProfile(ctx context.Context, in *UpdateProfileMsg, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/userService.UserService/UpdateProfile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/UpdateProfile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1301,7 +1301,7 @@ func (c *userServiceClient) UpdateProfile(ctx context.Context, in *UpdateProfile
 
 func (c *userServiceClient) RemoveSession(ctx context.Context, in *Sid, opts ...grpc.CallOption) (*Uid, error) {
 	out := new(Uid)
-	err := c.cc.Invoke(ctx, "/userService.UserService/RemoveSession", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/RemoveSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1310,7 +1310,7 @@ func (c *userServiceClient) RemoveSession(ctx context.Context, in *Sid, opts ...
 
 func (c *userServiceClient) GetSessionByUID(ctx context.Context, in *Uid, opts ...grpc.CallOption) (*Sid, error) {
 	out := new(Sid)
-	err := c.cc.Invoke(ctx, "/userService.UserService/GetSessionByUID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/GetSessionByUID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1319,7 +1319,7 @@ func (c *userServiceClient) GetSessionByUID(ctx context.Context, in *Uid, opts .
 
 func (c *userServiceClient) GetFolderId(ctx context.Context, in *Folder, opts ...grpc.CallOption) (*FolderId, error) {
 	out := new(FolderId)
-	err := c.cc.Invoke(ctx, "/userService.UserService/GetFolderId", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/GetFolderId", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1328,7 +1328,7 @@ func (c *userServiceClient) GetFolderId(ctx context.Context, in *Folder, opts ..
 
 func (c *userServiceClient) CreateFolder(ctx context.Context, in *Folder, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/userService.UserService/CreateFolder", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/CreateFolder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1337,7 +1337,7 @@ func (c *userServiceClient) CreateFolder(ctx context.Context, in *Folder, opts .
 
 func (c *userServiceClient) RenameFolder(ctx context.Context, in *RenameFolderMsg, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/userService.UserService/RenameFolder", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/RenameFolder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1346,7 +1346,7 @@ func (c *userServiceClient) RenameFolder(ctx context.Context, in *RenameFolderMs
 
 func (c *userServiceClient) RemoveFolder(ctx context.Context, in *Folder, opts ...grpc.CallOption) (*FolderId, error) {
 	out := new(FolderId)
-	err := c.cc.Invoke(ctx, "/userService.UserService/RemoveFolder", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/RemoveFolder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1355,7 +1355,7 @@ func (c *userServiceClient) RemoveFolder(ctx context.Context, in *Folder, opts .
 
 func (c *userServiceClient) GetFoldersList(ctx context.Context, in *FolderUidType, opts ...grpc.CallOption) (*FolderList, error) {
 	out := new(FolderList)
-	err := c.cc.Invoke(ctx, "/userService.UserService/GetFoldersList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/userService.Mailer/UserService/GetFoldersList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1449,7 +1449,7 @@ func _UserService_IsEmailExists_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/IsEmailExists",
+		FullMethod: "/userService.Mailer/UserService/IsEmailExists",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).IsEmailExists(ctx, req.(*Email))
@@ -1467,7 +1467,7 @@ func _UserService_AddSession_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/AddSession",
+		FullMethod: "/userService.Mailer/UserService/AddSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).AddSession(ctx, req.(*AddSessionMsg))
@@ -1485,7 +1485,7 @@ func _UserService_AddUser_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/AddUser",
+		FullMethod: "/userService.Mailer/UserService/AddUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).AddUser(ctx, req.(*User))
@@ -1503,7 +1503,7 @@ func _UserService_GenerateSID_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/GenerateSID",
+		FullMethod: "/userService.Mailer/UserService/GenerateSID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GenerateSID(ctx, req.(*Nothing))
@@ -1521,7 +1521,7 @@ func _UserService_GenerateUID_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/GenerateUID",
+		FullMethod: "/userService.Mailer/UserService/GenerateUID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GenerateUID(ctx, req.(*Nothing))
@@ -1539,7 +1539,7 @@ func _UserService_GetUserByEmail_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/GetUserByEmail",
+		FullMethod: "/userService.Mailer/UserService/GetUserByEmail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetUserByEmail(ctx, req.(*Email))
@@ -1557,7 +1557,7 @@ func _UserService_GetUserByUID_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/GetUserByUID",
+		FullMethod: "/userService.Mailer/UserService/GetUserByUID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetUserByUID(ctx, req.(*Uid))
@@ -1575,7 +1575,7 @@ func _UserService_IsOkSession_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/IsOkSession",
+		FullMethod: "/userService.Mailer/UserService/IsOkSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).IsOkSession(ctx, req.(*Sid))
@@ -1593,7 +1593,7 @@ func _UserService_UpdateProfile_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/UpdateProfile",
+		FullMethod: "/userService.Mailer/UserService/UpdateProfile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).UpdateProfile(ctx, req.(*UpdateProfileMsg))
@@ -1611,7 +1611,7 @@ func _UserService_RemoveSession_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/RemoveSession",
+		FullMethod: "/userService.Mailer/UserService/RemoveSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).RemoveSession(ctx, req.(*Sid))
@@ -1629,7 +1629,7 @@ func _UserService_GetSessionByUID_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/GetSessionByUID",
+		FullMethod: "/userService.Mailer/UserService/GetSessionByUID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetSessionByUID(ctx, req.(*Uid))
@@ -1647,7 +1647,7 @@ func _UserService_GetFolderId_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/GetFolderId",
+		FullMethod: "/userService.Mailer/UserService/GetFolderId",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetFolderId(ctx, req.(*Folder))
@@ -1665,7 +1665,7 @@ func _UserService_CreateFolder_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/CreateFolder",
+		FullMethod: "/userService.Mailer/UserService/CreateFolder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).CreateFolder(ctx, req.(*Folder))
@@ -1683,7 +1683,7 @@ func _UserService_RenameFolder_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/RenameFolder",
+		FullMethod: "/userService.Mailer/UserService/RenameFolder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).RenameFolder(ctx, req.(*RenameFolderMsg))
@@ -1701,7 +1701,7 @@ func _UserService_RemoveFolder_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/RemoveFolder",
+		FullMethod: "/userService.Mailer/UserService/RemoveFolder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).RemoveFolder(ctx, req.(*Folder))
@@ -1719,7 +1719,7 @@ func _UserService_GetFoldersList_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/userService.UserService/GetFoldersList",
+		FullMethod: "/userService.Mailer/UserService/GetFoldersList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetFoldersList(ctx, req.(*FolderUidType))
@@ -1797,5 +1797,5 @@ var _UserService_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "MainApplication/proto/UserServise/user.proto",
+	Metadata: "Mailer/MainApplication/proto/UserServise/user.proto",
 }

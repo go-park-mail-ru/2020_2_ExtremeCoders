@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"MainApplication/internal/errors"
+	"Mailer/MainApplication/internal/errors"
 )
 
 func authError(err error) []byte {

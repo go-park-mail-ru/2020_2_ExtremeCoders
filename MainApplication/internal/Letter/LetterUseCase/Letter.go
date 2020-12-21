@@ -1,8 +1,8 @@
 package LetterUseCase
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/Letter/LetterRepository"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterRepository"
 )
 
 type LetterUseCase interface {

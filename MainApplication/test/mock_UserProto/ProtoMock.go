@@ -5,7 +5,7 @@
 package mock_UserProto
 
 import (
-	UserServise "MainApplication/proto/UserServise"
+	UserServise "Mailer/MainApplication/proto/UserServise"
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"

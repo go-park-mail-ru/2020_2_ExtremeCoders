@@ -1,7 +1,7 @@
 package UseCase
 
-import fileProto "FileService/proto"
-import "FileService/internal/File/Repository"
+import fileProto "Mailer/FileService/proto"
+import "Mailer/FileService/internal/File/Repository"
 //go:generate mockgen -source=UseCase.go -destination=UseCaseMock.go
 
 type Interface interface {

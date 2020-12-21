@@ -1,7 +1,7 @@
 package FolderDelivery
 
 import (
-	Model "MainApplication/internal/Letter/LetterModel"
+	Model "Mailer/MainApplication/internal/Letter/LetterModel"
 )
 
 type LetterErr struct {

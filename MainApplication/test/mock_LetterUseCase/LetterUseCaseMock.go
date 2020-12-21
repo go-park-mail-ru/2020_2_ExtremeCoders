@@ -5,7 +5,7 @@
 package mock_LetterUseCase
 
 import (
-	LetterModel "MainApplication/internal/Letter/LetterModel"
+	LetterModel "Mailer/MainApplication/internal/Letter/LetterModel"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

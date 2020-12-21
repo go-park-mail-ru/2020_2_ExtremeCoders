@@ -1,10 +1,10 @@
 package LetterService
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/Letter/LetterRepository"
-	"MainApplication/internal/pkg/convert"
-	"MainApplication/proto/MailService"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterRepository"
+	"Mailer/MainApplication/internal/pkg/convert"
+	"Mailer/MainApplication/proto/MailService"
 	"context"
 )
 

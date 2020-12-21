@@ -1,8 +1,8 @@
 package Postgres
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/User/UserModel"
 	"github.com/go-pg/pg/v9"
 	"github.com/go-pg/pg/v9/orm"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"

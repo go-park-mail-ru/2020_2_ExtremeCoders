@@ -1,7 +1,7 @@
 package Postgres
 
 import (
-	"MailService/internal/Model"
+	"Mailer/MailService/internal/Model"
 	"github.com/go-pg/pg/v9"
 	"github.com/go-pg/pg/v9/orm"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
@@ -36,10 +36,13 @@ func (dbInfo *DataBase) Init(user string, password string, name string) (pgwrapp
 func createSchema(db pgwrapper.DB) error {
 	models := []interface{}{
 		(*Model.Letter)(nil),
+
 	}
 
 	for _, model := range models {
 		err := db.Model(model).CreateTable(&orm.CreateTableOptions{
+			IfNotExists: true,
+
 		})
 		if err != nil {
 			return err

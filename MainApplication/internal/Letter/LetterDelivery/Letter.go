@@ -1,10 +1,10 @@
 package LetterDelivery
 
 import (
-	"MainApplication/internal/Letter/LetterModel"
-	"MainApplication/internal/Letter/LetterUseCase"
-	"MainApplication/internal/errors"
-	"MainApplication/internal/pkg/context"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterUseCase"
+	"Mailer/MainApplication/internal/errors"
+	"Mailer/MainApplication/internal/pkg/context"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"

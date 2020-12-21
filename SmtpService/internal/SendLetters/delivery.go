@@ -8,7 +8,7 @@ import (
 	"net"
 	"net/mail"
 	baseSMTP "net/smtp"
-	pb "smtpTest/proto"
+	pb "Mailer/SmtpService/proto"
 	"strings"
 )
 

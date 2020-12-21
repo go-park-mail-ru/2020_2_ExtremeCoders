@@ -1,12 +1,12 @@
 package main
 
 import (
-	"MailService/Postgres"
-	"MailService/config"
-	"MailService/internal/Delivery"
-	"MailService/internal/Repository/LetterPostgres"
-	"MailService/internal/UseCase"
-	letterProto "MailService/proto"
+	"Mailer/MailService/Postgres"
+	"Mailer/MailService/config"
+	"Mailer/MailService/internal/Delivery"
+	"Mailer/MailService/internal/Repository/LetterPostgres"
+	"Mailer/MailService/internal/UseCase"
+	letterProto "Mailer/MailService/proto"
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
@@ -22,7 +22,12 @@ func main() {
 
 	server := grpc.NewServer()
 	db := Postgres.DataBase{}
-	db.Init(config.DbUser, config.DbPassword, config.DbDB)
+	_, err = db.Init(config.DbUser, config.DbPassword, config.DbDB)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	repo := LetterPostgres.New(db.DB)
 	uc := UseCase.New(repo)
 	letterProto.RegisterLetterServiceServer(server, Delivery.New(uc))

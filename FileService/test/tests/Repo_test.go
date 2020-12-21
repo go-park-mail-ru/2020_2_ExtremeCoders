@@ -1,8 +1,8 @@
 package test
 
 import (
-	"FileService/internal/File/Repository/FileSystem"
-	proto "FileService/proto"
+	"Mailer/FileService/internal/File/Repository/FileSystem"
+	proto "Mailer/FileService/proto"
 	"testing"
 )
 

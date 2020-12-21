@@ -1,8 +1,8 @@
 package LetterPostgres
 
 import (
-	"MailService/internal/Model"
-	"MailService/internal/Repository"
+	"Mailer/MailService/internal/Model"
+	"Mailer/MailService/internal/Repository"
 	crypto "crypto/rand"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
 	"sort"

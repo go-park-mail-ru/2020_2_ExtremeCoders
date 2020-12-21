@@ -1,12 +1,12 @@
 package test
 //
 //import (
-//	"MainApplication/internal/Letter/LetterModel"
-//	"MainApplication/internal/Letter/LetterRepository"
-//	"MainApplication/internal/Letter/LetterRepository/LetterPostgres"
-//	"MainApplication/internal/User/UserModel"
-//	"MainApplication/internal/User/UserRepository"
-//	"MainApplication/internal/User/UserRepository/UserPostgres"
+//	"Mailer/MainApplication/internal/Letter/LetterModel"
+//	"Mailer/MainApplication/internal/Letter/LetterRepository"
+//	"Mailer/MainApplication/internal/Letter/LetterRepository/LetterPostgres"
+//	"Mailer/MainApplication/internal/User/UserModel"
+//	"Mailer/MainApplication/internal/User/UserRepository"
+//	"Mailer/MainApplication/internal/User/UserRepository/UserPostgres"
 //	"github.com/stretchr/testify/assert"
 //	"gitlab.com/slax0rr/go-pg-wrapper/mocks"
 //	"testing"

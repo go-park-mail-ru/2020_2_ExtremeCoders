@@ -3,9 +3,9 @@ package UserPostgres
 //go:generate mockgen -destination=../mocks/mock_User.go -package=mocks -source=./DataBaseRequests.go
 
 import (
-	"UserService/config"
-	"UserService/internal/UserModel"
-	"UserService/internal/UserRepository"
+	"Mailer/UserService/config"
+	"Mailer/UserService/internal/UserModel"
+	"Mailer/UserService/internal/UserRepository"
 	crypto "crypto/rand"
 	"fmt"
 	"github.com/go-pg/pg/v9"

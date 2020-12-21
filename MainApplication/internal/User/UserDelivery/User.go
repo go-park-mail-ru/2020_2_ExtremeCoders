@@ -1,12 +1,12 @@
 package UserDelivery
 
 import (
-	"MainApplication/internal/User/UserModel"
-	"MainApplication/internal/User/UserRepository"
-	"MainApplication/internal/User/UserUseCase"
-	"MainApplication/internal/errors"
-	"MainApplication/internal/pkg/context"
-	"MainApplication/proto/FileServise"
+	"Mailer/MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/User/UserRepository"
+	"Mailer/MainApplication/internal/User/UserUseCase"
+	"Mailer/MainApplication/internal/errors"
+	"Mailer/MainApplication/internal/pkg/context"
+	"Mailer/MainApplication/proto/FileServise"
 
 	"bytes"
 	"fmt"

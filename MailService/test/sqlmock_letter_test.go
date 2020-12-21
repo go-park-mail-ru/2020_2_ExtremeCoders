@@ -2,9 +2,9 @@ package test
 
 import (
 
-	"MailService/internal/Model"
-	"MailService/internal/Repository"
-	"MailService/internal/Repository/LetterPostgres"
+	"Mailer/MailService/internal/Model"
+	"Mailer/MailService/internal/Repository"
+	"Mailer/MailService/internal/Repository/LetterPostgres"
 	"github.com/stretchr/testify/assert"
 	"gitlab.com/slax0rr/go-pg-wrapper/mocks"
 	"testing"

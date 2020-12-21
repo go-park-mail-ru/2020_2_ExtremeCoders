@@ -1,1 +1,1 @@
-module "2020_2_ExtremeCoders/MainApplication/docs"
+module "2020_2_ExtremeCoders/Mailer/MainApplication/docs"

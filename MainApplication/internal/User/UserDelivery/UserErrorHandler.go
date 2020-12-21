@@ -1,9 +1,9 @@
 package UserDelivery
 
 import (
-	"MainApplication/internal/User/UserRepository"
-	"MainApplication/internal/User/UserUseCase"
-	"MainApplication/internal/errors"
+	"Mailer/MainApplication/internal/User/UserRepository"
+	"Mailer/MainApplication/internal/User/UserUseCase"
+	"Mailer/MainApplication/internal/errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )

@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"MailService/internal/Model"
-	pb "MailService/proto"
+	"Mailer/MailService/internal/Model"
+	pb "Mailer/MailService/proto"
 )
 
 func ModelToProto(letter Model.Letter) pb.Letter {

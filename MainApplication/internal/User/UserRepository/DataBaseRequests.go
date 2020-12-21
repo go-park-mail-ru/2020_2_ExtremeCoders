@@ -1,7 +1,7 @@
 package UserRepository
 
 import (
-	"MainApplication/internal/User/UserModel"
+	"Mailer/MainApplication/internal/User/UserModel"
 	"errors"
 )
 

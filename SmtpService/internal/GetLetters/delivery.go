@@ -5,7 +5,7 @@ import (
 	"github.com/emersion/go-smtp"
 	"io"
 	"io/ioutil"
-	send "smtpTest/internal/SendLetters"
+	send "Mailer/SmtpService/internal/SendLetters"
 )
 
 // The Backend implements SMTP server methods.
