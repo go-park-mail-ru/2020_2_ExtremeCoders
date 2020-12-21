@@ -106,8 +106,18 @@ func (de delivery) Search(w http.ResponseWriter, r *http.Request) {
 	}
 	vars := mux.Vars(r)
 	sim := vars["similar"]
+<<<<<<< HEAD
 	searchRes := de.Uc.FindSim(sim)
 	_, _ = w.Write([]byte(searchRes))
+=======
+	er, user := context.GetUserFromCtx(r.Context())
+	if er != nil {
+		w.Write(GetLettersError(er, nil))
+		return
+	}
+	searchRes:=de.Uc.FindSim(sim, user.Email)
+	w.Write([]byte(searchRes))
+>>>>>>> CleanArch
 }
 
 func (de delivery) GetLetterBy(w http.ResponseWriter, r *http.Request) {

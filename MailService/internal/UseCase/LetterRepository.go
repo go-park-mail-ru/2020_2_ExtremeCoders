@@ -5,6 +5,9 @@ import (
 	"Mailer/MailService/internal/Repository"
 )
 
+
+//go:generate mockgen -source=./LetterRepository.go -destination=../../test/mock_LetterUseCase/RepositoryMock.go
+
 type UseCase struct {
 	re Repository.LetterDB
 }
@@ -12,7 +15,7 @@ type UseCase struct {
 type Interface interface {
 	GetLettersSendDir(dir uint64) (error, []Model.Letter)
 	GetLettersRecvDir(dir uint64, limit uint64, offset uint64) (error, []Model.Letter)
-	GetLettersSend(email string) (error, []Model.Letter)
+	GetLettersSend(email string, limit uint64, offset uint64) (error, []Model.Letter)
 	GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter)
 	SaveLetter(letter Model.Letter) error
 	WatchLetter(lid uint64) (error, Model.Letter)
@@ -21,11 +24,11 @@ type Interface interface {
 	RemoveLetterFromDir(uint64, uint64, bool) error
 	RemoveDir(uint64, bool) error
 	RemoveLetter(uint64) error
-	FindSimilar(similar string) SearchResult
+	FindSimilar(similar string, email string) SearchResult
 	GetLetterBy(what string, val string) (error, []Model.Letter)
 }
 
-//go:generate mockgen -source=./LetterRepository.go -destination=../../test/mock_LetterUseCase/RepositoryMock.go
+//go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
 
 func New(repo Repository.LetterDB) Interface {
 	return UseCase{re: repo}
@@ -50,8 +53,8 @@ func (uc UseCase) WatchLetter(lid uint64) (error, Model.Letter) {
 	return uc.re.SetLetterWatched(lid)
 }
 
-func (uc UseCase) GetLettersSend(email string) (error, []Model.Letter) {
-	err, letters := uc.re.GetLettersSent(email)
+func (uc UseCase) GetLettersSend(email string, limit uint64, offset uint64) (error, []Model.Letter) {
+	err, letters := uc.re.GetLettersSent(email, limit, offset)
 	return err, letters
 }
 
@@ -70,32 +73,32 @@ func (uc UseCase) RemoveDir(did uint64, flag bool) error {
 	return uc.re.RemoveDir(did, flag)
 }
 
-func (uc UseCase) RemoveLetter(lid uint64) error {
+func (uc UseCase) RemoveLetter(lid uint64) error{
 	return uc.re.RemoveLetter(lid)
 }
 
-func (uc UseCase) FindSimilar(similar string) SearchResult {
-	res := SearchResult{}
-	res.SimilarTo = similar
-	recv, err := uc.re.FindReceiver(similar)
-	if err == nil {
-		res.Receivers = recv
+func (uc UseCase) FindSimilar(similar string, email string) SearchResult {
+	res:= SearchResult{}
+	res.SimilarTo=similar
+	recv, err:=uc.re.FindReceiver(similar, email)
+	if err==nil{
+		res.Receivers=recv
 	}
-	send, err := uc.re.FindSender(similar)
-	if err == nil {
-		res.Senders = send
+	send, err:=uc.re.FindSender(similar, email)
+	if err==nil{
+		res.Senders=send
 	}
-	theme, err := uc.re.FindTheme(similar)
-	if err == nil {
-		res.Themes = theme
+	theme, err:=uc.re.FindTheme(similar, email)
+	if err==nil{
+		res.Themes=theme
 	}
-	text, err := uc.re.FindText(similar)
-	if err == nil {
-		res.Texts = text
+	text, err:=uc.re.FindText(similar, email)
+	if err==nil{
+		res.Texts=text
 	}
 	return res
 }
 
-func (uc UseCase) GetLetterBy(what string, val string) (error, []Model.Letter) {
+func (uc UseCase) GetLetterBy(what string, val string) (error, []Model.Letter){
 	return uc.re.GetLetterBy(what, val)
 }

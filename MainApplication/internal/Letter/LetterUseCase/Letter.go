@@ -15,7 +15,7 @@ type LetterUseCase interface {
 	GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter)
 	WatchLetter(lid uint64) (error, LetterModel.Letter)
 	DeleteLetter(lid uint64) error
-	FindSim(sim string) string
+	FindSim(sim string, email string) string
 	GetLetterBy(what string, val string) (error, []LetterModel.Letter)
 }
 
@@ -79,8 +79,13 @@ func (uc useCase) DeleteLetter(lid uint64) error {
 	return uc.Db.DeleteLetter(lid)
 }
 
+<<<<<<< HEAD
 func (uc useCase) FindSim(sim string) string {
 	return uc.Db.FindSimilar(sim)
+=======
+func (uc useCase) FindSim(sim string, email string) string{
+	return uc.Db.FindSimilar(sim, email)
+>>>>>>> CleanArch
 }
 
 func (uc useCase) GetLetterBy(what string, val string) (error, []LetterModel.Letter) {

@@ -25,6 +25,6 @@ type LetterDB interface {
 	WatchLetter(uint64) (error, LetterModel.Letter)
 
 	DeleteLetter(uint64) error
-	FindSimilar(string) string
+	FindSimilar(string, string) string
 	GetLetterBy(string, string) (error, []LetterModel.Letter)
 }

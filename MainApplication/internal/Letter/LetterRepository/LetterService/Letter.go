@@ -81,9 +81,15 @@ func (lsManager LetterServiceManager) DeleteLetter(lid uint64) error {
 	return nil
 }
 
+<<<<<<< HEAD
 func (lsManager LetterServiceManager) FindSimilar(sim string) string {
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.FindSimilar(ctx, &msProto.Similar{Sim: sim})
+=======
+func (lsManager LetterServiceManager) FindSimilar(sim string, email string) string{
+	ctx := context.Background()
+	resp, _:=lsManager.lsClient.FindSimilar(ctx, &letterService.Similar{Sim: sim, Email: email})
+>>>>>>> CleanArch
 	return resp.Res
 }
 

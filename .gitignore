@@ -8,3 +8,5 @@ MainApplication/go.sum
 /.travis/deploy_key.pub
 /.travis/set_up_ssh.sh
 *.txt
+
+/vendor/

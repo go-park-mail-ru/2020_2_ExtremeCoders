@@ -1,11 +1,21 @@
 package UserDelivery
 
 import (
+<<<<<<< HEAD
 	fsProto "Mailer/FileService/proto"
 	"Mailer/MainApplication/internal/User/UserModel"
 	"Mailer/MainApplication/internal/User/UserUseCase"
 	"Mailer/MainApplication/internal/errors"
 	"Mailer/MainApplication/internal/pkg/context"
+=======
+	"MainApplication/internal/User/UserModel"
+	"MainApplication/internal/User/UserRepository"
+	"MainApplication/internal/User/UserUseCase"
+	"MainApplication/internal/errors"
+	"MainApplication/internal/pkg/context"
+	"MainApplication/proto/FileServise"
+
+>>>>>>> CleanArch
 	"bytes"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -16,6 +26,7 @@ import (
 )
 
 type Interface interface {
+
 	Session(w http.ResponseWriter, r *http.Request)
 	Signup(w http.ResponseWriter, r *http.Request)
 	SignIn(w http.ResponseWriter, r *http.Request)
@@ -66,7 +77,7 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, cookie)
 		response = SignUpError(err, cookie)
 	} else {
-		response = SignUpError(err, nil)
+		response = SignUpError(UserRepository.CantAddUser, nil)
 	}
 
 	_, _ = w.Write(response)

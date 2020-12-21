@@ -1,9 +1,7 @@
 syntax = "proto3";
 
 // protoc --go_out=plugins=grpc:. *.proto
-//go:generate mockgen -source=mail.pb.go -destination=MailProtoMock.go
-
-package MailService;
+package letterService;
 
 message Lid{
   uint64 lid=1;
@@ -17,7 +15,9 @@ message Letter{
   string text=5;
   uint64 dateTime=6;
   bool isWatched=7;
+  int64 directoryRecv=8;
 }
+
 
 message DirName{
   uint64 dirName=1;
