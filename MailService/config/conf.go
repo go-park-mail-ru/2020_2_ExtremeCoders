@@ -7,6 +7,7 @@ const (
 	//DbUser = "mark"
 	//DbPassword   = "123456yhn"
 	DbPassword = "987654321"
+	//DbPassword = "1538"
 	//DbPassword   = "mark"
 	DbDB = "maila"
 	//DbDB         = "mail_db"

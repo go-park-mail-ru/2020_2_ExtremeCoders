@@ -97,5 +97,15 @@ func (uc UseCase) FindSimilar(similar string, email string) SearchResult {
 }
 
 func (uc UseCase) GetLetterBy(what string, val string) (error, []Model.Letter){
-	return uc.re.GetLetterBy(what, val)
+	switch what {
+	case "sender":
+		return uc.re.GetLetterBySender(val)
+	case "receiver":
+		return uc.re.GetLetterByReceiver(val)
+	case "theme":
+		return uc.re.GetLetterByTheme(val)
+	case "text":
+		return uc.re.GetLetterByText(val)
+	}
+	return Repository.GetLetterByError, nil
 }

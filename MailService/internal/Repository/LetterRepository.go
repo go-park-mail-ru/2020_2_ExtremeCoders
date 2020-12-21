@@ -39,5 +39,8 @@ type LetterDB interface {
 	FindTheme(string, string) ([]string, error)
 	FindText(string, string) ([]string, error)
 
-	GetLetterBy(string, string) (error, []Model.Letter)
+	GetLetterByTheme(string) (error, []Model.Letter)
+	GetLetterByText(string) (error, []Model.Letter)
+	GetLetterBySender(string) (error, []Model.Letter)
+	GetLetterByReceiver(string) (error, []Model.Letter)
 }
