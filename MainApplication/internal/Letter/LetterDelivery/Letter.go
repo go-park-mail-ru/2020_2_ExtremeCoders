@@ -112,7 +112,12 @@ func (de delivery) Search(w http.ResponseWriter, r *http.Request) {
 	}
 	vars := mux.Vars(r)
 	sim := vars["similar"]
-	searchRes:=de.Uc.FindSim(sim)
+	er, user := context.GetUserFromCtx(r.Context())
+	if er != nil {
+		w.Write(GetLettersError(er, nil))
+		return
+	}
+	searchRes:=de.Uc.FindSim(sim, user.Email)
 	w.Write([]byte(searchRes))
 }
 

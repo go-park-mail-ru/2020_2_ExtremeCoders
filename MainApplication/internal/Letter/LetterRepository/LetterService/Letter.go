@@ -90,9 +90,9 @@ func (lsManager LetterServiceManager) DeleteLetter(lid uint64) error{
 	return nil
 }
 
-func (lsManager LetterServiceManager) FindSimilar(sim string) string{
+func (lsManager LetterServiceManager) FindSimilar(sim string, email string) string{
 	ctx := context.Background()
-	resp, _:=lsManager.lsClient.FindSimilar(ctx, &letterService.Similar{Sim: sim})
+	resp, _:=lsManager.lsClient.FindSimilar(ctx, &letterService.Similar{Sim: sim, Email: email})
 	return resp.Res
 }
 

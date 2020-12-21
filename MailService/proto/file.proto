@@ -54,6 +54,7 @@ message DirLid{
 
 message Similar{
   string sim=1;
+  string email=2;
 }
 
 message SimRes{
