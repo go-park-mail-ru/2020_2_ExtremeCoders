@@ -20,6 +20,8 @@ before_script:
 - psql -c 'create database maila;' -U postgres
 - psql -c "ALTER USER postgres WITH PASSWORD '987654321';" -U postgres
 before_install:
+- pwd
+- ls
 - openssl aes-256-cbc -K $encrypted_a626daabe3df_key -iv $encrypted_a626daabe3df_iv
   -in .travis/deploy_key.enc -out .travis/deploy_key -d
 
