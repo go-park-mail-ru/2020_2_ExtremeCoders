@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	send "smtpTest/internal/SendLetters"
 	server "smtpTest/proto/server"
+	"strings"
 )
 
 // The Backend implements SMTP server methods.
@@ -39,7 +40,7 @@ func (s *Session) Mail(from string, opts smtp.MailOptions) error {
 		}
 	}()
 	fmt.Println("EMail from:", from, opts.Auth)
-	go send.SendAnswer2(from)
+	go send.SendAnswerCouldNotFindUser(from)
 
 	return nil
 }
@@ -61,14 +62,35 @@ func (s *Session) Data(r io.Reader) error {
 	)
 	defer grcpMailService.Close()
 	mailManager :=server.NewLetterServiceClient(grcpMailService)
+	var mail string
 	if b, err := ioutil.ReadAll(r); err != nil {
 		return err
 	} else {
 		fmt.Println("Data:", string(b))
+		mail+=string(b)
 	}
 	ctx:=context.Background()
-	mailManager.SaveLetter(ctx, &server.Letter{})
+	resp, _:=mailManager.SaveLetter(ctx, &server.Letter{})
+	if resp.Ok==false{
+		send.SendAnswerCouldNotFindUser(getEmailFromMail(mail))
+	}
 	return nil
+}
+
+func getEmailFromMail(mail string) string{
+	from:="\nFrom:"
+	pos:=strings.Index(mail, from)
+	var flag bool
+	var email string
+	for ;mail[pos]!='>';pos++{
+		if flag ==true{
+			email+=string(mail[pos])
+		}
+		if mail[pos]=='<'{
+			flag=true
+		}
+	}
+	return mail
 }
 
 func (s *Session) Reset() {}

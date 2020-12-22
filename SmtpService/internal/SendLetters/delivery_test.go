@@ -13,9 +13,9 @@ func TestSendAnswer(t *testing.T) {
 
 func TestSendAnswer2(t *testing.T) {
 	email := "roofinda@gmail.com"
-	err := SendAnswer2(email)
+	err := SendAnswerCouldNotFindUser(email)
 	assert.NotNil(t, err)
-	//assertPanic1(t, SendAnswer2, email)
+	//assertPanic1(t, SendAnswerCouldNotFindUser, email)
 }
 
 func TestSendLetter(t *testing.T) {
