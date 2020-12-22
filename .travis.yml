@@ -42,7 +42,7 @@ script:
 - golangci-lint run
 - echo TRAIS BULD DIR
 - echo $TRAVIS_BUILD_DIR
-- ./cmd./runFileServiceTest.sh
+- ./cmd/runFileServiceTest.sh
 deploy:
   skip_cleanup: false
   provider: script
