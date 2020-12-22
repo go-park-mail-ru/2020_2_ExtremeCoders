@@ -23,6 +23,9 @@ type Interface interface {
 	RemoveLetter(uint64) error
 	FindSimilar(similar string, email string) SearchResult
 	GetLetterBy(what string, val string, email string) (error, []Model.Letter)
+
+	SetLetterInSpam(lid uint64) error
+	SetLetterInBox(lid uint64) error
 }
 
 //go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
@@ -106,6 +109,18 @@ func (uc UseCase) GetLetterBy(what string, val string, email string) (error, []M
 		return uc.re.GetLetterByTheme(val, email)
 	case "text":
 		return uc.re.GetLetterByText(val, email)
+	case "spam":
+		return uc.re.GetSpam(email)
+	case "box":
+		return uc.re.GetSpam(email)
 	}
 	return Repository.GetLetterByError, nil
+}
+
+func (uc UseCase) SetLetterInSpam(lid uint64) error{
+	return uc.re.SetItSpam(lid)
+}
+
+func (uc UseCase) SetLetterInBox(lid uint64) error{
+	return uc.re.SetItBox(lid)
 }

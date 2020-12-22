@@ -10,4 +10,6 @@ type Letter struct {
 	IsWatched     bool
 	DirectoryRecv uint64
 	DirectorySend uint64
+	Spam          bool
+	Box           bool
 }

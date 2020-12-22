@@ -15,6 +15,8 @@ var GetByLidError = errors.New("Could not get letter by lid!")
 var SetLetterWatchedError = errors.New("Could not set letter watched!")
 var DeleteLetterError = errors.New("Could not delete letter!")
 var GetLetterByError = errors.New("Could not get letter by!")
+var SetSpamError = errors.New("Could not set letter to spam!")
+var SetBoxError = errors.New("Could not set letter to box!")
 
 //go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
 type LetterDB interface {
@@ -43,4 +45,10 @@ type LetterDB interface {
 	GetLetterByText(string, string) (error, []Model.Letter)
 	GetLetterBySender(string, string) (error, []Model.Letter)
 	GetLetterByReceiver(string, string) (error, []Model.Letter)
+
+	GetSpam(email string) (error, []Model.Letter)
+	GetBox(email string) (error, []Model.Letter)
+
+	SetItSpam(uint64) error
+	SetItBox(uint64) error
 }

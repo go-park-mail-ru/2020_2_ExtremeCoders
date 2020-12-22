@@ -104,3 +104,21 @@ func (lsManager LetterServiceManager) GetLetterBy(what string, val string, email
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
 }
+
+func (lsManager LetterServiceManager)SetLetterInSpam(lid uint64) error{
+	ctx := context.Background()
+	resp, _:=lsManager.lsClient.SetLetterInSpam(ctx, &letterService.Lid{Lid: lid})
+	if resp.Ok == false {
+		return LetterRepository.SetSpamError
+	}
+	return nil
+}
+
+func (lsManager LetterServiceManager)SetLetterInBox(lid uint64) error{
+	ctx := context.Background()
+	resp, _:=lsManager.lsClient.SetLetterInBox(ctx, &letterService.Lid{Lid: lid})
+	if resp.Ok == false {
+		return LetterRepository.SetBoxError
+	}
+	return nil
+}

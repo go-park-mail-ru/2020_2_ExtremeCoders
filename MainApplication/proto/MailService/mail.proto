@@ -16,6 +16,8 @@ message Letter{
   uint64 dateTime=6;
   bool isWatched=7;
   int64 directoryRecv=8;
+  bool spam=9;
+  bool box=10;
 }
 
 
@@ -83,5 +85,8 @@ service LetterService{
   rpc FindSimilar(Similar) returns (SimRes);
 
   rpc GetLetterBy(GetBy) returns (LetterListResponse);
+
+  rpc SetLetterInSpam(Lid) returns (Response);
+  rpc SetLetterInBox(Lid) returns (Response);
 }
 

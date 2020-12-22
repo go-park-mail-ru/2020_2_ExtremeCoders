@@ -1,12 +1,14 @@
 package LetterModel
 
 type Letter struct {
-	Id        uint64
-	Sender    string
-	Receiver  string
-	Theme     string
-	Text      string
-	DateTime  int64
-	IsWatched bool
+	Id            uint64
+	Sender        string
+	Receiver      string
+	Theme         string
+	Text          string
+	DateTime      int64
+	IsWatched     bool
 	DirectoryRecv int64
+	Spam          bool
+	Box           bool
 }

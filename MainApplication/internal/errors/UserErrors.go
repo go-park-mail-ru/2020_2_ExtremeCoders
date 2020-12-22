@@ -163,3 +163,21 @@ func GetUserOnUpdateError() []byte {
 	ans, _ := ok.MarshalJSON()
 	return ans
 }
+
+func GetLetterSpamError() []byte {
+	ok := &AnswerGet{
+		Code:        401,
+		Description: "Could not set letter in spam",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
+
+func GetLetterBoxError() []byte {
+	ok := &AnswerGet{
+		Code:        401,
+		Description: "Could not set letter in box",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
