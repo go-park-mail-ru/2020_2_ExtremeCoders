@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.36.13
 	github.com/emersion/go-smtp v0.14.0
 	github.com/go-pg/pg/v9 v9.2.0
-	github.com/golang/mock v1.1.1
+	github.com/golang/mock v1.4.4
 	github.com/golang/protobuf v1.4.3
 	github.com/gorilla/mux v1.8.0
 	github.com/mailru/easyjson v0.7.6

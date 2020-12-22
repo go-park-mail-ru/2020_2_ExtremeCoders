@@ -2,7 +2,7 @@
 // Source: ./LetterRepository.go
 
 // Package mock_Repository is a generated GoMock package.
-package mock_LetterRepository
+package mock_Repository
 
 import (
 	Model "Mailer/MailService/internal/Model"
@@ -92,18 +92,18 @@ func (mr *MockLetterDBMockRecorder) GetLetterByLid(arg0 interface{}) *gomock.Cal
 }
 
 // GetLettersRecvDir mocks base method
-func (m *MockLetterDB) GetLettersRecvDir(arg0 uint64) (error, []Model.Letter) {
+func (m *MockLetterDB) GetLettersRecvDir(arg0, arg1, arg2 uint64) (error, []Model.Letter) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLettersRecvDir", arg0)
+	ret := m.ctrl.Call(m, "GetLettersRecvDir", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	ret1, _ := ret[1].([]Model.Letter)
 	return ret0, ret1
 }
 
 // GetLettersRecvDir indicates an expected call of GetLettersRecvDir
-func (mr *MockLetterDBMockRecorder) GetLettersRecvDir(arg0 interface{}) *gomock.Call {
+func (mr *MockLetterDBMockRecorder) GetLettersRecvDir(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLettersRecvDir", reflect.TypeOf((*MockLetterDB)(nil).GetLettersRecvDir), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLettersRecvDir", reflect.TypeOf((*MockLetterDB)(nil).GetLettersRecvDir), arg0, arg1, arg2)
 }
 
 // GetLettersSentDir mocks base method
@@ -122,33 +122,33 @@ func (mr *MockLetterDBMockRecorder) GetLettersSentDir(arg0 interface{}) *gomock.
 }
 
 // GetLettersRecv mocks base method
-func (m *MockLetterDB) GetLettersRecv(arg0 string) (error, []Model.Letter) {
+func (m *MockLetterDB) GetLettersRecv(arg0 string, arg1, arg2 uint64) (error, []Model.Letter) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLettersRecv", arg0)
+	ret := m.ctrl.Call(m, "GetLettersRecv", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	ret1, _ := ret[1].([]Model.Letter)
 	return ret0, ret1
 }
 
 // GetLettersRecv indicates an expected call of GetLettersRecv
-func (mr *MockLetterDBMockRecorder) GetLettersRecv(arg0 interface{}) *gomock.Call {
+func (mr *MockLetterDBMockRecorder) GetLettersRecv(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLettersRecv", reflect.TypeOf((*MockLetterDB)(nil).GetLettersRecv), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLettersRecv", reflect.TypeOf((*MockLetterDB)(nil).GetLettersRecv), arg0, arg1, arg2)
 }
 
 // GetLettersSent mocks base method
-func (m *MockLetterDB) GetLettersSent(arg0 string) (error, []Model.Letter) {
+func (m *MockLetterDB) GetLettersSent(arg0 string, arg1, arg2 uint64) (error, []Model.Letter) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLettersSent", arg0)
+	ret := m.ctrl.Call(m, "GetLettersSent", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	ret1, _ := ret[1].([]Model.Letter)
 	return ret0, ret1
 }
 
 // GetLettersSent indicates an expected call of GetLettersSent
-func (mr *MockLetterDBMockRecorder) GetLettersSent(arg0 interface{}) *gomock.Call {
+func (mr *MockLetterDBMockRecorder) GetLettersSent(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLettersSent", reflect.TypeOf((*MockLetterDB)(nil).GetLettersSent), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLettersSent", reflect.TypeOf((*MockLetterDB)(nil).GetLettersSent), arg0, arg1, arg2)
 }
 
 // GetLettersByFolder mocks base method
@@ -206,4 +206,138 @@ func (m *MockLetterDB) RemoveDir(arg0 uint64, arg1 bool) error {
 func (mr *MockLetterDBMockRecorder) RemoveDir(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveDir", reflect.TypeOf((*MockLetterDB)(nil).RemoveDir), arg0, arg1)
+}
+
+// RemoveLetter mocks base method
+func (m *MockLetterDB) RemoveLetter(arg0 uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveLetter", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RemoveLetter indicates an expected call of RemoveLetter
+func (mr *MockLetterDBMockRecorder) RemoveLetter(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveLetter", reflect.TypeOf((*MockLetterDB)(nil).RemoveLetter), arg0)
+}
+
+// FindSender mocks base method
+func (m *MockLetterDB) FindSender(arg0, arg1 string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindSender", arg0, arg1)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindSender indicates an expected call of FindSender
+func (mr *MockLetterDBMockRecorder) FindSender(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindSender", reflect.TypeOf((*MockLetterDB)(nil).FindSender), arg0, arg1)
+}
+
+// FindReceiver mocks base method
+func (m *MockLetterDB) FindReceiver(arg0, arg1 string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindReceiver", arg0, arg1)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindReceiver indicates an expected call of FindReceiver
+func (mr *MockLetterDBMockRecorder) FindReceiver(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindReceiver", reflect.TypeOf((*MockLetterDB)(nil).FindReceiver), arg0, arg1)
+}
+
+// FindTheme mocks base method
+func (m *MockLetterDB) FindTheme(arg0, arg1 string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindTheme", arg0, arg1)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindTheme indicates an expected call of FindTheme
+func (mr *MockLetterDBMockRecorder) FindTheme(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTheme", reflect.TypeOf((*MockLetterDB)(nil).FindTheme), arg0, arg1)
+}
+
+// FindText mocks base method
+func (m *MockLetterDB) FindText(arg0, arg1 string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindText", arg0, arg1)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindText indicates an expected call of FindText
+func (mr *MockLetterDBMockRecorder) FindText(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindText", reflect.TypeOf((*MockLetterDB)(nil).FindText), arg0, arg1)
+}
+
+// GetLetterByTheme mocks base method
+func (m *MockLetterDB) GetLetterByTheme(arg0 string) (error, []Model.Letter) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLetterByTheme", arg0)
+	ret0, _ := ret[0].(error)
+	ret1, _ := ret[1].([]Model.Letter)
+	return ret0, ret1
+}
+
+// GetLetterByTheme indicates an expected call of GetLetterByTheme
+func (mr *MockLetterDBMockRecorder) GetLetterByTheme(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterByTheme", reflect.TypeOf((*MockLetterDB)(nil).GetLetterByTheme), arg0)
+}
+
+// GetLetterByText mocks base method
+func (m *MockLetterDB) GetLetterByText(arg0 string) (error, []Model.Letter) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLetterByText", arg0)
+	ret0, _ := ret[0].(error)
+	ret1, _ := ret[1].([]Model.Letter)
+	return ret0, ret1
+}
+
+// GetLetterByText indicates an expected call of GetLetterByText
+func (mr *MockLetterDBMockRecorder) GetLetterByText(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterByText", reflect.TypeOf((*MockLetterDB)(nil).GetLetterByText), arg0)
+}
+
+// GetLetterBySender mocks base method
+func (m *MockLetterDB) GetLetterBySender(arg0 string) (error, []Model.Letter) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLetterBySender", arg0)
+	ret0, _ := ret[0].(error)
+	ret1, _ := ret[1].([]Model.Letter)
+	return ret0, ret1
+}
+
+// GetLetterBySender indicates an expected call of GetLetterBySender
+func (mr *MockLetterDBMockRecorder) GetLetterBySender(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterBySender", reflect.TypeOf((*MockLetterDB)(nil).GetLetterBySender), arg0)
+}
+
+// GetLetterByReceiver mocks base method
+func (m *MockLetterDB) GetLetterByReceiver(arg0 string) (error, []Model.Letter) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLetterByReceiver", arg0)
+	ret0, _ := ret[0].(error)
+	ret1, _ := ret[1].([]Model.Letter)
+	return ret0, ret1
+}
+
+// GetLetterByReceiver indicates an expected call of GetLetterByReceiver
+func (mr *MockLetterDBMockRecorder) GetLetterByReceiver(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterByReceiver", reflect.TypeOf((*MockLetterDB)(nil).GetLetterByReceiver), arg0)
 }

@@ -12,27 +12,27 @@ func TestGetSendedLetters(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetSendedLetters("dellvin.black@gmail.com").Return(nil, nil)
+	mockLetter.EXPECT().GetSendedLetters("dellvin.black@gmail.com", uint64(5), uint64(0)).Return(nil, nil)
 	uc := LetterUseCase.New(mockLetter)
-	uc.GetSendedLetters("dellvin.black@gmail.com")
+	_, _ = uc.GetSendedLetters("dellvin.black@gmail.com", uint64(5), uint64(0))
 }
 
 func TestGetRecivedLetters(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetReceivedLetters("dellvin.black@gmail.com").Return(nil, nil)
+	mockLetter.EXPECT().GetReceivedLetters("dellvin.black@gmail.com", uint64(1), uint64(0)).Return(nil, nil)
 	uc := LetterUseCase.New(mockLetter)
-	uc.GetReceivedLetters("dellvin.black@gmail.com")
+	_, _ = uc.GetReceivedLetters("dellvin.black@gmail.com", uint64(1), uint64(0))
 }
 
 func TestGetRecivedLettersDir(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetReceivedLettersDir(uint64(12)).Return(nil, nil)
+	mockLetter.EXPECT().GetReceivedLettersDir(uint64(12), uint64(5), uint64(0)).Return(nil, nil)
 	uc := LetterUseCase.New(mockLetter)
-	uc.GetReceivedLettersDir(uint64(12))
+	_, _ = uc.GetReceivedLettersDir(uint64(12), uint64(5), uint64(0))
 }
 
 func TestGetSendedLettersDirasdf(t *testing.T) {
@@ -41,7 +41,7 @@ func TestGetSendedLettersDirasdf(t *testing.T) {
 	mockLetter := mock.NewMockLetterDB(ctrl)
 	mockLetter.EXPECT().GetSendedLettersDir(uint64(12)).Return(nil, nil)
 	uc := LetterUseCase.New(mockLetter)
-	uc.GetSendedLettersDir(uint64(12))
+	_, _ = uc.GetSendedLettersDir(uint64(12))
 }
 
 func TestSaveMailasdf(t *testing.T) {
@@ -49,8 +49,7 @@ func TestSaveMailasdf(t *testing.T) {
 	defer ctrl.Finish()
 	mockLetter := mock.NewMockLetterDB(ctrl)
 	l := LetterModel.Letter{}
-	mockLetter.EXPECT().SaveMail(l).Return( nil)
+	mockLetter.EXPECT().SaveMail(l).Return(nil)
 	uc := LetterUseCase.New(mockLetter)
-	uc.SaveLetter(&l)
+	_ = uc.SaveLetter(&l)
 }
-

@@ -15,10 +15,10 @@ func TestGetLettersRecvDir(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetLettersRecvDir(uint64(0)).Return(nil, nil)
+	mockLetter.EXPECT().GetLettersRecvDir(uint64(0),uint64(0),uint64(0)).Return(nil, nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.GetLettersRecvDir(0)
+	uc.GetLettersRecvDir(uint64(0),uint64(0),uint64(0))
 }
 
 func TestGetLettersSendDir(t *testing.T) {
@@ -60,10 +60,10 @@ func TestGetLettersSend(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetLettersSent(Letter.Receiver).Return(nil, nil)
+	mockLetter.EXPECT().GetLettersSent(Letter.Receiver,uint64(0),uint64(0)).Return(nil, nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.GetLettersSend(Letter.Receiver)
+	uc.GetLettersSend(Letter.Receiver,uint64(0),uint64(0))
 }
 
 
@@ -72,10 +72,10 @@ func TestGetLettersRecv(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().GetLettersRecv(Letter.Receiver).Return(nil, nil)
+	mockLetter.EXPECT().GetLettersRecv(Letter.Receiver,uint64(0),uint64(0)).Return(nil, nil)
 	uc := UseCase.New(mockLetter)
 
-	uc.GetLettersRecv(Letter.Receiver)
+	uc.GetLettersRecv(Letter.Receiver,uint64(0),uint64(0))
 }
 
 func TestAddLetterToDir(t *testing.T) {

@@ -5,6 +5,8 @@ import (
 	"Mailer/MailService/internal/Repository"
 )
 
+//go:generate mockgen -source=./LetterRepository.go -destination=../../test/mock_LetterUseCase/RepositoryMock.go
+
 type UseCase struct {
 	re Repository.LetterDB
 }
@@ -25,7 +27,6 @@ type Interface interface {
 	GetLetterBy(what string, val string) (error, []Model.Letter)
 }
 
-//go:generate mockgen -source=./LetterRepository.go -destination=./RepositoryMock.go
 
 func New(repo Repository.LetterDB) Interface {
 	return UseCase{re: repo}

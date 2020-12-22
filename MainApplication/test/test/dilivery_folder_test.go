@@ -39,7 +39,7 @@ func TestRenameFolder(t *testing.T) {
 
 	mailClient := mockMail.NewMockLetterServiceClient(ctrl)
 	userClient := mockUser.NewMockUserServiceClient(ctrl)
-	userClient.EXPECT().RenameFolder(r,w).Times(0)
+	userClient.EXPECT().RenameFolder(r, w).Times(0)
 	fd := FolderDelivery.New(userClient, mailClient)
 	fd.RenameFolder(&w, &r)
 }
@@ -53,7 +53,7 @@ func TestRemoveFolder(t *testing.T) {
 	w := MyWriter1{}
 	mailClient := mockMail.NewMockLetterServiceClient(ctrl)
 	userClient := mockUser.NewMockUserServiceClient(ctrl)
-	userClient.EXPECT().RemoveFolder(r,w).Times(0)
+	userClient.EXPECT().RemoveFolder(r, w).Times(0)
 	fd := FolderDelivery.New(userClient, mailClient)
 	fd.RemoveFolder(&w, &r)
 }
@@ -67,9 +67,8 @@ func Test(t *testing.T) {
 	w := MyWriter1{}
 	mailClient := mockMail.NewMockLetterServiceClient(ctrl)
 	userClient := mockUser.NewMockUserServiceClient(ctrl)
-	userClient.EXPECT().GetFolderId(r,w).Times(0)
-	mailClient.EXPECT().RemoveLetterFromDir(r,w).Times(0)
+	userClient.EXPECT().GetFolderId(r, w).Times(0)
+	mailClient.EXPECT().RemoveLetterFromDir(r, w).Times(0)
 	fd := FolderDelivery.New(userClient, mailClient)
 	fd.RemoveLetterInFolder(&w, &r)
 }
-
