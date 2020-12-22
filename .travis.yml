@@ -44,7 +44,7 @@ script:
 - echo $TRAVIS_BUILD_DIR
 - ./cmd/runFileServiceTest.sh
 deploy:
-  skip_cleanup: false
+  skip_cleanup: true
   provider: script
   script: "./.travis/deploy.sh"
   on:
