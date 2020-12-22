@@ -2,12 +2,12 @@ package SmtpManager
 
 import (
 	"github.com/stretchr/testify/assert"
-	pb "smtpTest/proto"
+	"smtpTest/proto/smtp"
 	"testing"
 )
 
 func TestManager_GetLettersByDir(t *testing.T) {
-	pbLetter := &pb.Letter{
+	pbLetter := &smtp.Letter{
 		Lid: 1,
 		Sender: "Sender",
 		Receiver: "Reciever",
@@ -22,14 +22,14 @@ func TestManager_GetLettersByDir(t *testing.T) {
 }
 
 // https://stackoverflow.com/questions/31595791/how-to-test-panics
-func assertPanic(t *testing.T, manager Manager, letter *pb.Letter) {
+func assertPanic(t *testing.T, manager Manager, letter *smtp.Letter) {
 	defer func() {
 		if r := recover(); r == nil {
 			t.Errorf("The code did not panic")
 		}
 	}()
 
-	pbResponse := &pb.Response {
+	pbResponse := &smtp.Response{
 		Ok: true,
 		Description: "Description",
 	}

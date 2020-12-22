@@ -2,15 +2,15 @@ package SmtpManager
 
 import (
 	"smtpTest/internal/SendLetters"
-	pb "smtpTest/proto"
+	"smtpTest/proto/smtp"
 )
 
 type Manager struct {
 }
 
-func (m Manager) GetLettersByDir(letter *pb.Letter) *pb.Response {
+func (m Manager) GetLettersByDir(letter *smtp.Letter) *smtp.Response {
 	err := SendLetters.SendLetter(letter)
-	resp := pb.Response{Ok: true, Description: err.Error()}
+	resp := smtp.Response{Ok: true, Description: err.Error()}
 	if err != nil {
 		resp.Ok = false
 	}

@@ -6,7 +6,7 @@
 
 // protoc --go_out=plugins=grpc:. *.proto
 
-package letterService
+package server
 
 import (
 	context "context"

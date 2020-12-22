@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.25.0
 // 	protoc        v3.13.0
-// source: MainApplication/proto/FileService/file.proto
+// source: MainApplication/proto/fileService/server.proto
 
 // protoc --go_out=plugins=grpc:. *.proto
 
@@ -412,14 +412,14 @@ var file_MainApplication_proto_FileService_file_proto_goTypes = []interface{}{
 }
 var file_MainApplication_proto_FileService_file_proto_depIdxs = []int32{
 	1, // 0: fileService.Files.files:type_name -> fileService.File
-	3, // 1: fileService.FileService.SetAvatar:input_type -> fileService.Avatar
-	2, // 2: fileService.FileService.GetAvatar:input_type -> fileService.User
-	5, // 3: fileService.FileService.SaveFiles:input_type -> fileService.Files
-	0, // 4: fileService.FileService.GetFiles:input_type -> fileService.LetterId
-	4, // 5: fileService.FileService.SetAvatar:output_type -> fileService.Nothing
-	3, // 6: fileService.FileService.GetAvatar:output_type -> fileService.Avatar
-	4, // 7: fileService.FileService.SaveFiles:output_type -> fileService.Nothing
-	5, // 8: fileService.FileService.GetFiles:output_type -> fileService.Files
+	3, // 1: fileService.fileService.SetAvatar:input_type -> fileService.Avatar
+	2, // 2: fileService.fileService.GetAvatar:input_type -> fileService.User
+	5, // 3: fileService.fileService.SaveFiles:input_type -> fileService.Files
+	0, // 4: fileService.fileService.GetFiles:input_type -> fileService.LetterId
+	4, // 5: fileService.fileService.SetAvatar:output_type -> fileService.Nothing
+	3, // 6: fileService.fileService.GetAvatar:output_type -> fileService.Avatar
+	4, // 7: fileService.fileService.SaveFiles:output_type -> fileService.Nothing
+	5, // 8: fileService.fileService.GetFiles:output_type -> fileService.Files
 	5, // [5:9] is the sub-list for method output_type
 	1, // [1:5] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -534,7 +534,7 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// FileServiceClient is the client API for FileService service.
+// FileServiceClient is the client API for fileService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type FileServiceClient interface {
@@ -554,7 +554,7 @@ func NewFileServiceClient(cc grpc.ClientConnInterface) FileServiceClient {
 
 func (c *fileServiceClient) SetAvatar(ctx context.Context, in *Avatar, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/SetAvatar", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.fileService/SetAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -563,7 +563,7 @@ func (c *fileServiceClient) SetAvatar(ctx context.Context, in *Avatar, opts ...g
 
 func (c *fileServiceClient) GetAvatar(ctx context.Context, in *User, opts ...grpc.CallOption) (*Avatar, error) {
 	out := new(Avatar)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/GetAvatar", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.fileService/GetAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -572,7 +572,7 @@ func (c *fileServiceClient) GetAvatar(ctx context.Context, in *User, opts ...grp
 
 func (c *fileServiceClient) SaveFiles(ctx context.Context, in *Files, opts ...grpc.CallOption) (*Nothing, error) {
 	out := new(Nothing)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/SaveFiles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.fileService/SaveFiles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -581,14 +581,14 @@ func (c *fileServiceClient) SaveFiles(ctx context.Context, in *Files, opts ...gr
 
 func (c *fileServiceClient) GetFiles(ctx context.Context, in *LetterId, opts ...grpc.CallOption) (*Files, error) {
 	out := new(Files)
-	err := c.cc.Invoke(ctx, "/fileService.FileService/GetFiles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileService.fileService/GetFiles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FileServiceServer is the server API for FileService service.
+// FileServiceServer is the server API for fileService service.
 type FileServiceServer interface {
 	SetAvatar(context.Context, *Avatar) (*Nothing, error)
 	GetAvatar(context.Context, *User) (*Avatar, error)
@@ -627,7 +627,7 @@ func _FileService_SetAvatar_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/SetAvatar",
+		FullMethod: "/fileService.fileService/SetAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).SetAvatar(ctx, req.(*Avatar))
@@ -645,7 +645,7 @@ func _FileService_GetAvatar_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/GetAvatar",
+		FullMethod: "/fileService.fileService/GetAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).GetAvatar(ctx, req.(*User))
@@ -663,7 +663,7 @@ func _FileService_SaveFiles_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/SaveFiles",
+		FullMethod: "/fileService.fileService/SaveFiles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).SaveFiles(ctx, req.(*Files))
@@ -681,7 +681,7 @@ func _FileService_GetFiles_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileService.FileService/GetFiles",
+		FullMethod: "/fileService.fileService/GetFiles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileServiceServer).GetFiles(ctx, req.(*LetterId))
@@ -690,7 +690,7 @@ func _FileService_GetFiles_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 var _FileService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "fileService.FileService",
+	ServiceName: "fileService.fileService",
 	HandlerType: (*FileServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -711,5 +711,5 @@ var _FileService_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "MainApplication/proto/FileService/file.proto",
+	Metadata: "MainApplication/proto/fileService/server.proto",
 }

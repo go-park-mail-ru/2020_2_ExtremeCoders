@@ -2,7 +2,7 @@ package SendLetters
 
 import (
 	"github.com/stretchr/testify/assert"
-	pb "smtpTest/proto"
+	"smtpTest/proto/smtp"
 	"testing"
 )
 
@@ -19,7 +19,7 @@ func TestSendAnswer2(t *testing.T) {
 }
 
 func TestSendLetter(t *testing.T) {
-	pbLetter := &pb.Letter{
+	pbLetter := &smtp.Letter{
 		Lid: 1,
 		Sender: "Sender",
 		Receiver: "Reciever",

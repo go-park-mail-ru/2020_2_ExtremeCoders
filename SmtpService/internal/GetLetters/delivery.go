@@ -1,11 +1,14 @@
 package GetLetters
 
 import (
+	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"
+	"google.golang.org/grpc"
 	"io"
 	"io/ioutil"
 	send "smtpTest/internal/SendLetters"
+	server "smtpTest/proto/server"
 )
 
 // The Backend implements SMTP server methods.
@@ -52,11 +55,19 @@ func (s *Session) Rcpt(to string) error {
 }
 
 func (s *Session) Data(r io.Reader) error {
+	grcpMailService, _ := grpc.Dial(
+		"95.163.209.195:8083",
+		grpc.WithInsecure(),
+	)
+	defer grcpMailService.Close()
+	mailManager :=server.NewLetterServiceClient(grcpMailService)
 	if b, err := ioutil.ReadAll(r); err != nil {
 		return err
 	} else {
 		fmt.Println("Data:", string(b))
 	}
+	ctx:=context.Background()
+	mailManager.SaveLetter(ctx, &server.Letter{})
 	return nil
 }
 
