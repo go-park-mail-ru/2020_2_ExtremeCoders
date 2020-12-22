@@ -13,8 +13,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/pkg/errors"
-	"image"
-	"image/jpeg"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -189,23 +187,24 @@ func (storage S3Conf)GetDefaultAvatar() (*fileProto.Avatar, error){
 	if err!=nil{
 		return nil, err
 	}
-	file, err := os.Open("default.jpeg")
+	resp, err := storage.sess.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(storage.BucketName),
+		Key:    aws.String("default.jpeg"),
+	})
 	if err != nil {
-		return &fileProto.Avatar{}, repo.GetAvatarError
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case s3.ErrCodeNoSuchBucket:
+				return nil, nil
+			case s3.ErrCodeNoSuchKey:
+				return nil, nil
+			}
+		}
+		return nil, nil
 	}
-
-	img, _, err := image.Decode(file)
-	if err != nil {
-		return &fileProto.Avatar{}, repo.GetAvatarError
-	}
-
-	buffer := new(bytes.Buffer)
-	if err := jpeg.Encode(buffer, img, nil); err != nil {
-		return &fileProto.Avatar{}, repo.GetAvatarError
-	}
-
-	return &fileProto.Avatar{
-		FileName: "default.jpeg",
-		Content:  buffer.Bytes(),
-	}, nil
+	defer resp.Body.Close()
+	var f fileProto.Avatar
+	body, err := ioutil.ReadAll(resp.Body)
+	f.Content=body
+	return &f, nil
 }
