@@ -1,12 +1,27 @@
 package SendLetters
 
 import (
+	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"
 	"net"
+	pb "smtpTest/proto/smtp"
 	smtp2 "smtpTest/proto/smtp"
 	"strings"
 )
+
+type FileManager struct {
+}
+
+func (fm *FileManager) SendLetter(ctx context.Context, mail *pb.Letter) (*pb.Response, error) {
+	err:=SendLetter(mail)
+	resp:=pb.Response{Ok: true, Description: "ok"}
+	if err!=nil{
+		resp.Description=err.Error()
+		resp.Ok=false
+	}
+	return &resp, nil
+}
 
 func SendAnswerCouldNotFindUser(email string) error {
 	defer func() {
