@@ -5,3 +5,5 @@ Mailer/MainApplication/go.sum
 ../go.sum
 /CleanArch
 /vendor/
+/.travis/deploy_key
+/.travis/deploy_key.pub

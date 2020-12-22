@@ -111,15 +111,7 @@ issues:
 
   exclude:
     - w.Write(.*)
-  exclude-rules:
-    # Exclude some linters from running on tests files.
-#    - path: ./.*
-#      linters:
-#        - govet
-#        - ineffassign
-#        - staticcheck
-#        - deadcode
-#        - unused
+
 
   # only those changes are analyzed, else only changes in HEAD~ are analyzed.
   # It's a super-useful option for integration of golangci-lint into existing
