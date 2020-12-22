@@ -38,7 +38,7 @@ func (fsr Repo) SaveAvatar(avatar *fileProto.Avatar) error {
 	fmt.Println(split, len(split))
 	temp := strings.Split(avatar.FileName, ".")
 	ext := temp[len(temp)-1]
-	err := os.Mkdir(avatar.Email, 0777)
+	_ = os.Mkdir(avatar.Email, 0777)
 	path := avatar.Email + "/" + "avatar." + ext
 	f, err := os.Create(path)
 	if err != nil {

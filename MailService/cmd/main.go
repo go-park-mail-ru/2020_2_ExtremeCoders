@@ -32,5 +32,5 @@ func main() {
 	uc := UseCase.New(repo)
 	letterProto.RegisterLetterServiceServer(server, Delivery.New(uc))
 	fmt.Println("starting File at :8083")
-	server.Serve(lis)
+	_ = server.Serve(lis)
 }

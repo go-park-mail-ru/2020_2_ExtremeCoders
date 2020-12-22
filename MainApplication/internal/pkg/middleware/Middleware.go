@@ -54,7 +54,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		csrf, Error := r.Cookie(context.CsrfCookieName)
-		fmt.Printf("REQ", r.URL.Path)
+		fmt.Print("REQ", r.URL.Path)
 		//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
 		//fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
 		if (csrf != nil && csrf.Value == r.Header.Get("csrf_token")) || r.Method == http.MethodGet {

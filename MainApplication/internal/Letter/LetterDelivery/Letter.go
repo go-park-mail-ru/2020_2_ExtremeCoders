@@ -68,8 +68,13 @@ func (de delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 	limit := vars["limit"]
 	offset:=vars["offset"]
 	intLim, err:=strconv.Atoi(limit)
+	if err != nil {
+		intLim = 5
+	}
 	intOff, err:=strconv.Atoi(offset)
-
+	if err != nil {
+		intOff = 0
+	}
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		w.Write(GetLettersError(er, nil))
@@ -84,7 +89,13 @@ func (de delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
 	limit := vars["limit"]
 	offset:=vars["offset"]
 	intLim, err:=strconv.Atoi(limit)
+	if err != nil {
+		intLim = 5
+	}
 	intOff, err:=strconv.Atoi(offset)
+	if err != nil {
+		intOff = 0
+	}
 
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
@@ -102,7 +113,7 @@ func (de delivery) WatchLetter(w http.ResponseWriter, r *http.Request) {
 	}
 	id := context.GetStrFormValueSafety(r, "id")
 	num, _:=strconv.Atoi(id)
-	de.Uc.WatchLetter(uint64(num))
+	_, _ = de.Uc.WatchLetter(uint64(num))
 }
 
 func (de delivery) Search(w http.ResponseWriter, r *http.Request) {

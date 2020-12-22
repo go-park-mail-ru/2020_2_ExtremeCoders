@@ -30,7 +30,6 @@ func (uc UseCase) SaveAvatar(avatar *fileProto.Avatar) error {
 func (uc UseCase) GetAvatar(user *fileProto.User) (*fileProto.Avatar, error) {
 	avatar, err := uc.repo.GetAvatar(user)
 	if err != nil {
-		err = nil
 		avatar, err = uc.repo.GetDefaultAvatar()
 	}
 	if err != nil {

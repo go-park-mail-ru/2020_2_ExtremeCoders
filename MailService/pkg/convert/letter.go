@@ -6,7 +6,7 @@ import (
 )
 
 func ModelToProto(letter Model.Letter) pb.Letter {
-	pbLetter := pb.Letter{
+	return pb.Letter{
 		Sender:    letter.Sender,
 		Receiver:  letter.Receiver,
 		Lid:       letter.Id,
@@ -15,7 +15,6 @@ func ModelToProto(letter Model.Letter) pb.Letter {
 		Text:      letter.Text,
 		IsWatched: letter.IsWatched,
 	}
-	return pbLetter
 }
 
 func ModelToProtoList(letters *[]Model.Letter) []*pb.Letter {

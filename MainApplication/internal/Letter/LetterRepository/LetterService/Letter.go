@@ -28,7 +28,7 @@ func (lsManager LetterServiceManager) WatchLetter(lid uint64) (error, LetterMode
 func (lsManager LetterServiceManager) SaveMail(letter LetterModel.Letter) error {
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.SaveLetter(ctx, convert.ModelToProto(letter))
-	if resp.Ok == false {
+	if !resp.Ok {
 		return LetterRepository.SaveLetterError
 	}
 	return nil
@@ -53,7 +53,7 @@ func (lsManager LetterServiceManager) GetSendedLetters(email string, limit uint6
 		Limit: limit,
 		Offset: offset,
 	})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
@@ -66,7 +66,7 @@ func (lsManager LetterServiceManager) GetReceivedLettersDir(dir uint64, limit ui
 		Limit: limit,
 		Offset: offset,
 		})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
@@ -75,7 +75,7 @@ func (lsManager LetterServiceManager) GetReceivedLettersDir(dir uint64, limit ui
 func (lsManager LetterServiceManager) GetSendedLettersDir(dir uint64) (error, []LetterModel.Letter) {
 	ctx := context.Background()
 	resp, _ := lsManager.lsClient.GetLettersByDirSend(ctx, &letterService.DirName{DirName: dir})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
@@ -84,7 +84,7 @@ func (lsManager LetterServiceManager) GetSendedLettersDir(dir uint64) (error, []
 func (lsManager LetterServiceManager) DeleteLetter(lid uint64) error{
 	ctx := context.Background()
 	resp, _:=lsManager.lsClient.RemoveLetter(ctx, &letterService.Lid{Lid: lid})
-	if resp.Ok==false{
+	if !resp.Ok{
 		return LetterRepository.DeleteLetterError
 	}
 	return nil
@@ -99,7 +99,7 @@ func (lsManager LetterServiceManager) FindSimilar(sim string, email string) stri
 func (lsManager LetterServiceManager) GetLetterBy(what string, val string) (error, []LetterModel.Letter){
 	ctx := context.Background()
 	resp, _:=lsManager.lsClient.GetLetterBy(ctx, &letterService.GetBy{What: what, Value: val})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)

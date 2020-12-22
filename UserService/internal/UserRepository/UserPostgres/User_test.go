@@ -48,7 +48,6 @@ var (
 
 var repository *dataBase
 
-var mockRes MockResult
 
 // go test -coverprofile=coverage.out -coverpkg=./... -cover ./... && go tool cover -html=coverage.out
 // go test `go list all | grep "UserService" | grep -v "mocks"`  -coverprofile=coverage.out.tmp -cover ./...
@@ -284,6 +283,8 @@ func TestDataBase_IsOkSession(t *testing.T) {
 }
 
 func TestDataBase_RemoveFolder(t *testing.T) {
+	mockRes:= MockResult{}
+
 	folder := UserModel.Folder{Id: testFolder.Id}
 
 	db := new(mocks.DB)
@@ -302,6 +303,8 @@ func TestDataBase_RemoveFolder(t *testing.T) {
 }
 
 func TestDataBase_RemoveSession(t *testing.T) {
+	mockRes:= MockResult{}
+
 	session := UserModel.Session{Id: testSession.Id}
 
 	db := new(mocks.DB)
@@ -321,6 +324,7 @@ func TestDataBase_RemoveSession(t *testing.T) {
 }
 
 func TestDataBase_RenameFolder(t *testing.T) {
+	mockRes:= MockResult{}
 	oldFolder := UserModel.Folder{Uid: testFolder.Uid, Name: testFolder.Name}
 
 	db := new(mocks.DB)
@@ -344,6 +348,8 @@ func TestDataBase_RenameFolder(t *testing.T) {
 }
 
 func TestDataBase_UpdateProfile(t *testing.T) {
+	mockRes:= MockResult{}
+
 	oldUser := UserModel.User{Email: testUser.Email}
 
 	db := new(mocks.DB)

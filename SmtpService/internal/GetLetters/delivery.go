@@ -1,11 +1,11 @@
 package GetLetters
 
 import (
+	send "Mailer/SmtpService/internal/SendLetters"
 	"fmt"
 	"github.com/emersion/go-smtp"
 	"io"
 	"io/ioutil"
-	send "Mailer/SmtpService/internal/SendLetters"
 )
 
 // The Backend implements SMTP server methods.
@@ -36,7 +36,9 @@ func (s *Session) Mail(from string, opts smtp.MailOptions) error {
 		}
 	}()
 	fmt.Println("EMail from:", from, opts.Auth)
-	go send.SendAnswer2(from)
+	go func() {
+		_ = send.SendAnswer2(from)
+	}()
 
 	return nil
 }

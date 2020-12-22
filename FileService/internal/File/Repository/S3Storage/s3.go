@@ -44,8 +44,7 @@ func New() repo.Interface {
 		Password:   "CherDan985fy1aasdf681553",
 		Token:      "",
 	}
-	var timeout time.Duration
-	timeout=0
+	timeout := time.Duration(0)
 
 	rep.ctx = context.Background()
 	var cancelFn func()
@@ -59,7 +58,7 @@ func New() repo.Interface {
 	creds:=credentials.NewStaticCredentials(rep.AccessKey, rep.SecretKey, rep.Token)
 	_, err:=creds.Get()
 	if err!=nil{
-		fmt.Print("error cred: %v\n", err)
+		fmt.Printf("error cred: %v\n", err)
 		return nil
 	}
 	cfg:=aws.NewConfig().WithRegion(
@@ -105,7 +104,7 @@ func (storage S3Conf)GetFiles(lid *fileProto.LetterId) (*fileProto.Files, error)
 				switch aerr.Code() {
 				case s3.ErrCodeNoSuchBucket:
 					var err error
-					return nil, errors.Wrapf(err, "bucket %s does not exist")
+					return nil, errors.Wrapf(err, "bucket  does not exist")
 				case s3.ErrCodeNoSuchKey:
 					break
 				}
@@ -114,7 +113,7 @@ func (storage S3Conf)GetFiles(lid *fileProto.LetterId) (*fileProto.Files, error)
 		}
 		defer resp.Body.Close()
 		var f fileProto.File
-		body, err := ioutil.ReadAll(resp.Body)
+		body, _ := ioutil.ReadAll(resp.Body)
 		f.Content=body
 		container.Files=append(container.Files, &f)
 	}
@@ -145,19 +144,19 @@ func (storage S3Conf)GetAvatar(user *fileProto.User) (*fileProto.Avatar, error){
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchBucket:
-				storage.GetDefaultAvatar()
+				_, _ = storage.GetDefaultAvatar()
 				return nil, nil
 			case s3.ErrCodeNoSuchKey:
-				storage.GetDefaultAvatar()
+				_, _ = storage.GetDefaultAvatar()
 				return nil, nil
 			}
 		}
-		storage.GetDefaultAvatar()
+		_, _ = storage.GetDefaultAvatar()
 		return nil, nil
 	}
 	defer resp.Body.Close()
 	var f fileProto.Avatar
-	body, err := ioutil.ReadAll(resp.Body)
+	body, _ := ioutil.ReadAll(resp.Body)
 	f.Content=body
 	return &f, nil
 }

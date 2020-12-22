@@ -162,8 +162,6 @@ func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 		w.Write(LogoutError(e))
 		return
 	}
-
-	w.Write(errors.GetErrorUnexpectedAns())
 }
 
 func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
@@ -183,7 +181,7 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 		FileName: fileHeader.Filename,
 		Content:  buf.Bytes(),
 	}
-	de.FileManager.SetAvatar(r.Context(), &avatar)
+	_, _ = de.FileManager.SetAvatar(r.Context(), &avatar)
 }
 
 func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {

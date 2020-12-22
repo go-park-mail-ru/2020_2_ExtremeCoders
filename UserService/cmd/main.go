@@ -32,5 +32,5 @@ func main() {
 	proto.RegisterUserServiceServer(server, UserDelivery.New(uc))
 
 	fmt.Println("starting File at :8082")
-	server.Serve(lis)
+	_ = server.Serve(lis)
 }
