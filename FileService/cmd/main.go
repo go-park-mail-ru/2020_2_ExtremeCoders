@@ -2,7 +2,7 @@ package main
 
 import (
 	"FileService/internal/File/Delivery"
-	fsRepo "FileService/internal/File/Repository/FileSystem"
+	fsRepo "FileService/internal/File/Repository/S3Storage"
 	"FileService/internal/File/UseCase"
 	fileProto "FileService/proto"
 	"fmt"

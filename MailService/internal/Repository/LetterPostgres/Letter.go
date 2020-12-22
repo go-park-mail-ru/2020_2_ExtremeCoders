@@ -19,6 +19,9 @@ func New(db pgwrapper.DB) Repository.LetterDB {
 }
 
 func (dbInfo dataBase) SaveMail(letter Model.Letter) error {
+	if letter.Receiver==letter.Sender{
+		letter.IsWatched=true
+	}
 	_, err := dbInfo.DB.Model(&letter).Insert()
 	if err != nil {
 		return Repository.SaveLetterError
@@ -322,4 +325,30 @@ func (dbInfo dataBase) GetLetterByReceiver(val string, email string) (error, []M
 		}
 	}
 	return nil, data
+}
+
+func (dbInfo dataBase)SetItSpam(lid uint64) error{
+	err, letter:= dbInfo.GetLetterByLid(lid)
+	if err!=nil{
+		return Repository.GetByLidError
+	}
+	letter.Spam=true
+	_, err=dbInfo.DB.Model(&letter).Column("spam").Where("id=?", lid).Update()
+	if err!=nil{
+		return Repository.SetSpamError
+	}
+	return nil
+}
+
+func (dbInfo dataBase)SetItBox(lid uint64) error{
+	err, letter:= dbInfo.GetLetterByLid(lid)
+	if err!=nil{
+		return Repository.GetByLidError
+	}
+	letter.Box=true
+	_, err=dbInfo.DB.Model(&letter).Column("box").Where("id=?", lid).Update()
+	if err!=nil{
+		return Repository.SetBoxError
+	}
+	return nil
 }

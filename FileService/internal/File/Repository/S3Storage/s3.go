@@ -8,18 +8,16 @@ import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/pkg/errors"
 	"image"
 	"image/jpeg"
 	"io/ioutil"
 	"os"
 	"strconv"
-	"time"
-
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 
@@ -44,19 +42,12 @@ func New() repo.Interface {
 		Password:   "CherDan985fy1aasdf681553",
 		Token:      "",
 	}
-	var timeout time.Duration
-	timeout=0
+	return rep
+}
 
-	rep.ctx = context.Background()
-	var cancelFn func()
-	if timeout > 0 {
-		rep.ctx, cancelFn = context.WithTimeout(rep.ctx, timeout)
-	}
-
-	defer cancelFn()
-
-
-	creds:=credentials.NewStaticCredentials(rep.AccessKey, rep.SecretKey, rep.Token)
+func (storage *S3Conf)Connect() error{
+	storage.ctx = context.Background()
+	creds:=credentials.NewStaticCredentials(storage.AccessKey, storage.SecretKey, storage.Token)
 	_, err:=creds.Get()
 	if err!=nil{
 		fmt.Print("error cred: %v\n", err)
@@ -70,11 +61,15 @@ func New() repo.Interface {
 		creds,
 	)
 	sess:=session.Must(session.NewSession(cfg))
-	rep.sess=s3.New(sess)
-	return rep
+	storage.sess=s3.New(sess)
+	return nil
 }
 
 func (storage S3Conf)SaveFiles(file *fileProto.Files) error{
+	err:=storage.Connect()
+	if err!=nil{
+		return err
+	}
 	for pos, f:=range file.Files{
 		_, err := storage.sess.PutObjectWithContext(storage.ctx, &s3.PutObjectInput{
 			Bucket: aws.String(storage.BucketName),
@@ -93,6 +88,10 @@ func (storage S3Conf)SaveFiles(file *fileProto.Files) error{
 	return nil
 }
 func (storage S3Conf)GetFiles(lid *fileProto.LetterId) (*fileProto.Files, error){
+	err:=storage.Connect()
+	if err!=nil{
+		return nil, err
+	}
 	var container fileProto.Files
 	var i=0
 	for ;;{
@@ -121,7 +120,27 @@ func (storage S3Conf)GetFiles(lid *fileProto.LetterId) (*fileProto.Files, error)
 	return &container, nil
 }
 func (storage S3Conf)SaveAvatar(file *fileProto.Avatar) error{
-	_, err := storage.sess.PutObjectWithContext(storage.ctx, &s3.PutObjectInput{
+	err:=storage.Connect()
+	if err!=nil{
+		return err
+	}
+	storage.ctx = context.Background()
+	creds:=credentials.NewStaticCredentials(storage.AccessKey, storage.SecretKey, storage.Token)
+	_, err=creds.Get()
+	if err!=nil{
+		fmt.Print("error cred: %v\n", err)
+		return nil
+	}
+	cfg:=aws.NewConfig().WithRegion(
+		"ru-msk",
+	).WithEndpoint(
+		"http://hb.bizmrg.com",
+	).WithCredentials(
+		creds,
+	)
+	sess:=session.Must(session.NewSession(cfg))
+	storage.sess=s3.New(sess)
+	_, err = storage.sess.PutObjectWithContext(storage.ctx, &s3.PutObjectInput{
 		Bucket: aws.String(storage.BucketName),
 		Key:    aws.String(file.Email),
 		Body:   bytes.NewReader(file.Content),
@@ -137,6 +156,10 @@ func (storage S3Conf)SaveAvatar(file *fileProto.Avatar) error{
 	return nil
 }
 func (storage S3Conf)GetAvatar(user *fileProto.User) (*fileProto.Avatar, error){
+	err:=storage.Connect()
+	if err!=nil{
+		return nil, err
+	}
 	resp, err := storage.sess.GetObject(&s3.GetObjectInput{
 		Bucket: aws.String(storage.BucketName),
 		Key:    aws.String(user.Email),
@@ -162,6 +185,10 @@ func (storage S3Conf)GetAvatar(user *fileProto.User) (*fileProto.Avatar, error){
 	return &f, nil
 }
 func (storage S3Conf)GetDefaultAvatar() (*fileProto.Avatar, error){
+	err:=storage.Connect()
+	if err!=nil{
+		return nil, err
+	}
 	file, err := os.Open("default.jpeg")
 	if err != nil {
 		return &fileProto.Avatar{}, repo.GetAvatarError

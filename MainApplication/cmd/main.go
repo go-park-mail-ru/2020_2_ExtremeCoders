@@ -11,9 +11,9 @@ import (
 	"MainApplication/internal/User/UserRepository/UserMicroservice"
 	"MainApplication/internal/User/UserUseCase"
 	"MainApplication/internal/pkg/middleware"
-	protoFs "MainApplication/proto/FileServise"
 	protoMail "MainApplication/proto/MailService"
 	protoUs "MainApplication/proto/UserServise"
+	protoFs "MainApplication/proto/fileService"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
@@ -31,19 +31,6 @@ type tmp struct {
 	ID int
 }
 
-// @title Blueprint Swagger API
-// @version 1.0
-// @description Swagger API for Golang Project Blueprint.
-// @termsOfService http://swagger.io/terms/
-
-// @contact.name API Support
-// @contact.email martin7.heinz@gmail.com
-
-// @license.name MIT
-// @license.url https://github.com/MartinHeinz/go-project-blueprint/blob/master/LICENSE
-
-// @BasePath /api/v1
-
 func recordMetrics() {
 	go func() {
 		for {
@@ -60,15 +47,7 @@ var (
 	})
 )
 
-// ShowAccount godoc
-// @Summary Show a account
-// @Description get user by ID
-// @ID get-user-by-int
-// @Accept  json
-// @Produce  json
-// @Param id path int true "User ID"
-// @Success 200 {object} tmp
-// @Router /user/{id} [get]
+
 func handleUsers(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "ok"}`))
 }
@@ -143,6 +122,10 @@ func main() {
 
 	//put watch/letter {id:10} - пометить письмо как прочитанное
 	mux.HandleFunc("/watch/letter", lDE.WatchLetter)
+
+	mux.HandleFunc("/letter/box", lDE.SetLetterInBox)
+
+	mux.HandleFunc("/letter/spam", lDE.SetLetterInSpam)
 
 	//get letter/by/{what}/{value} - what может быть равен
 	//(id, sender, receiver, theme, text, date_time, directory_recv, directory_send) - поиск по письмам

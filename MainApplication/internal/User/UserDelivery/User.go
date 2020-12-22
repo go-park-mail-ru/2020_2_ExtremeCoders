@@ -6,7 +6,7 @@ import (
 	"MainApplication/internal/User/UserUseCase"
 	"MainApplication/internal/errors"
 	"MainApplication/internal/pkg/context"
-	"MainApplication/proto/FileServise"
+	"MainApplication/proto/fileService"
 
 	"bytes"
 	"fmt"
@@ -31,10 +31,10 @@ type Interface interface {
 
 type delivery struct {
 	Uc          UserUseCase.UserUseCase
-	FileManager FileServise.FileServiceClient
+	FileManager fileService.FileServiceClient
 }
 
-func New(usecase UserUseCase.UserUseCase, fileManager FileServise.FileServiceClient) Interface {
+func New(usecase UserUseCase.UserUseCase, fileManager fileService.FileServiceClient) Interface {
 	return delivery{Uc: usecase, FileManager: fileManager}
 }
 
@@ -178,7 +178,7 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	if _, err := io.Copy(buf, file); err != nil {
 		log.Println("EEERR", err)
 	}
-	avatar := FileServise.Avatar{
+	avatar := fileService.Avatar{
 		Email:    (*user).Email,
 		FileName: fileHeader.Filename,
 		Content:  buf.Bytes(),
@@ -197,7 +197,7 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 			CookieError(Err)
 			return
 		}
-		avatar, err := de.FileManager.GetAvatar(r.Context(), &FileServise.User{Email: user.Email})
+		avatar, err := de.FileManager.GetAvatar(r.Context(), &fileService.User{Email: user.Email})
 		if err != nil {
 			fmt.Println("GET AVATAR ERROR ", err)
 		}

@@ -19,6 +19,8 @@ type Interface interface {
 	DeleteLetter(w http.ResponseWriter, r *http.Request)
 	Search(w http.ResponseWriter, r *http.Request)
 	GetLetterBy(w http.ResponseWriter, r *http.Request)
+	SetLetterInSpam(w http.ResponseWriter, r *http.Request)
+	SetLetterInBox(w http.ResponseWriter, r *http.Request)
 }
 
 type delivery struct {
@@ -136,4 +138,34 @@ func (de delivery) GetLetterBy(w http.ResponseWriter, r *http.Request) {
 	}
 	err, letters:=de.Uc.GetLetterBy(what, val, user.Email)
 	w.Write(GetLettersError(err, letters))
+}
+
+func (de delivery) SetLetterInSpam(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+	lidstr:=context.GetStrFormValueSafety(r, "lid")
+	lid,err:=strconv.Atoi(lidstr)
+	if err!=nil{
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+	err=de.Uc.SetLetterInSpam(uint64(lid))
+	w.Write(GetLetterSpamError(err))
+}
+
+func (de delivery) SetLetterInBox(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+	lidstr:=context.GetStrFormValueSafety(r, "lid")
+	lid,err:=strconv.Atoi(lidstr)
+	if err!=nil{
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+	err=de.Uc.SetLetterInBox(uint64(lid))
+	w.Write(GetLetterBoxError(err))
 }
