@@ -19,6 +19,9 @@ before_script:
 - sudo service postgresql start
 - psql -c 'create database maila;' -U postgres
 - psql -c "ALTER USER postgres WITH PASSWORD '987654321';" -U postgres
+- curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
+    | sh -s -- -b $(go env GOPATH)/bin $GOLANGCI_LINT_VERSION
+
 before_install:
 - pwd
 - ls
@@ -32,6 +35,7 @@ before_deploy:
 - mv ${TRAVIS_BUILD_DIR}/.travis/deploy_key ~/.ssh/id_rsa
 - cat ${TRAVIS_BUILD_DIR}/.travis/ssh_config >> ~/.ssh/config
 script:
+- pwd
 - go mod vendor
 - golangci-lint run
 - cd cmd
