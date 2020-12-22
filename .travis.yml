@@ -48,7 +48,6 @@ script:
 - ./cmd/runUserServiceTest.sh
 
 deploy:
-  cleanup: true
   provider: script
   script:
      ./.travis/deploy.sh
