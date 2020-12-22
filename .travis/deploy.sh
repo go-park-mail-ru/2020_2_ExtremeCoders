@@ -11,4 +11,4 @@ echo SUCCCES > alahbabah.txt
 #rm -rf 2020_2_ExtremeCoders
 #git clone https://github.com/sergii1/2020_2_ExtremeCoders
 #cd 2020_2_ExtremeCoders
-./cmd/runAllServices.sh
+#./cmd/runAllServices.sh
