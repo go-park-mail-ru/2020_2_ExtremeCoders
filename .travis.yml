@@ -40,10 +40,9 @@ script:
 - pwd
 - go mod vendor
 - golangci-lint run
-- cd cmd
 - echo TRAIS BULD DIR
 - echo $TRAVIS_BUILD_DIR
-- ./runFileServiceTest.sh
+- ./cmd./runFileServiceTest.sh
 deploy:
   skip_cleanup: false
   provider: script
