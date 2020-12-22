@@ -72,7 +72,7 @@ func (s *Session) Data(r io.Reader) error {
 	ctx:=context.Background()
 	resp, _:=mailManager.SaveLetter(ctx, &server.Letter{})
 	if resp.Ok==false{
-		send.SendAnswerCouldNotFindUser(getEmailFromMail(mail))
+		_ = send.SendAnswerCouldNotFindUser(getEmailFromMail(mail))
 	}
 	return nil
 }
