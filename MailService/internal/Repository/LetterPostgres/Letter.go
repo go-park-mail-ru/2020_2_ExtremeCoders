@@ -79,7 +79,7 @@ func (dbInfo dataBase) GetLetterByLid(lid uint64) (error, Model.Letter) {
 
 func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("directory_recv=?", Did).
+	exist := dbInfo.DB.Model(&letters).Where("directory_recv=? and spam=? and box=?", Did, false, false).
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -92,7 +92,7 @@ func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64
 
 func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("directory_send=?", Did).Select()
+	exist := dbInfo.DB.Model(&letters).Where("directory_send=? and spam=? and box=?", Did, false, false).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
@@ -101,7 +101,7 @@ func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 
 func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).
+	exist := dbInfo.DB.Model(&letters).Where("receiver=? and spam=? and box=?", email, false, false).
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -115,7 +115,7 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 
 func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).
+	exist := dbInfo.DB.Model(&letters).Where("sender=? and spam=? and box=?", email,false, false).
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -131,16 +131,18 @@ func (dbInfo dataBase) AddLetterToDir(lid uint64, did uint64, flag bool) error {
 	if err != nil {
 		return err
 	}
+	letter.Box=false
+	letter.Spam=false
 	if flag {
 		letter.DirectoryRecv = did
-		_, err = dbInfo.DB.Model(&letter).Column("directory_recv").Where("id=?", lid).
+		_, err = dbInfo.DB.Model(&letter).Column("directory_recv, spam, box").Where("id=?", lid).
 			Update()
 		if err != nil {
 			return err
 		}
 	} else {
 		letter.DirectorySend = did
-		_, err = dbInfo.DB.Model(&letter).Column("directory_send").Where("id=?", lid).
+		_, err = dbInfo.DB.Model(&letter).Column("directory_send, spam, box").Where("id=?", lid).
 			Update()
 		if err != nil {
 			return err
@@ -337,8 +339,44 @@ func (dbInfo dataBase) GetLetterByReceiver(val string, email string) (error, []M
 	return nil, data
 }
 
+
+func (dbInfo dataBase) GetSpam(email string) (error, []Model.Letter) {
+	var letters []Model.Letter
+	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE spam = ?", true)
+
+	if err != nil {
+		return Repository.GetLetterByError, nil
+	}
+	var data []Model.Letter
+	for _, let := range letters {
+		if let.Receiver == email || let.Sender == email {
+			data = append(data, let)
+		}
+	}
+	return nil, data
+}
+
+func (dbInfo dataBase) GetBox(email string) (error, []Model.Letter) {
+	var letters []Model.Letter
+	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE spam = ?", true)
+
+	if err != nil {
+		return Repository.GetLetterByError, nil
+	}
+	var data []Model.Letter
+	for _, let := range letters {
+		if let.Receiver == email || let.Sender == email {
+			data = append(data, let)
+		}
+	}
+	return nil, data
+}
+
 func (dbInfo dataBase)SetItSpam(lid uint64) error{
 	err, letter:= dbInfo.GetLetterByLid(lid)
+	if letter.Spam==true{
+		letter.Spam=false
+	}
 	if err!=nil{
 		return Repository.GetByLidError
 	}
@@ -352,6 +390,9 @@ func (dbInfo dataBase)SetItSpam(lid uint64) error{
 
 func (dbInfo dataBase)SetItBox(lid uint64) error{
 	err, letter:= dbInfo.GetLetterByLid(lid)
+	if letter.Box==true{
+		letter.Box=false
+	}
 	if err!=nil{
 		return Repository.GetByLidError
 	}

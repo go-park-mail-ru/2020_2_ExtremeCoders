@@ -46,6 +46,9 @@ type LetterDB interface {
 	GetLetterBySender(string, string) (error, []Model.Letter)
 	GetLetterByReceiver(string, string) (error, []Model.Letter)
 
+	GetSpam(email string) (error, []Model.Letter)
+	GetBox(email string) (error, []Model.Letter)
+
 	SetItSpam(uint64) error
 	SetItBox(uint64) error
 }
