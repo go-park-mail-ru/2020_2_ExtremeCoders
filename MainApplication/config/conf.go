@@ -22,7 +22,8 @@ var AllowedOriginsCORS = []string{"http://localhost:80", "http://127.0.0.1:80",
 	"http://95.163.209.195:3000", "http://mailer.ru.com:3000",
 	"http://95.163.209.195:80", "http://mailer.ru.com:80",
 	"http://95.163.209.195", "http://mailer.ru.com",
-	"https://95.163.209.195", "https://mailer.ru.com"}
+	"https://95.163.209.195", "https://mailer.ru.com",
+	"https://mailer.ru.com:8080"}
 var AllowedHeadersCORS = []string{"Version", "Authorization", "Content-Type", "csrf_token"}
 var AllowedMethodsCORS = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 
