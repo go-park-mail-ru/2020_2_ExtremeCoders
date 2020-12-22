@@ -79,7 +79,7 @@ func (dbInfo dataBase) GetLetterByLid(lid uint64) (error, Model.Letter) {
 
 func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("directory_recv=? and spam=? and box=?", Did, false, false).
+	exist := dbInfo.DB.Model(&letters).Where("directory_recv=?", Did).
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -87,21 +87,33 @@ func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64
 	sort.Slice(letters, func(i, j int) (less bool) {
 		return letters[i].DateTime > letters[j].DateTime
 	})
-	return nil, letters
+	data:= []Model.Letter{}
+	for _, let:=range letters{
+		if let.Box==false || let.Spam==false{
+			data=append(data, let)
+		}
+	}
+	return nil, data
 }
 
 func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("directory_send=? and spam=? and box=?", Did, false, false).Select()
+	exist := dbInfo.DB.Model(&letters).Where("directory_send=?", Did).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
-	return nil, letters
+	data:= []Model.Letter{}
+	for _, let:=range letters{
+		if let.Box==false || let.Spam==false{
+			data=append(data, let)
+		}
+	}
+	return nil, data
 }
 
 func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("receiver=? and spam=? and box=?", email, false, false).
+	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -110,12 +122,19 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 	sort.Slice(letters, func(i, j int) (less bool) {
 		return letters[i].DateTime > letters[j].DateTime
 	})
-	return nil, letters
+	data:= []Model.Letter{}
+	for _, let:=range letters{
+		if let.Box==false || let.Spam==false{
+			data=append(data, let)
+		}
+	}
+	return nil, data
 }
 
 func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("sender=? and spam=? and box=?", email,false, false).
+	f:=false
+	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -123,7 +142,13 @@ func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64)
 	sort.Slice(letters, func(i, j int) (less bool) {
 		return letters[i].DateTime > letters[j].DateTime
 	})
-	return nil, letters
+	data:= []Model.Letter{}
+	for _, let:=range letters{
+		if let.Box==false || let.Spam==false{
+			data=append(data, let)
+		}
+	}
+	return nil, data
 }
 
 func (dbInfo dataBase) AddLetterToDir(lid uint64, did uint64, flag bool) error {
