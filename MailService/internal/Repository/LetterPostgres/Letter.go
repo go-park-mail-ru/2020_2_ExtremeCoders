@@ -133,7 +133,6 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 
 func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	f:=false
 	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
@@ -160,14 +159,14 @@ func (dbInfo dataBase) AddLetterToDir(lid uint64, did uint64, flag bool) error {
 	letter.Spam=false
 	if flag {
 		letter.DirectoryRecv = did
-		_, err = dbInfo.DB.Model(&letter).Column("directory_recv, spam, box").Where("id=?", lid).
+		_, err = dbInfo.DB.Model(&letter).Column("directory_recv").Where("id=?", lid).
 			Update()
 		if err != nil {
 			return err
 		}
 	} else {
 		letter.DirectorySend = did
-		_, err = dbInfo.DB.Model(&letter).Column("directory_send, spam, box").Where("id=?", lid).
+		_, err = dbInfo.DB.Model(&letter).Column("directory_send").Where("id=?", lid).
 			Update()
 		if err != nil {
 			return err
