@@ -32,7 +32,6 @@ before_install:
 
 before_deploy:
 - echo before Deploy
-- cd ..
 - pwd
 - mv ${TRAVIS_BUILD_DIR}/.travis/deploy_key ~/.ssh/id_rsa
 - cat ${TRAVIS_BUILD_DIR}/.travis/ssh_config >> ~/.ssh/config
