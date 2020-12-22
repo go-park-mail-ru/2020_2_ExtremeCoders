@@ -50,6 +50,6 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: bash .travis/deploy.sh
+  script: bash ./.travis/deploy.sh
   on:
     branch: CI
