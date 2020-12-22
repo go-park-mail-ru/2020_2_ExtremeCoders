@@ -43,6 +43,10 @@ script:
 - echo TRAIS BULD DIR
 - echo $TRAVIS_BUILD_DIR
 - ./cmd/runFileServiceTest.sh
+- ./cmd/runMailServiceTest.sh
+- ./cmd/runMainApplicationTest.sh
+- ./cmd/runUserServiceTest.sh
+
 deploy:
   skip_cleanup: true
   provider: script
