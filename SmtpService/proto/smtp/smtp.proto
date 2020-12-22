@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 // protoc --go_out=plugins=grpc:. *.proto
-package letterService;
+package proto;
 
 message Letter{
   uint64 lid=1;
@@ -25,4 +25,3 @@ message Response{
 service LetterService{
   rpc SendLetter(Letter) returns (Response);
 }
-

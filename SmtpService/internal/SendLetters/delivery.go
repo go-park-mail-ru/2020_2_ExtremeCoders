@@ -8,7 +8,7 @@ import (
 	"net"
 	"net/mail"
 	baseSMTP "net/smtp"
-	pb "smtpTest/proto"
+	smtp2 "smtpTest/proto/smtp"
 	"strings"
 )
 
@@ -127,7 +127,7 @@ func SendAnswer2(email string) error {
 	return nil
 }
 
-func SendLetter(letter *pb.Letter) error {
+func SendLetter(letter *smtp2.Letter) error {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in getanswer2", r)
