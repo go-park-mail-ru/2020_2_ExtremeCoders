@@ -35,6 +35,7 @@ func GetErrorUnexpectedAns() []byte {
 }
 
 func GetErrorNoCockyAns() []byte {
+
 	err := &AnswerGet{
 		Code:        401,
 		Description: "not authorized user",

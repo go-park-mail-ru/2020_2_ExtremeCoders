@@ -39,6 +39,7 @@ func New(usecase UserUseCase.UserUseCase, fileManager fileService.FileServiceCli
 }
 
 func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\n\nserega pridumal\n\n\n")
 	if r.Method == http.MethodPost {
 		de.SignIn(w, r)
 	}
