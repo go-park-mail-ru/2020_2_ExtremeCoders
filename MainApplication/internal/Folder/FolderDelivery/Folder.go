@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+
 //get /user/folders/{recived/sended} - список папок
 //get /user/foders/{recived/sended}/folderName - письма
 //post /user/folders/{recived/sended}/folderName - добавить папку
@@ -38,9 +39,14 @@ type Delivery struct {
 	lsClient letterService.LetterServiceClient
 }
 
-//delete /user/folders/{recived/sended}/folderName  - удалить папку
-
-//get /user/folders/{recived/sended} - список папок
+// Folder GetFolderList godoc
+// @Summary getFolderList
+// @Description user/folders/{recived/sended} - список папок в отправленных (полученных) письмах
+// @ID GetFolderList
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} FolderList fl
+// @Router /user/folders/{recived/sended} [get]
 func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"))
 	kind := "sended"
@@ -62,7 +68,16 @@ func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoFolderListResponse(folders.Res))
 }
 
-//get /user/foders/{recived/sended}/folderName - письма
+// Folder GetLettersByFolder godoc
+// @Summary Get letters by folder
+// @Description письма из папки в полученых (отправленных) user/foders/{recived/sended}/{folderName}/{limit}/{offset}
+// @ID GetLettersByFolder
+// @Accept  json
+// @Produce  json
+// @Param limit path int true "limit"
+// @Param offset path int true "offset"
+// @Success 200 {object} LetterList ll
+// @Router /user/folders/{recived/sended}/{folderName}/{limit}/{offset} [get]
 func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	folderName := vars["folderName"]
@@ -99,7 +114,15 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoLetterListAnswer(letterList))
 }
 
-//post /user/folders/{recived/sended}/folderName - добавить папку
+// Folder AddFolder godoc
+// @Summary Add folder
+// @Description добавить папку в полученные (отправленные) post user/folders/{recived/sended}/folderName {folderName:"folderName"}
+// @ID AddFolder
+// @Accept  json
+// @Produce  json
+// @Param folderName body Folder true "folder name"
+// @Success 200
+// @Router /user/folders/recived/folderName [post]
 func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 	if r.Method==http.MethodPut{
 		d.RenameFolder(w, r)
@@ -117,6 +140,7 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
+	{}
 	userServiceStruct:=&userService.Folder{Uid: user.Id, Name: folderName, Type: kind}
 	_, er = d.usClient.CreateFolder(r.Context(), userServiceStruct)
 	if er != nil {
@@ -127,7 +151,16 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(SuccessRespAns())
 }
 
-//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
+// Folder AddLetterInFolder godoc
+// @Summary Add letter in folder
+// @Description добавить писмо в папку post user/folders/{recived/sended}/folderName {folderName:"folderName", letterID: id}
+// @ID AddLetterInFolder
+// @Accept  json
+// @Produce  json
+// @Param folderName body Folder true "folder name"
+// @Param letterId body int true "Letter id"
+// @Success 200
+// @Router /user/folders/recived/folderName/letter [put]
 func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	if r.Method==http.MethodDelete{
 		d.RemoveLetterInFolder(w, r)
@@ -143,6 +176,7 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(r.URL.Path, "recived") {
 		kind = "recived"
 	}
+
 	fmt.Println("KIND", kind)
 	folderName:=context.GetStrFormValueSafety(r, "folderName")
 	er, user := context.GetUserFromCtx(r.Context())
@@ -181,7 +215,16 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoResponseAnswer(resp))
 }
 
-//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
+// Folder RenameFolder godoc
+// @Summary Rename Folder
+// @Description Переименовать папку  user/folders/{recived/sended}/folderName {oldName:"oldName", newName:"newName"}
+// @ID RenameFolder
+// @Accept  json
+// @Produce  json
+// @Param folderName body Folder true "folder name"
+// @Param letterId body int true "Letter id"
+// @Success 200
+// @Router /user/folders/recived/folderName [put]
 func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 	fmt.Print("\n\n\nHUIn\n\n\n")
 	oldName := r.FormValue("oldName")
@@ -207,7 +250,17 @@ func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(SuccessRespAns())
 }
 
-//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
+// Folder RemoveLetterInFolder godoc
+// @Summary Remove Letter from Folder
+// @Description Удалить письмо из папки user/folders/{recived/sended}/folderName
+// @Description /user/folders/sended/folderName/letter body{letterID:Id}
+// @ID RemoveLetterInFolder
+// @Accept  json
+// @Produce  json
+// @Param folderName body Folder true "folder name"
+// @Param letterId body int true "Letter id"
+// @Success 200
+// @Router /user/folders/sended/folderName/letter  [delete]
 func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	param := r.FormValue("letterId")
 	lid, err := strconv.ParseUint(param, 10, 64)
@@ -247,6 +300,15 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoResponseAnswer(resp))
 }
 
+// Folder RemoveFolder godoc
+// @Summary Remove Folder
+// @Description удалить папку delete user/folders/{recived/sended}/folderName {folderName:"folderName"}
+// @ID RemoveFolder
+// @Accept  json
+// @Produce  json
+// @Param folderName body Folder true "folder name"
+// @Success 200
+// @Router /user/folders/recived/folderName [delete]
 func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 	folderName := r.FormValue("folderName")
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), folderName)

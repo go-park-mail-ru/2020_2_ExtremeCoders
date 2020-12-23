@@ -29,6 +29,15 @@ func New(usecase LetterUseCase.LetterUseCase) Interface {
 	return delivery{Uc: usecase}
 }
 
+// Letter delete letter
+// @Summary delete letter
+// @Description delete letter {id:10}
+// @ID delete-letter
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Letter ID"
+// @Success 200
+// @Router /letter [delete]
 func (de delivery)DeleteLetter(w http.ResponseWriter, r *http.Request){
 	id := context.GetStrFormValueSafety(r, "id")
 	intID,err:=strconv.Atoi(id)
@@ -40,6 +49,15 @@ func (de delivery)DeleteLetter(w http.ResponseWriter, r *http.Request){
 	w.Write(GetDeleteLetterError(err))
 }
 
+// Letter send letter
+// @Summary send letter
+// @Description send {to:'receiver', theme:'theme', text:'letter content'}
+// @ID send-letter
+// @Accept  json
+// @Produce  json
+// @Param letter body LetterModel.Letter true "Letter ID"
+// @Success 200
+// @Router /letter [post]
 func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 	if r.Method==http.MethodDelete{
 		de.DeleteLetter(w, r)
@@ -63,6 +81,16 @@ func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 	w.Write(SendLetterError(err, letter))
 }
 
+// Letter get received letter
+// @Summary get received letter
+// @Description get user/letter/sent/{limit}/{offset} - получить полученные письма
+// @ID get-received-letter
+// @Accept  json
+// @Produce  json
+// @Param limit path int true "limit"
+// @Param offset path int true "offset"
+// @Success 200 {array} LetterModel.Letter
+// @Router /user/letter/received/{limit}/{offset} [get]
 func (de delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	limit := vars["limit"]
@@ -84,6 +112,16 @@ func (de delivery) GetRecvLetters(w http.ResponseWriter, r *http.Request) {
 	w.Write(GetLettersError(err, letters))
 }
 
+// Letter get sended letter
+// @Summary get sended letter
+// @Description get user/letter/sent/{limit}/{offset} - получить отправленные письма
+// @ID get-send-letter
+// @Accept  json
+// @Produce  json
+// @Param limit path int true "limit"
+// @Param offset path int true "offset"
+// @Success 200 {array} LetterModel.Letter
+// @Router /user/letter/sent/{limit}/{offset} [get]
 func (de delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	limit := vars["limit"]
@@ -106,6 +144,15 @@ func (de delivery) GetSendLetters(w http.ResponseWriter, r *http.Request) {
 	w.Write(GetLettersError(err, letters))
 }
 
+// Letter Watch
+// @Summary set watch togle
+// @Description отметить письмо как прочитанное/непрочитанное /watch/letter {id:'id'}
+// @ID watch-letter
+// @Accept  json
+// @Produce  json
+// @Param id path int true "letter id"
+// @Success 200
+// @Router /watch/letter [put]
 func (de delivery) WatchLetter(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		w.Write(errors.GetErrorNotPostAns())
@@ -116,6 +163,16 @@ func (de delivery) WatchLetter(w http.ResponseWriter, r *http.Request) {
 	_, _ = de.Uc.WatchLetter(uint64(num))
 }
 
+
+// Search search
+// @Summary Search in letter
+// @Description get letter/{similar} - поиск по всем письмам
+// @ID search-search
+// @Accept  json
+// @Produce  json
+// @Param similar path string true "search template"
+// @Success 200 string Res
+// @Router /letter/{similar} [get]
 func (de delivery) Search(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		w.Write(errors.GetErrorUnexpectedAns())
@@ -128,10 +185,23 @@ func (de delivery) Search(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetLettersError(er, nil))
 		return
 	}
+
 	searchRes:=de.Uc.FindSim(sim, user.Email)
 	w.Write([]byte(searchRes))
 }
 
+// Search Search
+// @Summary Search in letter
+// @Description поиск по всем файлам
+// @Description get letter/by/{what}/{value} - what может быть равен
+// @Description (id, sender, receiver, theme, text, date_time, directory_recv, directory_send)
+// @ID all-search
+// @Accept  json
+// @Produce  json
+// @Param what path string true "search type"
+// @Param value path string true "search template"
+// @Success 200 {array} LetterModel.Letter
+// @Router /letter/by/{what}/{value} [get]
 func (de delivery) GetLetterBy(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		w.Write(errors.GetErrorUnexpectedAns())

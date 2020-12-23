@@ -1,7 +1,7 @@
 package FolderDelivery
 
 import (
-	Model "Mailer/MainApplication/internal/Letter/LetterModel"
+	"Mailer/MainApplication/internal/Letter/LetterModel"
 )
 
 type LetterErr struct {
@@ -12,7 +12,7 @@ type LetterErr struct {
 type LetterList struct {
 	Code        int
 	Description string
-	Letter      []Model.Letter
+	Letter      []LetterModel.Letter
 }
 
 type FolderList struct {

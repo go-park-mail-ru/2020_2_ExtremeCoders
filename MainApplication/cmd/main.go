@@ -18,16 +18,13 @@ import (
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"github.com/swaggo/http-swagger"
-    _ "Mailer/MainApplication/cmd/docs"
+    _ "Mailer/docs"
 	"google.golang.org/grpc"
 	"net/http"
 )
 
-type tmp struct {
-	ID int
-}
 
-// @title Blueprint Swagger API
+// @title Mailer Swagger API
 // @version 1.0
 // @description Swagger API for Golang Project Blueprint.
 // @termsOfService http://swagger.io/terms/
@@ -39,20 +36,6 @@ type tmp struct {
 // @license.url https://github.com/MartinHeinz/go-project-blueprint/blob/master/LICENSE
 
 // @BasePath /api/v1
-
-
-// ShowAccount godoc
-// @Summary Show a account
-// @Description get user by ID
-// @ID get-user-by-int
-// @Accept  json
-// @Produce  json
-// @Param id path int true "User ID"
-// @Success 200 {object} tmp
-// @Router /user/{id} [get]
-func handleUsers(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(`{"status": "ok"}`))
-}
 
 func main() {
 	grcpMailService, err := grpc.Dial(
@@ -97,7 +80,7 @@ func main() {
 
 	mux := mux.NewRouter()
 
-	//post session {email:"email@mail.ru", password: "password"}- логин
+	//post session body {email:"email@mail.ru", password: "password"}- логин
 	//delete session - логаут
 	mux.HandleFunc("/session", uDE.Session)
 
@@ -116,7 +99,7 @@ func main() {
 	//get user/letter/sent/{limit}/{offset} - получить отправленные письма
 	mux.HandleFunc("/user/letter/sent/{limit}/{offset}", lDE.GetSendLetters)
 
-	//get user/letter/sent/{limit}/{offset} - получить принятые письма
+	//get user/letter/received/{limit}/{offset} - получить принятые письма
 	mux.HandleFunc("/user/letter/received/{limit}/{offset}", lDE.GetRecvLetters)
 
 	//get letter/{similar} - поиск по всем элементам
@@ -135,7 +118,7 @@ func main() {
 	//get user/folders/recived - список папок в полученных
 	mux.HandleFunc("/user/folders/sended", fDe.GetFolderList)
 
-	//get user/foders/{recived/sended}/{folderName} - письма из папки в полученых, письма из папки в отправленнх
+	//get user/foders/{recived/sended}/{folderName}/{limit}/{offset} - письма из папки в полученых, письма из папки в отправленнх
 	mux.HandleFunc("/user/foders/recived/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
 
 	//get user/foders/sended/{folderName} - письма из папки в отправленнх
@@ -147,6 +130,7 @@ func main() {
 
 	//post user/folders/sended/folderName {folderName:"folderName"} - добавить папку в отправленные
 	//put user/folders/sended/folderName {oldName:"oldName", newName:"newName"} - переименовать папку в отправленных
+	//delete user/folders/{sended, recived}/folderName {folderName:"folderName"} - удалить папку
 	mux.HandleFunc("/user/folders/sended/folderName", fDe.AddFolder)
 
 	//put user/folders/recived/folderName/letter body{letterID: id} - добавить письмо в папку из полученных

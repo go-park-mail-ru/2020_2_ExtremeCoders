@@ -47,6 +47,15 @@ func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// User Signup godoc
+// @Summary signup
+// @Description user registration
+// @ID post-user
+// @Accept  json
+// @Produce  json
+// @Param User body UserModel.User true "User"
+// @Success 200 {object} UserModel.User
+// @Router /user [post]
 func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		return
@@ -75,6 +84,15 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
+
+// Session godoc
+// @Summary login
+// @Description get user by ID body {email:"email@mail.ru", password: "password"}
+// @ID get-session
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} UserModel.User
+// @Router /session [post]
 func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
@@ -117,6 +135,14 @@ func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Coo
 	return user, session, 200
 }
 
+// User GetData godoc
+// @Summary get user data
+// @Description get user data
+// @ID post-user
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} errors.AnswerGet
+// @Router /user [get]
 func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		de.Signup(w, r)
@@ -143,6 +169,15 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	w.Write(errors.GetErrorUnexpectedAns())
 }
 
+// Session godoc
+// @Summary logout
+// @Description logout: remove session cookies
+// @ID get-session
+// @Accept  json
+// @Produce  json
+// @Param id path int true "User ID"
+// @Success 200
+// @Router /session [delete]
 func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
@@ -164,6 +199,14 @@ func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// User ChangeUser godoc
+// @Summary changeUserProfile
+// @Description get user data
+// @ID post-user
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} UserModel.User
+// @Router /user [get]
 func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
@@ -184,6 +227,13 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 	_, _ = de.FileManager.SetAvatar(r.Context(), &avatar)
 }
 
+// User getAvatar godoc
+// @Summary get user avatar
+// @Description get user avatar
+// @ID get-user-avatar
+// @Accept  json
+// @Success 200 file avatar
+// @Router /user/avatar [get]
 func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))

@@ -1,0 +1,476 @@
+basePath: /api/v1
+definitions:
+  FolderDelivery.Folder:
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  FolderDelivery.FolderList:
+    properties:
+      code:
+        type: integer
+      folders:
+        items:
+          $ref: '#/definitions/FolderDelivery.Folder'
+        type: array
+    type: object
+  FolderDelivery.LetterList:
+    properties:
+      code:
+        type: integer
+      description:
+        type: string
+      letter:
+        items:
+          $ref: '#/definitions/LetterModel.Letter'
+        type: array
+    type: object
+  LetterModel.Letter:
+    properties:
+      dateTime:
+        type: integer
+      directoryRecv:
+        type: integer
+      id:
+        type: integer
+      isWatched:
+        type: boolean
+      receiver:
+        type: string
+      sender:
+        type: string
+      text:
+        type: string
+      theme:
+        type: string
+    type: object
+  UserModel.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      img:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      surname:
+        type: string
+    type: object
+  errors.AnswerGet:
+    properties:
+      code:
+        type: integer
+      description:
+        type: string
+      user:
+        $ref: '#/definitions/UserModel.User'
+    type: object
+info:
+  contact:
+    email: martin7.heinz@gmail.com
+    name: API Support
+  description: Swagger API for Golang Project Blueprint.
+  license:
+    name: MIT
+    url: https://github.com/MartinHeinz/go-project-blueprint/blob/master/LICENSE
+  termsOfService: http://swagger.io/terms/
+  title: Mailer Swagger API
+  version: "1.0"
+paths:
+  /letter:
+    delete:
+      consumes:
+      - application/json
+      description: delete letter {id:10}
+      operationId: delete-letter
+      parameters:
+      - description: Letter ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: delete letter
+    post:
+      consumes:
+      - application/json
+      description: send {to:'receiver', theme:'theme', text:'letter content'}
+      operationId: send-letter
+      parameters:
+      - description: Letter ID
+        in: body
+        name: letter
+        required: true
+        schema:
+          $ref: '#/definitions/LetterModel.Letter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: send letter
+  /letter/{similar}:
+    get:
+      consumes:
+      - application/json
+      description: get letter/{similar} - поиск по всем письмам
+      operationId: search-search
+      parameters:
+      - description: search template
+        in: path
+        name: similar
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Search in letter
+  /letter/by/{what}/{value}:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        поиск по всем файлам
+        get letter/by/{what}/{value} - what может быть равен
+        (id, sender, receiver, theme, text, date_time, directory_recv, directory_send)
+      operationId: all-search
+      parameters:
+      - description: search type
+        in: path
+        name: what
+        required: true
+        type: string
+      - description: search template
+        in: path
+        name: value
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/LetterModel.Letter'
+            type: array
+      summary: Search in letter
+  /session:
+    delete:
+      consumes:
+      - application/json
+      description: 'logout: remove session cookies'
+      operationId: get-session
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: logout
+    post:
+      consumes:
+      - application/json
+      description: 'get user by ID body {email:"email@mail.ru", password: "password"}'
+      operationId: get-session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserModel.User'
+      summary: login
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: get user data
+      operationId: post-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserModel.User'
+      summary: changeUserProfile
+    post:
+      consumes:
+      - application/json
+      description: user registration
+      operationId: post-user
+      parameters:
+      - description: User
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/UserModel.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserModel.User'
+      summary: signup
+  /user/avatar:
+    get:
+      consumes:
+      - application/json
+      description: get user avatar
+      operationId: get-user-avatar
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+      summary: get user avatar
+  /user/folders/{recived/sended}:
+    get:
+      consumes:
+      - application/json
+      description: user/folders/{recived/sended} - список папок в отправленных (полученных)
+        письмах
+      operationId: GetFolderList
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FolderDelivery.FolderList'
+      summary: getFolderList
+  /user/folders/{recived/sended}/{folderName}/{limit}/{offset}:
+    get:
+      consumes:
+      - application/json
+      description: письма из папки в полученых (отправленных) user/foders/{recived/sended}/{folderName}/{limit}/{offset}
+      operationId: GetLettersByFolder
+      parameters:
+      - description: limit
+        in: path
+        name: limit
+        required: true
+        type: integer
+      - description: offset
+        in: path
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FolderDelivery.LetterList'
+      summary: Get letters by folder
+  /user/folders/recived/folderName:
+    delete:
+      consumes:
+      - application/json
+      description: удалить папку delete user/folders/{recived/sended}/folderName {folderName:"folderName"}
+      operationId: RemoveFolder
+      parameters:
+      - description: folder name
+        in: body
+        name: folderName
+        required: true
+        schema:
+          $ref: '#/definitions/FolderDelivery.Folder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Remove Folder
+    post:
+      consumes:
+      - application/json
+      description: добавить папку в полученные (отправленные) post user/folders/{recived/sended}/folderName
+        {folderName:"folderName"}
+      operationId: AddFolder
+      parameters:
+      - description: folder name
+        in: body
+        name: folderName
+        required: true
+        schema:
+          $ref: '#/definitions/FolderDelivery.Folder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Add folder
+    put:
+      consumes:
+      - application/json
+      description: Переименовать папку  user/folders/{recived/sended}/folderName {oldName:"oldName",
+        newName:"newName"}
+      operationId: RenameFolder
+      parameters:
+      - description: folder name
+        in: body
+        name: folderName
+        required: true
+        schema:
+          $ref: '#/definitions/FolderDelivery.Folder'
+      - description: Letter id
+        in: body
+        name: letterId
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Rename Folder
+  /user/folders/recived/folderName/letter:
+    put:
+      consumes:
+      - application/json
+      description: 'добавить писмо в папку post user/folders/{recived/sended}/folderName
+        {folderName:"folderName", letterID: id}'
+      operationId: AddLetterInFolder
+      parameters:
+      - description: folder name
+        in: body
+        name: folderName
+        required: true
+        schema:
+          $ref: '#/definitions/FolderDelivery.Folder'
+      - description: Letter id
+        in: body
+        name: letterId
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Add letter in folder
+  /user/folders/sended/folderName/letter:
+    delete:
+      consumes:
+      - application/json
+      description: |-
+        Удалить письмо из папки user/folders/{recived/sended}/folderName
+        /user/folders/sended/folderName/letter body{letterID:Id}
+      operationId: RemoveLetterInFolder
+      parameters:
+      - description: folder name
+        in: body
+        name: folderName
+        required: true
+        schema:
+          $ref: '#/definitions/FolderDelivery.Folder'
+      - description: Letter id
+        in: body
+        name: letterId
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Remove Letter from Folder
+  /user/letter/received/{limit}/{offset}:
+    get:
+      consumes:
+      - application/json
+      description: get user/letter/sent/{limit}/{offset} - получить полученные письма
+      operationId: get-received-letter
+      parameters:
+      - description: limit
+        in: path
+        name: limit
+        required: true
+        type: integer
+      - description: offset
+        in: path
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/LetterModel.Letter'
+            type: array
+      summary: get received letter
+  /user/letter/sent/{limit}/{offset}:
+    get:
+      consumes:
+      - application/json
+      description: get user/letter/sent/{limit}/{offset} - получить отправленные письма
+      operationId: get-send-letter
+      parameters:
+      - description: limit
+        in: path
+        name: limit
+        required: true
+        type: integer
+      - description: offset
+        in: path
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/LetterModel.Letter'
+            type: array
+      summary: get sended letter
+  /watch/letter:
+    put:
+      consumes:
+      - application/json
+      description: отметить письмо как прочитанное/непрочитанное /watch/letter {id:'id'}
+      operationId: watch-letter
+      parameters:
+      - description: letter id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: set watch togle
+swagger: "2.0"
