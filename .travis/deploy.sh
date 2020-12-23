@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #chmod ugo+x deploy.sh
 echo DEPLLLOY
-ssh -o StrictHostKeyChecking=no ubuntu@95.163.209.195
+ssh ubuntu@95.163.209.195
 pwd
 echo DEPLLLOYMachine
 pwd
