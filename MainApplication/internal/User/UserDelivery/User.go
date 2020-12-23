@@ -135,6 +135,7 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		fmt.Println("\n\n\n2\n\n\n", user)
 		w.Write(errors.GetOkAnsData(session.Value, *user))
+		fmt.Println("SEND USER DATA")
 		return
 	} else if r.Method == http.MethodPut {
 		fmt.Println("\n\n\n3\n\n\n")
@@ -215,6 +216,7 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 			w.Write(errors.GetErrorUnexpectedAns())
 			return
 		}
+		fmt.Println("UPLOAD AVATAR")
 		return
 	}
 }
