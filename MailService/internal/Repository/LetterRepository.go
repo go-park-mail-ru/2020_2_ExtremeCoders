@@ -51,4 +51,6 @@ type LetterDB interface {
 
 	SetItSpam(uint64) error
 	SetItBox(uint64) error
+
+	SendOnAnotherDomain(Model.Letter) error
 }

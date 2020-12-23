@@ -1,6 +1,7 @@
 package GetLetters
 
 import (
+	server "Mailer/MailService/proto"
 	send "Mailer/SmtpService/internal/SendLetters"
 	"context"
 	"fmt"
@@ -8,7 +9,6 @@ import (
 	"google.golang.org/grpc"
 	"io"
 	"io/ioutil"
-	server "Mailer/SmtpService/proto/server"
 	"strings"
 )
 

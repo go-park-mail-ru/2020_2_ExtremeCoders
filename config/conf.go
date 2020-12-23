@@ -20,6 +20,7 @@ const (
 	BucketID     = "mcs6132821991"
 	Password     = "CherDan985fy1aasdf681553"
 	Token        = ""
+	MailDomain   = "mailer.ru.com"
 )
 
 var AllowedOriginsCORS = []string{

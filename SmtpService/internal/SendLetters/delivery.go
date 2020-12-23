@@ -10,10 +10,14 @@ import (
 	"strings"
 )
 
-type FileManager struct {
+type SMTPManager struct {
 }
 
-func (fm *FileManager) SendLetter(ctx context.Context, mail *pb.Letter) (*pb.Response, error) {
+func NewSMTPManager()  smtp2.LetterServiceServer{
+	return &SMTPManager{}
+}
+
+func (fm *SMTPManager) SendLetter(ctx context.Context, mail *pb.Letter) (*pb.Response, error) {
 	err:=SendLetter(mail)
 	resp:=pb.Response{Ok: true, Description: "ok"}
 	if err!=nil{

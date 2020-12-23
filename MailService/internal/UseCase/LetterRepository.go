@@ -3,6 +3,8 @@ package UseCase
 import (
 	"Mailer/MailService/internal/Model"
 	"Mailer/MailService/internal/Repository"
+	"Mailer/MailService/pkg/Domain"
+	"Mailer/config"
 )
 
 //go:generate mockgen -source=./LetterRepository.go -destination=../../test/mock_LetterUseCase/RepositoryMock.go
@@ -46,7 +48,14 @@ func (uc UseCase) GetLettersSendDir(dir uint64) (error, []Model.Letter) {
 }
 
 func (uc UseCase) SaveLetter(letter Model.Letter) error {
-	err := uc.re.SaveMail(letter)
+	var err error
+	if Domain.GetMailDomain(letter.Receiver)!=config.MailDomain{
+		err= uc.re.SendOnAnotherDomain(letter)
+		if err!=nil{
+			letter.Receiver+=" -> UNKNOWN ADDRESS"
+		}
+	}
+	_=uc.re.SaveMail(letter)
 	return err
 }
 
