@@ -4,6 +4,7 @@ import (
 	"Mailer/MailService/internal/Model"
 	"Mailer/MailService/internal/Repository"
 	crypto "crypto/rand"
+	"fmt"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
 	"sort"
 
@@ -55,12 +56,8 @@ func (dbInfo dataBase) SetLetterWatched(lid uint64) (error, Model.Letter) {
 	if err != nil {
 		return Repository.GetByLidError, letter
 	}
-	if letter.IsWatched{
-		letter.IsWatched=false
-	}else{
-		letter.IsWatched = true
-	}
-
+	fmt.Println("SET LETTER WATCH", letter.IsWatched)
+	letter.IsWatched = !letter.IsWatched
 	_, err = dbInfo.DB.Model(&letter).Column("is_watched").Where("id=?", lid).Update()
 	if err != nil {
 		return Repository.SetLetterWatchedError, letter

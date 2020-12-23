@@ -147,8 +147,8 @@ func main() {
 	//delete /user/folders/sended/folderName/letter body{letterID:Id} - удалить письмо из папки в отправленных
 	mux.HandleFunc("/api/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 
-	mux.PathPrefix("/api/").Handler(httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:8080/api/doc.json"), //The url pointing to API definition
+	mux.PathPrefix("/docs/").Handler(httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8080/docs/doc.json"), //The url pointing to API definition
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("#swagger-ui"),
