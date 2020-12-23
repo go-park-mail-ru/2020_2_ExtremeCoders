@@ -44,7 +44,7 @@ func SendAnswerCouldNotFindUser(email string) error {
 	to := []string{email}
 	msg := strings.NewReader("To: " + email + "\r\n" +
 		"From: " + "bot@mailer.ru.com\r\n" +
-		"(((((((\r\n" +
+		"Subject: "+"(((((((\r\n" +
 		"\r\n" +
 		"Sorry but we could not find out friend(\r\n")
 	fmt.Println("KEK_3")
@@ -69,7 +69,7 @@ func SendLetter(letter *smtp2.Letter) error {
 	to := []string{letter.Receiver}
 	msg := strings.NewReader("To: " + letter.Receiver + "\r\n" +
 		"From: " + letter.Sender + "\r\n" +
-		letter.Theme + "\r\n" +
+		"Subject: "+letter.Theme + "\r\n" +
 		"\r\n" +
 		letter.Text + "\r\n")
 	flag:=false
