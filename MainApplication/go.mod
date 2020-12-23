@@ -13,7 +13,6 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/mailru/easyjson v0.7.6
 	github.com/microcosm-cc/bluemonday v1.0.4
-	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/onsi/ginkgo v1.14.2 // indirect
 	github.com/onsi/gomega v1.10.3 // indirect
 	github.com/prometheus/client_golang v1.8.0
@@ -31,11 +30,8 @@ require (
 	gitlab.com/slax0rr/go-pg-wrapper v0.0.0-20200404125312-fa845276fc02
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
 	golang.org/x/net v0.0.0-20201216054612-986b41b23924 // indirect
-	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/tools v0.0.0-20201218024724-ae774e9781d2 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/grpc v1.27.0
 	google.golang.org/protobuf v1.25.0
-	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 )

@@ -85,7 +85,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 			return
 		} else {
 			//если csrf не норм, то если это вход или регистрация, то надо отправить на них
-			if (r.URL.Path == "/session" || r.URL.Path == "/user") && r.Method == http.MethodPost {
+			if (r.URL.Path == "/api/session" || r.URL.Path == "/api/user") && r.Method == http.MethodPost {
 				if Error == nil {
 					csrf.Expires = time.Now().AddDate(0, 0, -1)
 					http.SetCookie(w, csrf)
