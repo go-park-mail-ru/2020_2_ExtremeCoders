@@ -119,7 +119,7 @@ func parseEmail(s string) server.Letter{
 		emTo += string(s[pos])
 	}
 
-	pos = strings.Index(s, text)
+	pos = strings.LastIndex(s, text)
 	pos += len(text)
 	for ; pos < len(s); pos++ {
 		emtext += string(s[pos])
