@@ -62,13 +62,16 @@ func (s *Session) Data(r io.Reader) error {
 	defer grcpMailService.Close()
 	mailManager :=server.NewLetterServiceClient(grcpMailService)
 	var mail string
+	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n\n\n")
 	if b, err := ioutil.ReadAll(r); err != nil {
 		return err
 	} else {
 		fmt.Println("Data:", string(b))
 		mail+=string(b)
 	}
+	fmt.Println("\n\n\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	ctx:=context.Background()
+
 	resp, _:=mailManager.SaveLetter(ctx, &server.Letter{})
 	if resp.Ok==false{
 		_ = send.SendAnswerCouldNotFindUser(getEmailFromMail(mail))
