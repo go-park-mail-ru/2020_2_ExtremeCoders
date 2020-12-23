@@ -39,7 +39,7 @@ func New(usecase UserUseCase.UserUseCase, fileManager fileService.FileServiceCli
 }
 
 func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\n\nserega pridumal\n\n\n")
+	fmt.Println("\n\n\nsession\n\n\n")
 	if r.Method == http.MethodPost {
 		de.SignIn(w, r)
 	}
@@ -49,6 +49,7 @@ func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\n\nsignup\n\n\n")
 	if r.Method != http.MethodPost {
 		return
 	}
@@ -77,6 +78,7 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\n\nsignin\n\n\n")
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -103,6 +105,7 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
+	fmt.Println("\n\n\ngetbyreqvest\n\n\n")
 	session, err := r.Cookie("session_id")
 	if err == http.ErrNoCookie {
 		fmt.Println("\n\n\n1.1\n\n\n")
@@ -123,6 +126,7 @@ func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Coo
 }
 
 func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\n\nprofile\n\n\n")
 	if r.Method == http.MethodPost {
 		de.Signup(w, r)
 		return
@@ -154,6 +158,7 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\n\nlogout\n\n\n")
 	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -177,6 +182,7 @@ func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
+	fmt.Println("\n\n\nloadfile\n\n\n")
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
 		return
@@ -197,6 +203,7 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 }
 
 func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\n\ngetavatar\n\n\n")
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
 		return
