@@ -217,6 +217,9 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "image")
 		w.Header().Set("Content-Length", strconv.Itoa(len(avatar.Content)))
 		fmt.Println("UPLOAD prelast AVATAR")
+		if avatar.Content==nil{
+			fmt.Println("HUI tebe a ne avatar")
+		}
 		if _, err := w.Write(avatar.Content); err != nil {
 			w.Write(errors.GetErrorUnexpectedAns())
 			return
