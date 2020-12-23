@@ -112,7 +112,7 @@ func (uc UseCase) GetLetterBy(what string, val string, email string) (error, []M
 	case "spam":
 		return uc.re.GetSpam(email)
 	case "box":
-		return uc.re.GetSpam(email)
+		return uc.re.GetBox(email)
 	}
 	return Repository.GetLetterByError, nil
 }
