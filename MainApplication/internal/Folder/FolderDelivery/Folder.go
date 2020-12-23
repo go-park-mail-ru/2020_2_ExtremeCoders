@@ -225,33 +225,18 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"), lid)
-	kind := true
-	textKind := "received"
-	if strings.Contains(r.URL.Path, "received") {
-		kind = true
-	} else {
-		textKind = "sended"
-		kind = false
-	}
-
-	er, user := context.GetUserFromCtx(r.Context())
-	if er != nil {
-		w.Write(GetFoldersError(er))
-		return
-	}
 	vars := mux.Vars(r)
 	folderName := vars["folderName"]
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind, Name: folderName})
-	fmt.Println("FOLDER ID", folderId)
-	if er != nil {
-		w.Write(GetFoldersError(er))
+	id, err:=strconv.Atoi(folderName)
+	if err != nil {
+		w.Write(GetFoldersError(err))
 		return
 	}
 
 	resp, err := d.lsClient.RemoveLetterFromDir(r.Context(), &mailProto.DirLid{
-		Did:  folderId.Id,
+		Did:  uint64(id),
 		Lid:  lid,
-		Type: kind,
+		Type: true,
 	})
 
 	w.Write(ProtoResponseAnswer(resp))
