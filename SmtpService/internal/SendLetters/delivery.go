@@ -8,6 +8,7 @@ import (
 	"github.com/emersion/go-smtp"
 	"net"
 	"strings"
+	"time"
 )
 
 type SMTPManager struct {
@@ -76,7 +77,7 @@ func SendLetter(letter *smtp2.Letter) error {
 		err := smtp.SendMail(servername, nil, letter.Sender, to, msg)
 		if err != nil {
 			fmt.Println("Repeat: ", err.Error())
-
+			time.Sleep(1*time.Second)
 		}else{
 			flag=true
 		}
