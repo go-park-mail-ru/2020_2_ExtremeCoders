@@ -201,22 +201,27 @@ func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == http.MethodGet {
+		fmt.Println("UPLOAD -1 AVATAR")
 		user, _, Err := de.GetUserByRequest(r)
 		if Err != 200 {
+			fmt.Println("UPLOAD 0 AVATAR")
 			CookieError(Err)
 			return
 		}
+		fmt.Println("UPLOAD 1 AVATAR")
 		avatar, err := de.FileManager.GetAvatar(r.Context(), &fileService.User{Email: user.Email})
+		fmt.Println("UPLOAD 2 AVATAR")
 		if err != nil {
 			fmt.Println("GET AVATAR ERROR ", err)
 		}
 		w.Header().Set("Content-Type", "image")
 		w.Header().Set("Content-Length", strconv.Itoa(len(avatar.Content)))
+		fmt.Println("UPLOAD prelast AVATAR")
 		if _, err := w.Write(avatar.Content); err != nil {
 			w.Write(errors.GetErrorUnexpectedAns())
 			return
 		}
-		fmt.Println("UPLOAD AVATAR")
+		fmt.Println("UPLOAD last AVATAR")
 		return
 	}
 }
