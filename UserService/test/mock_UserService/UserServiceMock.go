@@ -2,10 +2,10 @@
 // Source: ./user.pb.go
 
 // Package mock_userService is a generated GoMock package.
-package mock_UserProto
+package mock_userService
 
 import (
-	UserServise "Mailer/UserService/proto"
+	userService "Mailer/UserService/proto"
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"
@@ -36,14 +36,14 @@ func (m *MockUserServiceClient) EXPECT() *MockUserServiceClientMockRecorder {
 }
 
 // IsEmailExists mocks base method
-func (m *MockUserServiceClient) IsEmailExists(ctx context.Context, in *UserServise.Email, opts ...grpc.CallOption) (*UserServise.Nothing, error) {
+func (m *MockUserServiceClient) IsEmailExists(ctx context.Context, in *userService.Email, opts ...grpc.CallOption) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "IsEmailExists", varargs...)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -56,14 +56,14 @@ func (mr *MockUserServiceClientMockRecorder) IsEmailExists(ctx, in interface{}, 
 }
 
 // AddSession mocks base method
-func (m *MockUserServiceClient) AddSession(ctx context.Context, in *UserServise.AddSessionMsg, opts ...grpc.CallOption) (*UserServise.Nothing, error) {
+func (m *MockUserServiceClient) AddSession(ctx context.Context, in *userService.AddSessionMsg, opts ...grpc.CallOption) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "AddSession", varargs...)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -76,14 +76,14 @@ func (mr *MockUserServiceClientMockRecorder) AddSession(ctx, in interface{}, opt
 }
 
 // AddUser mocks base method
-func (m *MockUserServiceClient) AddUser(ctx context.Context, in *UserServise.User, opts ...grpc.CallOption) (*UserServise.Nothing, error) {
+func (m *MockUserServiceClient) AddUser(ctx context.Context, in *userService.User, opts ...grpc.CallOption) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "AddUser", varargs...)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -96,14 +96,14 @@ func (mr *MockUserServiceClientMockRecorder) AddUser(ctx, in interface{}, opts .
 }
 
 // GenerateSID mocks base method
-func (m *MockUserServiceClient) GenerateSID(ctx context.Context, in *UserServise.Nothing, opts ...grpc.CallOption) (*UserServise.Sid, error) {
+func (m *MockUserServiceClient) GenerateSID(ctx context.Context, in *userService.Nothing, opts ...grpc.CallOption) (*userService.Sid, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GenerateSID", varargs...)
-	ret0, _ := ret[0].(*UserServise.Sid)
+	ret0, _ := ret[0].(*userService.Sid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -116,14 +116,14 @@ func (mr *MockUserServiceClientMockRecorder) GenerateSID(ctx, in interface{}, op
 }
 
 // GenerateUID mocks base method
-func (m *MockUserServiceClient) GenerateUID(ctx context.Context, in *UserServise.Nothing, opts ...grpc.CallOption) (*UserServise.Uid, error) {
+func (m *MockUserServiceClient) GenerateUID(ctx context.Context, in *userService.Nothing, opts ...grpc.CallOption) (*userService.Uid, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GenerateUID", varargs...)
-	ret0, _ := ret[0].(*UserServise.Uid)
+	ret0, _ := ret[0].(*userService.Uid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -136,14 +136,14 @@ func (mr *MockUserServiceClientMockRecorder) GenerateUID(ctx, in interface{}, op
 }
 
 // GetUserByEmail mocks base method
-func (m *MockUserServiceClient) GetUserByEmail(ctx context.Context, in *UserServise.Email, opts ...grpc.CallOption) (*UserServise.User, error) {
+func (m *MockUserServiceClient) GetUserByEmail(ctx context.Context, in *userService.Email, opts ...grpc.CallOption) (*userService.User, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetUserByEmail", varargs...)
-	ret0, _ := ret[0].(*UserServise.User)
+	ret0, _ := ret[0].(*userService.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -156,14 +156,14 @@ func (mr *MockUserServiceClientMockRecorder) GetUserByEmail(ctx, in interface{},
 }
 
 // GetUserByUID mocks base method
-func (m *MockUserServiceClient) GetUserByUID(ctx context.Context, in *UserServise.Uid, opts ...grpc.CallOption) (*UserServise.User, error) {
+func (m *MockUserServiceClient) GetUserByUID(ctx context.Context, in *userService.Uid, opts ...grpc.CallOption) (*userService.User, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetUserByUID", varargs...)
-	ret0, _ := ret[0].(*UserServise.User)
+	ret0, _ := ret[0].(*userService.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -176,14 +176,14 @@ func (mr *MockUserServiceClientMockRecorder) GetUserByUID(ctx, in interface{}, o
 }
 
 // IsOkSession mocks base method
-func (m *MockUserServiceClient) IsOkSession(ctx context.Context, in *UserServise.Sid, opts ...grpc.CallOption) (*UserServise.Uid, error) {
+func (m *MockUserServiceClient) IsOkSession(ctx context.Context, in *userService.Sid, opts ...grpc.CallOption) (*userService.Uid, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "IsOkSession", varargs...)
-	ret0, _ := ret[0].(*UserServise.Uid)
+	ret0, _ := ret[0].(*userService.Uid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -196,14 +196,14 @@ func (mr *MockUserServiceClientMockRecorder) IsOkSession(ctx, in interface{}, op
 }
 
 // UpdateProfile mocks base method
-func (m *MockUserServiceClient) UpdateProfile(ctx context.Context, in *UserServise.UpdateProfileMsg, opts ...grpc.CallOption) (*UserServise.Nothing, error) {
+func (m *MockUserServiceClient) UpdateProfile(ctx context.Context, in *userService.UpdateProfileMsg, opts ...grpc.CallOption) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "UpdateProfile", varargs...)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -216,14 +216,14 @@ func (mr *MockUserServiceClientMockRecorder) UpdateProfile(ctx, in interface{}, 
 }
 
 // RemoveSession mocks base method
-func (m *MockUserServiceClient) RemoveSession(ctx context.Context, in *UserServise.Sid, opts ...grpc.CallOption) (*UserServise.Uid, error) {
+func (m *MockUserServiceClient) RemoveSession(ctx context.Context, in *userService.Sid, opts ...grpc.CallOption) (*userService.Uid, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "RemoveSession", varargs...)
-	ret0, _ := ret[0].(*UserServise.Uid)
+	ret0, _ := ret[0].(*userService.Uid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -236,14 +236,14 @@ func (mr *MockUserServiceClientMockRecorder) RemoveSession(ctx, in interface{}, 
 }
 
 // GetSessionByUID mocks base method
-func (m *MockUserServiceClient) GetSessionByUID(ctx context.Context, in *UserServise.Uid, opts ...grpc.CallOption) (*UserServise.Sid, error) {
+func (m *MockUserServiceClient) GetSessionByUID(ctx context.Context, in *userService.Uid, opts ...grpc.CallOption) (*userService.Sid, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetSessionByUID", varargs...)
-	ret0, _ := ret[0].(*UserServise.Sid)
+	ret0, _ := ret[0].(*userService.Sid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -256,14 +256,14 @@ func (mr *MockUserServiceClientMockRecorder) GetSessionByUID(ctx, in interface{}
 }
 
 // GetFolderId mocks base method
-func (m *MockUserServiceClient) GetFolderId(ctx context.Context, in *UserServise.Folder, opts ...grpc.CallOption) (*UserServise.FolderId, error) {
+func (m *MockUserServiceClient) GetFolderId(ctx context.Context, in *userService.Folder, opts ...grpc.CallOption) (*userService.FolderId, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetFolderId", varargs...)
-	ret0, _ := ret[0].(*UserServise.FolderId)
+	ret0, _ := ret[0].(*userService.FolderId)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -276,14 +276,14 @@ func (mr *MockUserServiceClientMockRecorder) GetFolderId(ctx, in interface{}, op
 }
 
 // CreateFolder mocks base method
-func (m *MockUserServiceClient) CreateFolder(ctx context.Context, in *UserServise.Folder, opts ...grpc.CallOption) (*UserServise.Nothing, error) {
+func (m *MockUserServiceClient) CreateFolder(ctx context.Context, in *userService.Folder, opts ...grpc.CallOption) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "CreateFolder", varargs...)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -296,14 +296,14 @@ func (mr *MockUserServiceClientMockRecorder) CreateFolder(ctx, in interface{}, o
 }
 
 // RenameFolder mocks base method
-func (m *MockUserServiceClient) RenameFolder(ctx context.Context, in *UserServise.RenameFolderMsg, opts ...grpc.CallOption) (*UserServise.Nothing, error) {
+func (m *MockUserServiceClient) RenameFolder(ctx context.Context, in *userService.RenameFolderMsg, opts ...grpc.CallOption) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "RenameFolder", varargs...)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -316,14 +316,14 @@ func (mr *MockUserServiceClientMockRecorder) RenameFolder(ctx, in interface{}, o
 }
 
 // RemoveFolder mocks base method
-func (m *MockUserServiceClient) RemoveFolder(ctx context.Context, in *UserServise.Folder, opts ...grpc.CallOption) (*UserServise.FolderId, error) {
+func (m *MockUserServiceClient) RemoveFolder(ctx context.Context, in *userService.Folder, opts ...grpc.CallOption) (*userService.FolderId, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "RemoveFolder", varargs...)
-	ret0, _ := ret[0].(*UserServise.FolderId)
+	ret0, _ := ret[0].(*userService.FolderId)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -336,14 +336,14 @@ func (mr *MockUserServiceClientMockRecorder) RemoveFolder(ctx, in interface{}, o
 }
 
 // GetFoldersList mocks base method
-func (m *MockUserServiceClient) GetFoldersList(ctx context.Context, in *UserServise.FolderUidType, opts ...grpc.CallOption) (*UserServise.FolderList, error) {
+func (m *MockUserServiceClient) GetFoldersList(ctx context.Context, in *userService.FolderUidType, opts ...grpc.CallOption) (*userService.FolderList, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "GetFoldersList", varargs...)
-	ret0, _ := ret[0].(*UserServise.FolderList)
+	ret0, _ := ret[0].(*userService.FolderList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -379,10 +379,10 @@ func (m *MockUserServiceServer) EXPECT() *MockUserServiceServerMockRecorder {
 }
 
 // IsEmailExists mocks base method
-func (m *MockUserServiceServer) IsEmailExists(arg0 context.Context, arg1 *UserServise.Email) (*UserServise.Nothing, error) {
+func (m *MockUserServiceServer) IsEmailExists(arg0 context.Context, arg1 *userService.Email) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IsEmailExists", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -394,10 +394,10 @@ func (mr *MockUserServiceServerMockRecorder) IsEmailExists(arg0, arg1 interface{
 }
 
 // AddSession mocks base method
-func (m *MockUserServiceServer) AddSession(arg0 context.Context, arg1 *UserServise.AddSessionMsg) (*UserServise.Nothing, error) {
+func (m *MockUserServiceServer) AddSession(arg0 context.Context, arg1 *userService.AddSessionMsg) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddSession", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -409,10 +409,10 @@ func (mr *MockUserServiceServerMockRecorder) AddSession(arg0, arg1 interface{}) 
 }
 
 // AddUser mocks base method
-func (m *MockUserServiceServer) AddUser(arg0 context.Context, arg1 *UserServise.User) (*UserServise.Nothing, error) {
+func (m *MockUserServiceServer) AddUser(arg0 context.Context, arg1 *userService.User) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddUser", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -424,10 +424,10 @@ func (mr *MockUserServiceServerMockRecorder) AddUser(arg0, arg1 interface{}) *go
 }
 
 // GenerateSID mocks base method
-func (m *MockUserServiceServer) GenerateSID(arg0 context.Context, arg1 *UserServise.Nothing) (*UserServise.Sid, error) {
+func (m *MockUserServiceServer) GenerateSID(arg0 context.Context, arg1 *userService.Nothing) (*userService.Sid, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GenerateSID", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Sid)
+	ret0, _ := ret[0].(*userService.Sid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -439,10 +439,10 @@ func (mr *MockUserServiceServerMockRecorder) GenerateSID(arg0, arg1 interface{})
 }
 
 // GenerateUID mocks base method
-func (m *MockUserServiceServer) GenerateUID(arg0 context.Context, arg1 *UserServise.Nothing) (*UserServise.Uid, error) {
+func (m *MockUserServiceServer) GenerateUID(arg0 context.Context, arg1 *userService.Nothing) (*userService.Uid, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GenerateUID", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Uid)
+	ret0, _ := ret[0].(*userService.Uid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -454,10 +454,10 @@ func (mr *MockUserServiceServerMockRecorder) GenerateUID(arg0, arg1 interface{})
 }
 
 // GetUserByEmail mocks base method
-func (m *MockUserServiceServer) GetUserByEmail(arg0 context.Context, arg1 *UserServise.Email) (*UserServise.User, error) {
+func (m *MockUserServiceServer) GetUserByEmail(arg0 context.Context, arg1 *userService.Email) (*userService.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserByEmail", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.User)
+	ret0, _ := ret[0].(*userService.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -469,10 +469,10 @@ func (mr *MockUserServiceServerMockRecorder) GetUserByEmail(arg0, arg1 interface
 }
 
 // GetUserByUID mocks base method
-func (m *MockUserServiceServer) GetUserByUID(arg0 context.Context, arg1 *UserServise.Uid) (*UserServise.User, error) {
+func (m *MockUserServiceServer) GetUserByUID(arg0 context.Context, arg1 *userService.Uid) (*userService.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserByUID", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.User)
+	ret0, _ := ret[0].(*userService.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -484,10 +484,10 @@ func (mr *MockUserServiceServerMockRecorder) GetUserByUID(arg0, arg1 interface{}
 }
 
 // IsOkSession mocks base method
-func (m *MockUserServiceServer) IsOkSession(arg0 context.Context, arg1 *UserServise.Sid) (*UserServise.Uid, error) {
+func (m *MockUserServiceServer) IsOkSession(arg0 context.Context, arg1 *userService.Sid) (*userService.Uid, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IsOkSession", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Uid)
+	ret0, _ := ret[0].(*userService.Uid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -499,10 +499,10 @@ func (mr *MockUserServiceServerMockRecorder) IsOkSession(arg0, arg1 interface{})
 }
 
 // UpdateProfile mocks base method
-func (m *MockUserServiceServer) UpdateProfile(arg0 context.Context, arg1 *UserServise.UpdateProfileMsg) (*UserServise.Nothing, error) {
+func (m *MockUserServiceServer) UpdateProfile(arg0 context.Context, arg1 *userService.UpdateProfileMsg) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateProfile", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -514,10 +514,10 @@ func (mr *MockUserServiceServerMockRecorder) UpdateProfile(arg0, arg1 interface{
 }
 
 // RemoveSession mocks base method
-func (m *MockUserServiceServer) RemoveSession(arg0 context.Context, arg1 *UserServise.Sid) (*UserServise.Uid, error) {
+func (m *MockUserServiceServer) RemoveSession(arg0 context.Context, arg1 *userService.Sid) (*userService.Uid, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveSession", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Uid)
+	ret0, _ := ret[0].(*userService.Uid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -529,10 +529,10 @@ func (mr *MockUserServiceServerMockRecorder) RemoveSession(arg0, arg1 interface{
 }
 
 // GetSessionByUID mocks base method
-func (m *MockUserServiceServer) GetSessionByUID(arg0 context.Context, arg1 *UserServise.Uid) (*UserServise.Sid, error) {
+func (m *MockUserServiceServer) GetSessionByUID(arg0 context.Context, arg1 *userService.Uid) (*userService.Sid, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSessionByUID", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Sid)
+	ret0, _ := ret[0].(*userService.Sid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -544,10 +544,10 @@ func (mr *MockUserServiceServerMockRecorder) GetSessionByUID(arg0, arg1 interfac
 }
 
 // GetFolderId mocks base method
-func (m *MockUserServiceServer) GetFolderId(arg0 context.Context, arg1 *UserServise.Folder) (*UserServise.FolderId, error) {
+func (m *MockUserServiceServer) GetFolderId(arg0 context.Context, arg1 *userService.Folder) (*userService.FolderId, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFolderId", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.FolderId)
+	ret0, _ := ret[0].(*userService.FolderId)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -559,10 +559,10 @@ func (mr *MockUserServiceServerMockRecorder) GetFolderId(arg0, arg1 interface{})
 }
 
 // CreateFolder mocks base method
-func (m *MockUserServiceServer) CreateFolder(arg0 context.Context, arg1 *UserServise.Folder) (*UserServise.Nothing, error) {
+func (m *MockUserServiceServer) CreateFolder(arg0 context.Context, arg1 *userService.Folder) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateFolder", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -574,10 +574,10 @@ func (mr *MockUserServiceServerMockRecorder) CreateFolder(arg0, arg1 interface{}
 }
 
 // RenameFolder mocks base method
-func (m *MockUserServiceServer) RenameFolder(arg0 context.Context, arg1 *UserServise.RenameFolderMsg) (*UserServise.Nothing, error) {
+func (m *MockUserServiceServer) RenameFolder(arg0 context.Context, arg1 *userService.RenameFolderMsg) (*userService.Nothing, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RenameFolder", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.Nothing)
+	ret0, _ := ret[0].(*userService.Nothing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -589,10 +589,10 @@ func (mr *MockUserServiceServerMockRecorder) RenameFolder(arg0, arg1 interface{}
 }
 
 // RemoveFolder mocks base method
-func (m *MockUserServiceServer) RemoveFolder(arg0 context.Context, arg1 *UserServise.Folder) (*UserServise.FolderId, error) {
+func (m *MockUserServiceServer) RemoveFolder(arg0 context.Context, arg1 *userService.Folder) (*userService.FolderId, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveFolder", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.FolderId)
+	ret0, _ := ret[0].(*userService.FolderId)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -604,10 +604,10 @@ func (mr *MockUserServiceServerMockRecorder) RemoveFolder(arg0, arg1 interface{}
 }
 
 // GetFoldersList mocks base method
-func (m *MockUserServiceServer) GetFoldersList(arg0 context.Context, arg1 *UserServise.FolderUidType) (*UserServise.FolderList, error) {
+func (m *MockUserServiceServer) GetFoldersList(arg0 context.Context, arg1 *userService.FolderUidType) (*userService.FolderList, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFoldersList", arg0, arg1)
-	ret0, _ := ret[0].(*UserServise.FolderList)
+	ret0, _ := ret[0].(*userService.FolderList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

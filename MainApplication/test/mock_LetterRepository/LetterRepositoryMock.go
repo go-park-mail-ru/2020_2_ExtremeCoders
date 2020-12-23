@@ -151,16 +151,44 @@ func (mr *MockLetterDBMockRecorder) FindSimilar(arg0, arg1 interface{}) *gomock.
 }
 
 // GetLetterBy mocks base method
-func (m *MockLetterDB) GetLetterBy(arg0, arg1 string) (error, []LetterModel.Letter) {
+func (m *MockLetterDB) GetLetterBy(arg0, arg1, arg2 string) (error, []LetterModel.Letter) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLetterBy", arg0, arg1)
+	ret := m.ctrl.Call(m, "GetLetterBy", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	ret1, _ := ret[1].([]LetterModel.Letter)
 	return ret0, ret1
 }
 
 // GetLetterBy indicates an expected call of GetLetterBy
-func (mr *MockLetterDBMockRecorder) GetLetterBy(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockLetterDBMockRecorder) GetLetterBy(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterBy", reflect.TypeOf((*MockLetterDB)(nil).GetLetterBy), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterBy", reflect.TypeOf((*MockLetterDB)(nil).GetLetterBy), arg0, arg1, arg2)
+}
+
+// SetLetterInSpam mocks base method
+func (m *MockLetterDB) SetLetterInSpam(arg0 uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetLetterInSpam", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetLetterInSpam indicates an expected call of SetLetterInSpam
+func (mr *MockLetterDBMockRecorder) SetLetterInSpam(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetLetterInSpam", reflect.TypeOf((*MockLetterDB)(nil).SetLetterInSpam), arg0)
+}
+
+// SetLetterInBox mocks base method
+func (m *MockLetterDB) SetLetterInBox(arg0 uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetLetterInBox", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetLetterInBox indicates an expected call of SetLetterInBox
+func (mr *MockLetterDBMockRecorder) SetLetterInBox(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetLetterInBox", reflect.TypeOf((*MockLetterDB)(nil).SetLetterInBox), arg0)
 }

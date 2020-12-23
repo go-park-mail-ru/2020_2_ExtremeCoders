@@ -16,6 +16,8 @@ var GetByLidError = errors.New("Could not get letter by lid!")
 var SetLetterWatchedError = errors.New("Could not set letter watched!")
 var DeleteLetterError = errors.New("Could not delete letter!")
 var GetLetterByError = errors.New("Could not get letter by!")
+var SetSpamError = errors.New("Could not set letter to spam!")
+var SetBoxError = errors.New("Could not set letter to box!")
 
 type LetterDB interface {
 	SaveMail(Model.Letter) error
@@ -39,8 +41,14 @@ type LetterDB interface {
 	FindTheme(string, string) ([]string, error)
 	FindText(string, string) ([]string, error)
 
-	GetLetterByTheme(string) (error, []Model.Letter)
-	GetLetterByText(string) (error, []Model.Letter)
-	GetLetterBySender(string) (error, []Model.Letter)
-	GetLetterByReceiver(string) (error, []Model.Letter)
+	GetLetterByTheme(string, string) (error, []Model.Letter)
+	GetLetterByText(string, string) (error, []Model.Letter)
+	GetLetterBySender(string, string) (error, []Model.Letter)
+	GetLetterByReceiver(string, string) (error, []Model.Letter)
+
+	GetSpam(email string) (error, []Model.Letter)
+	GetBox(email string) (error, []Model.Letter)
+
+	SetItSpam(uint64) error
+	SetItBox(uint64) error
 }

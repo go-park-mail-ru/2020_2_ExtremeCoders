@@ -14,6 +14,9 @@ func ModelToProto(letter Model.Letter) pb.Letter {
 		Theme:     letter.Theme,
 		Text:      letter.Text,
 		IsWatched: letter.IsWatched,
+		Spam: letter.Spam,
+		Box: letter.Box,
+		DirectoryRecv: int64(letter.DirectoryRecv),
 	}
 }
 
@@ -29,6 +32,8 @@ func ModelToProtoList(letters *[]Model.Letter) []*pb.Letter {
 			Text:      letter.Text,
 			IsWatched: letter.IsWatched,
 			DirectoryRecv: int64(letter.DirectoryRecv),
+			Spam: letter.Spam,
+			Box: letter.Box,
 		}
 		list = append(list, &pbLetter)
 	}
@@ -44,6 +49,9 @@ func ProtoToModel(letter *pb.Letter) Model.Letter {
 		Theme:     letter.Theme,
 		Text:      letter.Text,
 		IsWatched: letter.IsWatched,
+		Spam: letter.Spam,
+		Box: letter.Box,
+		DirectoryRecv: uint64(letter.DirectoryRecv),
 	}
 	return Letter
 }

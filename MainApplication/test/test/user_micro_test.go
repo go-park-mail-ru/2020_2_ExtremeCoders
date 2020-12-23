@@ -3,7 +3,7 @@ package test
 import (
 	"Mailer/MainApplication/internal/User/UserModel"
 	"Mailer/MainApplication/internal/User/UserRepository/UserMicroservice"
-	mock "Mailer/MainApplication/test/mock_UserProto"
+	mock "Mailer/UserService/test/mock_UserService"
 	userService "Mailer/UserService/proto"
 	"context"
 	"github.com/golang/mock/gomock"

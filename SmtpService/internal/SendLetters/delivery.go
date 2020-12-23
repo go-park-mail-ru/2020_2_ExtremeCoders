@@ -1,103 +1,29 @@
 package SendLetters
 
 import (
-	"crypto/tls"
+	pb "Mailer/SmtpService/proto/smtp"
+	smtp2 "Mailer/SmtpService/proto/smtp"
+	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"
-	"log"
 	"net"
-	"net/mail"
-	baseSMTP "net/smtp"
-	pb "Mailer/SmtpService/proto"
 	"strings"
 )
 
-func sendAnswer(email string) {
-	if email == "bot@mailer.ru.com" {
-		return
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("Recovered in getanswer", r)
-		}
-	}()
-	fmt.Println("HUI_1")
-	from := mail.Address{Address: "bot@mailer.ru.com"}
-	to := mail.Address{Address: email}
-	subj := "Hello"
-	body := "We are happy to see you in our alfa smtp-test!"
-
-	// Setup headers
-	headers := make(map[string]string)
-	headers["From"] = from.String()
-	headers["To"] = to.String()
-	headers["Subject"] = subj
-	fmt.Println("HUI_2")
-	// Setup message
-	message := ""
-	for k, v := range headers {
-		message += fmt.Sprintf("%s: %s\r\n", k, v)
-	}
-	message += "\r\n" + body
-
-	// Connect to the SMTP Server
-	servername := getHost(email) + ":25"
-
-	host, _, _ := net.SplitHostPort(servername)
-	fmt.Println("HUI_3")
-	auth := baseSMTP.PlainAuth("", from.String(), "keklol123", host)
-	fmt.Println("HUI_4")
-	// TLS config
-	tlsconfig := &tls.Config{
-		InsecureSkipVerify: true,
-		ServerName:         host,
-	}
-
-	conn, err := tls.Dial("tcp", servername, tlsconfig)
-	if err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_5")
-	c, err := baseSMTP.NewClient(conn, host)
-	if err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_6")
-	// Auth
-	if err = c.Auth(auth); err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_7")
-	// To && From
-	if err = c.Mail(from.Address); err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_8")
-	if err = c.Rcpt(to.Address); err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_9")
-	// Data
-	w, err := c.Data()
-	if err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_10")
-	_, err = w.Write([]byte(message))
-	if err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_11")
-	err = w.Close()
-	if err != nil {
-		log.Panic(err)
-	}
-	fmt.Println("HUI_12")
-	_ = c.Quit()
-	fmt.Println("Sent answer to: ", email)
+type FileManager struct {
 }
 
-func SendAnswer2(email string) error {
+func (fm *FileManager) SendLetter(ctx context.Context, mail *pb.Letter) (*pb.Response, error) {
+	err:=SendLetter(mail)
+	resp:=pb.Response{Ok: true, Description: "ok"}
+	if err!=nil{
+		resp.Description=err.Error()
+		resp.Ok=false
+	}
+	return &resp, nil
+}
+
+func SendAnswerCouldNotFindUser(email string) error {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in getanswer2", r)
@@ -113,9 +39,9 @@ func SendAnswer2(email string) error {
 	to := []string{email}
 	msg := strings.NewReader("To: " + email + "\r\n" +
 		"From: " + "bot@mailer.ru.com\r\n" +
-		"Subject: Hello SMTP!!!\r\n" +
+		"(((((((\r\n" +
 		"\r\n" +
-		"We are happy to see you in our alfa smtp-test!\r\n")
+		"Sorry but we could not find out friend(\r\n")
 	fmt.Println("KEK_3")
 	err := smtp.SendMail(servername, nil, "bot@mailer.ru.com", to, msg)
 	fmt.Println("KEK_4")
@@ -127,7 +53,7 @@ func SendAnswer2(email string) error {
 	return nil
 }
 
-func SendLetter(letter *pb.Letter) error {
+func SendLetter(letter *smtp2.Letter) error {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in getanswer2", r)

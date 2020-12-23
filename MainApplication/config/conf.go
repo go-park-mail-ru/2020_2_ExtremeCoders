@@ -6,7 +6,8 @@ const (
 	DbUser = "postgres"
 	//DbUser = "mark"
 	//DbPassword   = "123456yhn"
-	DbPassword = "1538"
+	//DbPassword = "1538"
+	DbPassword = "987654321"
 	//DbPassword   = "mark"
 	DbDB = "maila"
 	//DbDB         = "mail_db"
@@ -16,9 +17,11 @@ const (
 )
 
 var AllowedOriginsCORS = []string{"http://localhost:80", "http://127.0.0.1:80",
-	"http://localhost", "http://127.0.0.1",
+        "http://localhost", "http://127.0.0.1",
 	"http://localhost:3000", "http://127.0.0.1:3000",
-	"http://95.163.209.195:3000"}
+	"http://95.163.209.195:3000", "http://95.163.209.195",
+	"http://95.163.209.195:3000", "http://95.163.209.195:80",
+	"http://95.163.209.195", "https://95.163.209.195", "https://mailer.ru.com"}
 var AllowedHeadersCORS = []string{"Version", "Authorization", "Content-Type", "csrf_token"}
 var AllowedMethodsCORS = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 

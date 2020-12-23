@@ -3,10 +3,12 @@ package test
 import (
 	"Mailer/FileService/internal/File/Repository/FileSystem"
 	proto "Mailer/FileService/proto"
+	"os"
 	"testing"
 )
 
 func TestGetAvatarRepo(t *testing.T) {
+	os.Chdir("..")
 	fs := FileSystem.New()
 	_, err := fs.GetAvatar(&proto.User{})
 	if err != nil {
@@ -15,6 +17,7 @@ func TestGetAvatarRepo(t *testing.T) {
 }
 
 func TestGetFilesRepo(t *testing.T) {
+	os.Chdir("..")
 	fs := FileSystem.New()
 	_, err := fs.GetFiles(&proto.LetterId{})
 	if err != nil {
@@ -23,6 +26,7 @@ func TestGetFilesRepo(t *testing.T) {
 }
 
 func TestGetDefaultAvatarRepo(t *testing.T) {
+	os.Chdir("..")
 	fs := FileSystem.New()
 	_, err := fs.GetDefaultAvatar()
 	if err != nil {
@@ -31,6 +35,7 @@ func TestGetDefaultAvatarRepo(t *testing.T) {
 }
 
 func TestSaveAvatarRepo(t *testing.T) {
+	os.Chdir("../..")
 	fs := FileSystem.New()
 	err := fs.SaveAvatar(&proto.Avatar{})
 	if err == nil {
@@ -44,6 +49,7 @@ func TestSaveAvatarRepo(t *testing.T) {
 }
 
 func TestSaveFilesRepo(t *testing.T) {
+	os.Chdir("..")
 	fs := FileSystem.New()
 	err := fs.SaveFiles(&proto.Files{})
 	if err == nil {

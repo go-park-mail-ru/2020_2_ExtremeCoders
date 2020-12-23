@@ -4,7 +4,7 @@ import (
 	letterService "Mailer/MailService/proto"
 	Model "Mailer/MainApplication/internal/Letter/LetterModel"
 	"Mailer/MainApplication/internal/Letter/LetterRepository/LetterService"
-	mock "Mailer/MainApplication/test/mock_MailServiceProto"
+	mock "Mailer/MailService/test/mock_MailServiceProto"
 	"context"
 	"github.com/golang/mock/gomock"
 	"testing"

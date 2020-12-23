@@ -194,16 +194,44 @@ func (mr *MockInterfaceMockRecorder) FindSimilar(similar, email interface{}) *go
 }
 
 // GetLetterBy mocks base method
-func (m *MockInterface) GetLetterBy(what, val string) (error, []Model.Letter) {
+func (m *MockInterface) GetLetterBy(what, val, email string) (error, []Model.Letter) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLetterBy", what, val)
+	ret := m.ctrl.Call(m, "GetLetterBy", what, val, email)
 	ret0, _ := ret[0].(error)
 	ret1, _ := ret[1].([]Model.Letter)
 	return ret0, ret1
 }
 
 // GetLetterBy indicates an expected call of GetLetterBy
-func (mr *MockInterfaceMockRecorder) GetLetterBy(what, val interface{}) *gomock.Call {
+func (mr *MockInterfaceMockRecorder) GetLetterBy(what, val, email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterBy", reflect.TypeOf((*MockInterface)(nil).GetLetterBy), what, val)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLetterBy", reflect.TypeOf((*MockInterface)(nil).GetLetterBy), what, val, email)
+}
+
+// SetLetterInSpam mocks base method
+func (m *MockInterface) SetLetterInSpam(lid uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetLetterInSpam", lid)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetLetterInSpam indicates an expected call of SetLetterInSpam
+func (mr *MockInterfaceMockRecorder) SetLetterInSpam(lid interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetLetterInSpam", reflect.TypeOf((*MockInterface)(nil).SetLetterInSpam), lid)
+}
+
+// SetLetterInBox mocks base method
+func (m *MockInterface) SetLetterInBox(lid uint64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetLetterInBox", lid)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetLetterInBox indicates an expected call of SetLetterInBox
+func (mr *MockInterfaceMockRecorder) SetLetterInBox(lid interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetLetterInBox", reflect.TypeOf((*MockInterface)(nil).SetLetterInBox), lid)
 }

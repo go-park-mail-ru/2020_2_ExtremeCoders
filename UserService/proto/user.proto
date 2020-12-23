@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 // protoc --go_out=plugins=grpc:. *.proto
+//go:generate mockgen -source=./user.pb.go -destination=../test/mock_UserService/UserServiceMock.go
+
 package userService;
 
 message Session{
@@ -90,17 +92,4 @@ service UserService{
   rpc RemoveFolder(Folder) returns(FolderId);
   rpc GetFoldersList(FolderUidType) returns(FolderList);
 }
-
-
-//    IsEmailExists(string) error
-//    AddSession(string, uint64, *UserModel.User) error
-//    AddUser(*UserModel.User) error
-//    GenerateSID() ([]rune, error)
-//    GenerateUID() (uint64, error)
-//    GetUserByEmail(string) (*UserModel.User, error)
-//    GetUserByUID(uint64) (*UserModel.User, error)
-//    IsOkSession(string) (uint64, error)
-//    UpdateProfile(UserModel.User, string) error
-//    RemoveSession(string) (error, uint64)
-//    GetSessionByUID(uint64) (string, error)
 

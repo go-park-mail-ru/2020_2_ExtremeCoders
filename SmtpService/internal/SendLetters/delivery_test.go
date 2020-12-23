@@ -1,25 +1,25 @@
 package SendLetters
 
 import (
+	"Mailer/SmtpService/proto/smtp"
 	"github.com/stretchr/testify/assert"
-	pb "Mailer/SmtpService/proto"
 	"testing"
 )
 
 func TestSendAnswer(t *testing.T) {
-	email := "roofinda@gmail.com"
-	sendAnswer(email)
+	//email := "roofinda@gmail.com"
+	//sendAnswer(email)
 }
 
 func TestSendAnswer2(t *testing.T) {
 	email := "roofinda@gmail.com"
-	err := SendAnswer2(email)
+	err := SendAnswerCouldNotFindUser(email)
 	assert.NotNil(t, err)
-	//assertPanic1(t, SendAnswer2, email)
+	//assertPanic1(t, SendAnswerCouldNotFindUser, email)
 }
 
 func TestSendLetter(t *testing.T) {
-	pbLetter := &pb.Letter{
+	pbLetter := &smtp.Letter{
 		Lid: 1,
 		Sender: "Sender",
 		Receiver: "Reciever",

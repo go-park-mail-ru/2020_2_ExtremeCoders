@@ -24,7 +24,10 @@ type Interface interface {
 	RemoveDir(uint64, bool) error
 	RemoveLetter(uint64) error
 	FindSimilar(similar string, email string) SearchResult
-	GetLetterBy(what string, val string) (error, []Model.Letter)
+	GetLetterBy(what string, val string, email string) (error, []Model.Letter)
+
+	SetLetterInSpam(lid uint64) error
+	SetLetterInBox(lid uint64) error
 }
 
 
@@ -97,16 +100,28 @@ func (uc UseCase) FindSimilar(similar string, email string) SearchResult {
 	return res
 }
 
-func (uc UseCase) GetLetterBy(what string, val string) (error, []Model.Letter){
+func (uc UseCase) GetLetterBy(what string, val string, email string) (error, []Model.Letter){
 	switch what {
 	case "sender":
-		return uc.re.GetLetterBySender(val)
+		return uc.re.GetLetterBySender(val, email)
 	case "receiver":
-		return uc.re.GetLetterByReceiver(val)
+		return uc.re.GetLetterByReceiver(val, email)
 	case "theme":
-		return uc.re.GetLetterByTheme(val)
+		return uc.re.GetLetterByTheme(val, email)
 	case "text":
-		return uc.re.GetLetterByText(val)
+		return uc.re.GetLetterByText(val, email)
+	case "spam":
+		return uc.re.GetSpam(email)
+	case "box":
+		return uc.re.GetBox(email)
 	}
 	return Repository.GetLetterByError, nil
+}
+
+func (uc UseCase) SetLetterInSpam(lid uint64) error{
+	return uc.re.SetItSpam(lid)
+}
+
+func (uc UseCase) SetLetterInBox(lid uint64) error{
+	return uc.re.SetItBox(lid)
 }

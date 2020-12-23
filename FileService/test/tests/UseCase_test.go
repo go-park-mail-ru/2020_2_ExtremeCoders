@@ -15,7 +15,7 @@ func TestGetAvatar(t *testing.T) {
 	user := &proto.User{Email: ""}
 	mockRepo := mock.NewMockInterface(ctrl)
 	mockRepo.EXPECT().GetAvatar(user).Return(&proto.Avatar{}, errors.New("sdf"))
-	mockRepo.EXPECT().GetDefaultAvatar().Times(1)
+	//mockRepo.EXPECT().GetDefaultAvatar().Times(1)
 	uc := UseCase.New(mockRepo)
 	uc.GetAvatar(user)
 }

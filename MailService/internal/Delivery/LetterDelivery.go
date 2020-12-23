@@ -136,7 +136,7 @@ func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar) (*pb.Si
 }
 
 func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy) (*pb.LetterListResponse, error) {
-	err, letters := ld.uc.GetLetterBy(GetBy.What, GetBy.Value)
+	err, letters := ld.uc.GetLetterBy(GetBy.What, GetBy.Value, GetBy.Email)
 	var pbLetter pb.LetterListResponse
 	var pbRes pb.Response
 	pbLetter.Result=&pbRes
@@ -151,4 +151,30 @@ func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy) (*pb.Letter
 	}
 	pbLetter.Letter = convert.ModelToProtoList(&letters)
 	return &pbLetter, nil
+}
+
+func (ld Delivery) SetLetterInSpam(ctx context.Context, Lid *pb.Lid) (*pb.Response, error) {
+	err:=ld.uc.SetLetterInSpam(Lid.Lid)
+	var pbRes =pb.Response{
+		Ok: true,
+		Description: "ok",
+	}
+	if err!=nil{
+		pbRes.Description=err.Error()
+		pbRes.Ok=false
+	}
+	return &pbRes, nil
+}
+
+func (ld Delivery) SetLetterInBox(ctx context.Context, Lid *pb.Lid) (*pb.Response, error) {
+	err:=ld.uc.SetLetterInBox(Lid.Lid)
+	var pbRes =pb.Response{
+		Ok: true,
+		Description: "ok",
+	}
+	if err!=nil{
+		pbRes.Description=err.Error()
+		pbRes.Ok=false
+	}
+	return &pbRes, nil
 }

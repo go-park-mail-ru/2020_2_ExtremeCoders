@@ -35,6 +35,7 @@ func GetErrorUnexpectedAns() []byte {
 }
 
 func GetErrorNoCockyAns() []byte {
+
 	err := &AnswerGet{
 		Code:        401,
 		Description: "not authorized user",
@@ -159,6 +160,24 @@ func GetUserOnUpdateError() []byte {
 	ok := &AnswerGet{
 		Code:        407,
 		Description: "Could not get user on update",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
+
+func GetLetterSpamError() []byte {
+	ok := &AnswerGet{
+		Code:        401,
+		Description: "Could not set letter in spam",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
+
+func GetLetterBoxError() []byte {
+	ok := &AnswerGet{
+		Code:        401,
+		Description: "Could not set letter in box",
 	}
 	ans, _ := ok.MarshalJSON()
 	return ans

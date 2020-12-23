@@ -2,8 +2,8 @@ package test
 
 import (
 	"Mailer/MainApplication/internal/Folder/FolderDelivery"
-	mockMail "Mailer/MainApplication/test/mock_MailServiceProto"
-	mockUser "Mailer/MainApplication/test/mock_UserProto"
+	mockMail "Mailer/MailService/test/mock_MailServiceProto"
+	mockUser "Mailer/UserService/test/mock_UserService"
 	"fmt"
 	"github.com/golang/mock/gomock"
 	"net/http"

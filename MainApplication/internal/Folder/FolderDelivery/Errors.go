@@ -94,6 +94,7 @@ func ProtoToModelMail(pbLetter *mailProto.LetterListResponse) []Model.Letter{
 			IsWatched: pb.IsWatched,
 			Id: pb.Lid,
 			DateTime: int64(pb.DateTime),
+			DirectoryRecv: pb.DirectoryRecv,
 		}
 		letters=append(letters, letter)
 	}
