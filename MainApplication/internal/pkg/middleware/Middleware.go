@@ -106,6 +106,10 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 				//log.WithFields(log.Fields{
 				//	"RECOVERED": csrfError,
 				//}).Error("got")
+				if Error == nil {
+					csrf.Expires = time.Now().AddDate(0, 0, -1)
+					http.SetCookie(w, csrf)
+				}
 				http.SetCookie(w, context.CreateCsrfCookie())
 				next.ServeHTTP(w, r)
 				return
