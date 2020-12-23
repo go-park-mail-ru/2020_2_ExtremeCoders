@@ -69,6 +69,9 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 			return
 		}
 		csrf, Error := r.Cookie(context.CsrfCookieName)
+
+		fmt.Printf("\n\n\nsuka kak ti zaibal %s=%s\n\n\n", r.Header.Get("csrf_token"), csrf.Value)
+
 		if r.Method==http.MethodGet{
 			if Error == nil {
 				csrf.Expires = time.Now().AddDate(0, 0, -1)
@@ -81,10 +84,6 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		} else {
-
-			defer func() {
-				fmt.Println(r.Header.Get("csrf_token"), csrf.Value)
-			}()
 			fmt.Printf("REQ", r.URL.Path)
 			//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
 			//fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
