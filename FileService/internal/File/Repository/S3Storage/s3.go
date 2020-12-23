@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/pkg/errors"
+	"Mailer/config"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -33,14 +34,13 @@ type S3Conf struct {
 
 func New() repo.Interface {
 	rep:=S3Conf{
-		AccessKey:  "vUEv3F69WEeN1D85oiiFgt",
-		SecretKey:  "c5yvQ6ANBnxvU2txz6dQwY7rJjDvMmVxVEakNjgJfH4X",
-		BucketName: "maila",
-		BucketID:   "mcs6132821991",
-		Password:   "CherDan985fy1aasdf681553",
-		Token:      "",
+		AccessKey:  config.AccessKey,
+		SecretKey:  config.SecretKey,
+		BucketName: config.BucketName,
+		BucketID:   config.BucketID,
+		Password:   config.Password,
+		Token:      config.Token,
 	}
-
 	return rep
 }
 

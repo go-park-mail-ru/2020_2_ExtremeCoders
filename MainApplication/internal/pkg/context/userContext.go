@@ -1,7 +1,7 @@
 package context
 
 import (
-	"Mailer/MainApplication/config"
+	"Mailer/config"
 	"Mailer/MainApplication/internal/User/UserModel"
 
 	"context"
