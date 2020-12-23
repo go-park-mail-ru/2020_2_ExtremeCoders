@@ -115,6 +115,7 @@ func (dbInfo dataBase) AddSession(sid string, uid uint64, user *UserModel.User) 
 
 	session := &UserModel.Session{Id: sid, UserId: int64(uid), User: user}
 	_, err := dbInfo.DB.Model(session).Insert()
+	fmt.Println("n\n\nPRECHINA GAVNA: ",err)
 	if err != nil {
 		return UserRepository.CantAddSession
 	}
