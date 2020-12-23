@@ -131,29 +131,29 @@ func main() {
 	//(id, sender, receiver, theme, text, date_time, directory_recv, directory_send) - поиск по письмам
 	mux.HandleFunc("/api/letter/by/{what}/{value}", lDE.GetLetterBy)
 
-	//get user/folders/recived - список папок в отправленных
-	mux.HandleFunc("/api/user/folders/recived", fDe.GetFolderList)
+	//get user/folders/received - список папок в отправленных
+	mux.HandleFunc("/api/user/folders/received", fDe.GetFolderList)
 
-	//get user/folders/recived - список папок в полученных
+	//get user/folders/received - список папок в полученных
 	mux.HandleFunc("/api/user/folders/sended", fDe.GetFolderList)
 
-	//get user/foders/{recived/sended}/{folderName} - письма из папки в полученых, письма из папки в отправленнх
-	mux.HandleFunc("/api/user/foders/recived/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
+	//get user/foders/{received/sended}/{folderName} - письма из папки в полученых, письма из папки в отправленнх
+	mux.HandleFunc("/api/user/foders/received/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
 
 	//get user/foders/sended/{folderName} - письма из папки в отправленнх
 	mux.HandleFunc("/api/user/foders/sended/{folderName}", fDe.GetLettersByFolder)
 
-	//post user/folders/recived/folderName {folderName:"folderName"} - добавить папку в полученные
-	//put user/folders/recived/folderName {oldName:"oldName", newName"":} - переименовать папку в полученных
-	mux.HandleFunc("/api/user/folders/recived/folderName", fDe.AddFolder)
+	//post user/folders/received/folderName {folderName:"folderName"} - добавить папку в полученные
+	//put user/folders/received/folderName {oldName:"oldName", newName"":} - переименовать папку в полученных
+	mux.HandleFunc("/api/user/folders/received/folderName", fDe.AddFolder)
 
 	//post user/folders/sended/folderName {folderName:"folderName"} - добавить папку в отправленные
 	//put user/folders/sended/folderName {oldName:"oldName", newName:"newName"} - переименовать папку в отправленных
 	mux.HandleFunc("/api/user/folders/sended/folderName", fDe.AddFolder)
 
-	//put user/folders/recived/folderName/letter body{letterID: id} - добавить письмо в папку из полученных
-	//delete /user/folders/recived/folderName/letter body{letterID:Id} - удалить письмо из папки в полученных
-	mux.HandleFunc("/api/user/folders/recived/{folderName}/letter", fDe.AddLetterInFolder)
+	//put user/folders/received/folderName/letter body{letterID: id} - добавить письмо в папку из полученных
+	//delete /user/folders/received/folderName/letter body{letterID:Id} - удалить письмо из папки в полученных
+	mux.HandleFunc("/api/user/folders/received/{folderName}/letter", fDe.AddLetterInFolder)
 
 	//put user/folders/sended/folderName/letter body{letterID: id} - добавить письмо в папку из отправленных
 	//delete /user/folders/sended/folderName/letter body{letterID:Id} - удалить письмо из папки в отправленных
