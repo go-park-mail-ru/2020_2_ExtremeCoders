@@ -3,12 +3,16 @@ package LetterPostgres
 import (
 	"Mailer/MailService/internal/Model"
 	"Mailer/MailService/internal/Repository"
+	"Mailer/MailService/pkg/convert"
+	"Mailer/SmtpService/proto/smtp"
+	"context"
 	crypto "crypto/rand"
 	"fmt"
+	"github.com/pkg/errors"
 	pgwrapper "gitlab.com/slax0rr/go-pg-wrapper"
-	"sort"
-
+	"google.golang.org/grpc"
 	"math/big"
+	"sort"
 )
 
 type dataBase struct {
@@ -417,6 +421,27 @@ func (dbInfo dataBase)SetItBox(lid uint64) error{
 	_, err=dbInfo.DB.Model(&letter).Column("box").Where("id=?", lid).Update()
 	if err!=nil{
 		return Repository.SetBoxError
+	}
+	return nil
+}
+
+func (dbInfo dataBase)SendOnAnotherDomain(letter Model.Letter) error{
+	grcpMailService, err := grpc.Dial(
+		"147.78.67.180:8080",
+		grpc.WithInsecure(),
+	)
+	if err!=nil{
+		fmt.Println("HIU: ", err.Error())
+		return err
+	}
+	defer grcpMailService.Close()
+	mailManager :=smtp.NewLetterServiceClient(grcpMailService)
+	ctx:=context.Background()
+	fmt.Println("connect to smpt serv")
+	resp, _:=mailManager.SendLetter(ctx, convert.ModelToSmtp(letter))
+	if resp!=nil && !resp.Ok{
+		var err error
+		return errors.Wrapf(err, resp.Description)
 	}
 	return nil
 }

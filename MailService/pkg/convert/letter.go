@@ -3,6 +3,7 @@ package convert
 import (
 	"Mailer/MailService/internal/Model"
 	pb "Mailer/MailService/proto"
+	"Mailer/SmtpService/proto/smtp"
 )
 
 func ModelToProto(letter Model.Letter) pb.Letter {
@@ -55,3 +56,16 @@ func ProtoToModel(letter *pb.Letter) Model.Letter {
 	}
 	return Letter
 }
+
+func ModelToSmtp(letter Model.Letter) *smtp.Letter {
+	Letter := smtp.Letter{
+		Sender:    letter.Sender,
+		Receiver:  letter.Receiver,
+		Lid:        letter.Id,
+		DateTime:  uint64(letter.DateTime),
+		Theme:     letter.Theme,
+		Text:      letter.Text,
+	}
+	return &Letter
+}
+

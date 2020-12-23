@@ -399,3 +399,17 @@ func (mr *MockLetterDBMockRecorder) SetItBox(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetItBox", reflect.TypeOf((*MockLetterDB)(nil).SetItBox), arg0)
 }
+
+// SendOnAnotherDomain mocks base method
+func (m *MockLetterDB) SendOnAnotherDomain(arg0 Model.Letter) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendOnAnotherDomain", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendOnAnotherDomain indicates an expected call of SendOnAnotherDomain
+func (mr *MockLetterDBMockRecorder) SendOnAnotherDomain(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendOnAnotherDomain", reflect.TypeOf((*MockLetterDB)(nil).SendOnAnotherDomain), arg0)
+}

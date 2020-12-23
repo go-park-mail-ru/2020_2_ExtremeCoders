@@ -8,12 +8,17 @@ import (
 	"github.com/emersion/go-smtp"
 	"net"
 	"strings"
+	"time"
 )
 
-type FileManager struct {
+type SMTPManager struct {
 }
 
-func (fm *FileManager) SendLetter(ctx context.Context, mail *pb.Letter) (*pb.Response, error) {
+func NewSMTPManager()  smtp2.LetterServiceServer{
+	return &SMTPManager{}
+}
+
+func (fm *SMTPManager) SendLetter(ctx context.Context, mail *pb.Letter) (*pb.Response, error) {
 	err:=SendLetter(mail)
 	resp:=pb.Response{Ok: true, Description: "ok"}
 	if err!=nil{
@@ -59,7 +64,7 @@ func SendLetter(letter *smtp2.Letter) error {
 			fmt.Println("Recovered in getanswer2", r)
 		}
 	}()
-	fmt.Println("LOL_1")
+
 	servername := getHost(letter.Receiver) + ":25"
 	to := []string{letter.Receiver}
 	msg := strings.NewReader("To: " + letter.Receiver + "\r\n" +
@@ -67,14 +72,22 @@ func SendLetter(letter *smtp2.Letter) error {
 		letter.Theme + "\r\n" +
 		"\r\n" +
 		letter.Text + "\r\n")
-	fmt.Println("LOL_2")
-	err := smtp.SendMail(servername, nil, letter.Sender, to, msg)
-	fmt.Println("LOL3")
-	if err != nil {
-		fmt.Println("Error in sendLETTER2", err.Error())
-		return err
+	flag:=false
+	for i:=0;i<100;i++{
+		err := smtp.SendMail(servername, nil, letter.Sender, to, msg)
+		if err != nil {
+			fmt.Println("Repeat: ", err.Error())
+			time.Sleep(1*time.Second)
+		}else{
+			flag=true
+			break
+		}
 	}
-	fmt.Println("success sendLETTER2", servername)
+	if flag{
+		fmt.Println("success sendLETTER2", servername)
+	}else{
+		fmt.Println("Could not send letter(")
+	}
 	return nil
 }
 

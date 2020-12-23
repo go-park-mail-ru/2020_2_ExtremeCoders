@@ -2,12 +2,18 @@ package main
 
 import (
 	"Mailer/SmtpService/internal/GetLetters"
+	"Mailer/SmtpService/internal/SendLetters"
+	pb "Mailer/SmtpService/proto/smtp"
 	"fmt"
 	"github.com/emersion/go-smtp"
+	"google.golang.org/grpc"
 	"log"
+	"net"
+	"sync"
 	"time"
 )
 
+var wg sync.WaitGroup
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
@@ -25,7 +31,19 @@ func main() {
 	s.AllowInsecureAuth = true
 
 	fmt.Println("Starting server at", s.Addr)
-	if err := s.ListenAndServe(); err != nil {
-		log.Fatal(err)
+	wg.Add(1)
+	go s.ListenAndServe()
+
+
+
+
+	lis, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		log.Fatalln("cant listen port", err)
 	}
+	server := grpc.NewServer()
+	pb.RegisterLetterServiceServer(server, SendLetters.NewSMTPManager())
+	fmt.Println("starting File at :8080")
+	_ = server.Serve(lis)
+	wg.Wait()
 }
