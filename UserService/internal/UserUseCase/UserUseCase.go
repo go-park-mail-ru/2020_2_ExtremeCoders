@@ -1,5 +1,9 @@
 package UserUseCase
 
+// go generate ./...
+
+//go:generate mockgen -destination=../mocks/mock_UserUseCase.go -package=mocks -source=./UserUseCase.go
+
 import (
 	"UserService/internal/UserModel"
 	proto "UserService/proto"

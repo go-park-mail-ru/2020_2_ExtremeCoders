@@ -47,3 +47,63 @@ func GetLettersError(err error, letters []LetterModel.Letter) []byte {
 	}
 	return returned
 }
+
+func GetDeleteLetterError(err error) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": string(returned),
+		}).Info("sent")
+	}()
+	switch err {
+	case nil:
+		returned = errors.GetOk()
+	case LetterRepository.DeleteLetterError:
+		returned = errors.GetDeleteLetterError(err)
+	}
+	return returned
+}
+
+func GetSearchSimError(res string) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": string(returned),
+		}).Info("sent")
+	}()
+
+	return returned
+}
+
+
+func GetLetterSpamError(err error) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": string(returned),
+		}).Info("sent")
+	}()
+	switch err {
+	case nil:
+		returned = errors.GetOk()
+	case LetterRepository.DeleteLetterError:
+		returned = errors.GetLetterSpamError()
+	}
+	return returned
+}
+
+func GetLetterBoxError(err error) []byte {
+	var returned []byte
+	defer func() {
+		log.WithFields(log.Fields{
+			"RESPONSE": string(returned),
+		}).Info("sent")
+	}()
+	switch err {
+	case nil:
+		returned = errors.GetOk()
+	case LetterRepository.DeleteLetterError:
+		returned = errors.GetLetterBoxError()
+	}
+	return returned
+}

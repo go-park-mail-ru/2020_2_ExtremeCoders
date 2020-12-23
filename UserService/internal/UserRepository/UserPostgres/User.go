@@ -1,5 +1,7 @@
 package UserPostgres
 
+//go:generate mockgen -destination=../mocks/mock_User.go -package=mocks -source=./DataBaseRequests.go
+
 import (
 	"UserService/config"
 	"UserService/internal/UserModel"
@@ -174,6 +176,7 @@ func (dbInfo dataBase) IsOkSession(sid string) (uid uint64, err error) {
 	fmt.Println("CALL IsOkSession")
 	session := &UserModel.Session{Id: sid}
 	err = dbInfo.DB.Model(session).Where("id=?", sid).Select()
+
 	if err != nil {
 		return 0, UserRepository.InvalidSession
 	}

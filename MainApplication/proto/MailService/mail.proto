@@ -15,14 +15,22 @@ message Letter{
   string text=5;
   uint64 dateTime=6;
   bool isWatched=7;
+  int64 directoryRecv=8;
+  bool spam=9;
+  bool box=10;
 }
+
 
 message DirName{
   uint64 dirName=1;
+  uint64 limit=2;
+  uint64 offset=3;
 }
 
 message Email{
   string email=1;
+  uint64 limit=2;
+  uint64 offset=3;
 }
 
 message Response{
@@ -46,6 +54,21 @@ message DirLid{
   bool type=3;// 0: send; 1: recv;
 }
 
+message Similar{
+  string sim=1;
+  string email=2;
+}
+
+message SimRes{
+  string res=1;
+}
+
+message GetBy{
+  string what=1;
+  string value=2;
+  string email=3;
+}
+
 service LetterService{
   rpc GetLettersByDirRecv(DirName) returns (LetterListResponse);
   rpc GetLettersByDirSend(DirName) returns (LetterListResponse);
@@ -53,9 +76,17 @@ service LetterService{
   rpc GetLettersSend(Email) returns (LetterListResponse);
   rpc SaveLetter(Letter) returns (Response);
   rpc WatchedLetter(Lid) returns (LetterResponse);
+  rpc RemoveLetter(Lid) returns (Response);
 
   rpc AddLetterToDir(DirLid) returns (Response);
   rpc RemoveLetterFromDir(DirLid) returns (Response);
   rpc RemoveDir(DirLid) returns (Response);
+
+  rpc FindSimilar(Similar) returns (SimRes);
+
+  rpc GetLetterBy(GetBy) returns (LetterListResponse);
+
+  rpc SetLetterInSpam(Lid) returns (Response);
+  rpc SetLetterInBox(Lid) returns (Response);
 }
 

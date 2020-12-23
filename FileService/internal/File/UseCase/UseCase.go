@@ -2,6 +2,7 @@ package UseCase
 
 import fileProto "FileService/proto"
 import "FileService/internal/File/Repository"
+//go:generate mockgen -source=UseCase.go -destination=UseCaseMock.go
 
 type Interface interface {
 	SaveFiles(*fileProto.Files) error
@@ -28,7 +29,7 @@ func (uc UseCase) SaveAvatar(avatar *fileProto.Avatar) error {
 
 func (uc UseCase) GetAvatar(user *fileProto.User) (*fileProto.Avatar, error) {
 	avatar, err := uc.repo.GetAvatar(user)
-	if err != nil {
+	if avatar == nil {
 		err = nil
 		avatar, err = uc.repo.GetDefaultAvatar()
 	}

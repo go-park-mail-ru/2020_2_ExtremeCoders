@@ -50,3 +50,12 @@ func GetSendOkAns(letters LetterModel.Letter) []byte {
 	ans, _ := ok.MarshalJSON()
 	return ans
 }
+
+func GetDeleteLetterError(err error)[]byte{
+	ans:= &AnswerGet{
+		Code:        500,
+		Description: err.Error(),
+	}
+	jsAns, _:=ans.MarshalJSON()
+	return jsAns
+}

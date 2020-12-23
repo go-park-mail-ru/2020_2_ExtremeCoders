@@ -18,7 +18,7 @@ func New(usecase UseCase.Interface) pb.LetterServiceServer {
 
 func (ld Delivery) GetLettersByDirRecv(ctx context.Context, dir *pb.DirName) (*pb.LetterListResponse, error) {
 	fmt.Println("recv dir")
-	err, letters := ld.uc.GetLettersRecvDir(dir.DirName)
+	err, letters := ld.uc.GetLettersRecvDir(dir.DirName, dir.Limit, dir.Offset)
 	resp := pb.Response{Ok: true}
 	if err != nil || letters == nil {
 		return &pb.LetterListResponse{}, err
@@ -62,7 +62,7 @@ func (ld Delivery) WatchedLetter(ctx context.Context, Lid *pb.Lid) (*pb.LetterRe
 }
 
 func (ld Delivery) GetLettersRecv(ctx context.Context, email *pb.Email) (*pb.LetterListResponse, error) {
-	err, letters := ld.uc.GetLettersRecv(email.Email)
+	err, letters := ld.uc.GetLettersRecv(email.Email, email.Limit, email.Offset)
 	resp := pb.Response{Ok: true}
 	if err != nil || letters == nil {
 		return &pb.LetterListResponse{}, err
@@ -73,7 +73,7 @@ func (ld Delivery) GetLettersRecv(ctx context.Context, email *pb.Email) (*pb.Let
 }
 
 func (ld Delivery) GetLettersSend(ctx context.Context, email *pb.Email) (*pb.LetterListResponse, error) {
-	err, letters := ld.uc.GetLettersSend(email.Email)
+	err, letters := ld.uc.GetLettersSend(email.Email, email.Limit, email.Offset)
 	resp := pb.Response{Ok: true}
 	if err != nil || letters == nil {
 		return &pb.LetterListResponse{}, err
@@ -113,4 +113,68 @@ func (ld Delivery) RemoveDir(ctx context.Context, dirlid *pb.DirLid) (*pb.Respon
 		resp.Description = err.Error()
 	}
 	return &resp, nil
+}
+
+func (ld Delivery) RemoveLetter(ctx context.Context, Lid *pb.Lid) (*pb.Response, error) {
+	err := ld.uc.RemoveLetter(Lid.Lid)
+	resp := pb.Response{Ok: true, Description: ""}
+	if err != nil {
+		resp.Ok = false
+		resp.Description = err.Error()
+	} else {
+		resp.Description = "ok"
+	}
+	return &resp, nil
+}
+
+func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar) (*pb.SimRes, error) {
+	res := ld.uc.FindSimilar(Similar.Sim, Similar.Email)
+	searchResult := &pb.SimRes{}
+	strRes, _ := res.MarshalJSON()
+	searchResult.Res = string(strRes)
+	return searchResult, nil
+}
+
+func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy) (*pb.LetterListResponse, error) {
+	err, letters := ld.uc.GetLetterBy(GetBy.What, GetBy.Value, GetBy.Email)
+	var pbLetter pb.LetterListResponse
+	var pbRes pb.Response
+	pbLetter.Result=&pbRes
+	pbLetter.Result.Ok=true
+	pbLetter.Result.Description=""
+	if err!=nil{
+		pbLetter.Result.Ok=true
+		pbLetter.Result.Description=err.Error()
+	}else{
+		pbLetter.Result.Description="ok"
+
+	}
+	pbLetter.Letter = convert.ModelToProtoList(&letters)
+	return &pbLetter, nil
+}
+
+func (ld Delivery) SetLetterInSpam(ctx context.Context, Lid *pb.Lid) (*pb.Response, error) {
+	err:=ld.uc.SetLetterInSpam(Lid.Lid)
+	var pbRes =pb.Response{
+		Ok: true,
+		Description: "ok",
+	}
+	if err!=nil{
+		pbRes.Description=err.Error()
+		pbRes.Ok=false
+	}
+	return &pbRes, nil
+}
+
+func (ld Delivery) SetLetterInBox(ctx context.Context, Lid *pb.Lid) (*pb.Response, error) {
+	err:=ld.uc.SetLetterInBox(Lid.Lid)
+	var pbRes =pb.Response{
+		Ok: true,
+		Description: "ok",
+	}
+	if err!=nil{
+		pbRes.Description=err.Error()
+		pbRes.Ok=false
+	}
+	return &pbRes, nil
 }

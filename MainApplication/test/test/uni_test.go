@@ -7,188 +7,180 @@ import (
 	"MainApplication/internal/User/UserDelivery"
 	"MainApplication/internal/User/UserModel"
 	"MainApplication/internal/User/UserRepository"
-	"MainApplication/internal/User/UserRepository/UserPostgres"
 	"MainApplication/internal/User/UserUseCase"
 	"MainApplication/internal/errors"
 	"MainApplication/internal/pkg/context"
-"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"testing"
 )
 
-func TestPasswordBcrypt(t *testing.T) {
-	raw:="1538"
-	enc:= UserPostgres.PasswordBcrypt([]byte(raw))
-	if bcrypt.CompareHashAndPassword(enc,[]byte(raw))!=nil{
-		log.Fatalf("error in PasswordBcrypt")
-	}
-}
+
 
 func TestGenerateCSRF(t *testing.T) {
-	csrf:= context.GenerateCSRF()
+	csrf:=context.GenerateCSRF()
 	if csrf==""{
 		log.Fatalf("error in GenerateCSRF")
 	}
 }
 
 func TestGetUserOnUpdateError(t *testing.T) {
-	err:= errors.GetUserOnUpdateError()
+	err:=errors.GetUserOnUpdateError()
 	if len(err)==0{
 		log.Fatalf("error in GetUserOnUpdateError")
 	}
 }
 
 func TestUpdateProfileError(t *testing.T) {
-	err:= errors.UpdateProfileError()
+	err:=errors.UpdateProfileError()
 	if len(err)==0{
 		log.Fatalf("error in UpdateProfileError")
 	}
 }
 
 func TestAddUserError(t *testing.T) {
-	err:= errors.AddUserError()
+	err:=errors.AddUserError()
 	if len(err)==0{
 		log.Fatalf("error in AddUserError")
 	}
 }
 
 func TestRemoveSessionError(t *testing.T) {
-	err:= errors.RemoveSessionError()
+	err:=errors.RemoveSessionError()
 	if len(err)==0{
 		log.Fatalf("error in RemoveSessionError")
 	}
 }
 
 func TestGetAddSessionError(t *testing.T) {
-	err:= errors.GetAddSessionError()
+	err:=errors.GetAddSessionError()
 	if len(err)==0{
 		log.Fatalf("error in GetAddSessionError")
 	}
 }
 
 func TestGetOkAnsData(t *testing.T) {
-	err:= errors.GetOkAnsData("", UserModel.User{})
+	err:=errors.GetOkAnsData("", UserModel.User{})
 	if len(err)==0{
 		log.Fatalf("error in GetOkAnsData")
 	}
 }
 
 func TestGetOkAns(t *testing.T) {
-	err:= errors.GetOkAns("")
+	err:=errors.GetOkAns("")
 	if len(err)==0{
 		log.Fatalf("error in GetOkAns")
 	}
 }
 
 func TestGetErrorBadPasswordAns(t *testing.T) {
-	err:= errors.GetErrorBadPasswordAns()
+	err:=errors.GetErrorBadPasswordAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorBadPasswordAns")
 	}
 }
 
 func TestGetErrorNoUserAns(t *testing.T) {
-	err:= errors.GetErrorNoUserAns()
+	err:=errors.GetErrorNoUserAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorNoUserAns")
 	}
 }
 
 func TestGetErrorNotNumberAns(t *testing.T) {
-	err:= errors.GetErrorNotNumberAns()
+	err:=errors.GetErrorNotNumberAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorNotNumberAns")
 	}
 }
 
 func TestGetErrorNotPostAns(t *testing.T) {
-	err:= errors.GetErrorNotPostAns()
+	err:=errors.GetErrorNotPostAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorNotPostAns")
 	}
 }
 
 func TestGetErrorWrongCookieAns(t *testing.T) {
-	err:= errors.GetErrorWrongCookieAns()
+	err:=errors.GetErrorWrongCookieAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorWrongCookieAns")
 	}
 }
 
 func TestGetErrorNoCockyAns(t *testing.T) {
-	err:= errors.GetErrorNoCockyAns()
+	err:=errors.GetErrorNoCockyAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorNoCockyAns")
 	}
 }
 
 func TestGetErrorLoginExistAns(t *testing.T) {
-	err:= errors.GetErrorLoginExistAns()
+	err:=errors.GetErrorLoginExistAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorLoginExistAns")
 	}
 }
 
 func TestGetErrorBadJsonAns(t *testing.T) {
-	err:= errors.GetErrorBadJsonAns()
+	err:=errors.GetErrorBadJsonAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorBadJsonAns")
 	}
 }
 
 func TestGetErrorBadCsrfAns(t *testing.T) {
-	err:= errors.GetErrorBadCsrfAns(UserRepository.GetSessionError)
+	err:=errors.GetErrorBadCsrfAns(UserRepository.GetSessionError)
 	if len(err)==0{
 		log.Fatalf("error in GetErrorBadCsrfAns")
 	}
 }
 
 func TestGetSendOkAns(t *testing.T) {
-	err:= errors.GetSendOkAns(LetterModel.Letter{})
+	err:=errors.GetSendOkAns(LetterModel.Letter{})
 	if len(err)==0{
 		log.Fatalf("error in GetSendOkAns")
 	}
 }
 
 func TestGetGetLettersOkAns(t *testing.T) {
-	err:= errors.GetGetLettersOkAns([]LetterModel.Letter{})
+	err:=errors.GetGetLettersOkAns([]LetterModel.Letter{})
 	if len(err)==0{
 		log.Fatalf("error in GetGetLettersOkAns")
 	}
 }
 
 func TestGetErrorReceivedLetterAns(t *testing.T) {
-	err:= errors.GetErrorReceivedLetterAns()
+	err:=errors.GetErrorReceivedLetterAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorReceivedLetterAns")
 	}
 }
 
 func TestGetErrorNoRecieverAns(t *testing.T) {
-	err:= errors.GetErrorNoRecieverAns()
+	err:=errors.GetErrorNoRecieverAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorNoRecieverAns")
 	}
 }
 
 func TestGetErrorSaveErrorAns(t *testing.T) {
-	err:= errors.GetErrorSaveErrorAns()
+	err:=errors.GetErrorSaveErrorAns()
 	if len(err)==0{
 		log.Fatalf("error in GetErrorSaveErrorAns")
 	}
 }
 
 func TestProfileError(t *testing.T) {
-	err:= UserDelivery.ProfileError(nil, &http.Cookie{})
+	err:=UserDelivery.ProfileError(nil, &http.Cookie{})
 	if len(err)==0{
 		log.Fatalf("error in ProfileError")
 	}
-	err= UserDelivery.ProfileError(UserRepository.CantUpdateUser, &http.Cookie{})
+	err=UserDelivery.ProfileError(UserRepository.CantUpdateUser, &http.Cookie{})
 	if len(err)==0{
 		log.Fatalf("error in ProfileError")
 	}
-	err= UserDelivery.ProfileError(UserRepository.CantGetUserOnUpdate, &http.Cookie{})
+	err=UserDelivery.ProfileError(UserRepository.CantGetUserOnUpdate, &http.Cookie{})
 	if len(err)==0{
 		log.Fatalf("error in ProfileError")
 	}

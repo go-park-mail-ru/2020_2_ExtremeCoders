@@ -35,6 +35,7 @@ func GetErrorUnexpectedAns() []byte {
 }
 
 func GetErrorNoCockyAns() []byte {
+
 	err := &AnswerGet{
 		Code:        401,
 		Description: "not authorized user",
@@ -98,6 +99,15 @@ func GetOkAns(cocky string) []byte {
 	return ans
 }
 
+func GetOk() []byte {
+	ok := &AnswerGet{
+		Code:        200,
+		Description: "ok",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
+
 func GetOkAnsData(cocky string, data UserModel.User) []byte {
 	fmt.Println("DATA::::::::::", data.Email, data.Name, data.Password)
 	ok := &AnswerGet{
@@ -150,6 +160,24 @@ func GetUserOnUpdateError() []byte {
 	ok := &AnswerGet{
 		Code:        407,
 		Description: "Could not get user on update",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
+
+func GetLetterSpamError() []byte {
+	ok := &AnswerGet{
+		Code:        401,
+		Description: "Could not set letter in spam",
+	}
+	ans, _ := ok.MarshalJSON()
+	return ans
+}
+
+func GetLetterBoxError() []byte {
+	ok := &AnswerGet{
+		Code:        401,
+		Description: "Could not set letter in box",
 	}
 	ans, _ := ok.MarshalJSON()
 	return ans
