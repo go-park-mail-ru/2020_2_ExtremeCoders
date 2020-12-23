@@ -78,6 +78,8 @@ func (s *Session) Data(r io.Reader) error {
 	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	fmt.Println(letter.Text)
 	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n\n\n")
+	fmt.Println(mail)
+	fmt.Println("\n\n\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	resp, _:=mailManager.SaveLetter(ctx, &letter)
 	if resp.Ok==false{
 		_ = send.SendAnswerCouldNotFindUser(letter.Sender)
