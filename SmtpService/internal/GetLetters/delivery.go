@@ -94,7 +94,7 @@ func parseEmail(s string) server.Letter{
 	letter :=server.Letter{}
 	from := "\nFrom:"
 	subj := "\nSubject: "
-	text := "\n\n"
+	text := "\n\r\n\r"
 	to := "\nTo: "
 	fmt.Println(strings.Index(s, from))
 	pos := strings.Index(s, from)
