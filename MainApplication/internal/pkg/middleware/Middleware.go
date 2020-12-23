@@ -52,6 +52,7 @@ type AuthMiddleware struct {
 
 func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
 		cookie, err := r.Cookie(context.CookieName)
 		if err != nil {
 			next.ServeHTTP(w, r)
@@ -67,15 +68,23 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
+		csrf, Error := r.Cookie(context.CsrfCookieName)
 		if r.Method==http.MethodGet{
+			if Error == nil {
+				csrf.Expires = time.Now().AddDate(0, 0, -1)
+				http.SetCookie(w, csrf)
+			}
 			http.SetCookie(w, context.CreateCsrfCookie())
 			ctx := r.Context()
 			ctx = context.SaveUserToContext(ctx, *user)
 			r = r.WithContext(ctx)
 			next.ServeHTTP(w, r)
 			return
-		} else{
-			csrf, Error := r.Cookie(context.CsrfCookieName)
+		} else {
+
+			defer func() {
+				fmt.Println(r.Header.Get("csrf_token"), csrf.Value)
+			}()
 			fmt.Printf("REQ", r.URL.Path)
 			//если пришли с нормальным csrf, то обновляем его, получаем юзера и прокидываем запрос дальше
 			//fmt.Printf("%s == %s\n", csrf.Value, r.Header.Get("csrf_token"))
@@ -108,5 +117,6 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 				}).Error("got")
 			}
 		}
+
 	})
 }
