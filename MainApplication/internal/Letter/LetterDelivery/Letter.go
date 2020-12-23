@@ -142,7 +142,7 @@ func (de delivery) GetLetterBy(w http.ResponseWriter, r *http.Request) {
 
 func (de delivery) SetLetterInSpam(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
-		w.Write(errors.GetErrorUnexpectedAns())
+		w.Write(errors.GetLetterSpamError())
 		return
 	}
 	lidstr:=context.GetStrFormValueSafety(r, "lid")
