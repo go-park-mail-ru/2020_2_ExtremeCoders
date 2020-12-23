@@ -92,6 +92,7 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 	} else {
 		letterList, er = d.lsClient.GetLettersByDirSend(r.Context(), &mailProto.DirName{DirName: folderId.Id})
 	}
+
 	if er != nil {
 		fmt.Println("Er", er)
 		w.Write(GetFoldersError(er))
@@ -138,6 +139,7 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	if r.Method==http.MethodDelete{
 		d.RemoveLetterInFolder(w, r)
+		return
 	}
 	param := r.FormValue("letterId")
 	lid, err := strconv.ParseUint(param, 10, 64)
@@ -237,8 +239,9 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind})
+	vars := mux.Vars(r)
+	folderName := vars["folderName"]
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind, Name: folderName})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))

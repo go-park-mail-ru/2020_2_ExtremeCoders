@@ -153,7 +153,7 @@ func main() {
 
 	//put user/folders/recived/folderName/letter body{letterID: id} - добавить письмо в папку из полученных
 	//delete /user/folders/recived/folderName/letter body{letterID:Id} - удалить письмо из папки в полученных
-	mux.HandleFunc("/api/user/folders/recived/folderName/letter", fDe.AddLetterInFolder)
+	mux.HandleFunc("/api/user/folders/recived/{folderName}/letter", fDe.AddLetterInFolder)
 
 	//put user/folders/sended/folderName/letter body{letterID: id} - добавить письмо в папку из отправленных
 	//delete /user/folders/sended/folderName/letter body{letterID:Id} - удалить письмо из папки в отправленных

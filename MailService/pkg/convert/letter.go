@@ -16,6 +16,7 @@ func ModelToProto(letter Model.Letter) pb.Letter {
 		IsWatched: letter.IsWatched,
 		Spam: letter.Spam,
 		Box: letter.Box,
+		DirectoryRecv: int64(letter.DirectoryRecv),
 	}
 	return pbLetter
 }
@@ -51,6 +52,7 @@ func ProtoToModel(letter *pb.Letter) Model.Letter {
 		IsWatched: letter.IsWatched,
 		Spam: letter.Spam,
 		Box: letter.Box,
+		DirectoryRecv: uint64(letter.DirectoryRecv),
 	}
 	return Letter
 }
