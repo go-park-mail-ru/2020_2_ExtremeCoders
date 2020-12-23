@@ -9,9 +9,11 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"sync"
 	"time"
 )
 
+var wg sync.WaitGroup
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
@@ -29,9 +31,9 @@ func main() {
 	s.AllowInsecureAuth = true
 
 	fmt.Println("Starting server at", s.Addr)
-	if err := s.ListenAndServe(); err != nil {
-		log.Fatal(err)
-	}
+	wg.Add(1)
+	go s.ListenAndServe()
+
 
 
 
@@ -43,4 +45,5 @@ func main() {
 	pb.RegisterLetterServiceServer(server, SendLetters.NewSMTPManager())
 	fmt.Println("starting File at :8080")
 	_ = server.Serve(lis)
+	wg.Wait()
 }

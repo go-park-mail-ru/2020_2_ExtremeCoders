@@ -430,10 +430,14 @@ func (dbInfo dataBase)SetItBox(lid uint64) error{
 }
 
 func (dbInfo dataBase)SendOnAnotherDomain(letter Model.Letter) error{
-	grcpMailService, _ := grpc.Dial(
+	grcpMailService, err := grpc.Dial(
 		"147.78.67.180:8080",
 		grpc.WithInsecure(),
 	)
+	if err!=nil{
+		fmt.Println("HIU: ", err.Error())
+		return err
+	}
 	defer grcpMailService.Close()
 	mailManager :=smtp.NewLetterServiceClient(grcpMailService)
 	ctx:=context.Background()
