@@ -141,8 +141,7 @@ func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64)
 	sort.Slice(letters, func(i, j int) (less bool) {
 		return letters[i].DateTime > letters[j].DateTime
 	})
-	data:= []Model.Letter{}
-	return nil, data
+	return nil, letters
 }
 
 func (dbInfo dataBase) AddLetterToDir(lid uint64, did uint64, flag bool) error {
