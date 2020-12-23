@@ -166,6 +166,7 @@ func (dbInfo dataBase) GetUserByUID(uid uint64) (user *UserModel.User, err error
 	fmt.Println("CALL GetUserByUID")
 	user = &UserModel.User{}
 	err = dbInfo.DB.Model(user).Where("id=?", uid).Select()
+	fmt.Println("PRECHINA GOVNA:", err, uid)
 	if err != nil {
 		return user, UserRepository.CantGetUserByUid
 	}
@@ -176,7 +177,7 @@ func (dbInfo dataBase) IsOkSession(sid string) (uid uint64, err error) {
 	fmt.Println("CALL IsOkSession")
 	session := &UserModel.Session{Id: sid}
 	err = dbInfo.DB.Model(session).Where("id=?", sid).Select()
-	fmt.Println("PRECHINA GOVNA:", err)
+
 	if err != nil {
 		return 0, UserRepository.InvalidSession
 	}
