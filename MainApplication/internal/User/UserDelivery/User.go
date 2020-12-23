@@ -133,7 +133,7 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == http.MethodGet {
-		fmt.Println("\n\n\n2\n\n\n")
+		fmt.Println("\n\n\n2\n\n\n", user)
 		w.Write(errors.GetOkAnsData(session.Value, *user))
 		return
 	} else if r.Method == http.MethodPut {
