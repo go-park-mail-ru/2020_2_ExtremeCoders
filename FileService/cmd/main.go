@@ -2,7 +2,7 @@ package main
 
 import (
 	"Mailer/FileService/internal/File/Delivery"
-	fsRepo "Mailer/FileService/internal/File/Repository/FileSystem"
+	fsRepo "Mailer/FileService/internal/File/Repository/S3Storage"
 	"Mailer/FileService/internal/File/UseCase"
 	fileProto "Mailer/FileService/proto"
 	"fmt"
