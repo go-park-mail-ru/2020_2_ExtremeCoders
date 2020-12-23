@@ -104,16 +104,20 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
 	session, err := r.Cookie("session_id")
 	if err == http.ErrNoCookie {
+		fmt.Println("1.1")
 		return nil, nil, 401
 	}
 	uid, ok := de.Uc.GetDB().IsOkSession(session.Value)
 	if ok != nil {
+		fmt.Println("1.2")
 		return nil, nil, 402
 	}
 	user, err := de.Uc.GetDB().GetUserByUID(uid)
 	if err != nil {
+		fmt.Println("1.3")
 		return nil, nil, 402
 	}
+	fmt.Println("1.4")
 	return user, session, 200
 }
 
@@ -124,13 +128,16 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 	}
 	user, session, err := de.GetUserByRequest(r)
 	if err != 200 {
+		fmt.Println("1")
 		w.Write(CookieError(err))
 		return
 	}
 	if r.Method == http.MethodGet {
+		fmt.Println("2")
 		w.Write(errors.GetOkAnsData(session.Value, *user))
 		return
 	} else if r.Method == http.MethodPut {
+		fmt.Println("3")
 		var up UserModel.User
 		up.Email = user.Email
 		up.Name = context.GetStrFormValueSafety(r, "profile_firstName")
@@ -140,6 +147,7 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		w.Write(ProfileError(err, session))
 		return
 	}
+	fmt.Println("4")
 	w.Write(errors.GetErrorUnexpectedAns())
 }
 

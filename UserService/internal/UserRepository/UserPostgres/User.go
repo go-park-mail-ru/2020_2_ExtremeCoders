@@ -166,7 +166,6 @@ func (dbInfo dataBase) GetUserByUID(uid uint64) (user *UserModel.User, err error
 	fmt.Println("CALL GetUserByUID")
 	user = &UserModel.User{}
 	err = dbInfo.DB.Model(user).Where("id=?", uid).Select()
-	fmt.Println("PRECHINA GOVNA:", err, uid)
 	if err != nil {
 		return user, UserRepository.CantGetUserByUid
 	}
