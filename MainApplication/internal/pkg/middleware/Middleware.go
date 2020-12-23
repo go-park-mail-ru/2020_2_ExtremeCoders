@@ -108,7 +108,5 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 				}).Error("got")
 			}
 		}
-
-
 	})
 }
