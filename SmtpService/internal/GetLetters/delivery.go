@@ -71,28 +71,56 @@ func (s *Session) Data(r io.Reader) error {
 	}
 	fmt.Println("\n\n\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	ctx:=context.Background()
-
-	resp, _:=mailManager.SaveLetter(ctx, &server.Letter{})
+	letter:=parseEmail(mail)
+	resp, _:=mailManager.SaveLetter(ctx, &letter)
 	if resp.Ok==false{
-		_ = send.SendAnswerCouldNotFindUser(getEmailFromMail(mail))
+		_ = send.SendAnswerCouldNotFindUser(letter.Sender)
 	}
 	return nil
 }
 
-func getEmailFromMail(mail string) string{
-	from:="\nFrom:"
-	pos:=strings.Index(mail, from)
+func parseEmail(s string) server.Letter{
+	letter :=server.Letter{}
+	from := "\nFrom:"
+	subj := "\nSubject: "
+	text := "\n\n"
+	to := "\nTo: "
+	fmt.Println(strings.Index(s, from))
+	pos := strings.Index(s, from)
 	var flag bool
 	var email string
-	for ;mail[pos]!='>';pos++{
-		if flag ==true{
-			email+=string(mail[pos])
+	var emTo string
+	var emtext string
+	var emSubj string
+	for ; s[pos] != '>'; pos++ {
+		if flag == true {
+			email += string(s[pos])
 		}
-		if mail[pos]=='<'{
-			flag=true
+		if s[pos] == '<' {
+			flag = true
 		}
 	}
-	return mail
+	pos = strings.Index(s, subj)
+	pos += len(subj)
+	for ; s[pos] != '\n'; pos++ {
+		emSubj += string(s[pos])
+	}
+	pos = strings.Index(s, to)
+	pos += len(to)
+	for ; s[pos] != '\n'; pos++ {
+		emTo += string(s[pos])
+	}
+
+	pos = strings.Index(s, text)
+	pos += len(text)
+	for ; pos < len(s); pos++ {
+		emtext += string(s[pos])
+	}
+	letter.Sender=emTo
+	letter.Receiver=email
+	letter.Theme=emSubj
+	letter.Text=emtext
+	return letter
 }
 
 func (s *Session) Reset() {}
