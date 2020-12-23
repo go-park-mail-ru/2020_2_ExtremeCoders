@@ -2,7 +2,7 @@ package main
 
 import (
 	"Mailer/UserService/Postgres"
-	"Mailer/UserService/config"
+	"Mailer/config"
 	"Mailer/UserService/internal/UserDelivery"
 	"Mailer/UserService/internal/UserRepository/UserPostgres"
 	"Mailer/UserService/internal/UserUseCase"

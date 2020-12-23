@@ -2,16 +2,15 @@ package main
 
 import (
 	"Mailer/MailService/Postgres"
-	"Mailer/MailService/config"
 	"Mailer/MailService/internal/Delivery"
 	"Mailer/MailService/internal/Repository/LetterPostgres"
 	"Mailer/MailService/internal/UseCase"
 	letterProto "Mailer/MailService/proto"
+	"Mailer/config"
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
 	"net"
-
 )
 
 func main() {

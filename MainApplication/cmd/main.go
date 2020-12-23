@@ -3,7 +3,7 @@ package main
 import (
 	protoFs "Mailer/FileService/proto"
 	protoMail "Mailer/MailService/proto"
-	"Mailer/MainApplication/config"
+	"Mailer/config"
 	"Mailer/MainApplication/internal/Folder/FolderDelivery"
 	"Mailer/MainApplication/internal/Letter/LetterDelivery"
 	"Mailer/MainApplication/internal/Letter/LetterRepository/LetterService"
