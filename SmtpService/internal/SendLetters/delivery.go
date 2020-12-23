@@ -80,6 +80,7 @@ func SendLetter(letter *smtp2.Letter) error {
 			time.Sleep(1*time.Second)
 		}else{
 			flag=true
+			break
 		}
 	}
 	if flag{
