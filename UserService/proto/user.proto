@@ -91,16 +91,3 @@ service UserService{
   rpc GetFoldersList(FolderUidType) returns(FolderList);
 }
 
-
-//    IsEmailExists(string) error
-//    AddSession(string, uint64, *UserModel.User) error
-//    AddUser(*UserModel.User) error
-//    GenerateSID() ([]rune, error)
-//    GenerateUID() (uint64, error)
-//    GetUserByEmail(string) (*UserModel.User, error)
-//    GetUserByUID(uint64) (*UserModel.User, error)
-//    IsOkSession(string) (uint64, error)
-//    UpdateProfile(UserModel.User, string) error
-//    RemoveSession(string) (error, uint64)
-//    GetSessionByUID(uint64) (string, error)
-

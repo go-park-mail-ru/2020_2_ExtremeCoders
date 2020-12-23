@@ -13,13 +13,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//get /user/folders/{recived/sended} - список папок
-//get /user/foders/{recived/sended}/folderName - письма
-//post /user/folders/{recived/sended}/folderName - добавить папку
-//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
-//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
-//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
-//delete /user/folders/{recived/sended}/folderName  - удалить папку
+//get /user/folders/{received/sended} - список папок
+//get /user/foders/{received/sended}/folderName - письма
+//post /user/folders/{received/sended}/folderName - добавить папку
+//put /user/folders/{received/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
+//put /user/folders/{received/sended}/folderName body:{ name: newName} - переименовать папку
+//delete /user/folders/{received/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
+//delete /user/folders/{received/sended}/folderName  - удалить папку
 
 type Interface interface {
 	GetFolderList(w http.ResponseWriter, r *http.Request)
@@ -40,14 +40,14 @@ type Delivery struct {
 	lsClient letterService.LetterServiceClient
 }
 
-//delete /user/folders/{recived/sended}/folderName  - удалить папку
+//delete /user/folders/{received/sended}/folderName  - удалить папку
 
-//get /user/folders/{recived/sended} - список папок
+//get /user/folders/{received/sended} - список папок
 func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"))
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"))
 	kind := "sended"
-	if strings.Contains(r.URL.Path, "recived") {
-		kind = "recived"
+	if strings.Contains(r.URL.Path, "received") {
+		kind = "received"
 	}
 	fmt.Println("KIND", kind)
 	er, user := context.GetUserFromCtx(r.Context())
@@ -64,14 +64,14 @@ func (d Delivery) GetFolderList(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoFolderListResponse(folders.Res))
 }
 
-//get /user/foders/{recived/sended}/folderName - письма
+//get /user/foders/{received/sended}/folderName - письма
 func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	folderName := vars["folderName"]
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"))
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"))
 	kind := "sended"
-	if strings.Contains(r.URL.Path, "recived") {
-		kind = "recived"
+	if strings.Contains(r.URL.Path, "received") {
+		kind = "received"
 	}
 	fmt.Println("KIND", kind)
 	er, user := context.GetUserFromCtx(r.Context())
@@ -87,7 +87,7 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var letterList *mailProto.LetterListResponse
-	if kind == "recived" {
+	if kind == "received" {
 		letterList, er = d.lsClient.GetLettersByDirRecv(r.Context(), &mailProto.DirName{DirName: folderId.Id})
 	} else {
 		letterList, er = d.lsClient.GetLettersByDirSend(r.Context(), &mailProto.DirName{DirName: folderId.Id})
@@ -101,17 +101,22 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoLetterListAnswer(letterList))
 }
 
-//post /user/folders/{recived/sended}/folderName - добавить папку
+//post /user/folders/{received/sended}/folderName - добавить папку
 func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 	if r.Method==http.MethodPut{
 		d.RenameFolder(w, r)
+		return
+	}
+	if r.Method==http.MethodDelete{
+		d.RemoveFolder(w, r)
+		return
 	}
 	folderName := r.FormValue("folderName")
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"),
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"),
 		folderName)
 	kind := "sended"
-	if strings.Contains(r.URL.Path, "recived") {
-		kind = "recived"
+	if strings.Contains(r.URL.Path, "received") {
+		kind = "received"
 	}
 	fmt.Println("KIND", kind)
 	er, user := context.GetUserFromCtx(r.Context())
@@ -129,7 +134,7 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(SuccessRespAns())
 }
 
-//put /user/folders/{recived/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
+//put /user/folders/{received/sended}/folderName/letter body{letterID: id} - добавить письмо в папку
 func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	if r.Method==http.MethodDelete{
 		d.RemoveLetterInFolder(w, r)
@@ -140,10 +145,10 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(err))
 		return
 	}
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), lid, err)
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"), lid, err)
 	kind := "sended"
-	if strings.Contains(r.URL.Path, "recived") {
-		kind = "recived"
+	if strings.Contains(r.URL.Path, "received") {
+		kind = "received"
 	}
 	fmt.Println("KIND", kind)
 	folderName:=context.GetStrFormValueSafety(r, "folderName")
@@ -161,7 +166,7 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var resp *mailProto.Response
-	if kind == "recived" {
+	if kind == "received" {
 		resp, er = d.lsClient.AddLetterToDir(r.Context(), &mailProto.DirLid{
 			Did:  folderId.Id,
 			Lid:  lid,
@@ -183,15 +188,15 @@ func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(ProtoResponseAnswer(resp))
 }
 
-//put /user/folders/{recived/sended}/folderName body:{ name: newName} - переименовать папку
+//put /user/folders/{received/sended}/folderName body:{ name: newName} - переименовать папку
 func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 	fmt.Print("\n\n\nHUIn\n\n\n")
 	oldName := r.FormValue("oldName")
 	newName := r.FormValue("newName")
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), oldName, newName)
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"), oldName, newName)
 	kind := "sended"
-	if strings.Contains(r.URL.Path, "recived") {
-		kind = "recived"
+	if strings.Contains(r.URL.Path, "received") {
+		kind = "received"
 	}
 	fmt.Println("KIND", kind)
 	fmt.Print("\n\n\nHUIn\n\n\n")
@@ -209,7 +214,7 @@ func (d Delivery) RenameFolder(w http.ResponseWriter, r *http.Request) {
 	w.Write(SuccessRespAns())
 }
 
-//delete /user/folders/{recived/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
+//delete /user/folders/{received/sended}/folderName/letter body{letterID:Id} - удалить письмо из папки
 func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 	param := r.FormValue("letterId")
 	lid, err := strconv.ParseUint(param, 10, 64)
@@ -217,10 +222,10 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(err))
 		return
 	}
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), lid)
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"), lid)
 	kind := true
-	textKind := "recieved"
-	if strings.Contains(r.URL.Path, "recived") {
+	textKind := "received"
+	if strings.Contains(r.URL.Path, "received") {
 		kind = true
 	} else {
 		textKind = "sended"
@@ -251,10 +256,10 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 
 func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 	folderName := r.FormValue("folderName")
-	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "recived"), strings.Contains(r.URL.Path, "sended"), folderName)
+	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"), folderName)
 	kind := true
-	textKind := "recieved"
-	if strings.Contains(r.URL.Path, "recived") {
+	textKind := "received"
+	if strings.Contains(r.URL.Path, "received") {
 		kind = true
 	} else {
 		textKind = "sended"
@@ -266,8 +271,7 @@ func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 		w.Write(GetFoldersError(er))
 		return
 	}
-
-	folderId, er := d.usClient.RemoveFolder(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind})
+	folderId, er := d.usClient.RemoveFolder(r.Context(), &userProto.Folder{Uid: user.Id, Type: textKind, Name: folderName})
 	fmt.Println("FOLDER ID", folderId)
 	if er != nil {
 		w.Write(GetFoldersError(er))

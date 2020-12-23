@@ -123,9 +123,9 @@ func main() {
 	//put watch/letter {id:10} - пометить письмо как прочитанное
 	mux.HandleFunc("/api/watch/letter", lDE.WatchLetter)
 
-	mux.HandleFunc("/api/letter/box", lDE.SetLetterInBox)
+	mux.HandleFunc("/api/letter/box/set", lDE.SetLetterInBox)
 
-	mux.HandleFunc("/api/letter/spam", lDE.SetLetterInSpam)
+	mux.HandleFunc("/api/letter/spam/set", lDE.SetLetterInSpam)
 
 	//get letter/by/{what}/{value} - what может быть равен
 	//(id, sender, receiver, theme, text, date_time, directory_recv, directory_send) - поиск по письмам

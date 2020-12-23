@@ -89,7 +89,7 @@ func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64
 	})
 	data:= []Model.Letter{}
 	for _, let:=range letters{
-		if let.Box==false || let.Spam==false{
+		if let.Box==false && let.Spam==false{
 			data=append(data, let)
 		}
 	}
@@ -104,7 +104,7 @@ func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 	}
 	data:= []Model.Letter{}
 	for _, let:=range letters{
-		if let.Box==false || let.Spam==false{
+		if let.Box==false && let.Spam==false{
 			data=append(data, let)
 		}
 	}
@@ -124,7 +124,7 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 	})
 	data:= []Model.Letter{}
 	for _, let:=range letters{
-		if let.Box==false || let.Spam==false{
+		if let.Box==false && let.Spam==false{
 			data=append(data, let)
 		}
 	}
@@ -142,11 +142,6 @@ func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64)
 		return letters[i].DateTime > letters[j].DateTime
 	})
 	data:= []Model.Letter{}
-	for _, let:=range letters{
-		if let.Box==false || let.Spam==false{
-			data=append(data, let)
-		}
-	}
 	return nil, data
 }
 
@@ -373,7 +368,7 @@ func (dbInfo dataBase) GetSpam(email string) (error, []Model.Letter) {
 	}
 	var data []Model.Letter
 	for _, let := range letters {
-		if let.Receiver == email || let.Sender == email {
+		if (let.Receiver == email || let.Sender == email) && let.Box==false {
 			data = append(data, let)
 		}
 	}
@@ -382,7 +377,7 @@ func (dbInfo dataBase) GetSpam(email string) (error, []Model.Letter) {
 
 func (dbInfo dataBase) GetBox(email string) (error, []Model.Letter) {
 	var letters []Model.Letter
-	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE spam = ?", true)
+	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE box = ?", true)
 
 	if err != nil {
 		return Repository.GetLetterByError, nil
@@ -416,6 +411,8 @@ func (dbInfo dataBase)SetItBox(lid uint64) error{
 	err, letter:= dbInfo.GetLetterByLid(lid)
 	if letter.Box==true{
 		letter.Box=false
+	} else{
+		letter.Spam=false
 	}
 	if err!=nil{
 		return Repository.GetByLidError
