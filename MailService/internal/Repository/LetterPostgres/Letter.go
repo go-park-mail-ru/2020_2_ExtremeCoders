@@ -443,7 +443,7 @@ func (dbInfo dataBase)SendOnAnotherDomain(letter Model.Letter) error{
 	ctx:=context.Background()
 	fmt.Println("connect to smpt serv")
 	resp, _:=mailManager.SendLetter(ctx, convert.ModelToSmtp(letter))
-	if !resp.Ok{
+	if resp!=nil && !resp.Ok{
 		var err error
 		return errors.Wrapf(err, resp.Description)
 	}
