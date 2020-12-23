@@ -101,11 +101,14 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 					next.ServeHTTP(w, r)
 					return
 				}
-				//либо злоумышленник либо что-то пошло совсем не так...
-				w.Write(authError(csrfError))
-				log.WithFields(log.Fields{
-					"RECOVERED": csrfError,
-				}).Error("got")
+				////либо злоумышленник либо что-то пошло совсем не так...
+				//w.Write(authError(csrfError))
+				//log.WithFields(log.Fields{
+				//	"RECOVERED": csrfError,
+				//}).Error("got")
+				http.SetCookie(w, context.CreateCsrfCookie())
+				next.ServeHTTP(w, r)
+				return
 			}
 		}
 
