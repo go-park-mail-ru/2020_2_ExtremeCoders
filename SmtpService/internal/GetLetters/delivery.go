@@ -68,28 +68,24 @@ func (s *Session) Data(r io.Reader) error {
 	ctx:=context.Background()
 
 	env, _ := enmime.ReadEnvelope(r)
-	// Headers can be retrieved via Envelope.GetHeader(name).
 	fmt.Printf("From: %v\n", env.GetHeader("From"))
-	// Address-type headers can be parsed into a list of decoded mail.Address structs.
+	var to string
 	alist, _ := env.AddressList("To")
 	for _, addr := range alist {
 		fmt.Printf("To: %s <%s>\n", addr.Name, addr.Address)
+		to=addr.Address
 	}
 	fmt.Printf("Subject: %v\n", env.GetHeader("Subject"))
-
-
-	// The plain text body is available as mime.Text.
 	fmt.Printf("Text Body: %v chars\n", len(env.Text))
-
-	// The HTML body is stored in mime.HTML.
 	fmt.Printf("HTML Body: %v chars\n", len(env.HTML))
-
-	// mime.Inlines is a slice of inlined attacments.
 	fmt.Printf("Inlines: %v\n", len(env.Inlines))
-
-	// mime.Attachments contains the non-inline attachments.
 	fmt.Printf("Attachments: %v\n", len(env.Attachments))
-	resp, _:=mailManager.SaveLetter(ctx, nil)
+	resp, _:=mailManager.SaveLetter(ctx, &server.Letter{
+		Sender: env.GetHeader("From"),
+		Receiver: to,
+		Theme: env.GetHeader("Subject"),
+		Text: env.Text,
+	})
 	if resp==nil || !resp.Ok{
 		fmt.Println("COULD NOT SAVE LETTER: ", resp.Description)
 		_ = send.SendAnswerCouldNotFindUser(env.GetHeader("From"))
