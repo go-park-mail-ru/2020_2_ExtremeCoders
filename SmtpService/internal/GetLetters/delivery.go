@@ -6,10 +6,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"
+	"github.com/jhillyerd/enmime"
 	"google.golang.org/grpc"
 	"io"
-	"io/ioutil"
-	"strings"
 )
 
 // The Backend implements SMTP server methods.
@@ -63,74 +62,36 @@ func (s *Session) Data(r io.Reader) error {
 	)
 	defer grcpMailService.Close()
 	mailManager :=server.NewLetterServiceClient(grcpMailService)
-	var mail string
-	if b, err := ioutil.ReadAll(r); err != nil {
-		return err
-	} else {
-		mail+=string(b)
-	}
 	ctx:=context.Background()
-	letter:=parseEmail(mail)
-	fmt.Println("\n\n\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	fmt.Println(letter.Receiver)
-	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	fmt.Println(letter.Sender)
-	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	fmt.Println(letter.Theme)
-	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	fmt.Println(letter.Text)
-	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	fmt.Println(mail)
-	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	resp, _:=mailManager.SaveLetter(ctx, &letter)
-	if !resp.Ok{
-		_ = send.SendAnswerCouldNotFindUser(letter.Sender)
+
+	env, _ := enmime.ReadEnvelope(r)
+	// Headers can be retrieved via Envelope.GetHeader(name).
+	fmt.Printf("From: %v\n", env.GetHeader("From"))
+	// Address-type headers can be parsed into a list of decoded mail.Address structs.
+	alist, _ := env.AddressList("To")
+	for _, addr := range alist {
+		fmt.Printf("To: %s <%s>\n", addr.Name, addr.Address)
+	}
+	fmt.Printf("Subject: %v\n", env.GetHeader("Subject"))
+
+
+	// The plain text body is available as mime.Text.
+	fmt.Printf("Text Body: %v chars\n", len(env.Text))
+
+	// The HTML body is stored in mime.HTML.
+	fmt.Printf("HTML Body: %v chars\n", len(env.HTML))
+
+	// mime.Inlines is a slice of inlined attacments.
+	fmt.Printf("Inlines: %v\n", len(env.Inlines))
+
+	// mime.Attachments contains the non-inline attachments.
+	fmt.Printf("Attachments: %v\n", len(env.Attachments))
+	resp, _:=mailManager.SaveLetter(ctx, nil)
+	if resp==nil || resp.Ok==false{
+		fmt.Println("COULD NOT SAVE LETTER: ", resp.Description)
+		_ = send.SendAnswerCouldNotFindUser(env.GetHeader("From"))
 	}
 	return nil
-}
-
-func parseEmail(s string) server.Letter{
-	letter :=server.Letter{}
-	from := "\nFrom:"
-	subj := "\nSubject: "
-	text := "\r"
-	to := "\nTo: "
-	fmt.Println(strings.Index(s, from))
-	pos := strings.Index(s, from)
-	var flag bool
-	var email string
-	var emTo string
-	var emtext string
-	var emSubj string
-	for ; s[pos] != '>'; pos++ {
-		if flag {
-			email += string(s[pos])
-		}
-		if s[pos] == '<' {
-			flag = true
-		}
-	}
-	pos = strings.Index(s, subj)
-	pos += len(subj)
-	for ; s[pos] != '\n'; pos++ {
-		emSubj += string(s[pos])
-	}
-	pos = strings.Index(s, to)
-	pos += len(to)
-	for ; s[pos] != '\n'; pos++ {
-		emTo += string(s[pos])
-	}
-	s=s[pos:]
-	pos = strings.LastIndex(s, text)
-	pos += len(text)
-	for ; pos < len(s); pos++ {
-		emtext += string(s[pos])
-	}
-	letter.Sender=emTo
-	letter.Receiver=email
-	letter.Theme=emSubj
-	letter.Text=emtext
-	return letter
 }
 
 func (s *Session) Reset() {}
