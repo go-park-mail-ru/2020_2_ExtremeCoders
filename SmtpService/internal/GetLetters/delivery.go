@@ -77,9 +77,9 @@ func (s *Session) Data(r io.Reader) error {
 	fmt.Println(letter.Theme)
 	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	fmt.Println(letter.Text)
-	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n\n\n")
+	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	fmt.Println(mail)
-	fmt.Println("\n\n\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	resp, _:=mailManager.SaveLetter(ctx, &letter)
 	if resp.Ok==false{
 		_ = send.SendAnswerCouldNotFindUser(letter.Sender)
@@ -91,7 +91,7 @@ func parseEmail(s string) server.Letter{
 	letter :=server.Letter{}
 	from := "\nFrom:"
 	subj := "\nSubject: "
-	text := "\n\n"
+	text := "\r"
 	to := "\nTo: "
 	fmt.Println(strings.Index(s, from))
 	pos := strings.Index(s, from)
@@ -118,8 +118,8 @@ func parseEmail(s string) server.Letter{
 	for ; s[pos] != '\n'; pos++ {
 		emTo += string(s[pos])
 	}
-
-	pos = strings.Index(s, text)
+	s=s[pos:]
+	pos = strings.LastIndex(s, text)
 	pos += len(text)
 	for ; pos < len(s); pos++ {
 		emtext += string(s[pos])

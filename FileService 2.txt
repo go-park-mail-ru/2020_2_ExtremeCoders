@@ -1,0 +1,3 @@
+CUR PATh /Users/dellvin/Desktop/Технопарк/Разработка GoLang/2020_2_ExtremeCoders
+CUR PATh /Users/dellvin/Desktop/Технопарк/Разработка GoLang/2020_2_ExtremeCoders/web/static
+starting File at :8081
