@@ -4,6 +4,7 @@ import (
 	"Mailer/MainApplication/internal/Letter/LetterModel"
 	"Mailer/MainApplication/internal/Letter/LetterRepository"
 )
+//go:generate mockgen -source=./Letter.go -destination=../../../test/mock_LetterUseCase/LetterUseCaseMock.go
 
 type LetterUseCase interface {
 	SaveLetter(letter *LetterModel.Letter) error
