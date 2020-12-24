@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-// protoc --go_out=plugins=grpc:. *.proto
+//protoc --go_out=plugins=grpc:. *.proto
+//go:generate mockgen -source=./user.pb.go -destination=../test/mock_UserService/UserServiceMock.go
 package fileService;
 
 message LetterId{

@@ -2,7 +2,7 @@ package UserUseCase
 
 // go generate ./...
 
-//go:generate mockgen -destination=../mocks/mock_UserUseCase.go -package=mocks -source=./UserUseCase.go
+//go:generate mockgen -destination=../../test/mock_UseCase/mock_UserUseCase.go -package=mocks -source=./UserUseCase.go
 
 import (
 	"Mailer/UserService/internal/UserModel"

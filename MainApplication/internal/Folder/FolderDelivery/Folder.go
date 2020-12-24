@@ -12,6 +12,7 @@ import (
 )
 
 
+//go:generate mockgen -source=./Folder.go -destination=../../../test/mock_FolderDelivery/FolderDeliveyeMock.go
 
 type Interface interface {
 	GetFolderList(w http.ResponseWriter, r *http.Request)

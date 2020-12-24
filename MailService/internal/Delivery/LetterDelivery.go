@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 )
+//go:generate mockgen -source=./LetterDelivery.go -destination=../../test/mock_LetterDelivery/DeliveryMock.go
 
 type Delivery struct {
 	uc UseCase.Interface

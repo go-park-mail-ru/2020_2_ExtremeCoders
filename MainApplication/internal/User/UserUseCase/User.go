@@ -8,6 +8,7 @@ import (
 	err "errors"
 	"golang.org/x/crypto/bcrypt"
 )
+//go:generate mockgen -source=./User.go -destination=../../../test/mock_UserUseCase/UserUseCaseMock.go
 
 type UserUseCase interface {
 	Signup(user UserModel.User) (error, string)

@@ -15,6 +15,7 @@ import (
 	"strconv"
 	"time"
 )
+//go:generate mockgen -source=./User.go -destination=../../../test/mock_UserDelivery/UserDeliveryMock.go
 
 type Interface interface {
 

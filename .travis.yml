@@ -21,6 +21,8 @@ before_script:
 - psql -c "ALTER USER postgres WITH PASSWORD '987654321';" -U postgres
 - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
     | sh -s -- -b $(go env GOPATH)/bin $GOLANGCI_LINT_VERSION
+- go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
+- go get -u google.golang.org/grpc
 
 before_install:
 - pwd
@@ -39,8 +41,9 @@ script:
 - pwd
 - go mod vendor
 - golangci-lint run
-- echo TRAIS BULD DIR
 - echo $TRAVIS_BUILD_DIR
+- ./cmd/generateProtoFiles.sh
+- go generate ./...
 - ./cmd/runFileServiceTest.sh
 - ./cmd/runMailServiceTest.sh
 - ./cmd/runMainApplicationTest.sh

@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 )
+//go:generate mockgen -source=./Letter.go -destination=../../../test/mock_LetterDelivery/LetterDeliveryMock.go
 
 type Interface interface {
 	SendLetter(w http.ResponseWriter, r *http.Request)

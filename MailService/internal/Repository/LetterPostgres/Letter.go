@@ -4,7 +4,7 @@ import (
 	"Mailer/MailService/internal/Model"
 	"Mailer/MailService/internal/Repository"
 	"Mailer/MailService/pkg/convert"
-	smtp "Mailer/SmtpService/proto/smtp"
+	smtp "Mailer/SmtpService/proto"
 	"context"
 	crypto "crypto/rand"
 	"fmt"

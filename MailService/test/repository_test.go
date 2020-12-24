@@ -32,16 +32,16 @@ func TestGetLettersSendDir(t *testing.T) {
 	uc.GetLettersSendDir(0)
 }
 
-func TestSaveLetter(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockLetter := mock.NewMockLetterDB(ctrl)
-	mockLetter.EXPECT().SaveMail(Letter).Return(nil)
-	uc := UseCase.New(mockLetter)
-
-	uc.SaveLetter(Letter)
-}
+//func TestSaveLetter(t *testing.T) {
+//	ctrl := gomock.NewController(t)
+//	defer ctrl.Finish()
+//
+//	mockLetter := mock.NewMockLetterDB(ctrl)
+//	mockLetter.EXPECT().SaveMail(Letter).Return(nil)
+//	uc := UseCase.New(mockLetter)
+//
+//	uc.SaveLetter(Letter)
+//}
 
 func TestWatchLetter(t *testing.T) {
 	ctrl := gomock.NewController(t)

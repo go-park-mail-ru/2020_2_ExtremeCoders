@@ -1,6 +1,5 @@
 package UserPostgres
 
-//go:generate mockgen -destination=../mocks/mock_User.go -package=mocks -source=./DataBaseRequests.go
 
 import (
 	"Mailer/UserService/internal/UserModel"

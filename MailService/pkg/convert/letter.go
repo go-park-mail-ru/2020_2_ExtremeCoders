@@ -3,7 +3,7 @@ package convert
 import (
 	"Mailer/MailService/internal/Model"
 	pb "Mailer/MailService/proto"
-	smtp "Mailer/SmtpService/proto/smtp"
+	smtp "Mailer/SmtpService/proto"
 )
 
 func ModelToProto(letter Model.Letter) pb.Letter {
