@@ -6,11 +6,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"
+	"github.com/jhillyerd/enmime"
 	"google.golang.org/grpc"
 	"io"
-	"io/ioutil"
 	"strings"
-	"github.com/jhillyerd/enmime"
 )
 
 // The Backend implements SMTP server methods.
@@ -62,14 +61,12 @@ func (s *Session) Data(r io.Reader) error {
 	)
 	defer grcpMailService.Close()
 	mailManager :=server.NewLetterServiceClient(grcpMailService)
-	var mail string
-	if b, err := ioutil.ReadAll(r); err != nil {
-		return err
-	} else {
-		mail+=string(b)
-	}
-
-
+	//var mail string
+	//if b, err := ioutil.ReadAll(r); err != nil {
+	//	return err
+	//} else {
+	//	mail+=string(b)
+	//}
 	ctx:=context.Background()
 	env, _ := enmime.ReadEnvelope(r)
 	// Headers can be retrieved via Envelope.GetHeader(name).
