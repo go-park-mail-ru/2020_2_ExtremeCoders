@@ -32,6 +32,7 @@ var AllowedOriginsCORS = []string{
 	"http://95.163.209.195:3000", "http://95.163.209.195",
 	"http://95.163.209.195:3000", "http://95.163.209.195:80",
 	"http://95.163.209.195", "https://95.163.209.195", "https://mailer.ru.com",
+	"https://localhost:8080",
 }
 var AllowedHeadersCORS = []string{"Version", "Authorization", "Content-Type", "csrf_token"}
 var AllowedMethodsCORS = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
