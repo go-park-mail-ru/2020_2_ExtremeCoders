@@ -90,7 +90,7 @@ func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64
 	})
 	data:= []Model.Letter{}
 	for _, let:=range letters{
-		if let.Box==false && let.Spam==false{
+		if !let.Box && !let.Spam{
 			data=append(data, let)
 		}
 	}
@@ -105,7 +105,7 @@ func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 	}
 	data:= []Model.Letter{}
 	for _, let:=range letters{
-		if let.Box==false && let.Spam==false{
+		if !let.Box && !let.Spam{
 			data=append(data, let)
 		}
 	}
@@ -125,7 +125,7 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 	})
 	data:= []Model.Letter{}
 	for _, let:=range letters{
-		if let.Box==false && let.Spam==false{
+		if !let.Box && !let.Spam{
 			data=append(data, let)
 		}
 	}
@@ -368,7 +368,7 @@ func (dbInfo dataBase) GetSpam(email string) (error, []Model.Letter) {
 	}
 	var data []Model.Letter
 	for _, let := range letters {
-		if (let.Receiver == email || let.Sender == email) && let.Box==false {
+		if (let.Receiver == email || let.Sender == email) && !let.Box {
 			data = append(data, let)
 		}
 	}
@@ -393,7 +393,7 @@ func (dbInfo dataBase) GetBox(email string) (error, []Model.Letter) {
 
 func (dbInfo dataBase)SetItSpam(lid uint64) error{
 	err, letter:= dbInfo.GetLetterByLid(lid)
-	if letter.Spam==true{
+	if letter.Spam{
 		letter.Spam=false
 	}
 	if err!=nil{
@@ -409,7 +409,7 @@ func (dbInfo dataBase)SetItSpam(lid uint64) error{
 
 func (dbInfo dataBase)SetItBox(lid uint64) error{
 	err, letter:= dbInfo.GetLetterByLid(lid)
-	if letter.Box==true{
+	if letter.Box{
 		letter.Box=false
 	} else{
 		letter.Spam=false

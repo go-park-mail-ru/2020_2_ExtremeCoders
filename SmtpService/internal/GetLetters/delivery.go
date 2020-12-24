@@ -40,7 +40,9 @@ func (s *Session) Mail(from string, opts smtp.MailOptions) error {
 		}
 	}()
 	fmt.Println("EMail from:", from, opts.Auth)
-	go send.SendAnswerCouldNotFindUser(from)
+	go func() {
+		_ = send.SendAnswerCouldNotFindUser(from)
+	}()
 	return nil
 }
 
@@ -81,7 +83,7 @@ func (s *Session) Data(r io.Reader) error {
 	fmt.Println(mail)
 	fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	resp, _:=mailManager.SaveLetter(ctx, &letter)
-	if resp.Ok==false{
+	if !resp.Ok{
 		_ = send.SendAnswerCouldNotFindUser(letter.Sender)
 	}
 	return nil
@@ -101,7 +103,7 @@ func parseEmail(s string) server.Letter{
 	var emtext string
 	var emSubj string
 	for ; s[pos] != '>'; pos++ {
-		if flag == true {
+		if flag {
 			email += string(s[pos])
 		}
 		if s[pos] == '<' {

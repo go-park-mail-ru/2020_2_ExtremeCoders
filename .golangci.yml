@@ -111,6 +111,7 @@ issues:
 
   exclude:
     - w.Write(.*)
+    - return [^\s]*
 
 
   # only those changes are analyzed, else only changes in HEAD~ are analyzed.

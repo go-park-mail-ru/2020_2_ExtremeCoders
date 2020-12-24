@@ -127,7 +127,7 @@ func (storage S3Conf)SaveAvatar(file *fileProto.Avatar) error{
 	creds:=credentials.NewStaticCredentials(storage.AccessKey, storage.SecretKey, storage.Token)
 	_, err=creds.Get()
 	if err!=nil{
-		fmt.Print("error cred: %v\n", err)
+		fmt.Printf("error cred: %v\n", err)
 		return nil
 	}
 	cfg:=aws.NewConfig().WithRegion(
@@ -205,7 +205,7 @@ func (storage S3Conf)GetDefaultAvatar() (*fileProto.Avatar, error){
 	}
 	defer resp.Body.Close()
 	var f fileProto.Avatar
-	body, err := ioutil.ReadAll(resp.Body)
+	body, _ := ioutil.ReadAll(resp.Body)
 	f.Content=body
 	return &f, nil
 }

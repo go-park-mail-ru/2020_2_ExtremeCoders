@@ -278,7 +278,7 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := d.lsClient.RemoveLetterFromDir(r.Context(), &letterService.DirLid{
+	resp, _ := d.lsClient.RemoveLetterFromDir(r.Context(), &letterService.DirLid{
 		Did:  uint64(id),
 		Lid:  lid,
 		Type: true,
@@ -299,7 +299,7 @@ func (d Delivery) RemoveLetterInFolder(w http.ResponseWriter, r *http.Request) {
 func (d Delivery) RemoveFolder(w http.ResponseWriter, r *http.Request) {
 	folderName := r.FormValue("folderName")
 	fmt.Println("url", r.URL, strings.Contains(r.URL.Path, "received"), strings.Contains(r.URL.Path, "sended"), folderName)
-	kind := true
+	var kind bool
 	textKind := "received"
 	if strings.Contains(r.URL.Path, "received") {
 		kind = true

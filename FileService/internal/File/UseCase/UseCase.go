@@ -31,7 +31,6 @@ func (uc UseCase) GetAvatar(user *fileProto.User) (*fileProto.Avatar, error) {
 	avatar, err := uc.repo.GetAvatar(user)
 
 	if avatar == nil || err!=nil ||avatar.Content==nil {
-		err = nil
 		avatar, err = uc.repo.GetDefaultAvatar()
 	}
 	if err != nil {

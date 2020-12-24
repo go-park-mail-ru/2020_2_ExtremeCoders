@@ -99,7 +99,7 @@ func (lsManager LetterServiceManager) FindSimilar(sim string, email string) stri
 func (lsManager LetterServiceManager) GetLetterBy(what string, val string, email string) (error, []LetterModel.Letter){
 	ctx := context.Background()
 	resp, _:=lsManager.lsClient.GetLetterBy(ctx, &letterService.GetBy{What: what, Value: val, Email: email})
-	if resp.Result.Ok == false {
+	if !resp.Result.Ok {
 		return LetterRepository.ReceivedLetterError, nil
 	}
 	return nil, convert.ProtoToModelList(resp.Letter)
@@ -108,7 +108,7 @@ func (lsManager LetterServiceManager) GetLetterBy(what string, val string, email
 func (lsManager LetterServiceManager)SetLetterInSpam(lid uint64) error{
 	ctx := context.Background()
 	resp, _:=lsManager.lsClient.SetLetterInSpam(ctx, &letterService.Lid{Lid: lid})
-	if resp.Ok == false {
+	if !resp.Ok {
 		return LetterRepository.SetSpamError
 	}
 	return nil
@@ -117,7 +117,7 @@ func (lsManager LetterServiceManager)SetLetterInSpam(lid uint64) error{
 func (lsManager LetterServiceManager)SetLetterInBox(lid uint64) error{
 	ctx := context.Background()
 	resp, _:=lsManager.lsClient.SetLetterInBox(ctx, &letterService.Lid{Lid: lid})
-	if resp.Ok == false {
+	if !resp.Ok {
 		return LetterRepository.SetBoxError
 	}
 	return nil

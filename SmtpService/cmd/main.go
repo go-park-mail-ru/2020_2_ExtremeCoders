@@ -32,7 +32,9 @@ func main() {
 
 	fmt.Println("Starting server at", s.Addr)
 	wg.Add(1)
-	go s.ListenAndServe()
+	go func() {
+		_ = s.ListenAndServe()
+	}()
 
 
 

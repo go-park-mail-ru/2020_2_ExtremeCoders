@@ -38,7 +38,7 @@ func New(usecase UserUseCase.UserUseCase, fileManager FileServise.FileServiceCli
 }
 
 func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\n\nsession\n\n\n")
+	fmt.Println("\n\n\nsession")
 	if r.Method == http.MethodPost {
 		de.SignIn(w, r)
 	}
@@ -57,7 +57,7 @@ func (de delivery) Session(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} UserModel.User
 // @Router /user [post]
 func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\n\nsignup\n\n\n")
+	fmt.Println("\n\n\nsignup")
 	if r.Method != http.MethodPost {
 		return
 	}
@@ -95,7 +95,7 @@ func (de delivery) Signup(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} UserModel.User
 // @Router /session [post]
 func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\n\nsignin\n\n\n")
+	fmt.Println("\n\n\nsignin")
 	if r.Method != http.MethodPost {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -122,23 +122,19 @@ func (de delivery) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Cookie, uint16) {
-	fmt.Println("\n\n\ngetbyreqvest\n\n\n")
+	fmt.Println("\n\n\ngetbyreqvestn")
 	session, err := r.Cookie("session_id")
 	if err == http.ErrNoCookie {
-		fmt.Println("\n\n\n1.1\n\n\n")
 		return nil, nil, 401
 	}
 	uid, ok := de.Uc.GetDB().IsOkSession(session.Value)
 	if ok != nil {
-		fmt.Println("\n\n\n1.2\n\n\n")
 		return nil, nil, 402
 	}
 	user, err := de.Uc.GetDB().GetUserByUID(uid)
 	if err != nil {
-		fmt.Println("\n\n\n1.3\n\n\n")
 		return nil, nil, 402
 	}
-	fmt.Println("\n\n\n1.4\n\n\n")
 	return user, session, 200
 }
 
@@ -151,24 +147,21 @@ func (de delivery) GetUserByRequest(r *http.Request) (*UserModel.User, *http.Coo
 // @Success 200 {object} errors.AnswerGet
 // @Router /user [get]
 func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\n\nprofile\n\n\n")
+	fmt.Println("\n\n\nprofile")
 	if r.Method == http.MethodPost {
 		de.Signup(w, r)
 		return
 	}
 	user, session, err := de.GetUserByRequest(r)
 	if err != 200 {
-		fmt.Println("\n\n\n1\n\n\n")
 		w.Write(CookieError(err))
 		return
 	}
 	if r.Method == http.MethodGet {
-		fmt.Println("\n\n\n2\n\n\n", user)
 		w.Write(errors.GetOkAnsData(session.Value, *user))
 		fmt.Println("SEND USER DATA")
 		return
 	} else if r.Method == http.MethodPut {
-		fmt.Println("\n\n\n3\n\n\n")
 		var up UserModel.User
 		up.Email = user.Email
 		up.Name = context.GetStrFormValueSafety(r, "profile_firstName")
@@ -178,7 +171,6 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 		w.Write(ProfileError(err, session))
 		return
 	}
-	fmt.Println("\n\n\n4\n\n\n")
 	w.Write(errors.GetErrorUnexpectedAns())
 }
 
@@ -192,7 +184,7 @@ func (de delivery) Profile(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /session [delete]
 func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\n\nlogout\n\n\n")
+	fmt.Println("\n\n\nlogout")
 	if r.Method != http.MethodDelete {
 		w.Write(errors.GetErrorNotPostAns())
 		return
@@ -222,7 +214,7 @@ func (de delivery) Logout(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} UserModel.User
 // @Router /user [get]
 func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
-	fmt.Println("\n\n\nloadfile\n\n\n")
+	fmt.Println("\n\n\nloadfile")
 	file, fileHeader, err := r.FormFile("avatar")
 	if file == nil {
 		return
@@ -250,7 +242,7 @@ func (de delivery) LoadFile(user *UserModel.User, r *http.Request) {
 // @Success 200 file avatar
 // @Router /user/avatar [get]
 func (de delivery) GetAvatar(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\n\n\ngetavatar\n\n\n")
+	fmt.Println("\n\n\ngetavatar")
 	if r.Method == http.MethodOptions {
 		w.Write([]byte(""))
 		return
