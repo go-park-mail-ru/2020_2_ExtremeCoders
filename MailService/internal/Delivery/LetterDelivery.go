@@ -48,6 +48,7 @@ func (ld Delivery) SaveLetter(ctx context.Context, letter *pb.Letter) (*pb.Respo
 		resp.Ok = false
 		resp.Description = err.Error()
 	}
+	fmt.Println("RESPONSE: ", resp)
 	return &resp, nil
 }
 
