@@ -8,4 +8,8 @@ Mailer/MainApplication/go.sum
 /.travis/deploy_key
 /.travis/deploy_key.pub
 *.txt
-/mock_.*
+/FileService/test/mock_*/
+/MailService/test/mock_*/
+/MainApplication/test/mock_*/
+/SmtpService/test/mock_*/
+/UserService/test/mock_*/
