@@ -10,7 +10,6 @@ sudo kill 9 `sudo lsof -t -i:8081`
 sudo kill 9 `sudo lsof -t -i:8082`
 sudo kill 9 `sudo lsof -t -i:8083`
 sudo kill 9 `sudo lsof -t -i:8084`
-./cmd/generateProtoFiles.sh
 go mod vendor
 go run ./FileService/cmd/main.go &>FileService.txt &
 go run ./MailService/cmd/main.go &>MailService.txt &
