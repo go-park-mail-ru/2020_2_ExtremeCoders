@@ -9,7 +9,6 @@ import (
 	"github.com/jhillyerd/enmime"
 	"google.golang.org/grpc"
 	"io"
-	"strings"
 )
 
 // The Backend implements SMTP server methods.
@@ -61,12 +60,6 @@ func (s *Session) Data(r io.Reader) error {
 	)
 	defer grcpMailService.Close()
 	mailManager :=server.NewLetterServiceClient(grcpMailService)
-	//var mail string
-	//if b, err := ioutil.ReadAll(r); err != nil {
-	//	return err
-	//} else {
-	//	mail+=string(b)
-	//}
 	ctx:=context.Background()
 	env, _ := enmime.ReadEnvelope(r)
 	// Headers can be retrieved via Envelope.GetHeader(name).
@@ -89,67 +82,12 @@ func (s *Session) Data(r io.Reader) error {
 
 	// mime.Attachments contains the non-inline attachments.
 	fmt.Printf("Attachments: %v\n", len(env.Attachments))
-	//letter:=parseEmail(mail)
-	//fmt.Println("\n\n\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	//fmt.Println(letter.Receiver)
-	//fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	//fmt.Println(letter.Sender)
-	//fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	//fmt.Println(letter.Theme)
-	//fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	//fmt.Println(letter.Text)
-	//fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-	//fmt.Println(mail)
-	//fmt.Println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
 	resp, _:=mailManager.SaveLetter(ctx, nil)
-	if resp.Ok==false{
+	if resp==nil || resp.Ok==false{
+		fmt.Println("COULD NOT SAVE LETTER: ", resp.Description)
 		_ = send.SendAnswerCouldNotFindUser(env.GetHeader("From"))
 	}
 	return nil
-}
-
-func parseEmail(s string) server.Letter{
-	letter :=server.Letter{}
-	from := "\nFrom:"
-	subj := "\nSubject: "
-	text := "\n"
-	to := "\nTo: "
-	fmt.Println(strings.Index(s, from))
-	pos := strings.Index(s, from)
-	var flag bool
-	var email string
-	var emTo string
-	var emtext string
-	var emSubj string
-	for ; s[pos] != '>'; pos++ {
-		if flag == true {
-			email += string(s[pos])
-		}
-		if s[pos] == '<' {
-			flag = true
-		}
-	}
-	pos = strings.Index(s, subj)
-	pos += len(subj)
-	for ; s[pos] != '\n'; pos++ {
-		emSubj += string(s[pos])
-	}
-	pos = strings.Index(s, to)
-	pos += len(to)
-	for ; s[pos] != '\n'; pos++ {
-		emTo += string(s[pos])
-	}
-	s=s[pos:]
-	pos = strings.LastIndex(s, text)
-	pos += len(text)
-	for ; pos < len(s); pos++ {
-		emtext += string(s[pos])
-	}
-	letter.Sender=emTo
-	letter.Receiver=email
-	letter.Theme=emSubj
-	letter.Text=emtext
-	return letter
 }
 
 func (s *Session) Reset() {}
