@@ -88,9 +88,6 @@ func (s *Session) Data(r io.Reader) error {
 }
 
 func parseEmail(s string) server.Letter{
-	for ;s[0]=='\n';{
-		s=s[1:]
-	}
 	letter :=server.Letter{}
 	from := "\nFrom:"
 	subj := "\nSubject: "
