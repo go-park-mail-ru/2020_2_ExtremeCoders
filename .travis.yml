@@ -43,6 +43,8 @@ script:
 - pwd
 - echo $TRAVIS_BUILD_DIR
 - ./cmd/generateProtoFiles.sh
+- mockgen --version
+- go generate ./...
 - go mod vendor
 - golangci-lint run
 - ./cmd/runFileServiceTest.sh
