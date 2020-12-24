@@ -20,8 +20,8 @@ before_script:
 - psql -c "ALTER USER postgres WITH PASSWORD '987654321';" -U postgres
 - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
     | sh -s -- -b $(go env GOPATH)/bin $GOLANGCI_LINT_VERSION
-- go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
-- go get -u google.golang.org/grpc
+- GO111MODULE=on go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
+- GO111MODULE=on go get -u google.golang.org/grpc
 - GO111MODULE=on go get github.com/golang/mock/mockgen@v1.4.4
 
 
@@ -40,11 +40,11 @@ before_deploy:
 - cat ${TRAVIS_BUILD_DIR}/.travis/ssh_config >> ~/.ssh/config
 script:
 - pwd
-- go mod vendor
-- golangci-lint run
 - echo $TRAVIS_BUILD_DIR
 - ./cmd/generateProtoFiles.sh
 - go generate ./...
+- go mod vendor
+- golangci-lint run
 - ./cmd/runFileServiceTest.sh
 - ./cmd/runMailServiceTest.sh
 - ./cmd/runMainApplicationTest.sh
