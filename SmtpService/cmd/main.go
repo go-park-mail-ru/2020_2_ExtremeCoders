@@ -3,7 +3,7 @@ package main
 import (
 	"Mailer/SmtpService/internal/GetLetters"
 	"Mailer/SmtpService/internal/SendLetters"
-	pb "Mailer/SmtpService/proto/smtp"
+	pb "Mailer/SmtpService/proto"
 	"fmt"
 	"github.com/emersion/go-smtp"
 	"google.golang.org/grpc"

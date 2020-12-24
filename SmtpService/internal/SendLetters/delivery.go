@@ -1,8 +1,8 @@
 package SendLetters
 
 import (
-	pb "Mailer/SmtpService/proto/smtp"
-	smtp2 "Mailer/SmtpService/proto/smtp"
+	pb "Mailer/SmtpService/proto"
+	smtp2 "Mailer/SmtpService/proto"
 	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"

@@ -2,7 +2,7 @@ package SmtpManager
 
 import (
 	"github.com/stretchr/testify/assert"
-	"Mailer/SmtpService/proto/smtp"
+	smtp "Mailer/SmtpService/proto"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package SendLetters
 
 import (
-	"Mailer/SmtpService/proto/smtp"
+	smtp "Mailer/SmtpService/proto"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
