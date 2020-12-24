@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 )
-//go:generate mockgen -source=./LetterDelivery.go -destination=../../test/mock_LetterDelivery/DeliveryMock.go
 
 type Delivery struct {
 	uc UseCase.Interface
@@ -49,7 +48,7 @@ func (ld Delivery) SaveLetter(ctx context.Context, letter *pb.Letter) (*pb.Respo
 		resp.Ok = false
 		resp.Description = err.Error()
 	}
-	fmt.Println("RESPONSE: ", resp)
+	fmt.Println("RESPONSE: ", resp.Description)
 	return &resp, nil
 }
 

@@ -90,7 +90,7 @@ func (s *Session) Data(r io.Reader) error {
 	// mime.Attachments contains the non-inline attachments.
 	fmt.Printf("Attachments: %v\n", len(env.Attachments))
 	resp, _:=mailManager.SaveLetter(ctx, nil)
-	if resp==nil || resp.Ok==false{
+	if resp==nil || !resp.Ok{
 		fmt.Println("COULD NOT SAVE LETTER: ", resp.Description)
 		_ = send.SendAnswerCouldNotFindUser(env.GetHeader("From"))
 	}
