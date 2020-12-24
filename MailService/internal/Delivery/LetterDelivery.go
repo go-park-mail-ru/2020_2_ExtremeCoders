@@ -40,10 +40,10 @@ func (ld Delivery) GetLettersByDirSend(ctx context.Context, dir *pb.DirName) (*p
 }
 
 func (ld Delivery) SaveLetter(ctx context.Context, letter *pb.Letter) (*pb.Response, error) {
-	fmt.Println("letter ", letter)
+	fmt.Println("Save letter ", letter)
 	letter.IsWatched = false
 	err := ld.uc.SaveLetter(convert.ProtoToModel(letter))
-	resp := pb.Response{Ok: true, Description: ""}
+	resp := pb.Response{Ok: true, Description: "ok"}
 	if err != nil {
 		resp.Ok = false
 		resp.Description = err.Error()

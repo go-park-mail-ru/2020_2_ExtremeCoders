@@ -63,6 +63,7 @@ func (s *Session) Data(r io.Reader) error {
 	if err!=nil{
 		fmt.Println("NOT Connect by grpc: ", err.Error())
 	}
+	fmt.Println("Connect OK!")
 	defer grcpMailService.Close()
 	mailManager :=server.NewLetterServiceClient(grcpMailService)
 	ctx:=context.Background()
@@ -89,7 +90,9 @@ func (s *Session) Data(r io.Reader) error {
 	if resp==nil || !resp.Ok{
 		fmt.Println("COULD NOT SAVE LETTER: ", resp.Description)
 		_ = send.SendAnswerCouldNotFindUser(env.GetHeader("From"))
+		return err
 	}
+	fmt.Println("SAVE LETTER OK: ", resp.Description)
 	return nil
 }
 
