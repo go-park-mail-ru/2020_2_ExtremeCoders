@@ -14,6 +14,8 @@ cd 2020_2_ExtremeCoders
 ls
 git checkout CiAndCleanArch
 git pull
+cat ~/myconf.go > config/conf.go
+cat config/config.go
 ./cmd/runAllServices.sh
 sleep 5
 echo res
