@@ -16,6 +16,7 @@ git checkout CiAndCleanArch
 git pull
 ./cmd/runAllServices.sh
 sleep 5
+echo res
 cat FileService.txt
 cat MailService.txt
 cat UserService.txt
