@@ -13,6 +13,7 @@ addons:
     packages:
     - postgresql
     - postgresql-client
+    - protobuf-compiler
 
 before_script:
 - sudo service postgresql start
