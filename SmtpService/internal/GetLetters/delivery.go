@@ -56,10 +56,13 @@ func (s *Session) Rcpt(to string) error {
 }
 
 func (s *Session) Data(r io.Reader) error {
-	grcpMailService, _ := grpc.Dial(
+	grcpMailService, err := grpc.Dial(
 		"95.163.209.195:8083",
 		grpc.WithInsecure(),
 	)
+	if err!=nil{
+		fmt.Println("NOT Connect by grpc: ", err.Error())
+	}
 	defer grcpMailService.Close()
 	mailManager :=server.NewLetterServiceClient(grcpMailService)
 	ctx:=context.Background()
