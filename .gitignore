@@ -13,3 +13,4 @@ Mailer/MainApplication/go.sum
 /MainApplication/test/mock_*/
 /SmtpService/test/mock_*/
 /UserService/test/mock_*/
+/FileService/test/selicium/
