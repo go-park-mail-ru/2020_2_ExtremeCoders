@@ -6,8 +6,13 @@ pwd
 echo DEPLLLOYMachine
 pwd
 ls
-#cd go
-#rm -rf 2020_2_ExtremeCoders
-#git clone https://github.com/sergii1/2020_2_ExtremeCoders
-#cd 2020_2_ExtremeCoders
-#./cmd/runAllServices.sh
+cd go
+rm -rf 2020_2_ExtremeCoders
+git clone https://github.com/sergii1/2020_2_ExtremeCoders
+cd 2020_2_ExtremeCoders
+git checkout CiAndCleanArch
+./cmd/runAllServices.sh
+cat FileService.txt
+cat MailService.txt
+cat UserService.txt
+cat MainApplication.txt

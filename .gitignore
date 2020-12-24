@@ -7,3 +7,4 @@ Mailer/MainApplication/go.sum
 /vendor/
 /.travis/deploy_key
 /.travis/deploy_key.pub
+*.txt

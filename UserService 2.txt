@@ -1,2 +1,0 @@
-ERR FATAL #28P01 password authentication failed for user "postgres"
-FATAL #28P01 password authentication failed for user "postgres"
