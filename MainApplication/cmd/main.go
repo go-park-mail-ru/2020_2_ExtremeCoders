@@ -148,7 +148,7 @@ func main() {
 	mux.HandleFunc("/api/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 
 	mux.PathPrefix("/api/docs/").Handler(httpSwagger.Handler(
-		httpSwagger.URL("https://localhost:8080/api/docs/doc.json"), //The url pointing to API definition
+		httpSwagger.URL("https://mailer/api/docs/doc.json"), //The url pointing to API definition
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("#swagger-ui"),
