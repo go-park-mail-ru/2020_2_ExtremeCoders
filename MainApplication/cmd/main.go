@@ -170,6 +170,11 @@ func main() {
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 	}
+	fmt.Println(
+		config.AllowedOriginsCORS,
+		config.AllowedHeadersCORS,
+		config.AllowedMethodsCORS,
+		)
 	fmt.Println("starting Main at ", config.Port)
 	err = server.ListenAndServe()
 	fmt.Println(err.Error())
