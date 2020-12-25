@@ -18,7 +18,7 @@ import (
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"github.com/swaggo/http-swagger"
-    _ "Mailer/docs"
+	_ "Mailer/docs"
 	"google.golang.org/grpc"
 	"net/http"
 )
