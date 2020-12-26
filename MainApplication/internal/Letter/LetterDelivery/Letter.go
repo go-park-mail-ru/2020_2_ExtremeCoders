@@ -5,13 +5,13 @@ import (
 	"Mailer/MainApplication/internal/Letter/LetterUseCase"
 	"Mailer/MainApplication/internal/errors"
 	"Mailer/MainApplication/internal/pkg/context"
+	protoUs "Mailer/UserService/proto"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"strconv"
 	"time"
-	protoUs "Mailer/UserService/proto"
 )
 //go:generate mockgen -source=./Letter.go -destination=../../../test/mock_LetterDelivery/LetterDeliveryMock.go
 
@@ -87,13 +87,22 @@ func (de delivery) SendLetter(w http.ResponseWriter, r *http.Request) {
 	letter.DateTime = time.Now().Unix()
 	err := de.Uc.SaveLetter(&letter)
 	w.Write(SendLetterError(err, letter))
+
+
 	receiver, err := de.UserManager.GetUserByEmail(r.Context(), &protoUs.Email{Email: letter.Receiver})
 	if err != nil {
 		fmt.Printf("\n\nNOTIFY TO %s FAILED %s\n", letter.Receiver, err.Error())
 		return
 	}
+
+	err, letters := de.Uc.GetReceivedLetters(receiver.Email, uint64(5), uint64(0))
+	if err != nil {
+		fmt.Printf("\n\nNOTIFY TO %s FAILED %s\n", letter.Receiver, err.Error())
+		return
+	}
+
 	if val, ok := context.WebSockets[receiver.Uid]; ok {
-		err = val.WriteMessage(websocket.TextMessage, []byte("You have a message" + letter.Sender + letter.Theme + letter.Text))
+		err = val.WriteMessage(websocket.TextMessage,GetLettersError(err, letters))
 		if err!=nil {
 			fmt.Printf("\n\nNOTIFY TO %s FAILED %s\n", letter.Receiver, err.Error())
 		}
