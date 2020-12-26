@@ -26,7 +26,7 @@ type LetterDB interface {
 
 	DeleteLetter(uint64) error
 	FindSimilar(string, string) string
-	GetLetterBy(string, string, string) (error, []LetterModel.Letter)
+	GetLetterBy(string, string, string, int, int) (error, []LetterModel.Letter)
 
 	SetLetterInSpam(uint64) error
 	SetLetterInBox(uint64) error

@@ -80,7 +80,7 @@ func (dbInfo dataBase) GetLetterByLid(lid uint64) (error, Model.Letter) {
 
 func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("directory_recv=?", Did).
+	exist := dbInfo.DB.Model(&letters).Where("directory_recv=?", Did).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -97,9 +97,10 @@ func (dbInfo dataBase) GetLettersRecvDir(Did uint64, limit uint64, offset uint64
 	return nil, data
 }
 
-func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
+func (dbInfo dataBase) GetLettersSentDir(Did uint64, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("directory_send=?", Did).Select()
+	exist := dbInfo.DB.Model(&letters).Where("directory_send=?", Did).Order("date_time DESC").
+		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
 	}
@@ -114,7 +115,7 @@ func (dbInfo dataBase) GetLettersSentDir(Did uint64) (error, []Model.Letter) {
 
 func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).
+	exist := dbInfo.DB.Model(&letters).Where("receiver=?", email).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -134,7 +135,7 @@ func (dbInfo dataBase) GetLettersRecv(email string, limit uint64, offset uint64)
 
 func (dbInfo dataBase) GetLettersSent(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	letters := []Model.Letter{}
-	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).
+	exist := dbInfo.DB.Model(&letters).Where("sender=?", email).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if exist != nil {
 		return Repository.SentLetterError, letters
@@ -294,10 +295,10 @@ func (dbInfo dataBase) FindText(text string, email string) ([]string, error) {
 	return data, nil
 }
 
-func (dbInfo dataBase) GetLetterByTheme(val string, email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetLetterByTheme(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE theme = ?", val)
-
+	err := dbInfo.DB.Model(&letters).Where("theme=?", email).Order("date_time DESC").
+		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
 	}
@@ -310,10 +311,10 @@ func (dbInfo dataBase) GetLetterByTheme(val string, email string) (error, []Mode
 	return nil, data
 }
 
-func (dbInfo dataBase) GetLetterByText(val string, email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetLetterByText(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE text = ?", val)
-
+	err := dbInfo.DB.Model(&letters).Where("text=?", email).Order("date_time DESC").
+		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
 	}
@@ -326,10 +327,10 @@ func (dbInfo dataBase) GetLetterByText(val string, email string) (error, []Model
 	return nil, data
 }
 
-func (dbInfo dataBase) GetLetterBySender(val string, email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetLetterBySender(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE sender = ?", val)
-
+	err := dbInfo.DB.Model(&letters).Where("sender=?", email).Order("date_time DESC").
+		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
 	}
@@ -342,10 +343,10 @@ func (dbInfo dataBase) GetLetterBySender(val string, email string) (error, []Mod
 	return nil, data
 }
 
-func (dbInfo dataBase) GetLetterByReceiver(val string, email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetLetterByReceiver(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE receiver = ?", val)
-
+	err := dbInfo.DB.Model(&letters).Where("receiver=?", email).Order("date_time DESC").
+		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
 	}
@@ -359,10 +360,10 @@ func (dbInfo dataBase) GetLetterByReceiver(val string, email string) (error, []M
 }
 
 
-func (dbInfo dataBase) GetSpam(email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetSpam(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE spam = ?", true)
-
+	err := dbInfo.DB.Model(&letters).Where("spam=?", email).Order("date_time DESC").
+		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
 	}
@@ -375,10 +376,10 @@ func (dbInfo dataBase) GetSpam(email string) (error, []Model.Letter) {
 	return nil, data
 }
 
-func (dbInfo dataBase) GetBox(email string) (error, []Model.Letter) {
+func (dbInfo dataBase) GetBox(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	_, err := dbInfo.DB.Query(&letters, "SELECT * FROM letters WHERE box = ?", true)
-
+	err := dbInfo.DB.Model(&letters).Where("box=?", email).Order("date_time DESC").
+		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
 	}

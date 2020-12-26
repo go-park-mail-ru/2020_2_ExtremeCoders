@@ -29,7 +29,7 @@ func (ld Delivery) GetLettersByDirRecv(ctx context.Context, dir *pb.DirName) (*p
 }
 
 func (ld Delivery) GetLettersByDirSend(ctx context.Context, dir *pb.DirName) (*pb.LetterListResponse, error) {
-	err, letters := ld.uc.GetLettersSendDir(dir.DirName)
+	err, letters := ld.uc.GetLettersSendDir(dir.DirName, dir.Limit, dir.Offset)
 	resp := pb.Response{Ok: true}
 	if err != nil || letters == nil {
 		return &pb.LetterListResponse{}, err
@@ -138,7 +138,7 @@ func (ld Delivery) FindSimilar(ctx context.Context, Similar *pb.Similar) (*pb.Si
 }
 
 func (ld Delivery) GetLetterBy(ctx context.Context, GetBy *pb.GetBy) (*pb.LetterListResponse, error) {
-	err, letters := ld.uc.GetLetterBy(GetBy.What, GetBy.Value, GetBy.Email)
+	err, letters := ld.uc.GetLetterBy(GetBy.What, GetBy.Value, GetBy.Email, uint64(GetBy.Limit), uint64(GetBy.Offset))
 	var pbLetter pb.LetterListResponse
 	var pbRes pb.Response
 	pbLetter.Result=&pbRes
