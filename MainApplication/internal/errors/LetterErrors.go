@@ -2,6 +2,7 @@ package errors
 
 import (
 	"Mailer/MainApplication/internal/Letter/LetterModel"
+	"encoding/json"
 )
 
 
@@ -11,7 +12,7 @@ func GetErrorSaveErrorAns() []byte {
 		Code:        400,
 		Description: "Could not save letter",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -20,7 +21,7 @@ func GetErrorNoRecieverAns() []byte {
 		Code:        408,
 		Description: "No such user in DB",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -29,7 +30,7 @@ func GetErrorReceivedLetterAns() []byte {
 		Code:        408,
 		Description: "Could not get letters",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -38,7 +39,7 @@ func GetGetLettersOkAns(letters []LetterModel.Letter) []byte {
 		Code:    200,
 		Letters: letters,
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -47,7 +48,7 @@ func GetSendOkAns(letters LetterModel.Letter) []byte {
 		Code: 200,
 		Lid:  letters.Id,
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -56,6 +57,6 @@ func GetDeleteLetterError(err error)[]byte{
 		Code:        500,
 		Description: err.Error(),
 	}
-	jsAns, _:=ans.MarshalJSON()
+	jsAns, _:=json.Marshal(ans)
 	return jsAns
 }

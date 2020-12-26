@@ -4,6 +4,7 @@ import (
 	Model "Mailer/MainApplication/internal/Letter/LetterModel"
 	mailProto "Mailer/MailService/proto"
 	userProto "Mailer/UserService/proto"
+	"encoding/json"
 )
 
 func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
@@ -11,7 +12,7 @@ func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
 		Code:    200,
 		Folders: ProtoToModelList(folders),
 	}
-	res, err := ans.MarshalJSON()
+	res, err := json.Marshal(ans)
 	if err!=nil{
 		return nil
 	}
@@ -20,7 +21,7 @@ func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
 
 func SuccessRespAns() []byte {
 	ans := SuccessAns{Code: 200}
-	res, _ := ans.MarshalJSON()
+	res, _ := json.Marshal(ans)
 	return res
 }
 
@@ -29,7 +30,7 @@ func GetFoldersError(err error) []byte {
 		Code:        400,
 		Description: err.Error(),
 	}
-	res, _ := ans.MarshalJSON()
+	res, _ := json.Marshal(ans)
 	return res
 }
 
@@ -39,7 +40,7 @@ func ProtoResponseAnswer(pbLetter *mailProto.Response) []byte {
 		ans := LetterList{
 			Code:        500,
 		}
-		res, _ := ans.MarshalJSON()
+		res, _ := json.Marshal(ans)
 		return res
 	}
 	if !pbLetter.Ok {
@@ -49,7 +50,7 @@ func ProtoResponseAnswer(pbLetter *mailProto.Response) []byte {
 		Code:        code,
 		Description: pbLetter.Description,
 	}
-	res, _ := ans.MarshalJSON()
+	res, _ := json.Marshal(ans)
 	return res
 }
 
@@ -59,7 +60,7 @@ func ProtoLetterListAnswer(pbLetter *mailProto.LetterListResponse) []byte {
 		ans := LetterList{
 			Code:        500,
 		}
-		res, _ := ans.MarshalJSON()
+		res, _ := json.Marshal(ans)
 		return res
 	}
 	if !pbLetter.Result.Ok {
@@ -70,7 +71,7 @@ func ProtoLetterListAnswer(pbLetter *mailProto.LetterListResponse) []byte {
 		Description: pbLetter.Result.Description,
 		Letter:      ProtoToModelMail(pbLetter),
 	}
-	res, _ := ans.MarshalJSON()
+	res, _ := json.Marshal(ans)
 	return res
 }
 

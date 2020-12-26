@@ -297,7 +297,7 @@ func (dbInfo dataBase) FindText(text string, email string) ([]string, error) {
 
 func (dbInfo dataBase) GetLetterByTheme(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	err := dbInfo.DB.Model(&letters).Where("theme=?", email).Order("date_time DESC").
+	err := dbInfo.DB.Model(&letters).Where("theme=?", val).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
@@ -313,7 +313,7 @@ func (dbInfo dataBase) GetLetterByTheme(val string, email string, limit uint64, 
 
 func (dbInfo dataBase) GetLetterByText(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	err := dbInfo.DB.Model(&letters).Where("text=?", email).Order("date_time DESC").
+	err := dbInfo.DB.Model(&letters).Where("text=?", val).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
@@ -329,7 +329,7 @@ func (dbInfo dataBase) GetLetterByText(val string, email string, limit uint64, o
 
 func (dbInfo dataBase) GetLetterBySender(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	err := dbInfo.DB.Model(&letters).Where("sender=?", email).Order("date_time DESC").
+	err := dbInfo.DB.Model(&letters).Where("sender=?", val).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
@@ -345,7 +345,7 @@ func (dbInfo dataBase) GetLetterBySender(val string, email string, limit uint64,
 
 func (dbInfo dataBase) GetLetterByReceiver(val string, email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	err := dbInfo.DB.Model(&letters).Where("receiver=?", email).Order("date_time DESC").
+	err := dbInfo.DB.Model(&letters).Where("receiver=?", val).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
