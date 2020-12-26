@@ -362,7 +362,7 @@ func (dbInfo dataBase) GetLetterByReceiver(val string, email string, limit uint6
 
 func (dbInfo dataBase) GetSpam(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	err := dbInfo.DB.Model(&letters).Where("spam=?", email).Order("date_time DESC").
+	err := dbInfo.DB.Model(&letters).Where("spam=?", true).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
@@ -378,7 +378,7 @@ func (dbInfo dataBase) GetSpam(email string, limit uint64, offset uint64) (error
 
 func (dbInfo dataBase) GetBox(email string, limit uint64, offset uint64) (error, []Model.Letter) {
 	var letters []Model.Letter
-	err := dbInfo.DB.Model(&letters).Where("box=?", email).Order("date_time DESC").
+	err := dbInfo.DB.Model(&letters).Where("box=?", true).Order("date_time DESC").
 		Limit(int(limit)).Offset(int(offset)).Select()
 	if err != nil {
 		return Repository.GetLetterByError, nil
