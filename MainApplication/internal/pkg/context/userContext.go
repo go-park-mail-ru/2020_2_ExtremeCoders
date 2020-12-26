@@ -3,6 +3,7 @@ package context
 import (
 	"Mailer/config"
 	"Mailer/MainApplication/internal/User/UserModel"
+	"github.com/gorilla/websocket"
 
 	"context"
 	crypto "crypto/rand"
@@ -19,6 +20,9 @@ const (
 )
 
 var UserFromContextError = errors.New("Could not get user from context!")
+
+
+var WebSockets  = map[uint64]*websocket.Conn{}
 
 type userKey struct {
 }

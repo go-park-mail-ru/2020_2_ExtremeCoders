@@ -3,7 +3,6 @@ package main
 import (
 	protoFs "Mailer/FileService/proto"
 	protoMail "Mailer/MailService/proto"
-	"Mailer/config"
 	"Mailer/MainApplication/internal/Folder/FolderDelivery"
 	"Mailer/MainApplication/internal/Letter/LetterDelivery"
 	"Mailer/MainApplication/internal/Letter/LetterRepository/LetterService"
@@ -11,18 +10,21 @@ import (
 	"Mailer/MainApplication/internal/User/UserDelivery"
 	"Mailer/MainApplication/internal/User/UserRepository/UserMicroservice"
 	"Mailer/MainApplication/internal/User/UserUseCase"
+	"Mailer/MainApplication/internal/pkg/context"
 	"Mailer/MainApplication/internal/pkg/middleware"
 	protoUs "Mailer/UserService/proto"
+	"Mailer/config"
+	_ "Mailer/docs"
+	"flag"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"github.com/swaggo/http-swagger"
-	_ "Mailer/docs"
 	"google.golang.org/grpc"
 	"net/http"
 )
-
 
 // @title Mailer Swagger API
 // @version 1.0
@@ -36,6 +38,29 @@ import (
 // @license.url https://github.com/MartinHeinz/go-project-blueprint/blob/master/LICENSE
 
 // @BasePath /api/v1
+
+var addr = flag.String("addr", "localhost:8080", "http service address")
+
+var upgrader = websocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
+	return true
+}}
+
+
+func OpenWebSocket(w http.ResponseWriter, r *http.Request) {
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		fmt.Print("upgrade:", err)
+		return
+	}
+	err, um :=context.GetUserFromCtx(r.Context())
+	if err != nil {
+		fmt.Println("SOCKET: CANT GET USER BY CONTEXT", err)
+		c.WriteMessage(websocket.TextMessage,[]byte("cant get user"))
+		return
+	}
+	fmt.Println("SUCCESS SET SOCKET TO", um.Email, um.Id)
+	context.WebSockets[um.Id] = c
+}
 
 func main() {
 	grcpMailService, err := grpc.Dial(
@@ -74,8 +99,8 @@ func main() {
 
 	var lDB = LetterService.New(mailManager)
 	var lUC = LetterUseCase.New(lDB)
-	var lDE = LetterDelivery.New(lUC)
-
+	var lDE = LetterDelivery.New(lUC,userManager)
+	//userManager.UpdateProfile()
 	var fDe = FolderDelivery.New(userManager, mailManager)
 
 	mux := mux.NewRouter()
@@ -99,7 +124,6 @@ func main() {
 	//get user/letter/sent/{limit}/{offset} - получить отправленные письма
 	mux.HandleFunc("/api/user/letter/sent/{limit}/{offset}", lDE.GetSendLetters)
 
-
 	//get user/letter/sent/{limit}/{offset} - получить принятые письма
 	mux.HandleFunc("/api/user/letter/received/{limit}/{offset}", lDE.GetRecvLetters)
 
@@ -122,7 +146,6 @@ func main() {
 
 	//get user/folders/received - список папок в полученных
 	mux.HandleFunc("/api/user/folders/sended", fDe.GetFolderList)
-
 
 	//get user/foders/{received/sended}/{folderName} - письма из папки в полученых, письма из папки в отправленнх
 	mux.HandleFunc("/api/user/foders/received/{folderName}/{limit}/{offset}", fDe.GetLettersByFolder)
@@ -148,11 +171,13 @@ func main() {
 	mux.HandleFunc("/api/user/folders/sended/folderName/letter", fDe.AddLetterInFolder)
 
 	mux.PathPrefix("/api/docs/").Handler(httpSwagger.Handler(
-		httpSwagger.URL("https://mailer/api/docs/doc.json"), //The url pointing to API definition
+		httpSwagger.URL("http://localhost:8080/api/docs/doc.json"), //The url pointing to API definition
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("#swagger-ui"),
 	))
+
+	mux.HandleFunc("/api/socket", OpenWebSocket)
 	//mux.Handle("/metrics", promhttp.Handler())
 	//siteHandler := middleware.AccessLogMiddleware(mux)
 	//siteHandler = middleware.PanicMiddleware(siteHandler)
@@ -174,3 +199,4 @@ func main() {
 	err = server.ListenAndServe()
 	fmt.Println(err.Error())
 }
+

@@ -70,7 +70,7 @@ func (a AuthMiddleware) Auth(next http.Handler) http.Handler {
 		}
 		csrf, Error := r.Cookie(context.CsrfCookieName)
 
-		fmt.Printf("\n\n\nsuka kak ti zaibal\n\n%s\n\n\n", r.Header)
+		fmt.Printf("\n\n%s\n\n", r.Header)
 
 		if r.Method==http.MethodGet{
 			if Error == nil {
