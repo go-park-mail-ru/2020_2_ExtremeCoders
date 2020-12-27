@@ -47,6 +47,7 @@ message Folder{
   string name=1;
   string Type=2;
   uint64 uid=3;
+  uint64 id=4;
 }
 
 message FolderId{
@@ -66,7 +67,7 @@ message FolderNameType{
 }
 
 message FolderList{
-  repeated FolderNameType res  = 1;
+  repeated Folder res  = 1;
 }
 
 message FolderUidType{

@@ -15,7 +15,7 @@ type LetterUseCase interface {
 	WatchLetter(lid uint64) (error, LetterModel.Letter)
 	DeleteLetter(lid uint64) error
 	FindSim(sim string, email string) string
-	GetLetterBy(what string, val string, email string) (error, []LetterModel.Letter)
+	GetLetterBy(what string, val string, email string, limit int, offset int) (error, []LetterModel.Letter)
 	SetLetterInSpam(lid uint64) error
 	SetLetterInBox(lid uint64) error
 }
@@ -84,8 +84,8 @@ func (uc useCase) FindSim(sim string, email string) string{
 	return uc.Db.FindSimilar(sim, email)
 }
 
-func (uc useCase) GetLetterBy(what string, val string, email string) (error, []LetterModel.Letter){
-	return uc.Db.GetLetterBy(what, val, email)
+func (uc useCase) GetLetterBy(what string, val string, email string, limit int, offset int) (error, []LetterModel.Letter){
+	return uc.Db.GetLetterBy(what, val, email, limit, offset)
 }
 
 func (uc useCase)SetLetterInSpam(lid uint64) error{

@@ -115,7 +115,7 @@ func main() {
 
 	//get letter/by/{what}/{value} - what может быть равен
 	//(id, sender, receiver, theme, text, date_time, directory_recv, directory_send) - поиск по письмам
-	mux.HandleFunc("/api/letter/by/{what}/{value}", lDE.GetLetterBy)
+	mux.HandleFunc("/api/letter/by/{what}/{value}/{limit}/{offset}", lDE.GetLetterBy)
 
 	//get user/folders/received - список папок в отправленных
 	mux.HandleFunc("/api/user/folders/received", fDe.GetFolderList)
@@ -170,6 +170,11 @@ func main() {
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 	}
+	fmt.Println(
+		config.AllowedOriginsCORS,
+		config.AllowedHeadersCORS,
+		config.AllowedMethodsCORS,
+		)
 	fmt.Println("starting Main at ", config.Port)
 	err = server.ListenAndServe()
 	fmt.Println(err.Error())

@@ -68,6 +68,8 @@ message GetBy{
   string what=1;
   string value=2;
   string email=3;
+  int32 limit=4;
+  int32 offset=5;
 }
 
 service LetterService{

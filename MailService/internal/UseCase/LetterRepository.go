@@ -14,7 +14,7 @@ type UseCase struct {
 }
 
 type Interface interface {
-	GetLettersSendDir(dir uint64) (error, []Model.Letter)
+	GetLettersSendDir(dir uint64, limit uint64, offset uint64) (error, []Model.Letter)
 	GetLettersRecvDir(dir uint64, limit uint64, offset uint64) (error, []Model.Letter)
 	GetLettersSend(email string, limit uint64, offset uint64) (error, []Model.Letter)
 	GetLettersRecv(email string, limit uint64, offset uint64) (error, []Model.Letter)
@@ -26,7 +26,7 @@ type Interface interface {
 	RemoveDir(uint64, bool) error
 	RemoveLetter(uint64) error
 	FindSimilar(similar string, email string) SearchResult
-	GetLetterBy(what string, val string, email string) (error, []Model.Letter)
+	GetLetterBy(what string, val string, email string, limit uint64, offset uint64) (error, []Model.Letter)
 
 	SetLetterInSpam(lid uint64) error
 	SetLetterInBox(lid uint64) error
@@ -42,8 +42,8 @@ func (uc UseCase) GetLettersRecvDir(dir uint64, limit uint64, offset uint64) (er
 	return err, letters
 }
 
-func (uc UseCase) GetLettersSendDir(dir uint64) (error, []Model.Letter) {
-	err, letters := uc.re.GetLettersSentDir(dir)
+func (uc UseCase) GetLettersSendDir(dir uint64, limit uint64, offset uint64) (error, []Model.Letter) {
+	err, letters := uc.re.GetLettersSentDir(dir, limit, offset)
 	return err, letters
 }
 
@@ -109,20 +109,20 @@ func (uc UseCase) FindSimilar(similar string, email string) SearchResult {
 	return res
 }
 
-func (uc UseCase) GetLetterBy(what string, val string, email string) (error, []Model.Letter){
+func (uc UseCase) GetLetterBy(what string, val string, email string, limit uint64, offset uint64) (error, []Model.Letter){
 	switch what {
 	case "sender":
-		return uc.re.GetLetterBySender(val, email)
+		return uc.re.GetLetterBySender(val, email, limit, offset)
 	case "receiver":
-		return uc.re.GetLetterByReceiver(val, email)
+		return uc.re.GetLetterByReceiver(val, email, limit, offset)
 	case "theme":
-		return uc.re.GetLetterByTheme(val, email)
+		return uc.re.GetLetterByTheme(val, email, limit, offset)
 	case "text":
-		return uc.re.GetLetterByText(val, email)
+		return uc.re.GetLetterByText(val, email, limit, offset)
 	case "spam":
-		return uc.re.GetSpam(email)
+		return uc.re.GetSpam(email, limit, offset)
 	case "box":
-		return uc.re.GetBox(email)
+		return uc.re.GetBox(email, limit, offset)
 	}
 	return Repository.GetLetterByError, nil
 }

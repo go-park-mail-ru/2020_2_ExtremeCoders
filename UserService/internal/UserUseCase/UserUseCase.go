@@ -46,11 +46,13 @@ func (u UseCase) GetFoldersList(msg *proto.FolderUidType) (*proto.FolderList, er
 	if err != nil {
 		return nil, err
 	}
-	var tmp []*proto.FolderNameType
+	var tmp []*proto.Folder
 	for _, value := range folders {
-		tmp = append(tmp, &proto.FolderNameType{
+		tmp = append(tmp, &proto.Folder{
 			Name: value.Name,
 			Type: value.Type,
+			Uid: value.Uid,
+			Id: value.Id,
 		})
 	}
 	return &proto.FolderList{Res: tmp}, err
