@@ -26,7 +26,7 @@ type LetterDB interface {
 	GetLetterByLid(uint64) (error, Model.Letter)
 
 	GetLettersRecvDir(uint64, uint64, uint64) (error, []Model.Letter)
-	GetLettersSentDir(uint64) (error, []Model.Letter)
+	GetLettersSentDir(uint64, uint64, uint64) (error, []Model.Letter)
 	GetLettersRecv(string, uint64, uint64) (error, []Model.Letter)
 	GetLettersSent(string, uint64, uint64) (error, []Model.Letter)
 	GetLettersByFolder(uint64) (error, []Model.Letter)
@@ -41,13 +41,13 @@ type LetterDB interface {
 	FindTheme(string, string) ([]string, error)
 	FindText(string, string) ([]string, error)
 
-	GetLetterByTheme(string, string) (error, []Model.Letter)
-	GetLetterByText(string, string) (error, []Model.Letter)
-	GetLetterBySender(string, string) (error, []Model.Letter)
-	GetLetterByReceiver(string, string) (error, []Model.Letter)
+	GetLetterByTheme(string, string, uint64, uint64) (error, []Model.Letter)
+	GetLetterByText(string, string, uint64, uint64) (error, []Model.Letter)
+	GetLetterBySender(string, string, uint64, uint64) (error, []Model.Letter)
+	GetLetterByReceiver(string, string, uint64, uint64) (error, []Model.Letter)
 
-	GetSpam(email string) (error, []Model.Letter)
-	GetBox(email string) (error, []Model.Letter)
+	GetSpam(string, uint64, uint64) (error, []Model.Letter)
+	GetBox (string, uint64, uint64) (error, []Model.Letter)
 
 	SetItSpam(uint64) error
 	SetItBox(uint64) error

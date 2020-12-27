@@ -239,13 +239,26 @@ func (de delivery) GetLetterBy(w http.ResponseWriter, r *http.Request) {
 	}
 	vars := mux.Vars(r)
 	what := vars["what"]
-	val:=vars["value"]
+	val	 := vars["value"]
+	limit:= vars["limit"]
+	offset:=vars["offset"]
+	linInt, err:=strconv.Atoi(limit)
+	if err!=nil{
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+	offInt, err:=strconv.Atoi(offset)
+	if err!=nil{
+		w.Write(errors.GetErrorUnexpectedAns())
+		return
+	}
+
 	er, user := context.GetUserFromCtx(r.Context())
 	if er != nil {
 		w.Write(GetLettersError(er, nil))
 		return
 	}
-	err, letters:=de.Uc.GetLetterBy(what, val, user.Email)
+	err, letters:=de.Uc.GetLetterBy(what, val, user.Email, linInt, offInt)
 	w.Write(GetLettersError(err, letters))
 }
 

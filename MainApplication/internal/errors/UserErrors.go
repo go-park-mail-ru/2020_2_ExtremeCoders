@@ -2,6 +2,7 @@ package errors
 
 import (
 	"Mailer/MainApplication/internal/User/UserModel"
+	"encoding/json"
 	"fmt"
 )
 
@@ -12,7 +13,7 @@ func GetErrorBadJsonAns() []byte {
 		Code:        400,
 		Description: "Bad Json",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -21,7 +22,7 @@ func GetErrorLoginExistAns() []byte {
 		Code:        401,
 		Description: "This Email has already exists",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -30,7 +31,7 @@ func GetErrorUnexpectedAns() []byte {
 		Code:        500,
 		Description: "Unexpected error",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -40,7 +41,7 @@ func GetErrorNoCockyAns() []byte {
 		Code:        401,
 		Description: "not authorized user",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -49,7 +50,7 @@ func GetErrorWrongCookieAns() []byte {
 		Code:        403,
 		Description: "wrong session id",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -58,7 +59,7 @@ func GetErrorNotPostAns() []byte {
 		Code:        400,
 		Description: "Do not require request's method, expected POST",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -67,7 +68,7 @@ func GetErrorNotNumberAns() []byte {
 		Code:        400,
 		Description: "Not number",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -76,7 +77,7 @@ func GetErrorNoUserAns() []byte {
 		Code:        404,
 		Description: "Do not find this user in db",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -85,7 +86,7 @@ func GetErrorBadPasswordAns() []byte {
 		Code:        401,
 		Description: "Wrong Password",
 	}
-	ans, _ := err.MarshalJSON()
+	ans, _ := json.Marshal(err)
 	return ans
 }
 
@@ -95,7 +96,7 @@ func GetOkAns(cocky string) []byte {
 		Description: "ok",
 		sid:         cocky,
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -104,7 +105,7 @@ func GetOk() []byte {
 		Code:        200,
 		Description: "ok",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -116,7 +117,7 @@ func GetOkAnsData(cocky string, data UserModel.User) []byte {
 		sid:         cocky,
 		User:        data,
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -125,7 +126,7 @@ func GetAddSessionError() []byte {
 		Code:        401,
 		Description: "Could not add session",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -134,7 +135,7 @@ func RemoveSessionError() []byte {
 		Code:        408,
 		Description: "Could not remove session",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -143,7 +144,7 @@ func AddUserError() []byte {
 		Code:        407,
 		Description: "Could not add user",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -152,7 +153,7 @@ func UpdateProfileError() []byte {
 		Code:        407,
 		Description: "Could not update profile",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -161,7 +162,7 @@ func GetUserOnUpdateError() []byte {
 		Code:        407,
 		Description: "Could not get user on update",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -170,7 +171,7 @@ func GetLetterSpamError() []byte {
 		Code:        401,
 		Description: "Could not set letter in spam",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
 
@@ -179,6 +180,6 @@ func GetLetterBoxError() []byte {
 		Code:        401,
 		Description: "Could not set letter in box",
 	}
-	ans, _ := ok.MarshalJSON()
+	ans, _ := json.Marshal(ok)
 	return ans
 }
