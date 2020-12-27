@@ -396,11 +396,12 @@ func (dbInfo dataBase)SetItSpam(lid uint64) error{
 	err, letter:= dbInfo.GetLetterByLid(lid)
 	if letter.Spam{
 		letter.Spam=false
+	}else {
+		letter.Spam=true
 	}
 	if err!=nil{
 		return Repository.GetByLidError
 	}
-	letter.Spam=true
 	_, err=dbInfo.DB.Model(&letter).Column("spam").Where("id=?", lid).Update()
 	if err!=nil{
 		return Repository.SetSpamError
@@ -410,15 +411,14 @@ func (dbInfo dataBase)SetItSpam(lid uint64) error{
 
 func (dbInfo dataBase)SetItBox(lid uint64) error{
 	err, letter:= dbInfo.GetLetterByLid(lid)
-	if letter.Box{
+	if letter.Box {
 		letter.Box=false
 	} else{
-		letter.Spam=false
+		letter.Spam=true
 	}
 	if err!=nil{
 		return Repository.GetByLidError
 	}
-	letter.Box=true
 	_, err=dbInfo.DB.Model(&letter).Column("box").Where("id=?", lid).Update()
 	if err!=nil{
 		return Repository.SetBoxError

@@ -81,28 +81,21 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 		kind = "received"
 	}
 	fmt.Println("KIND", kind)
-	er, user := context.GetUserFromCtx(r.Context())
-	if er != nil {
-		fmt.Println("Er", er)
-		w.Write(GetFoldersError(er))
-		return
-	}
-	folderId, er := d.usClient.GetFolderId(r.Context(), &userService.Folder{Uid: user.Id, Name: folderName, Type: kind})
-	if er != nil {
-		fmt.Println("Er", er)
-		w.Write(GetFoldersError(er))
+	folderId, err:=strconv.Atoi(folderName)
+	if err!=nil{
+		w.Write(GetFoldersError(err))
 		return
 	}
 	var letterList *letterService.LetterListResponse
 	if kind == "received" {
-		letterList, er = d.lsClient.GetLettersByDirRecv(r.Context(), &letterService.DirName{DirName: folderId.Id})
+		letterList, err = d.lsClient.GetLettersByDirRecv(r.Context(), &letterService.DirName{DirName: uint64(folderId)})
 	} else {
-		letterList, er = d.lsClient.GetLettersByDirSend(r.Context(), &letterService.DirName{DirName: folderId.Id})
+		letterList, err = d.lsClient.GetLettersByDirSend(r.Context(), &letterService.DirName{DirName: uint64(folderId)})
 	}
 
-	if er != nil {
-		fmt.Println("Er", er)
-		w.Write(GetFoldersError(er))
+	if err != nil {
+		fmt.Println("Er", err)
+		w.Write(GetFoldersError(err))
 		return
 	}
 	fmt.Println(len(letterList.Letter))
