@@ -47,6 +47,7 @@ var upgrader = websocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
 
 
 func OpenWebSocket(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\n\nSOCKET HEADER", r.Header)
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Print("upgrade:", err)
