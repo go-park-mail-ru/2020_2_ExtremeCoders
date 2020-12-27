@@ -162,7 +162,7 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /user/folders/recived/folderName/letter [put]
 func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
-	if r.Method==http.MethodPut{
+	if r.Method==http.MethodDelete{
 		d.RemoveLetterInFolder(w, r)
 		return
 	}
