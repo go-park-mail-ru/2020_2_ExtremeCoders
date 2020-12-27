@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 )
 
-func ProtoFolderListResponse(folders []*userProto.FolderNameType) []byte {
+func ProtoFolderListResponse(folders []*userProto.Folder) []byte {
 	ans := FolderList{
 		Code:    200,
 		Folders: ProtoToModelList(folders),
@@ -75,7 +75,7 @@ func ProtoLetterListAnswer(pbLetter *mailProto.LetterListResponse) []byte {
 	return res
 }
 
-func ProtoToModelList(pbLetter []*userProto.FolderNameType) []Folder{
+func ProtoToModelList(pbLetter []*userProto.Folder) []Folder{
 	var folders []Folder
 	for _, letter:=range pbLetter{
 		letterModel:=Folder{Name: letter.Name, Type: letter.Type}
