@@ -81,21 +81,28 @@ func (d Delivery) GetLettersByFolder(w http.ResponseWriter, r *http.Request) {
 		kind = "received"
 	}
 	fmt.Println("KIND", kind)
-	folderId, err:=strconv.Atoi(folderName)
-	if err!=nil{
-		w.Write(GetFoldersError(err))
+	er, user := context.GetUserFromCtx(r.Context())
+	if er != nil {
+		fmt.Println("Er", er)
+		w.Write(GetFoldersError(er))
+		return
+	}
+	folderId, er := d.usClient.GetFolderId(r.Context(), &userService.Folder{Uid: user.Id, Name: folderName, Type: kind})
+	if er != nil {
+		fmt.Println("Er", er)
+		w.Write(GetFoldersError(er))
 		return
 	}
 	var letterList *letterService.LetterListResponse
 	if kind == "received" {
-		letterList, err = d.lsClient.GetLettersByDirRecv(r.Context(), &letterService.DirName{DirName: uint64(folderId)})
+		letterList, er = d.lsClient.GetLettersByDirRecv(r.Context(), &letterService.DirName{DirName: folderId.Id})
 	} else {
-		letterList, err = d.lsClient.GetLettersByDirSend(r.Context(), &letterService.DirName{DirName: uint64(folderId)})
+		letterList, er = d.lsClient.GetLettersByDirSend(r.Context(), &letterService.DirName{DirName: folderId.Id})
 	}
 
-	if err != nil {
-		fmt.Println("Er", err)
-		w.Write(GetFoldersError(err))
+	if er != nil {
+		fmt.Println("Er", er)
+		w.Write(GetFoldersError(er))
 		return
 	}
 	fmt.Println(len(letterList.Letter))
@@ -155,7 +162,7 @@ func (d Delivery) AddFolder(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /user/folders/recived/folderName/letter [put]
 func (d Delivery) AddLetterInFolder(w http.ResponseWriter, r *http.Request) {
-	if r.Method==http.MethodDelete{
+	if r.Method==http.MethodPut{
 		d.RemoveLetterInFolder(w, r)
 		return
 	}
